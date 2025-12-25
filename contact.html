@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ | COFFEE Sông Hậu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-[#fcfcfc] text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-white sticky top-0 z-50 shadow-sm">
+        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+            <span>Công ty phân phối</span>
+            <span>Hotline: 0852.494.694</span>
+        </div>
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+            <a href="index.html" class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông Hậu</span></a>
+
+            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900">Trang Chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900">Best Seller</a>
+                <a href="guide.html" class="hover:text-red-900">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900">Nhượng quyền</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div id="search-box" class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
+                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..." class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
+                </div>
+
+                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
+            <div class="flex flex-col space-y-4 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900 border-b pb-2">Trang Chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900 border-b pb-2">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900 border-b pb-2">Best Seller</a>
+                <a href="gift.html" class="hover:text-red-900 border-b pb-2">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900 border-b pb-2">Nhượng quyền</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-gray-100 py-3 border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <nav class="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                <a href="index.html" class="hover:text-red-900 transition">Trang chủ</a>
+                <span class="mx-2">/</span>
+                <span class="text-red-900">Liên hệ</span>
+            </nav>
+        </div>
+    </div>
+
+    <section class="container mx-auto px-4 py-12 flex-grow">
+        <div class="text-center mb-16">
+            <h1 class="text-3xl md:text-5xl font-black text-red-950 uppercase mb-4">Liên hệ Sông Hậu</h1>
+            <p class="text-gray-500 max-w-2xl mx-auto">Kết nối ngay với chúng tôi để nhận báo giá sỉ, tư vấn nhượng quyền hoặc giải đáp mọi thắc mắc về sản phẩm.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition group">
+                <div class="w-16 h-16 rounded-full bg-red-50 text-red-900 flex items-center justify-center mx-auto mb-6 group-hover:bg-red-900 group-hover:text-white transition">
+                    <i class="fas fa-map-marker-alt text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-red-950 uppercase tracking-widest text-sm mb-3">Văn Phòng Công Ty</h3>
+
+                <p class="text-gray-600 text-sm leading-relaxed px-4 mb-4">
+                    188+181, Đường 23/8, Khóm Cầu Sập, Phường 8, TP. Bạc Liêu
+                </p>
+
+                <div class="w-1/3 h-px bg-gray-200 mx-auto mb-4"></div>
+
+                <div class="mb-5">
+                    <div class="flex items-center justify-center gap-2 mb-2 text-red-900 font-bold text-xs uppercase tracking-widest">
+                        <i class="far fa-clock"></i> Giờ làm việc
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li class="flex justify-between px-8">
+                            <span>Sáng:</span>
+                            <span class="font-medium text-gray-900">07:30 - 11:00</span>
+                        </li>
+                        <li class="flex justify-between px-8">
+                            <span>Chiều:</span>
+                            <span class="font-medium text-gray-900">13:30 - 17:00</span>
+                        </li>
+                    </ul>
+                    <p class="text-[11px] text-yellow-600 font-bold mt-2 bg-yellow-50 inline-block px-2 py-1 rounded">
+                        Làm việc cả Chủ Nhật & Ngày Lễ
+                    </p>
+                </div>
+
+                <a href="https://maps.app.goo.gl/4EMndQMYtEtbKaSt6" target="_blank" class="text-[11px] font-bold text-red-900 border border-red-900 px-4 py-2 rounded uppercase inline-block hover:bg-red-900 hover:text-white transition">
+                    Chỉ đường Google Map
+                </a>
+            </div>
+
+            <div class="bg-red-900 p-8 rounded-xl shadow-lg border border-red-800 text-center text-white transform md:-translate-y-4">
+                <div class="w-16 h-16 rounded-full bg-white/10 text-yellow-400 flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-phone-volume text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-white/80 uppercase tracking-widest text-sm mb-2">Hotline 24/7</h3>
+                <div class="text-3xl font-black text-white mb-2">0852.494.694</div>
+                <p class="text-white/60 text-xs mb-6">Tư vấn Đại lý & Nhượng quyền</p>
+
+                <div class="flex flex-col gap-3">
+                    <a href="tel:0852494694" class="bg-white text-red-900 py-3 rounded-lg font-bold uppercase text-xs hover:bg-yellow-500 hover:text-white transition">
+                        <i class="fa-solid fa-phone mr-2"></i> Gọi ngay
+                    </a>
+                    <a href="https://zalo.me/0852494694" target="_blank" class="bg-[#0068ff] text-white py-3 rounded-lg font-bold uppercase text-xs hover:bg-[#0057d6] transition">
+                        Chat Zalo
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition group">
+                <div class="w-16 h-16 rounded-full bg-red-50 text-red-900 flex items-center justify-center mx-auto mb-6 group-hover:bg-red-900 group-hover:text-white transition">
+                    <i class="fas fa-envelope text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-red-950 uppercase tracking-widest text-sm mb-3">Email Hợp tác</h3>
+                <p class="text-gray-600 text-sm mb-2">congtynamduongbl@gmail.com</p>
+                <p class="text-gray-400 text-xs">(Phản hồi trong vòng 24h)</p>
+                <a href="mailto:congtynamduongbl@gmail.com" class="text-[11px] font-bold text-yellow-600 uppercase mt-4 inline-block hover:underline">Gửi Email ngay</a>
+            </div>
+        </div>
+
+        <div class="bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
+            <div class="w-full h-[450px] rounded-lg overflow-hidden relative">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15749.820364969959!2d105.6764575!3d9.2928817!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a10f039f6bbd0d%3A0xd760bab58616bd9f!2zQ2FmZSBTw7RuZyBI4bqtdSAxMg!5e0!3m2!1svi!2s!4v1766394116880!5m2!1svi!2s" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="grayscale hover:grayscale-0 transition duration-700">
+                </iframe>
+                
+                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded shadow text-xs font-bold text-red-900 border-l-4 border-red-900 pointer-events-none">
+                    Khu vực Bạc Liêu & Cà Mau
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="bg-red-950 text-white pt-16 pb-8 mt-auto">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="text-2xl font-black mb-6">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+                <p class="text-sm text-gray-400 leading-relaxed mb-6">Đơn vị cung ứng giải pháp cà phê hàng đầu cho các Doanh nghiệp và Cửa hàng.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-facebook-f text-xs"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-youtube text-xs"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-instagram text-xs"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Chính sách hỗ trợ</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="guide.html" class="hover:text-yellow-600 transition">Chính sách vận chuyển</a></li>
+                    <li><a href="return-policy.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a></li>
+                    <li><a href="purchase-guide.html" class="hover:text-yellow-600 transition">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee Sông Hậu</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Hợp tác kinh doanh</a></li>
+                    <li><a href="distribution.html" class="hover:text-yellow-600 transition">Hệ thống phân phối</a></li>
+                    <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ ngay</h4>
+                <div class="text-sm text-gray-400 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
+                        <span>Trụ sở: 188+181, Đường 23/8, <br> Khóm Cầu Sập, Phường 8, TP. Bạc Liêu</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-phone text-yellow-600"></i>
+                        <span>0852.494.694</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-yellow-600"></i>
+                        <span>congtynamduongbl@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]">2025 COFFEE Sông Hậu ©. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn mua hàng | COFFEE Sông Hậu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#fcfcfc] text-gray-900">
+
+    <header class="bg-white sticky top-0 z-50 shadow-sm">
+        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+            <span>Công ty phân phối</span>
+            <span>Hotline: 0852.494.694</span>
+        </div>
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+            <div class="text-2xl font-black text-red-950">
+                <a href="index.html">COFFEE<span class="text-yellow-600"> Sông Hậu</span></a>
+            </div>
+            
+            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900 transition">Trang chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900 transition">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900 transition">Cà phê bột</a>
+                <a href="gift.html" class="hover:text-red-900 transition">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900 transition">Nhượng quyền</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div id="search-box" class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
+                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..." class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
+                </div>
+                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
+            <div class="flex flex-col space-y-4 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900 border-b pb-2">Trang chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900 border-b pb-2">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900 border-b pb-2">Cà phê bột</a>
+                <a href="gift.html" class="hover:text-red-900 transition">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900 border-b pb-2">Nhượng quyền</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        
+        <nav class="text-[11px] uppercase tracking-widest text-gray-400 mb-8 flex items-center gap-2">
+            <a href="index.html" class="hover:text-red-900 transition"><i class="fa-solid fa-house"></i></a> / 
+            <span class="text-red-900 font-bold border-b border-red-900 pb-0.5">Hướng dẫn mua hàng</span>
+        </nav>
+
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-yellow-600 text-xs font-bold uppercase tracking-widest">Hỗ trợ khách hàng</span>
+                <h1 class="text-3xl md:text-5xl font-black text-red-950 uppercase mt-2 mb-6">Quy trình đặt hàng</h1>
+                <p class="text-gray-500 max-w-2xl mx-auto">Chúng tôi tối ưu hóa quy trình để bạn có thể thưởng thức hương vị cà phê Sông Hậu nhanh nhất có thể.</p>
+                <div class="w-20 h-1 bg-red-900 mx-auto mt-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 mb-20">
+                
+                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group relative">
+                    <div class="absolute right-4 top-4 text-6xl font-black text-gray-100 group-hover:text-red-50 transition select-none">01</div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-red-900 mb-6 group-hover:bg-red-900 group-hover:text-white transition shadow-sm">
+                            <i class="fa-solid fa-mug-hot text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-red-950 uppercase mb-3">Chọn sản phẩm</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4">
+                            Truy cập danh mục sản phẩm trên website. Đọc kỹ thông tin về thành phần, hương vị (đắng, chua, thơm...) để chọn loại gu phù hợp nhất.
+                        </p>
+                        <a href="index.html#grid-rang-xay" class="text-xs font-bold text-yellow-600 hover:text-red-900 uppercase tracking-widest flex items-center gap-2">
+                            Xem sản phẩm <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group relative">
+                    <div class="absolute right-4 top-4 text-6xl font-black text-gray-100 group-hover:text-red-50 transition select-none">02</div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-red-900 mb-6 group-hover:bg-red-900 group-hover:text-white transition shadow-sm">
+                            <i class="fa-solid fa-headset text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-red-950 uppercase mb-3">Liên hệ tư vấn & Chốt đơn</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4">
+                            Liên hệ trực tiếp để được báo giá ưu đãi nhất. Nhân viên sẽ xác nhận địa chỉ và phí vận chuyển.
+                        </p>
+                        <div class="flex gap-3">
+                            <a href="https://zalo.me/0852494694" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                                Chat Zalo
+                            </a>
+                            <a href="tel:0852494694" class="bg-red-900 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase hover:bg-black transition shadow-lg shadow-red-200">
+                                Gọi Hotline
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group relative">
+                    <div class="absolute right-4 top-4 text-6xl font-black text-gray-100 group-hover:text-red-50 transition select-none">03</div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-red-900 mb-6 group-hover:bg-red-900 group-hover:text-white transition shadow-sm">
+                            <i class="fa-solid fa-money-bill-transfer text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-red-950 uppercase mb-3">Thanh toán linh hoạt</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4">
+                            Quý khách có thể chọn:
+                            <br>• <strong>COD:</strong> Thanh toán tiền mặt khi nhận hàng.
+                            <br>• <strong>Chuyển khoản:</strong> Theo thông tin ngân hàng bên dưới.
+                        </p>
+                        <a href="#payment-info" class="text-xs font-bold text-yellow-600 hover:text-red-900 uppercase tracking-widest flex items-center gap-2">
+                            Xem TK Ngân hàng <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group relative">
+                    <div class="absolute right-4 top-4 text-6xl font-black text-gray-100 group-hover:text-red-50 transition select-none">04</div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-red-900 mb-6 group-hover:bg-red-900 group-hover:text-white transition shadow-sm">
+                            <i class="fa-solid fa-box-open text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-red-950 uppercase mb-3">Giao hàng tận nơi</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4">
+                            Đơn hàng sẽ được đóng gói cẩn thận và gửi đi ngay trong ngày.
+                            <br>• Miền Tây: 1-2 ngày.
+                            <br>• Toàn quốc: 3-4 ngày.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payment-info" class="bg-gradient-to-br from-red-950 to-red-900 rounded-2xl p-8 md:p-12 text-white shadow-2xl mb-20 relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-yellow-500 rounded-full opacity-10 blur-3xl"></div>
+
+                <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
+                    <div class="md:w-1/2">
+                        <h2 class="text-2xl font-black uppercase mb-4 text-yellow-500">Thông tin chuyển khoản</h2>
+                        <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                            Khuyến khích quý khách chuyển khoản trước để được <strong>miễn phí vận chuyển</strong> cho đơn hàng từ 500.000đ.
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg border border-white/10 flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white rounded flex items-center justify-center shrink-0">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Logo_MB_new.png" class="w-8">
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-gray-300 uppercase tracking-widest">Ngân hàng MB Bank</div>
+                                    <div class="font-mono text-xl md:text-2xl font-bold text-yellow-400">9999.8888.6868</div>
+                                    <div class="text-xs font-bold">CTY TNHH MTV NAM DUONG BL</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 text-xs text-gray-400 italic">
+                            * Nội dung chuyển khoản: <strong>[Tên khách hàng] + [SĐT]</strong>
+                        </div>
+                    </div>
+
+                    <div class="md:w-1/2 flex justify-center">
+                        <div class="bg-white p-4 rounded-xl shadow-lg transform rotate-3 hover:rotate-0 transition duration-500">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020101021138570010A0000007270127000697042201139999888868680208QRIBFTTA53037045802VN6304191C&color=7a0b0b&bgcolor=fff" alt="QR Code Thanh Toán" class="w-48 h-48 mix-blend-multiply">
+                            <div class="text-center text-red-950 font-bold text-xs mt-3 uppercase tracking-widest">Quét mã thanh toán</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl font-black text-red-950 uppercase text-center mb-8">Câu hỏi thường gặp</h2>
+                
+                <div class="space-y-4">
+                    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 bg-gray-50 group-open:bg-red-50 group-open:text-red-900 transition">
+                                <span>Phí vận chuyển được tính như thế nào?</span>
+                                <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                            </summary>
+                            <div class="text-gray-600 text-sm p-4 leading-relaxed border-t border-gray-100">
+                                Chúng tôi áp dụng phí ship theo đơn vị vận chuyển. <strong>Giảm phí ship 50% </strong> cho đơn hàng có giá trị từ 5.000.000đ trở lên hoặc khách hàng mua sỉ/đại lý.
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 bg-gray-50 group-open:bg-red-50 group-open:text-red-900 transition">
+                                <span>Tôi có được kiểm tra hàng trước khi nhận không?</span>
+                                <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                            </summary>
+                            <div class="text-gray-600 text-sm p-4 leading-relaxed border-t border-gray-100">
+                                Hoàn toàn được. Coffee Sông Hậu luôn khuyến khích khách hàng đồng kiểm với shipper (kiểm tra bao bì, số lượng, hạn sử dụng) trước khi thanh toán để đảm bảo quyền lợi.
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 bg-gray-50 group-open:bg-red-50 group-open:text-red-900 transition">
+                                <span>Chính sách đổi trả nếu cà phê không hợp gu?</span>
+                                <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                            </summary>
+                            <div class="text-gray-600 text-sm p-4 leading-relaxed border-t border-gray-100">
+                                Nếu sản phẩm bị lỗi sản xuất hoặc hư hỏng do vận chuyển, chúng tôi đổi mới 1-1 ngay lập tức. Nếu quý khách muốn đổi sang dòng sản phẩm khác, vui lòng liên hệ Hotline trong vòng 3 ngày kể từ khi nhận hàng (sản phẩm đổi phải còn nguyên seal, quay video nhận hàng không cắt ghép).
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-red-950 text-white mt-20 pt-16 pb-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="text-2xl font-black mb-6">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+                <p class="text-sm text-gray-400 leading-relaxed mb-6">Đơn vị cung ứng giải pháp cà phê hàng đầu cho các Doanh nghiệp và Cửa hàng.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-facebook-f text-xs"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-youtube text-xs"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-instagram text-xs"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Chính sách hỗ trợ</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="guide.html" class="hover:text-yellow-600 transition">Chính sách vận chuyển</a></li>
+                    <li><a href="return-policy.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a></li>
+                    <li><a href="guide.html" class="text-yellow-600 transition font-bold">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee Sông Hậu</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Tin tức & Sự kiện</a></li>
+                    <li><a href="distribution.html" class="hover:text-yellow-600 transition">Hệ thống phân phối</a></li>
+                    <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ ngay</h4>
+                <div class="text-sm text-gray-400 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
+                        <span>Trụ sở: 188+181, Đường 23/8, <br> Khóm Cầu Sập, Phường Bạc Liêu, Tỉnh Cà Mau</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-phone text-yellow-600"></i>
+                        <span>0852.494.694</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-yellow-600"></i>
+                        <span>congtynamduongbl@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]">2025 COFFEE Sông Hậu ©. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

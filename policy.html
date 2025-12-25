@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chính sách & Quy định | COFFEE Sông Hậu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .policy-content h3 { color: #450a0a; font-weight: 700; margin-bottom: 0.5rem; margin-top: 1.5rem; }
+        .policy-content p { margin-bottom: 1rem; line-height: 1.6; color: #4b5563; }
+        .policy-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #4b5563; }
+    </style>
+</head>
+
+<body class="bg-[#fcfcfc] text-gray-900 font-sans">
+
+    <header class="bg-white sticky top-0 z-50 shadow-sm">
+        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+            <span>Công ty phân phối</span>
+            <span>Hotline: 0852.494.694</span>
+        </div>
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+            <div class="text-2xl font-black text-red-950">
+                <a href="index.html">COFFEE<span class="text-yellow-600"> Sông Hậu</span></a>
+            </div>
+
+            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900">Trang Chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900">Best Seller</a>
+                <a href="gift.html" class="hover:text-red-900">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900">Nhượng quyền</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div id="search-box" class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
+                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..." class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
+                </div>
+                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
+            <div class="flex flex-col space-y-4 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900">Trang Chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900">Best Seller</a>
+                <a href="gift.html" class="hover:text-red-900">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900">Nhượng quyền</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-gray-100 py-12 border-b border-gray-200">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-black text-red-950 uppercase tracking-wide mb-3">Chính sách & Quy định</h1>
+            <p class="text-gray-500 text-sm">Cập nhật lần cuối: 23/12/2025</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-12 max-w-6xl">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <aside class="lg:w-1/4 h-fit">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-red-950 uppercase mb-4 text-sm tracking-wider border-b pb-2">Mục lục</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li>
+                            <a href="#privacy" class="flex items-center gap-2 hover:text-red-900 transition">
+                                <i class="fa-solid fa-shield-halved w-4"></i> Bảo mật thông tin
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#brand" class="flex items-center gap-2 hover:text-red-900 transition">
+                                <i class="fa-solid fa-copyright w-4"></i> Bảo vệ thương hiệu
+                            </a>
+                        </li>
+                         <li>
+                            <a href="#franchise-rule" class="flex items-center gap-2 hover:text-red-900 transition">
+                                <i class="fa-solid fa-store w-4"></i> Quy định đối tác
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="lg:w-3/4 space-y-12">
+
+                <div id="privacy" class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <i class="fa-solid fa-user-shield text-2xl text-yellow-600"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 uppercase">1. Chính sách bảo mật</h2>
+                    </div>
+                    
+                    <div class="policy-content text-sm text-justify">
+                        <h3>a. Mục đích thu thập thông tin</h3>
+                        <p>Coffee Sông Hậu thu thập thông tin cá nhân (Họ tên, SĐT, Email, Địa chỉ) khi khách hàng đăng ký tư vấn nhượng quyền hoặc đặt hàng. Dữ liệu này chỉ được sử dụng để:</p>
+                        <ul>
+                            <li>Xác nhận đơn hàng và giao hàng.</li>
+                            <li>Liên hệ tư vấn giải pháp kinh doanh theo yêu cầu.</li>
+                            <li>Gửi thông báo về chương trình khuyến mãi (nếu khách hàng đăng ký).</li>
+                        </ul>
+
+                        <h3>b. Cam kết bảo mật</h3>
+                        <p>Chúng tôi cam kết <strong>không mua bán, trao đổi hay chia sẻ</strong> thông tin khách hàng cho bất kỳ bên thứ ba nào, ngoại trừ các đơn vị vận chuyển liên kết để thực hiện giao nhận.</p>
+
+                        <h3>c. Thời gian lưu trữ</h3>
+                        <p>Dữ liệu được lưu trữ bảo mật trên hệ thống cho đến khi có yêu cầu hủy bỏ từ khách hàng.</p>
+                    </div>
+                </div>
+
+                <div id="brand" class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <i class="fa-solid fa-certificate text-2xl text-red-900"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 uppercase">2. Bảo vệ thương hiệu</h2>
+                    </div>
+
+                    <div class="policy-content text-sm text-justify">
+                        <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                            <p class="font-medium text-red-900 italic m-0">
+                                "Thương hiệu Coffee Sông Hậu là tài sản uy tín được xây dựng dựa trên chất lượng sản phẩm và lòng tin của khách hàng."
+                            </p>
+                        </div>
+
+                        <h3>a. Quyền sở hữu trí tuệ</h3>
+                        <p>Logo, tên thương hiệu "Coffee Sông Hậu", slogan, hình ảnh sản phẩm và công thức pha chế độc quyền thuộc sở hữu của Công ty. Nghiêm cấm mọi hành vi sao chép, làm giả nhận diện thương hiệu để kinh doanh trái phép khi chưa đăng ký nhượng quyền thương hiệu theo quy định công ty.</p>
+
+                        <h3>b. Quy định sử dụng hình ảnh</h3>
+                        <p>Đối tác nhượng quyền được cấp quyền sử dụng Logo và hình ảnh thương hiệu trong phạm vi cửa hàng và các kênh marketing đã đăng ký. Không được tự ý thay đổi màu sắc, tỷ lệ Logo làm sai lệch nhận diện thương hiệu các trường hợp nghiêm cấm các hàng vi vi phạm pháp luật...v.v .</p>
+                    </div>
+                </div>
+
+                <div id="franchise-rule" class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 scroll-mt-24 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-500 transform rotate-45 translate-x-12 -translate-y-12"></div>
+                    
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4 relative z-10">
+                        <i class="fa-solid fa-gavel text-2xl text-gray-800"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 uppercase">3. Quy định dành cho Đối tác</h2>
+                    </div>
+
+                    <div class="space-y-6 text-sm text-gray-600 leading-relaxed text-justify relative z-10">
+                        <p class="mb-4">Để đảm bảo quyền lợi chung cho toàn hệ thống, Đối tác cần tuân thủ:</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="min-w-[40px] h-10 rounded bg-red-100 text-red-900 flex items-center justify-center font-bold">01</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Tuyệt đối không pha trộn</h4>
+                                    <p>Nghiêm cấm hành vi sử dụng bao bì Coffee Sông Hậu nhưng đóng gói/pha chế bằng loại cà phê trôi nổi, kém chất lượng.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="min-w-[40px] h-10 rounded bg-red-100 text-red-900 flex items-center justify-center font-bold">02</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Tuân thủ công thức</h4>
+                                    <p>Thực hiện đúng quy trình pha chế và định lượng đã được chuyển giao để đảm bảo hương vị đồng nhất.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="min-w-[40px] h-10 rounded bg-red-100 text-red-900 flex items-center justify-center font-bold">03</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Minh bạch về giá</h4>
+                                    <p>Niêm yết giá bán công khai theo khung giá quy định (hoặc trong biên độ cho phép) của Công ty.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="min-w-[40px] h-10 rounded bg-red-100 text-red-900 flex items-center justify-center font-bold">04</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Bảo vệ Thương Hiệu</h4>
+                                    <p>"Nghiêm cấm mọi hành vi tự ý thay đổi màu sắc, tỷ lệ làm sai lệch nhận diện thương hiệu. Đặc biệt, tuyệt đối không lợi dụng địa điểm kinh doanh để tổ chức cờ bạc, sử dụng chất cấm, tàng trữ hàng hóa trái phép hoặc thực hiện các tệ nạn xã hội khác trái với quy định của pháp luật."</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-gray-50 border-l-4 border-red-900 text-xs text-gray-500">
+                            <strong>Lưu ý:</strong> Mọi hành vi vi phạm ảnh hưởng nghiêm trọng đến uy tín thương hiệu, Công ty có quyền đơn phương chấm dứt hợp tác và thu hồi quyền sử dụng thương hiệu.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-red-950 text-white mt-12 pt-16 pb-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="text-2xl font-black mb-6">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+                <p class="text-sm text-gray-400 leading-relaxed mb-6">Đơn vị cung ứng giải pháp cà phê hàng đầu cho các Doanh nghiệp và Cửa hàng.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-facebook-f text-xs"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:bg-yellow-600 transition"><i class="fab fa-youtube text-xs"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Hỗ trợ khách hàng</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="guide.html" class="hover:text-yellow-600 transition">Chính sách vận chuyển</a></li>
+                    <li><a href="return-policy.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a></li>
+                    <li><a href="purchase-guide.html" class="hover:text-yellow-600 transition">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee Sông Hậu</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
+                    <li><a href="story.html"hover:text-yellow-600 transition">Tin tức & Sự kiện</a></li>
+                    <li><a href="distribution.html" class="hover:text-yellow-600 transition">Hệ thống phân phối</a></li>
+                    <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ ngay</h4>
+                <div class="text-sm text-gray-400 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
+                        <span>Trụ sở: 188+181, Đường 23/8, <br> Khóm Cầu Sập, Phường Bạc Liêu</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-phone text-yellow-600"></i>
+                        <span>0852.494.694</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-yellow-600"></i>
+                        <span>congtynamduongbl@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]">2025 COFFEE Sông Hậu ©. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.dbProducts = []; // Mảng rỗng để không bị lỗi
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+
+</html>

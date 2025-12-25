@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm | COFFEE Sông Hậu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/sanpham.css">
+</head>
+
+<body class="bg-[#f8f9fa] text-gray-900 font-sans">
+
+    <header class="bg-white sticky top-0 z-50 shadow-sm">
+        <div
+            class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+            <span>Hệ thống phân phối</span>
+            <span>Hotline: 0852.494.694</span>
+        </div>
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+            <div class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+
+            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900">Trang Chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900">Best Seller</a>
+                <a href="gift.html" class="hover:text-red-900">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900">Nhượng quyền</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div id="search-box"
+                    class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
+                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..."
+                        class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
+                </div>
+
+                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
+            <div class="flex flex-col space-y-4 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="hover:text-red-900">Trang Chủ</a>
+                <a href="index.html#grid-rang-xay" class="hover:text-red-900">Cà phê hạt</a>
+                <a href="index.html#grid-best-seller" class="hover:text-red-900">Best Seller</a>
+                <a href="gift.html" class="hover:text-red-900">Quà tặng</a>
+                <a href="franchise.html" class="hover:text-red-900">Nhượng quyền</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative h-[300px] flex items-center justify-center bg-gray-900 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=1600"
+            class="absolute inset-0 w-full h-full object-cover opacity-40">
+        <div class="relative z-10 text-center text-white p-4">
+            <h1 class="text-4xl md:text-5xl font-black uppercase tracking-widest mb-4 slide-up">Thế giới Cà phê</h1>
+            <p class="text-sm md:text-base font-light tracking-wider opacity-90 slide-up delay-100">Tinh hoa đất trời -
+                Hương vị Sông Hậu</p>
+        </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8">
+        <aside class="w-full lg:w-1/4 space-y-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="font-bold text-red-950 uppercase text-sm mb-4 border-l-4 border-yellow-500 pl-3">Tìm kiếm
+                </h3>
+                <div class="relative">
+                    <input type="text" id="filter-search" placeholder="Tên sản phẩm..."
+                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-red-900 transition">
+                    <i class="fa-solid fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="font-bold text-red-950 uppercase text-sm mb-4 border-l-4 border-yellow-500 pl-3">Danh mục
+                </h3>
+                <ul class="space-y-2 text-sm text-gray-600" id="category-filter">
+                    <li class="cursor-pointer hover:text-red-900 hover:bg-red-50 p-2 rounded transition flex justify-between active-filter"
+                        data-filter="all">
+                        <span>Tất cả</span> <span
+                            class="text-xs bg-gray-200 px-2 py-0.5 rounded-full text-gray-500 count-all">0</span>
+                    </li>
+
+                    <li class="cursor-pointer hover:text-red-900 hover:bg-red-50 p-2 rounded transition flex justify-between"
+                        data-filter="rang-xay">
+                        <span>Cà phê Rang Xay</span> <span
+                            class="text-xs bg-gray-200 px-2 py-0.5 rounded-full text-gray-500 count-rx">0</span>
+                    </li>
+
+                    <li class="cursor-pointer hover:text-red-900 hover:bg-red-50 p-2 rounded transition flex justify-between"
+                        data-filter="best-seller">
+                        <span>Cà phê Hòa Tan</span> <span
+                            class="text-xs bg-gray-200 px-2 py-0.5 rounded-full text-gray-500 count-ht">0</span>
+                    </li>
+
+                    <li class="cursor-pointer hover:text-red-900 hover:bg-red-50 p-2 rounded transition flex justify-between"
+                        data-filter="may-pha">
+                        <span>Máy Pha Cà Phê</span>
+                        <span class="text-xs bg-gray-200 px-2 py-0.5 rounded-full text-gray-500 count-may">0</span>
+                    </li>
+
+                    <li class="cursor-pointer hover:text-red-900 hover:bg-red-50 p-2 rounded transition flex justify-between"
+                        data-filter="dung-cu">
+                        <span>Dụng Cụ Pha Chế</span>
+                        <span class="text-xs bg-gray-200 px-2 py-0.5 rounded-full text-gray-500 count-cu">0</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-red-900 text-white p-6 rounded-xl shadow-lg text-center bg-pattern">
+                <h4 class="font-bold uppercase text-lg mb-2">Hợp tác kinh doanh?</h4>
+                <p class="text-xs opacity-80 mb-4">Chiết khấu hấp dẫn cho đại lý</p>
+                <a href="https://zalo.me/0852494694" target="_blank"
+                    class="inline-block bg-white text-red-900 px-6 py-2 rounded-full text-xs font-bold uppercase hover:bg-yellow-500 hover:text-white transition">Liên
+                    hệ Zalo</a>
+            </div>
+        </aside>
+
+        <main class="flex-1">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-sm text-gray-500">Hiển thị <strong id="show-count">0</strong> sản phẩm</span>
+                <select id="price-sort"
+                    class="bg-white border border-gray-200 text-sm px-4 py-2 rounded-lg focus:outline-none focus:border-red-900 cursor-pointer">
+                    <option value="default">Sắp xếp: Mặc định</option>
+                    <option value="asc">Giá: Thấp đến Cao</option>
+                    <option value="desc">Giá: Cao đến Thấp</option>
+                </select>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6">
+            </div>
+
+            <div id="pagination" class="mt-12 flex justify-center space-x-2">
+            </div>
+        </main>
+    </div>
+
+    <footer class="bg-red-950 text-white mt-20 pt-16 pb-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="text-2xl font-black mb-6">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+                <p class="text-sm text-gray-400 leading-relaxed mb-6">Đơn vị cung ứng giải pháp cà phê hàng đầu cho các
+                    Doanh nghiệp và Của hàng.</p>
+                <div class="flex space-x-4">
+                    <a href="#"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-facebook-f text-xs"></i></a>
+                    <a href="#"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-youtube text-xs"></i></a>
+                    <a href="#"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-instagram text-xs"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Chính sách hỗ
+                    trợ</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="guide.html" class="hover:text-yellow-600 transition">Chính sách vận chuyển</a></li>
+                    <li><a href="return-policy.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a></li>
+                    <li><a href="purchase-guide.html" class="hover:text-yellow-600 transition">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee
+                    Sông Hậu</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Tin tức & Sự kiện</a></li>
+                    <li><a href="distribution.html" class="hover:text-yellow-600 transition">Hệ thống phân phối</a></li>
+                    <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ ngay
+                </h4>
+                <div class="text-sm text-gray-400 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
+                        <span>Trụ sở: 188+181, Đường 23/8, <br> Khóm Cầu Sập, Phường Bạc Liêu, Tỉnh Cà Mau</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-phone text-yellow-600"></i>
+                        <span>0852.494.694</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-yellow-600"></i>
+                        <span>congtynamduongbl@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]">2025 COFFEE Sông Hậu ©. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/sanpham.js"></script>
+</body>
+
+</html>
