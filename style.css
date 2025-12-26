@@ -187,3 +187,27 @@ aside ul li:hover {
 #promo-popup:not(.hidden) {
     display: flex !important;
 }
+
+.messenger-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #0084FF; /* Màu xanh chuẩn Messenger */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999; /* Đảm bảo nút luôn nổi trên cùng */
+    transition: transform 0.3s ease;
+}
+
+.messenger-btn:hover {
+    transform: scale(1.05); /* Hiệu ứng phóng to khi di chuột vào */
+    background-color: #0078e7;
+}
