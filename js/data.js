@@ -26,28 +26,6 @@ window.dbProducts = [
         }
     },
 
-    { 
-        id: 22, 
-        name: "Cà Phê gu Truyền Thống", 
-        price: 250000, 
-        category: "rang-xay", 
-        img: "img/2.jpg",
-        gallery: [
-           "img/2.jpg", 
-            "imgsp/01/img2.png", 
-            "imgsp/01/img3.png", 
-            "imgsp/01/img4.png"
-        ],
-        info: {
-            description: "Dòng sản phẩm No.1 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
-            details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> 70% Robusta - 30% Arabica.</p>
-                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Socola đen, hạt dẻ, hậu vị ngọt sâu.</p>
-                <p>- <strong>Hạn sử dụng:</strong> 12 tháng kể từ ngày sản xuất.</p>
-            `
-        }
-    },
     { id: 2, name: "Đang cập nhật sản phẩm", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 3, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 4, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
