@@ -7,7 +7,7 @@ cd /d "%~dp0"
 REM --- CAU HINH ---
 set BRANCH=master
 set REPO_URL=https://github.com/coffeesonghau/Coffeesonghau.git
-set WEB_URL=https://coffeesonghau.github.io/Coffeesonghau/ 
+set WEB_URL=https://coffeesonghau.com/
 
 REM --- LAY THOI GIAN ---
 for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set dt=%%I
@@ -23,6 +23,7 @@ echo ==========================================
 
 REM --- KIEM TRA TRANG THAI ---
 echo [1/4] Dang kiem tra code tren Server (git pull)...
+REM Buoc nay cuc ky quan trong de lay file CNAME ve may
 git pull origin %BRANCH%
 
 REM --- ADD VA COMMIT ---
