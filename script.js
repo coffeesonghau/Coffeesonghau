@@ -1,12 +1,32 @@
-// 1. Dữ liệu sản phẩm hệ thống (Lấy từ data.js)
+// ======================================================
+// 1. DỮ LIỆU & HÀM HỖ TRỢ CHUNG
+// ======================================================
 const products = window.dbProducts || [];
 
-// 2. Hàm hiển thị sản phẩm theo danh mục (Trang chủ)
+// Hàm mở menu con (Dùng cho Mobile Menu trong HTML mới)
+function toggleSubMenu(btn) {
+    const subMenu = btn.nextElementSibling;
+    const icon = btn.querySelector('i');
+    
+    // Toggle ẩn hiện menu con
+    subMenu.classList.toggle('hidden');
+    
+    // Xoay mũi tên 180 độ
+    if (subMenu.classList.contains('hidden')) {
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// ======================================================
+// 2. HIỂN THỊ SẢN PHẨM (TRANG CHỦ)
+// ======================================================
 function renderSection(category, targetId) {
     const grid = document.getElementById(targetId);
     if (!grid) return;
 
-    // LỌC: Chỉ lấy sản phẩm giá > 0 (Giá = 1 vẫn lấy)
+    // LỌC: Chỉ lấy sản phẩm giá > 0
     const filtered = products.filter(p => p.category === category && p.price > 0);
     
     if (filtered.length === 0) {
@@ -34,7 +54,9 @@ function renderSection(category, targetId) {
     `}).join('');
 }
 
-// 3. Tính năng Tìm kiếm
+// ======================================================
+// 3. TÍNH NĂNG TÌM KIẾM
+// ======================================================
 function initSearch() {
     const searchBtn = document.getElementById('search-toggle-btn');
     const searchBox = document.getElementById('search-box');
@@ -62,7 +84,6 @@ function initSearch() {
             const query = searchInput.value.toLowerCase().trim();
             if (query === "") return;
             
-            // LỌC QUAN TRỌNG: Chỉ tìm sản phẩm có giá > 0
             const found = products.find(p => p.name.toLowerCase().includes(query) && p.price > 0);
             
             if (found) {
@@ -72,32 +93,129 @@ function initSearch() {
             }
         }
     });
-} // <--- ĐÃ BỔ SUNG DẤU ĐÓNG NGOẶC BỊ THIẾU
+}
 
-// 4. Slider tự động (Trang chủ)
+// ======================================================
+// 4. SLIDER TỰ ĐỘNG & KÉO THẢ (NÂNG CẤP)
+// ======================================================
 function initSlider() {
+    const sliderContainer = document.getElementById('slider-container');
     const slider = document.getElementById('slider');
     const dots = document.querySelectorAll('.slider-dot');
+    
+    if (!slider || !sliderContainer) return;
+
     let currentSlide = 0;
+    let autoPlayInterval;
+    const totalSlides = 3; // Số lượng slide
 
-    // Nếu không có slider (ở trang khác) thì dừng
-    if (!slider) return;
-
+    // --- A. Hàm chuyển Slide ---
     function moveSlider(index) {
-        slider.style.transform = `translateX(-${index * 100}%)`;
+        // Xử lý vòng lặp index
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Cập nhật dot active
         dots.forEach((dot, i) => {
-            dot.classList.toggle('bg-white', i === index);
-            dot.classList.toggle('bg-white/50', i !== index);
+            if (i === currentSlide) {
+                dot.classList.add('bg-white', 'w-8'); // Active dài ra
+                dot.classList.remove('bg-white/50');
+            } else {
+                dot.classList.remove('bg-white', 'w-8');
+                dot.classList.add('bg-white/50');
+            }
         });
     }
 
-    setInterval(() => {
-        currentSlide = (currentSlide + 1) % 3;
-        moveSlider(currentSlide);
-    }, 4000);
+    // --- B. Tự động chạy ---
+    function startAutoPlay() {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(() => {
+            moveSlider(currentSlide + 1);
+        }, 4000);
+    }
+    
+    startAutoPlay(); // Kích hoạt ngay khi load
+
+    // --- C. Xử lý Kéo Thả (Swipe Logic) ---
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let sliderWidth = sliderContainer.offsetWidth;
+
+    // Ngăn kéo ảnh mặc định
+    slider.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+
+    // Sự kiện bắt đầu chạm/click
+    function touchStart(event) {
+        isDragging = true;
+        sliderWidth = sliderContainer.offsetWidth;
+        startPos = getPositionX(event);
+        clearInterval(autoPlayInterval); // Tạm dừng tự động chạy
+        slider.style.transition = 'none'; // Tắt animation để kéo dính tay
+    }
+
+    // Sự kiện di chuyển
+    function touchMove(event) {
+        if (isDragging) {
+            const currentPosition = getPositionX(event);
+            const currentDrag = currentPosition - startPos;
+            
+            // Tính toán vị trí tạm thời
+            const translatePercent = -(currentSlide * 100) + (currentDrag / sliderWidth * 100);
+            slider.style.transform = `translateX(${translatePercent}%)`;
+            
+            currentTranslate = currentDrag; 
+        }
+    }
+
+    // Sự kiện thả tay
+    function touchEnd() {
+        isDragging = false;
+        slider.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)'; // Bật lại animation
+
+        // Nếu kéo > 100px thì đổi slide
+        if (currentTranslate < -100) currentSlide += 1;
+        else if (currentTranslate > 100) currentSlide -= 1;
+
+        moveSlider(currentSlide); // Căn chỉnh lại vị trí chuẩn
+        startAutoPlay(); // Chạy lại tự động
+        currentTranslate = 0; // Reset
+    }
+
+    // Lấy tọa độ X (hỗ trợ cả chuột và cảm ứng)
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+
+    // Gán sự kiện
+    slider.addEventListener('touchstart', touchStart);
+    slider.addEventListener('touchend', touchEnd);
+    slider.addEventListener('touchmove', touchMove);
+
+    slider.addEventListener('mousedown', touchStart);
+    slider.addEventListener('mouseup', touchEnd);
+    slider.addEventListener('mouseleave', () => { if(isDragging) touchEnd() });
+    slider.addEventListener('mousemove', touchMove);
+
+    // Click Dot
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            moveSlider(index);
+            startAutoPlay();
+        });
+    });
 }
 
-// 5. Menu Mobile
+// ======================================================
+// 5. MENU MOBILE (NÚT 3 GẠCH)
+// ======================================================
 function initMobileMenu() {
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -106,16 +224,17 @@ function initMobileMenu() {
     }
 }
 
-// 6. Hiển thị chi tiết sản phẩm & Sản phẩm liên quan (Trang chi tiết)
+// ======================================================
+// 6. TRANG CHI TIẾT SẢN PHẨM
+// ======================================================
 function renderProductDetail() {
     const container = document.getElementById('product-detail-container');
-    if (!container) return; // Nếu không tìm thấy container (ở trang chủ) thì thoát
+    if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
     const product = products.find(p => p.id === productId);
 
-    // 1. XỬ LÝ ẨN SẢN PHẨM: Nếu không tìm thấy hoặc Giá = 0
     if (!product || product.price === 0) {
         container.innerHTML = `
             <div class="text-center py-20">
@@ -126,26 +245,18 @@ function renderProductDetail() {
         return;
     }
 
-    // 2. XỬ LÝ HIỂN THỊ GIÁ (CHO SẢN PHẨM CHÍNH)
-    // Nếu giá là 1 -> Hiện "Liên hệ báo giá", ngược lại hiện số tiền
-    let mainPriceHTML = '';
-    if (product.price === 1) {
-        mainPriceHTML = `<span class="text-3xl font-black text-blue-700 uppercase">Liên hệ báo giá</span>`;
-    } else {
-        mainPriceHTML = `
-            <span class="text-3xl font-black text-red-600">${product.price.toLocaleString()} VNĐ</span>
-            <span class="text-sm text-gray-400 line-through mb-1.5">Giá thị trường: ${(product.price * 1.2).toLocaleString()}đ</span>
-        `;
-    }
+    // Giá chính
+    let mainPriceHTML = product.price === 1 
+        ? `<span class="text-3xl font-black text-blue-700 uppercase">Liên hệ báo giá</span>`
+        : `<span class="text-3xl font-black text-red-600">${product.price.toLocaleString()} VNĐ</span>
+           <span class="text-sm text-gray-400 line-through mb-1.5">Giá thị trường: ${(product.price * 1.2).toLocaleString()}đ</span>`;
 
-    // 3. XỬ LÝ SẢN PHẨM LIÊN QUAN
-    // Lấy sản phẩm cùng loại, trừ chính nó, VÀ giá > 0
+    // Sản phẩm liên quan
     const relatedProducts = products
         .filter(p => p.category === product.category && p.id !== product.id && p.price > 0)
         .slice(0, 4);
 
     const relatedHTML = relatedProducts.map(p => {
-        // Xử lý hiển thị giá cho thẻ nhỏ (card) bên dưới
         const smallPriceDisplay = p.price === 1 
             ? '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>' 
             : `<div class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</div>`;
@@ -160,27 +271,19 @@ function renderProductDetail() {
         </div>
     `}).join('');
 
-    // 4. RENDER HTML CHI TIẾT
     container.innerHTML = `
         <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 bg-white p-6 md:p-10 rounded-xl shadow-sm border border-gray-100 mb-16 relative">
             <div class="absolute top-0 left-0 bg-yellow-500 text-white text-[10px] font-bold px-3 py-1 uppercase rounded-tl-xl rounded-br-xl z-10">Best Seller</div>
-
             <div class="lg:w-1/2 flex items-center justify-center bg-[#f9f9f9] rounded-xl overflow-hidden p-6 group">
                 <img src="${product.img}" alt="${product.name}" class="max-w-full h-auto group-hover:scale-105 transition duration-500 shadow-xl rounded-lg">
             </div>
-
             <div class="lg:w-1/2 flex flex-col justify-center">
                 <nav class="text-[10px] uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
                     <a href="index.html" class="hover:text-red-900 transition"><i class="fa-solid fa-house"></i></a> / 
                     <span class="text-red-900 font-bold border-b border-red-900 pb-0.5">${product.category === 'rang-xay' ? 'Cà phê Rang Xay' : 'Cà phê Hòa Tan'}</span>
                 </nav>
-                
                 <h1 class="text-3xl md:text-4xl font-black text-red-950 mb-3 leading-tight uppercase tracking-tight">${product.name}</h1>
-                
-                <div class="flex items-end gap-3 mb-6">
-                     ${mainPriceHTML}
-                </div>
-                
+                <div class="flex items-end gap-3 mb-6">${mainPriceHTML}</div>
                 <div class="bg-red-50 p-4 rounded-lg mb-8 border border-red-100">
                     <p class="text-gray-700 text-sm leading-relaxed mb-3">
                         ${product.info ? product.info.description : `Hương vị đậm đà truyền thống từ dòng sản phẩm <strong>${product.name}</strong>.`}
@@ -192,7 +295,6 @@ function renderProductDetail() {
                          `}
                     </div>
                 </div>
-
                 <div class="flex flex-col gap-3 pt-4 border-t border-gray-100">
                     <a href="https://zalo.me/0852494694" target="_blank" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg uppercase tracking-widest text-xs transition duration-300 shadow-lg shadow-blue-600/20 text-center flex items-center justify-center gap-2">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" class="w-5 h-5 bg-white rounded-full p-0.5">
@@ -204,7 +306,6 @@ function renderProductDetail() {
                 </div>
             </div>
         </div>
-
         <div class="mt-16">
             <div class="flex items-center justify-between mb-8">
                 <h3 class="text-xl font-black text-red-950 uppercase border-l-4 border-yellow-500 pl-4">Có thể bạn sẽ thích</h3>
@@ -217,61 +318,54 @@ function renderProductDetail() {
     `;
 }
 
-// 7. KHỞI CHẠY CHÍNH
-document.addEventListener('DOMContentLoaded', () => {
-    // Chạy các tính năng chung
-    initMobileMenu();
-    initSearch();
-    initPromoPopup();
-    
-    // Kiểm tra trang hiện tại để chạy code phù hợp
-    // a. Nếu là Trang Chủ (có slider)
-    if (document.getElementById('slider')) {
-        initSlider();
-        renderSection('rang-xay', 'grid-rang-xay');
-        renderSection('best-seller', 'grid-best-seller');
-    }
-
-    // b. Nếu là Trang Chi Tiết (có container sản phẩm)
-    if (document.getElementById('product-detail-container')) {
-        renderProductDetail();
-    }
-});
-
-// ==========================================
-// 8. LOGIC POPUP SLIDER
-// ==========================================
+// ======================================================
+// 7. POPUP KHUYẾN MÃI
+// ======================================================
 function initPromoPopup() {
     const popup = document.getElementById('promo-popup');
     const closeBtn = document.getElementById('close-popup-btn');
     const dismissBtn = document.getElementById('dismiss-popup-btn');
     const overlay = document.getElementById('popup-overlay');
 
-    // Nếu trang hiện tại không có popup HTML thì thoát ngay
     if (!popup) return;
 
-    // Kiểm tra sessionStorage xem khách đã tắt popup trong phiên này chưa
     const isPopupShown = sessionStorage.getItem('popupShown');
 
     if (!isPopupShown) {
-        // Hiện popup sau 2.5 giây
         setTimeout(() => {
             popup.classList.remove('hidden');
-            popup.classList.add('flex'); // <--- 1. THÊM DÒNG NÀY (để căn giữa)
+            popup.classList.add('flex'); 
         }, 2500);
     }
 
-    // Hàm đóng popup
     const closePopup = () => {
-        popup.classList.remove('flex');   // <--- 2. THÊM DÒNG NÀY (xóa flex trước)
-        popup.classList.add('hidden');    // Sau đó mới ẩn
-        
-        // Lưu trạng thái "đã xem" -> F5 sẽ không hiện lại nữa
+        popup.classList.remove('flex');   
+        popup.classList.add('hidden');    
         sessionStorage.setItem('popupShown', 'true');
     };
 
-    // Gán sự kiện click
     if(closeBtn) closeBtn.addEventListener('click', closePopup);
     if(dismissBtn) dismissBtn.addEventListener('click', closePopup);
     if(overlay) overlay.addEventListener('click', closePopup);
 }
+
+// ======================================================
+// 8. KHỞI CHẠY CHÍNH
+// ======================================================
+document.addEventListener('DOMContentLoaded', () => {
+    initMobileMenu();
+    initSearch();
+    initPromoPopup();
+    
+    // Trang Chủ
+    if (document.getElementById('slider')) {
+        initSlider();
+        renderSection('rang-xay', 'grid-rang-xay');
+        renderSection('best-seller', 'grid-best-seller');
+    }
+
+    // Trang Chi Tiết
+    if (document.getElementById('product-detail-container')) {
+        renderProductDetail();
+    }
+});

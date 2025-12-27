@@ -5,8 +5,6 @@ let baseProducts = window.dbProducts || [];
 // Lấy toàn bộ dữ liệu thật từ data.js (Bao gồm cả sản phẩm giá 0đ/Chưa cập nhật)
 let allProducts = [...baseProducts].filter(p => p.price !== 0);
 
-// (Đã xóa vòng lặp for tạo 30 sản phẩm giả tại đây)
-
 // 3. CẤU HÌNH TRANG
 const itemsPerPage = 9; // Số sản phẩm mỗi trang (3 hàng x 3 cột)
 let currentPage = 1;
@@ -204,7 +202,7 @@ function renderPagination(filteredList) {
 function changePage(filteredList) {
     renderProducts(filteredList);
     renderPagination(filteredList);
-    window.scrollTo({ top: 300, behavior: 'smooth' }); // Cuộn lên đầu lưới sản phẩm
+    window.scrollTo({ top: 300, behavior: 'smooth' }); 
 }
 
 // 8. CẬP NHẬT SỐ LƯỢNG (Sidebar)
