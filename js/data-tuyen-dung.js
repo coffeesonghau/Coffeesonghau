@@ -3,7 +3,7 @@
 const jobData = {
     'barista': {
         title: 'Nhân viên Pha chế (Barista)',
-        salary: '5.000.000 - 8.000.000 VNĐ + Thưởng',
+        salary: '4.000.000 - 6.000.000 VNĐ + Thưởng',
         location: 'Coffee Sông Hậu, TP. Bạc Liêu',
         desc: [
             'Chuẩn bị nguyên liệu, pha chế cà phê và các loại đồ uống theo menu.',
@@ -26,7 +26,7 @@ const jobData = {
     },
     'sales': {
         title: 'Nhân viên Kinh Doanh (Sales thị trường)',
-        salary: 'Lương cứng + Hoa hồng (Thu nhập 10-20tr)',
+        salary: 'Lương cứng + Hoa hồng (Thu nhập 5-15tr)',
         location: 'Bạc Liêu, Cà Mau, Sóc Trăng',
         desc: [
             'Tìm kiếm khách hàng mới (Đại lý tạp hóa, Quán cà phê, Nhà hàng).',
@@ -49,7 +49,7 @@ const jobData = {
     },
     'phucvu': {
         title: 'Nhân viên Phục vụ (Part-time)',
-        salary: 'Khởi điểm: 16.000đ/giờ',
+        salary: 'Khởi điểm: 15.000đ/giờ',
         location: 'TP. Bạc Liêu (Làm tại quán)',
         desc: [
             'Chào đón khách hàng, order món tại bàn.',
