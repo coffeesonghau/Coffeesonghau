@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Chi nhánh & Nhượng quyền | COFFEE Sông Hậu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="./style.css" rel="stylesheet">
+
+    <style>
+        /* Hiệu ứng hiện dần khi lọc */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .store-item {
+            animation: fadeInScale 0.4s ease-out;
+        }
+
+        /* Class ẩn item (Dùng thay vì hidden của tailwind để dễ quản lý logic) */
+        .store-hidden {
+            display: none !important;
+        }
+
+        /* Style cho nút lọc đang chọn */
+        .filter-btn.active {
+            background-color: #7a0b0b;
+            /* Red-900 */
+            color: white;
+            border-color: #7a0b0b;
+        }
+    </style>
+</head>
+
+<body class="bg-[#fcfcfc] text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-white sticky top-0 z-50 shadow-sm">
+        <div
+            class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+            <span>Coffee Sông Hậu</span>
+            <span>Hotline: 0852.494.694</span>
+        </div>
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+            <a href="index.html" class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông
+                    Hậu</span></a>
+            <div
+                class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
+                <a href="index.html" class="hover:text-red-900 py-4">Trang Chủ</a>
+                <a href="sanpham.html" class="hover:text-red-900 py-4">Sản phẩm</a>
+                <a href="chuoi-he-thong.html" class="text-red-900 py-4 border-b-2 border-red-900">Hệ thống cửa hàng</a>
+                <a href="nhuong-quyen.html" class="hover:text-red-900 py-4">Nhượng quyền</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i
+                        class="fa-solid fa-bars text-2xl"></i></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
+            <div class="flex flex-col space-y-2 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <a href="index.html" class="py-2 border-b border-gray-50 hover:text-red-900">Trang Chủ</a>
+                <a href="sanpham.html" class="py-2 border-b border-gray-50 hover:text-red-900">Sản phẩm</a>
+                <a href="chuoi-he-thong.html" class="py-2 border-b border-gray-50 text-red-900">Hệ thống cửa hàng</a>
+                <a href="nhuong-quyen.html" class="py-2 hover:text-red-900">Nhượng quyền</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="relative w-full h-64 bg-gray-900 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200" alt="Background"
+            class="absolute inset-0 w-full h-full object-cover opacity-40">
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4 text-center">
+            <h1 class="text-3xl md:text-5xl font-black uppercase mb-2">Chuỗi Cà Phê</h1>
+            <p class="text-sm md:text-base font-light opacity-90 tracking-wide max-w-2xl">
+                Tìm kiếm cửa hàng Sông Hậu Coffee gần bạn nhất
+            </p>
+        </div>
+    </div>
+
+    <section class="container mx-auto px-4 -mt-8 relative z-10 max-w-5xl">
+        <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100">
+            <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+
+                <div class="w-full md:w-1/3 relative">
+                    <input type="text" id="store-search" placeholder="Nhập tên đường, quận, huyện..."
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-red-900 focus:bg-white transition shadow-sm">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400"></i>
+                </div>
+
+                <div class="w-full md:w-2/3 flex flex-wrap gap-2 justify-center md:justify-end" id="filter-container">
+                    <button
+                        class="filter-btn active px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-transparent bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        onclick="filterStores('all', this)">
+                        Tất cả
+                    </button>
+                    <button
+                        class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900"
+                        onclick="filterStores('bac-lieu', this)">
+                        Bạc Liêu
+                    </button>
+                    <button
+                        class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900"
+                        onclick="filterStores('ca-mau', this)">
+                        Cà Mau
+                    </button>
+                    <button
+                        class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900"
+                        onclick="filterStores('soc-trang', this)">
+                        Sóc Trăng
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-500">
+                <span>Hiển thị danh sách các điểm bán chính hãng.</span>
+                <span id="result-count" class="font-bold text-red-900">Đang hiển thị 5 địa điểm</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-12 max-w-5xl min-h-[400px]">
+        <div id="store-list" class="flex flex-col gap-6">
+
+            <div class="store-item mt-2 relative bg-yellow-50 border-2 border-red-900 rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row transform hover:-translate-y-1 transition duration-300"
+                data-city="bac-lieu" data-search="cong ty nam duong tru so chinh bac lieu ca mau cau sap">
+
+                <div
+                    class="absolute top-0 right-0 bg-red-900 text-white text-[10px] font-bold px-4 py-2 rounded-bl-xl uppercase z-10">
+                    <i class="fa-solid fa-star text-yellow-500 mr-1"></i> Trụ sở chính
+                </div>
+
+                <div
+                    class="w-full md:w-5/12 h-64 md:h-auto overflow-hidden relative border-r-0 md:border-r border-red-200">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800"
+                        class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <div class="bg-white/90 p-4 rounded-full shadow-lg backdrop-blur-sm">
+                            <i class="fa-solid fa-building text-4xl text-red-900"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                    <h4 class="text-sm font-bold text-red-600 uppercase tracking-widest mb-1">Công Ty TNHH MTV SX TM DV
+                    </h4>
+                    <h2 class="text-3xl font-black text-red-950 uppercase mb-4 leading-none">Nam Dương</h2>
+
+                    <div class="space-y-4 mb-8 border-l-4 border-yellow-500 pl-4">
+                        <p class="text-gray-700 flex items-start gap-3">
+                            <i class="fa-solid fa-map-location-dot mt-1 text-red-900 text-lg"></i>
+                            <span class="font-medium">188+181, Đường 23/8, Khóm Cầu Sập, Phường 8, TP. Bạc Liêu, Tỉnh Cà
+                                Mau</span>
+                        </p>
+                        <p class="text-gray-700 flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-red-900 text-lg"></i>
+                            <span class="font-bold text-lg">0852.494.694</span>
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="https://goo.gl/maps/example" target="_blank"
+                            class="flex-1 bg-red-900 text-white text-center py-4 rounded-lg font-bold uppercase tracking-wider hover:bg-black transition shadow-lg shadow-red-900/30">
+                            <i class="fa-solid fa-diamond-turn-right mr-2"></i> Dẫn đường
+                        </a>
+                        <a href="nhuong-quyen.html"
+                            class="flex-1 bg-white border-2 border-red-900 text-red-900 text-center py-4 rounded-lg font-bold uppercase tracking-wider hover:bg-red-50 transition">
+                            <i class="fa-solid fa-handshake mr-2"></i> Liên hệ hợp tác
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row group"
+                data-city="bac-lieu" data-search="song hau 12 cau sap phuong 8 bac lieu">
+                <div class="w-full md:w-1/3 h-48 md:h-auto overflow-hidden relative">
+                    <img src="img/songhau12.jpg"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute top-2 left-2 bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded">
+                        COFFEE</div>
+                </div>
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <h3 class="text-xl font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông
+                        Hậu 12 - CẦU SẬP</h3>
+                    <p class="text-sm text-gray-500 mb-2"><i
+                            class="fa-solid fa-location-dot w-5 text-red-900"></i>188+181, Đường 23/8, Khóm Cầu Sập,
+                        Phường 8, TP. Bạc Liêu, Tỉnh Cà Mau</p>
+                    <p class="text-sm text-gray-500 mb-4"><i class="fa-solid fa-clock w-5 text-red-900"></i> 05:30 -
+                        21:30 (Mở cửa hàng ngày)</p>
+                    <div class="flex gap-3 mt-auto">
+                        <a href="tel:0852494694"
+                            class="px-4 py-2 border border-gray-300 rounded text-xs font-bold uppercase hover:bg-gray-50 text-gray-600">Liên
+                            hệ CSKH</a>
+                        <a href="https://maps.app.goo.gl/z11znAq7eE6X5mtP7" target="_blank"
+                            class="px-4 py-2 bg-red-900 text-white rounded text-xs font-bold uppercase hover:bg-black transition flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot"></i> Bấm xem bản đồ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row group"
+                data-city="bac-lieu" data-search="song hau special duong ninh binh phuong 2, tinh bac lieu">
+                <div class="w-full md:w-1/3 h-48 md:h-auto overflow-hidden relative">
+                    <img src="img/songhaup2.jpg"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute top-2 left-2 bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded">
+                        COFFEE</div>
+                </div>
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <h3 class="text-xl font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Cafe
+                        Sông Hậu Special</h3>
+                    <p class="text-sm text-gray-500 mb-2"><i class="fa-solid fa-location-dot w-5 text-red-900"></i>
+                        Đường Ninh Bình, Phường 2, tỉnh Bạc Liêu</p>
+                    <div class="flex gap-3 mt-auto pt-4">
+                        <a href="tel:0852494694"
+                            class="px-4 py-2 border border-gray-300 rounded text-xs font-bold uppercase hover:bg-gray-50 text-gray-600">Liên
+                            hệ CSHK</a>
+                        <a href="#" target="_blank"
+                            class="px-4 py-2 bg-red-900 text-white rounded text-xs font-bold uppercase hover:bg-black transition flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot"></i> Bấm xem bản đồ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row group"
+                data-city="bac-lieu" data-search="song hau 2 duong cach mang phuong 1 bac lieu">
+                <div class="w-full md:w-1/3 h-48 md:h-auto overflow-hidden relative">
+                    <img src="img/songhau2.jpg"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute top-2 left-2 bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded">
+                        Take Away</div>
+                </div>
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <h3 class="text-xl font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông
+                        Hậu 2 - Bạc Liêu</h3>
+                    <p class="text-sm text-gray-500 mb-2"><i class="fa-solid fa-location-dot w-5 text-red-900"></i>Đường
+                        Cách Mạng, Phường 1, Bạc Liêu</p>
+                    <div class="flex gap-3 mt-auto pt-4">
+                        <a href="tel:0852494694"
+                            class="px-4 py-2 border border-gray-300 rounded text-xs font-bold uppercase hover:bg-gray-50 text-gray-600">Liên
+                            hệ CSKH</a>
+                        <a href="https://maps.app.goo.gl/jZYdeBkgCuJzW98LA" target="_blank"
+                            class="px-4 py-2 bg-red-900 text-white rounded text-xs font-bold uppercase hover:bg-black transition flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot"></i> Bấm xem bản đồ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row group"
+                data-city="bac-lieu" data-search="vong xoay ton duc thang đường vo van kiet phuonng 7 tinh bac lieu">
+                <div class="w-full md:w-1/3 h-48 md:h-auto overflow-hidden relative">
+                    <img src="img/amthucsonghau.jpg"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute top-2 left-2 bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded">
+                        Food</div>
+                </div>
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <h3 class="text-xl font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Ẩm
+                        Thực Sông
+                        Hậu - Bạc Liêu</h3>
+                    <p class="text-sm text-gray-500 mb-2"><i class="fa-solid fa-location-dot w-5 text-red-900"></i>Vòng
+                        xoay Tôn Đức Thắng, Đ. Võ Văn Kiệt, Phường 7, Bạc Liêu, Việt Nam</p>
+                    <div class="flex gap-3 mt-auto pt-4">
+                        <a href="tel:0852494694"
+                            class="px-4 py-2 border border-gray-300 rounded text-xs font-bold uppercase hover:bg-gray-50 text-gray-600">Liên
+                            hệ CSKH</a>
+                        <a href="https://maps.app.goo.gl/gcN9vA2XzsJdc4GW9" target="_blank"
+                            class="px-4 py-2 bg-red-900 text-white rounded text-xs font-bold uppercase hover:bg-black transition flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot"></i> Bấm xem bản đồ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="mt-6 p-8 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 flex flex-col items-center justify-center text-center group hover:border-red-900 hover:bg-red-50 transition duration-300 cursor-default">
+                <div
+                    class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-spinner fa-spin-pulse text-xl text-red-900"></i>
+                </div>
+                <h3 class="text-gray-600 font-bold uppercase text-sm group-hover:text-red-900">Dữ liệu đang được cập
+                    nhật...</h3>
+                <p class="text-xs text-gray-400 mt-1 max-w-md">
+                    Hệ thống Sông Hậu còn nhiều chi nhánh và điểm bán khác đang được chúng tôi bổ sung liên tục lên Website này.
+                </p>
+            </div>
+
+            <div id="no-result" class="hidden text-center py-12">
+                <i class="fa-solid fa-map-location-dot text-6xl text-gray-200 mb-4"></i>
+                <p class="text-gray-500 font-bold">Không tìm thấy địa điểm nào phù hợp.</p>
+                <button onclick="filterStores('all', document.querySelector('.filter-btn'))"
+                    class="mt-4 text-red-900 underline text-sm hover:text-red-700">Xem tất cả cửa hàng</button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-red-950 text-white mt-auto pt-16 pb-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="text-2xl font-black mb-6">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+                <p class="text-sm text-gray-400 leading-relaxed mb-6">Nam Dương Co., Ltd – Đối tác tin cậy trong sản
+                    xuất, phân phối và nhượng quyền cà phê Sông Hậu.</p>
+                <div class="flex space-x-4">
+                    <a href="https://www.facebook.com/profile.php?id=61585402033689&locale=vi_VN"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-facebook-f text-xs"></i></a>
+                    <a href="#"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-youtube text-xs"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Hỗ trợ</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="quy-trinh-dat-hang.html" class="hover:text-yellow-600 transition">Hướng dẫn mua
+                            hàng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về chúng tôi
+                </h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
+                    <li><a href="chuoi-he-thong.html"
+                            class="hover:text-yellow-600 transition text-yellow-500 font-bold">Hệ thống phân phối</a>
+                    </li>
+                    <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ</h4>
+                <div class="text-sm text-gray-400 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
+                        <span>188+181, Đường 23/8, Khóm Cầu Sập, Phường 8, TP. Bạc Liêu, Tỉnh Cà Mau</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-phone text-yellow-600"></i>
+                        <span>0852.494.694</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]"> © 2025 COFFEE Sông Hậu. All rights
+                reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // 1. Hàm lọc theo Nút bấm (Thành phố)
+        function filterStores(city, btnElement) {
+            const items = document.querySelectorAll('.store-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('store-search');
+            let count = 0;
+
+            // Xử lý UI nút bấm
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'bg-red-900', 'text-white', 'border-transparent');
+                btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200'); // Reset style
+            });
+
+            // Active nút được bấm
+            if (btnElement) {
+                btnElement.classList.add('active');
+                btnElement.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+            }
+
+            // Xóa nội dung ô tìm kiếm khi bấm nút lọc (để tránh xung đột logic)
+            if (searchInput) searchInput.value = '';
+
+            // Lọc item
+            items.forEach(item => {
+                const itemCity = item.getAttribute('data-city');
+
+                if (city === 'all' || itemCity === city) {
+                    item.classList.remove('store-hidden');
+                    count++;
+                } else {
+                    item.classList.add('store-hidden');
+                }
+            });
+
+            updateCount(count);
+        }
+
+        // 2. Hàm tìm kiếm (Real-time)
+        const searchInput = document.getElementById('store-search');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const items = document.querySelectorAll('.store-item');
+                const buttons = document.querySelectorAll('.filter-btn');
+                let count = 0;
+
+                // Khi tìm kiếm, bỏ active ở các nút lọc
+                buttons.forEach(btn => btn.classList.remove('active', 'bg-red-900', 'text-white'));
+                buttons[0].classList.add('bg-white', 'text-gray-600'); // Reset về màu thường
+
+                items.forEach(item => {
+                    // Lấy dữ liệu từ attribute data-search
+                    const searchData = item.getAttribute('data-search') || '';
+
+                    if (searchData.includes(query)) {
+                        item.classList.remove('store-hidden');
+                        count++;
+                    } else {
+                        item.classList.add('store-hidden');
+                    }
+                });
+
+                updateCount(count);
+            });
+        }
+
+        // 3. Hàm cập nhật số lượng & Hiển thị thông báo rỗng
+        function updateCount(count) {
+            const countLabel = document.getElementById('result-count');
+            const noResult = document.getElementById('no-result');
+
+            if (countLabel) countLabel.innerText = `Đang hiển thị ${count} địa điểm`;
+
+            if (count === 0) {
+                if (noResult) noResult.classList.remove('hidden');
+            } else {
+                if (noResult) noResult.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
