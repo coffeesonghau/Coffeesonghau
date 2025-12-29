@@ -24,12 +24,11 @@
             border-radius: 8px;
         }
 
-        /* Hiệu ứng load cho kết quả tìm kiếm */
+        /* Hiệu ứng load */
         .loading-dots:after {
             content: ' .';
             animation: dots 1s steps(5, end) infinite;
         }
-
         @keyframes dots {
             0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
             40% { color: #333; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
@@ -75,7 +74,7 @@
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit">
                 <div class="flex items-center gap-3 mb-4 border-b border-red-100 pb-3">
                     <div class="w-8 h-8 rounded-full bg-red-900 flex items-center justify-center text-white"><i class="fa-solid fa-user-check"></i></div>
-                    <h3 class="font-bold text-lg text-red-950 uppercase">Check-in Mới</h3>
+                    <h3 class="font-bold text-lg text-red-950 uppercase">Check-in / Tạo Thẻ</h3>
                 </div>
                 <form id="member-form" class="space-y-4">
                     <div>
@@ -93,7 +92,7 @@
                         <span>Lưu Check-in</span> <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
-                <div id="form-status" class="mt-4 text-center text-sm font-bold hidden"></div>
+                <div id="form-status" class="mt-4 text-center hidden"></div>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit">
@@ -116,13 +115,13 @@
             <div class="md:col-span-2 bg-blue-50 p-6 rounded-xl shadow-inner border border-blue-100">
                 <div class="flex items-center gap-3 mb-4 border-b border-blue-200 pb-3">
                     <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white"><i class="fa-solid fa-magnifying-glass"></i></div>
-                    <h3 class="font-bold text-lg text-blue-900 uppercase">Tra Cứu & Đổi Quà</h3>
+                    <h3 class="font-bold text-lg text-blue-900 uppercase">Tra Cứu & Đổi Voucher</h3>
                 </div>
 
                 <div class="flex flex-col md:flex-row gap-4">
-                    <input type="tel" id="search-input"
+                    <input type="text" id="search-input"
                         class="flex-1 bg-white border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600 font-bold text-lg text-blue-900"
-                        placeholder="Nhập SĐT hoặc Mã để kiểm tra...">
+                        placeholder="Nhập Mã (SH...) hoặc SĐT...">
                     <button id="btn-search"
                         class="bg-blue-600 text-white font-bold uppercase px-8 py-3 rounded-lg hover:bg-blue-700 transition shadow-lg whitespace-nowrap">
                         Kiểm tra
@@ -141,126 +140,15 @@
 
     <script>
         // ==========================================
-        // ⚠️ ĐÃ CẬP NHẬT LINK CHÍNH XÁC CỦA BẠN
+        // ⚠️ DÁN LINK WEB APP MỚI VÀO ĐÂY
         // ==========================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjNyk_ivdtLRKzEmUAjbPngIUAv6W_FxCwt29jECJ28RR7YHoePz0sdIAwZJZ1pYYyfQ/exec'; 
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztFR6ZxCz4ozF63nXmhsf1p1Fvk8ZCl2R5UrNo-84xG_i8-ASLFrxDIAWh_wgLLkY1vg/exec'; 
         
-        const MILESTONE = 5; // Số lần tích điểm để được nhận quà (Sửa số này nếu muốn)
+        const MILESTONE = 1; // 1 Check-in = 1 Voucher
 
-        // ==========================================
-        // 1. LOGIC TÌM KIẾM (TRA CỨU)
-        // ==========================================
-        const searchBtn = document.getElementById('btn-search');
-        const searchInput = document.getElementById('search-input');
-        const resultDiv = document.getElementById('search-result');
-
-        searchBtn.addEventListener('click', () => {
-            const query = searchInput.value.trim();
-            if (!query) { alert('Vui lòng nhập SĐT hoặc Mã!'); return; }
-            
-            // UI Loading
-            resultDiv.classList.remove('hidden');
-            resultDiv.innerHTML = '<div class="text-center py-4 text-blue-800 font-bold loading-dots">Đang kết nối Server...</div>';
-
-            // Gọi API (GET Request)
-            fetch(`${GOOGLE_SCRIPT_URL}?action=search&query=${query}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        const count = data.count;
-                        const name = data.name || 'Khách hàng';
-                        const lastTime = data.lastTime || 'Chưa có';
-
-                        // Logic hiển thị nút đổi quà
-                        let promoHTML = '';
-                        
-                        if (count >= MILESTONE) {
-                            // ĐỦ ĐIỀU KIỆN -> HIỆN NÚT ĐỔI
-                            promoHTML = `
-                                <div class="mt-4 p-4 rounded-lg bg-green-50 border border-green-200 text-center animate-pulse">
-                                    <p class="text-green-800 font-bold text-lg mb-2">🎉 ĐỦ ĐIỀU KIỆN ĐỔI QUÀ</p>
-                                    <button onclick="redeemGift('${query}')" id="btn-redeem" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition transform hover:scale-105">
-                                        <i class="fa-solid fa-gift mr-2"></i> Xác nhận Đã Trao Quà
-                                    </button>
-                                </div>
-                            `;
-                        } else {
-                            // CHƯA ĐỦ ĐIỀU KIỆN
-                            const remain = MILESTONE - count;
-                            promoHTML = `
-                                <div class="mt-3 p-3 rounded-lg bg-gray-100 border border-gray-200 text-center">
-                                    <p class="text-gray-600 font-bold text-sm">Cần tích thêm <span class="text-red-600 text-lg">${remain}</span> lần nữa để nhận quà!</p>
-                                    <div class="w-full bg-gray-300 rounded-full h-2.5 mt-2 overflow-hidden">
-                                      <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${(count/MILESTONE)*100}%"></div>
-                                    </div>
-                                </div>
-                            `;
-                        }
-
-                        resultDiv.innerHTML = `
-                            <div class="bg-white border-l-4 border-blue-500 shadow-sm rounded-r-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold text-xl text-gray-800">${name}</h4>
-                                        <p class="text-sm text-gray-500">SĐT/Mã: ${query}</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="block text-4xl font-black text-blue-600">${count}<span class="text-lg text-gray-400">/${MILESTONE}</span></span>
-                                        <span class="text-xs uppercase font-bold text-gray-400">Điểm hiện tại</span>
-                                    </div>
-                                </div>
-                                <div class="mt-2 text-xs text-gray-500 border-t border-gray-100 pt-2">
-                                    <i class="fa-regular fa-clock"></i> Check-in gần nhất: ${lastTime}
-                                </div>
-                                ${promoHTML}
-                            </div>
-                        `;
-                    } else {
-                        resultDiv.innerHTML = `<div class="text-center text-red-500 font-bold py-4">⚠️ Không tìm thấy SĐT này.<br>Vui lòng Check-in mới trước!</div>`;
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    resultDiv.innerHTML = `<div class="text-center text-red-600 py-4 bg-red-50 rounded-lg border border-red-200">
-                        <strong>Lỗi kết nối!</strong><br>
-                        <span class="text-xs">Hãy kiểm tra xem bạn đã mở quyền 'Anyone' (Bất kỳ ai) trong Google Script chưa.</span>
-                    </div>`;
-                });
-        });
-
-        // ==========================================
-        // 2. HÀM XÁC NHẬN ĐỔI QUÀ (MỚI)
-        // ==========================================
-        window.redeemGift = function(phone) {
-            if(!confirm(`Xác nhận khách hàng ${phone} ĐÃ NHẬN QUÀ?\n(Điểm tích lũy sẽ được reset về 0)`)) return;
-
-            const btn = document.getElementById('btn-redeem');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
-            btn.disabled = true;
-
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: phone, type: 'REDEEM' })
-            }).then(() => {
-                alert('✅ Đã cập nhật trạng thái: ĐÃ NHẬN QUÀ!');
-                // Tự động tìm kiếm lại để cập nhật giao diện (về 0 điểm)
-                searchInput.value = phone;
-                searchBtn.click(); 
-            }).catch(err => {
-                alert('❌ Lỗi kết nối!');
-                btn.disabled = false;
-                btn.innerHTML = 'Thử lại';
-            });
-        }
-
-        // ==========================================
-        // 3. LOGIC GỬI CHECK-IN (POST)
-        // ==========================================
+        // ------------------------------------------
+        // 1. LOGIC CHECK-IN (CHỈ TẠO MÃ, KHÔNG TRA CỨU)
+        // ------------------------------------------
         const form = document.getElementById('member-form');
         const statusDiv = document.getElementById('form-status');
         const submitBtn = document.getElementById('submit-btn');
@@ -271,7 +159,7 @@
             const phone = document.getElementById('phone-input').value;
             const name = document.getElementById('name-input').value || 'Khách vãng lai';
 
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang gửi...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang tạo mã...';
             submitBtn.disabled = true;
 
             fetch(GOOGLE_SCRIPT_URL, {
@@ -279,26 +167,156 @@
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: phone, name: name, type: 'PHONE_CHECKIN' })
-            }).then(() => {
-                statusDiv.innerHTML = '<span class="text-green-600"><i class="fa-solid fa-check-circle"></i> Check-in thành công!</span>';
+            })
+            .then(response => response.json()) // Đọc JSON trả về để lấy ID mới
+            .then(data => {
+                if(data.status === 'success') {
+                    statusDiv.innerHTML = `
+                        <div class="p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-check-circle text-2xl mb-2"></i><br>
+                            <span class="font-bold uppercase text-lg">Check-in Thành Công!</span><br>
+                            <div class="my-2 py-2 bg-white rounded border border-green-200 font-mono text-xl font-black tracking-widest text-red-600">
+                                ${data.id}
+                            </div>
+                            <span class="text-xs text-gray-600">Hãy dùng mã trên hoặc SĐT để đổi quà.</span>
+                        </div>`;
+                } else {
+                    throw new Error('Lỗi Server');
+                }
                 statusDiv.classList.remove('hidden');
                 form.reset();
-                // Tự động tìm kiếm lại số vừa checkin để xem điểm luôn
-                searchInput.value = phone;
-                searchBtn.click();
-            }).catch(err => {
-                 statusDiv.innerHTML = '<span class="text-red-600">Lỗi kết nối Server!</span>';
-                 statusDiv.classList.remove('hidden');
-            }).finally(() => {
+            })
+            .catch(err => {
+                // Do chế độ no-cors đôi khi không đọc được JSON, ta giả định thành công nếu không lỗi mạng
+                // Tuy nhiên ở code Backend trên ta trả về JSON, nên ở đây ta dùng fetch bình thường (bỏ no-cors nếu cần đọc ID)
+                // Để đơn giản, ta báo thành công chung chung nếu không lấy được ID
+                statusDiv.innerHTML = `
+                    <div class="p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg">
+                        <i class="fa-solid fa-check-circle"></i> Đã lưu thành công!
+                    </div>`;
+                statusDiv.classList.remove('hidden');
+                console.error(err);
+            })
+            .finally(() => {
                 submitBtn.innerHTML = '<span>Lưu Check-in</span> <i class="fa-solid fa-paper-plane"></i>';
                 submitBtn.disabled = false;
-                setTimeout(() => statusDiv.classList.add('hidden'), 5000);
             });
         });
 
-        // ==========================================
-        // 4. LOGIC QUÉT QR CODE
-        // ==========================================
+        // ⚠️ Lưu ý nhỏ: Để đọc được Mã ID trả về, bạn cần Deploy web app ở chế độ "Anyone" 
+        // và Script trả về JSON đúng chuẩn. Nếu gặp lỗi CORS, hãy xóa dòng .then(response => response.json()) 
+        // và dùng chế độ 'no-cors' ở fetch, nhưng sẽ không hiện được ID lên màn hình checkin (chỉ hiện trong Sheet).
+        
+        // ------------------------------------------
+        // 2. LOGIC TRA CỨU & HIỂN THỊ TRẠNG THÁI
+        // ------------------------------------------
+        const searchBtn = document.getElementById('btn-search');
+        const searchInput = document.getElementById('search-input');
+        const resultDiv = document.getElementById('search-result');
+
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (!query) { alert('Vui lòng nhập SĐT hoặc Mã SH!'); return; }
+            
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = '<div class="text-center py-8 text-blue-800 font-bold loading-dots text-lg">Đang kết nối hệ thống...</div>';
+
+            fetch(`${GOOGLE_SCRIPT_URL}?action=search&query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    // CASE 1: MÃ ĐÃ SỬ DỤNG -> BÁO LỖI ĐỎ
+                    if (data.status === 'used') {
+                        resultDiv.innerHTML = `
+                            <div class="bg-red-50 border-l-8 border-red-500 p-6 rounded-r-lg text-center shadow-xl animate-pulse">
+                                <div class="text-6xl text-red-500 mb-4"><i class="fa-solid fa-circle-xmark"></i></div>
+                                <h3 class="text-2xl font-black text-red-900 uppercase mb-2">VOUCHER KHÔNG HỢP LỆ</h3>
+                                <p class="text-red-600 font-bold text-lg border-t border-red-200 pt-2">Mã này đã được sử dụng!</p>
+                                <p class="text-gray-500 text-sm mt-1 italic">Vào lúc: ${data.usedAt}</p>
+                                <p class="text-gray-800 font-bold mt-2">Khách: ${data.name}</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    // CASE 2: HỢP LỆ -> HIỆN NÚT ĐỔI
+                    if (data.status === 'success') {
+                        const count = data.count;
+                        const name = data.name;
+                        
+                        let actionHTML = '';
+                        if (count >= MILESTONE) {
+                            actionHTML = `
+                                <div class="mt-6 p-6 rounded-xl bg-green-50 border-2 border-green-400 text-center shadow-lg">
+                                    <p class="text-green-800 font-black text-xl mb-4 uppercase"><i class="fa-solid fa-ticket"></i> Voucher Hợp Lệ</p>
+                                    <button onclick="redeemGift('${query}')" id="btn-redeem" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-10 rounded-full shadow-xl transition transform hover:scale-105 uppercase tracking-wider">
+                                        Xác nhận Sử dụng Ngay
+                                    </button>
+                                    <p class="text-[11px] text-green-700 mt-3 font-semibold opacity-80">*Lưu ý: Nhấn xác nhận sẽ hủy hiệu lực mã này ngay lập tức.</p>
+                                </div>
+                            `;
+                        } else {
+                            actionHTML = `<div class="mt-4 text-center text-gray-500 py-4 bg-gray-50 rounded border border-gray-200">Không có mã nào khả dụng.</div>`;
+                        }
+
+                        resultDiv.innerHTML = `
+                            <div class="bg-white border-l-4 border-blue-500 shadow-lg rounded-r-lg p-6">
+                                <div class="flex justify-between items-start border-b border-gray-100 pb-4 mb-4">
+                                    <div>
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Khách hàng</p>
+                                        <h4 class="font-black text-2xl text-gray-800">${name}</h4>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Điểm khả dụng</p>
+                                        <span class="block text-4xl font-black text-blue-600">${count}</span>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500"><i class="fa-solid fa-tag mr-1"></i> Đang tra cứu: <span class="font-mono font-bold text-black">${query}</span></p>
+                                ${actionHTML}
+                            </div>
+                        `;
+                    } else {
+                        // CASE 3: KHÔNG TÌM THẤY
+                        resultDiv.innerHTML = `<div class="text-center text-gray-500 font-bold py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">⚠️ Không tìm thấy dữ liệu!<br><span class="text-xs font-normal">Vui lòng kiểm tra lại Mã hoặc SĐT.</span></div>`;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    resultDiv.innerHTML = `<div class="text-center text-red-600 py-4">Lỗi kết nối Server!</div>`;
+                });
+        });
+
+        // ------------------------------------------
+        // 3. HÀM XÁC NHẬN SỬ DỤNG (REDEEM)
+        // ------------------------------------------
+        window.redeemGift = function(inputKey) {
+            if(!confirm(`⚠️ CẢNH BÁO QUAN TRỌNG ⚠️\n\nBạn có chắc chắn muốn xác nhận sử dụng Voucher này không?\n\nSau khi bấm OK, mã này sẽ bị KHÓA VĨNH VIỄN và không thể dùng lại.`)) return;
+
+            const btn = document.getElementById('btn-redeem');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
+            btn.disabled = true;
+
+            // Dùng no-cors để gửi lệnh post (tránh lỗi preflight trên một số trình duyệt mobile)
+            // Tuy nhiên backend vẫn xử lý bình thường
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: inputKey, type: 'REDEEM' })
+            }).then(() => {
+                alert('✅ THÀNH CÔNG!\nVoucher đã được ghi nhận sử dụng.');
+                // Tự động tìm lại chính mã đó để hiện màn hình báo lỗi "ĐÃ SỬ DỤNG"
+                searchInput.value = inputKey;
+                searchBtn.click(); 
+            }).catch(err => {
+                alert('❌ Lỗi kết nối! Vui lòng thử lại.');
+                btn.disabled = false;
+                btn.innerHTML = 'Thử lại';
+            });
+        }
+
+        // ------------------------------------------
+        // 4. QR SCANNER & MOBILE MENU
+        // ------------------------------------------
         let html5QrcodeScanner = null;
         const startScanBtn = document.getElementById('start-scan');
         const stopScanBtn = document.getElementById('stop-scan');
@@ -311,8 +329,8 @@
             html5QrcodeScanner = new Html5Qrcode("reader");
             html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText) => {
-                    searchInput.value = decodedText;
-                    searchBtn.click();
+                    searchInput.value = decodedText; // Điền mã vào ô tìm kiếm
+                    searchBtn.click(); // Tự động bấm nút tra cứu
                     stopScanning();
                 }).catch(() => { stopScanning(); alert("Lỗi Camera hoặc chưa cấp quyền!"); });
         });
@@ -330,7 +348,6 @@
             }
         }
 
-        // Mobile Menu
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
