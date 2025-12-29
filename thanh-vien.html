@@ -10,18 +10,45 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="./style.css" rel="stylesheet">
     <style>
-        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #7a0b0b; }
-        #reader video { object-fit: cover; border-radius: 8px; }
+        #reader {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #7a0b0b;
+        }
+
+        #reader video {
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
         /* Hiệu ứng load cho kết quả tìm kiếm */
         .loading-dots:after {
             content: ' .';
             animation: dots 1s steps(5, end) infinite;
         }
+
         @keyframes dots {
-            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0);}
-            40% { color: #333; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0);}
-            60% { text-shadow: .25em 0 0 #333, .5em 0 0 rgba(0,0,0,0);}
-            80%, 100% { text-shadow: .25em 0 0 #333, .5em 0 0 #333;}
+
+            0%,
+            20% {
+                color: rgba(0, 0, 0, 0);
+                text-shadow: .25em 0 0 rgba(0, 0, 0, 0), .5em 0 0 rgba(0, 0, 0, 0);
+            }
+
+            40% {
+                color: #333;
+                text-shadow: .25em 0 0 rgba(0, 0, 0, 0), .5em 0 0 rgba(0, 0, 0, 0);
+            }
+
+            60% {
+                text-shadow: .25em 0 0 #333, .5em 0 0 rgba(0, 0, 0, 0);
+            }
+
+            80%,
+            100% {
+                text-shadow: .25em 0 0 #333, .5em 0 0 #333;
+            }
         }
     </style>
 </head>
@@ -29,18 +56,22 @@
 <body class="bg-[#fcfcfc] text-gray-900">
 
     <header class="bg-white sticky top-0 z-50 shadow-sm">
-        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+        <div
+            class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
             <span>Coffee Sông Hậu</span><span>Hotline: 0852.494.694</span>
         </div>
         <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
-            <a href="index.html" class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông Hậu</span></a>
-            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
+            <a href="index.html" class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông
+                    Hậu</span></a>
+            <div
+                class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
                 <a href="index.html" class="hover:text-red-900 py-4">Trang Chủ</a>
                 <a href="sanpham.html" class="hover:text-red-900 py-4">Sản phẩm</a>
                 <a href="thanh-vien.html" class="text-red-900 py-4 border-b-2 border-red-900">Thành Viên</a>
             </div>
             <div class="flex items-center space-x-4">
-                <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i class="fa-solid fa-bars text-2xl"></i></button>
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i
+                        class="fa-solid fa-bars text-2xl"></i></button>
             </div>
         </div>
         <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
@@ -58,20 +89,26 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            
+
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit">
                 <div class="flex items-center gap-3 mb-4 border-b border-red-100 pb-3">
-                    <div class="w-8 h-8 rounded-full bg-red-900 flex items-center justify-center text-white"><i class="fa-solid fa-user-check"></i></div>
+                    <div class="w-8 h-8 rounded-full bg-red-900 flex items-center justify-center text-white"><i
+                            class="fa-solid fa-user-check"></i></div>
                     <h3 class="font-bold text-lg text-red-950 uppercase">Check-in Mới</h3>
                 </div>
                 <form id="member-form" class="space-y-4">
                     <div>
-                        <input type="tel" id="phone-input" required pattern="[0-9]{10}" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 font-bold text-lg text-red-900 placeholder-gray-400" placeholder="Nhập SĐT khách (09xxxx)...">
+                        <input type="tel" id="phone-input" required pattern="[0-9]{10}"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 font-bold text-lg text-red-900 placeholder-gray-400"
+                            placeholder="Nhập SĐT khách (09xxxx)...">
                     </div>
                     <div>
-                        <input type="text" id="name-input" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 text-sm" placeholder="Tên khách (Tùy chọn)">
+                        <input type="text" id="name-input"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 text-sm"
+                            placeholder="Tên khách (Tùy chọn)">
                     </div>
-                    <button type="submit" id="submit-btn" class="w-full bg-red-900 text-white font-bold uppercase py-3 rounded-lg hover:bg-black transition shadow-lg flex justify-center items-center gap-2">
+                    <button type="submit" id="submit-btn"
+                        class="w-full bg-red-900 text-white font-bold uppercase py-3 rounded-lg hover:bg-black transition shadow-lg flex justify-center items-center gap-2">
                         <span>Lưu Check-in</span> <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
@@ -80,36 +117,48 @@
 
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit">
                 <div class="flex items-center gap-3 mb-4 border-b border-yellow-100 pb-3">
-                    <div class="w-8 h-8 rounded-full bg-yellow-600 flex items-center justify-center text-white"><i class="fa-solid fa-qrcode"></i></div>
+                    <div class="w-8 h-8 rounded-full bg-yellow-600 flex items-center justify-center text-white"><i
+                            class="fa-solid fa-qrcode"></i></div>
                     <h3 class="font-bold text-lg text-red-950 uppercase">Quét QR Code</h3>
                 </div>
-                <div class="relative bg-black rounded-lg overflow-hidden mb-4 min-h-[200px] flex flex-col justify-center">
+                <div
+                    class="relative bg-black rounded-lg overflow-hidden mb-4 min-h-[200px] flex flex-col justify-center">
                     <div id="reader"></div>
-                    <div id="camera-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-0">
-                        <i class="fa-solid fa-camera text-4xl mb-2"></i> <span class="text-xs uppercase">Camera tắt</span>
+                    <div id="camera-placeholder"
+                        class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-0">
+                        <i class="fa-solid fa-camera text-4xl mb-2"></i> <span class="text-xs uppercase">Camera
+                            tắt</span>
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <button id="start-scan" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg text-sm uppercase transition">Bật Cam</button>
-                    <button id="stop-scan" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg text-sm uppercase transition" disabled>Tắt</button>
+                    <button id="start-scan"
+                        class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg text-sm uppercase transition">Bật
+                        Cam</button>
+                    <button id="stop-scan"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg text-sm uppercase transition"
+                        disabled>Tắt</button>
                 </div>
             </div>
 
             <div class="md:col-span-2 bg-blue-50 p-6 rounded-xl shadow-inner border border-blue-100">
                 <div class="flex items-center gap-3 mb-4 border-b border-blue-200 pb-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white"><i
+                            class="fa-solid fa-magnifying-glass"></i></div>
                     <h3 class="font-bold text-lg text-blue-900 uppercase">Tra Cứu & Đổi Quà</h3>
                 </div>
-                
+
                 <div class="flex flex-col md:flex-row gap-4">
-                    <input type="tel" id="search-input" class="flex-1 bg-white border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600 font-bold text-lg text-blue-900" placeholder="Nhập SĐT hoặc Mã để kiểm tra...">
-                    <button id="btn-search" class="bg-blue-600 text-white font-bold uppercase px-8 py-3 rounded-lg hover:bg-blue-700 transition shadow-lg whitespace-nowrap">
+                    <input type="tel" id="search-input"
+                        class="flex-1 bg-white border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600 font-bold text-lg text-blue-900"
+                        placeholder="Nhập SĐT hoặc Mã để kiểm tra...">
+                    <button id="btn-search"
+                        class="bg-blue-600 text-white font-bold uppercase px-8 py-3 rounded-lg hover:bg-blue-700 transition shadow-lg whitespace-nowrap">
                         Kiểm tra
                     </button>
                 </div>
 
                 <div id="search-result" class="mt-6 hidden">
-                    </div>
+                </div>
             </div>
 
         </div>
@@ -123,8 +172,8 @@
         // ==========================================
         // 1. CẤU HÌNH LIÊN KẾT GOOGLE APPS SCRIPT
         // ==========================================
-        const GOOGLE_SCRIPT_URL = 'DÁN_LINK_WEB_APP_CỦA_BẠN_VÀO_ĐÂY'; 
-        
+        // SỬA LẠI DÒNG NÀY (Bỏ đoạn bị lặp và dùng link /exec)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz36KyhHD2ZqC6qj33-BPFtEiWYlDvydt-dLy5LSPcS/exec';
         // ==========================================
         // 2. LOGIC TÌM KIẾM (TRA CỨU)
         // ==========================================
@@ -134,8 +183,8 @@
 
         searchBtn.addEventListener('click', () => {
             const query = searchInput.value.trim();
-            if(!query) { alert('Vui lòng nhập SĐT hoặc Mã!'); return; }
-            if(GOOGLE_SCRIPT_URL.includes('DÁN_LINK')) { alert('Chưa cấu hình Script URL!'); return; }
+            if (!query) { alert('Vui lòng nhập SĐT hoặc Mã!'); return; }
+            if (GOOGLE_SCRIPT_URL.includes('DÁN_LINK')) { alert('Chưa cấu hình Script URL!'); return; }
 
             // UI Loading
             resultDiv.classList.remove('hidden');
@@ -147,17 +196,16 @@
                 .then(data => {
                     if (data.status === 'success') {
                         // Tính toán hiển thị (Giả sử cứ 1 lần checkin = 1 điểm)
-                        const count = data.count; 
+                        const count = data.count;
                         const name = data.name || 'Khách hàng';
                         const lastTime = data.lastTime || 'Chưa có';
-                        const GOOGLE_SCRIPT_URL = 'https://coffeesonghau.com/';
 
                         // Logic hiển thị kết quả đẹp
                         let promoMessage = '';
                         let promoColor = 'bg-gray-100 text-gray-600';
-                        
+
                         // Ví dụ logic khuyến mãi: 5 lần tặng 1 ly, 10 lần tặng voucher
-                        if(count >= 10) {
+                        if (count >= 10) {
                             promoMessage = '🎉 ĐỦ ĐIỀU KIỆN NHẬN VOUCHER GIẢM 50%';
                             promoColor = 'bg-green-100 text-green-700 border-green-300';
                         } else if (count >= 5) {
@@ -210,7 +258,7 @@
 
             const phone = document.getElementById('phone-input').value;
             const name = document.getElementById('name-input').value || 'Khách vãng lai';
-            
+
             submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang gửi...';
             submitBtn.disabled = true;
 
@@ -246,14 +294,14 @@
             startScanBtn.disabled = true;
             stopScanBtn.disabled = false;
             html5QrcodeScanner = new Html5Qrcode("reader");
-            html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, 
-            (decodedText) => {
-                // Khi quét thành công -> Tự động điền vào ô tìm kiếm và bấm nút tìm
-                searchInput.value = decodedText;
-                searchBtn.click(); // Kích hoạt tra cứu ngay
-                stopScanning(); // Tắt cam
-                alert(`Đã tìm thấy mã: ${decodedText}`);
-            }).catch(() => { stopScanning(); alert("Lỗi Camera!"); });
+            html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
+                (decodedText) => {
+                    // Khi quét thành công -> Tự động điền vào ô tìm kiếm và bấm nút tìm
+                    searchInput.value = decodedText;
+                    searchBtn.click(); // Kích hoạt tra cứu ngay
+                    stopScanning(); // Tắt cam
+                    alert(`Đã tìm thấy mã: ${decodedText}`);
+                }).catch(() => { stopScanning(); alert("Lỗi Camera!"); });
         });
 
         stopScanBtn.addEventListener('click', stopScanning);
@@ -268,11 +316,12 @@
                 });
             }
         }
-        
+
         // Mobile Menu
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
     </script>
 </body>
+
 </html>
