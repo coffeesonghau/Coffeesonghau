@@ -40,25 +40,129 @@
 
 <body class="bg-[#fcfcfc] text-gray-900">
 
-    <header class="bg-white sticky top-0 z-50 shadow-sm">
-        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
-            <span>Coffee Sông Hậu</span><span>Hotline: 0852.494.694</span>
-        </div>
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
-            <a href="index.html" class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông Hậu</span></a>
-            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+            <div class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+
+            <div
+                class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
+
                 <a href="index.html" class="hover:text-red-900 py-4">Trang Chủ</a>
-                <a href="sanpham.html" class="hover:text-red-900 py-4">Sản phẩm</a>
-                <a href="thanh-vien.html" class="text-red-900 py-4 border-b-2 border-red-900">Thành Viên</a>
+
+                <div class="relative group h-full flex items-center">
+                    <a href="sanpham.html" class="hover:text-red-900 cursor-pointer flex items-center gap-1 py-4">
+                        Sản phẩm <i class="fa-solid fa-chevron-down text-[9px] mt-0.5"></i>
+                    </a>
+                    <div
+                        class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
+                        <a href="#"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
+                            Phê hạt</a>
+                        <a href="#"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
+                            Phê bột</a>
+                        <a href="#"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
+                            Phê cao cấp</a>
+                        <a href="index.html#grid-best-seller"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 normal-case font-medium text-sm text-gray-600">Best
+                            seller</a>
+                    </div>
+                </div>
+
+                <div class="relative group h-full flex items-center">
+                    <a href="#" class="hover:text-red-900 cursor-pointer flex items-center gap-1 py-4">
+                        Dịch vụ <i class="fa-solid fa-chevron-down text-[9px] mt-0.5"></i>
+                    </a>
+                    <div
+                        class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
+                        <a href="chuoi-he-thong.html"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Chuỗi
+                            Cà Phê</a>
+                        <a href="gia-cong.html"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Gia
+                            Công</a>
+                        <a href="gift.html"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Khuyến
+                            Mãi</a>
+                        <a href="tuyen-dung.html"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tuyển
+                            Dụng</a>
+                    </div>
+                </div>
+
+                <a href="gift.html" class="hover:text-red-900 py-4">Quà tặng</a>
+
+                <a href="nhuong-quyen.html" class="hover:text-red-900 py-4">Nhượng quyền</a>
             </div>
+
             <div class="flex items-center space-x-4">
-                <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i class="fa-solid fa-bars text-2xl"></i></button>
+                <div id="search-box"
+                    class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
+                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..."
+                        class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
+                </div>
+
+                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
+
+        <div id="mobile-menu"
+            class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6 max-h-[80vh] overflow-y-auto">
             <div class="flex flex-col space-y-2 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+
                 <a href="index.html" class="py-2 border-b border-gray-50 hover:text-red-900">Trang Chủ</a>
-                <a href="thanh-vien.html" class="py-2 border-b border-gray-50 text-red-900">Thành Viên</a>
+
+                <div class="group-menu">
+                    <button
+                        class="w-full flex justify-between items-center py-2 border-b border-gray-50 hover:text-red-900 focus:outline-none uppercase"
+                        onclick="toggleSubMenu(this)">
+                        <span>Sản phẩm</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
+                        <a href="#"
+                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Cà
+                            Phê hạt</a>
+                        <a href="#"
+                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Cà
+                            Phê bột</a>
+                        <a href="#" class="block py-3 text-gray-500 hover:text-red-900 normal-case">Cà Phê Cao Cấp</a>
+                        <a href="index.html#grid-best-seller"
+                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Best
+                            Seller</a>
+                    </div>
+                </div>
+
+                <div class="group-menu">
+                    <button
+                        class="w-full flex justify-between items-center py-2 border-b border-gray-50 hover:text-red-900 focus:outline-none uppercase"
+                        onclick="toggleSubMenu(this)">
+                        <span>Dịch vụ</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
+                        <a href="chuoi-he-thong.html"
+                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Chuỗi
+                            Cà Phê</a>
+                        <a href="gia-cong.html"
+                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Gia
+                            Công</a>
+                        <a href="gift.html"
+                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Khuyến
+                            Mãi</a>
+                        <a href="tuyen-dung.html" class="block py-3 text-gray-500 hover:text-red-900 normal-case">Tuyển
+                            Dụng</a>
+                    </div>
+                </div>
+
+                <a href="gift.html" class="py-2 border-b border-gray-50 hover:text-red-900">Quà tặng</a>
+                <a href="nhuong-quyen.html" class="py-2 hover:text-red-900">Nhượng quyền</a>
             </div>
         </div>
     </header>
@@ -134,8 +238,76 @@
         </div>
     </main>
 
-    <footer class="bg-red-950 text-white mt-10 pt-8 pb-8 text-center">
-        <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]"> © 2025 COFFEE Sông Hậu.</p>
+    <footer class="bg-red-950 text-white mt-20 pt-16 pb-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="text-2xl font-black mb-6">COFFEE<span class="text-yellow-600"> Sông Hậu</span></div>
+                <p class="text-sm text-gray-400 leading-relaxed mb-6">Nam Dương Co., Ltd – Đối tác tin cậy trong sản
+                    xuất, phân phối và nhượng quyền cà phê Sông Hậu.</p>
+                <div class="flex space-x-4">
+                    <a href="https://www.facebook.com/profile.php?id=61585402033689&locale=vi_VN"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-facebook-f text-xs"></i></a>
+                    <a href="#"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-youtube text-xs"></i></a>
+                    <a href="#"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
+                            class="fab fa-instagram text-xs"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Chính sách hỗ
+                    trợ</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="quy-trinh-dat-hang.html" class="hover:text-yellow-600 transition">Chính sách vận chuyển
+                        </a></li>
+                    <li><a href="return-policy.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a>
+                    </li>
+                    <li><a href="quy-trinh-dat-hang.html" class="hover:text-yellow-600 transition">Hướng dẫn mua
+                            hàng</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee
+                    Sông Hậu</h4>
+                <ul class="text-sm text-gray-400 space-y-3">
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
+                    <li><a href="story.html" class="hover:text-yellow-600 transition">Tin tức & Sự kiện</a></li>
+                    <li><a href="distribution.html" class="hover:text-yellow-600 transition">Hệ thống phân phối</a></li>
+                    <li><a href="about.html" class="hover:text-yellow-600 transition">Thông Tin</a></li>
+                    <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ ngay
+                </h4>
+                <div class="text-sm text-gray-400 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
+                        <span>Trụ sở chính: 188+181, Đường 23/8, <br> Khóm Cầu Sập, Phường Bạc Liêu, Tỉnh Cà Mau</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-phone text-yellow-600"></i>
+                        <span>0852.494.694</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-yellow-600"></i>
+                        <span>congtynamduongbl@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]"> © 2025 COFFEE Sông Hậu. All rights
+                reserved.
+            </p>
+        </div>
     </footer>
 
     <script>
