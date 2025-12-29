@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
+    <link href="./style.css" rel="stylesheet"> 
+
     <style>
         #reader {
             width: 100%;
@@ -138,10 +141,11 @@
 
     <script>
         // ==========================================
-        // ⚠️ QUAN TRỌNG: DÁN LINK WEB APP MỚI VÀO ĐÂY
+        // ⚠️ ĐÃ CẬP NHẬT LINK CHÍNH XÁC CỦA BẠN
         // ==========================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby2YmACJKa5Nadrze_e2ZwUfQmzDW0X24-hESQbk_1Fj3WJJaIvSRNnTqbcjVPXYVzFrA/exec'; 
-        const MILESTONE = 5; // Số lần tích điểm để được nhận quà
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQi7EECWwD3lrChfrAnEeDUevyiF6n8_PnfAt3tFx9NgaemHOARbz3ZlfNd__ic9KZsA/exec'; 
+        
+        const MILESTONE = 5; // Số lần tích điểm để được nhận quà (Sửa số này nếu muốn)
 
         // ==========================================
         // 1. LOGIC TÌM KIẾM (TRA CỨU)
@@ -154,12 +158,6 @@
             const query = searchInput.value.trim();
             if (!query) { alert('Vui lòng nhập SĐT hoặc Mã!'); return; }
             
-            // Kiểm tra xem người dùng đã dán link chưa
-            if (GOOGLE_SCRIPT_URL.includes('DÁN_LINK_MỚI')) {
-                alert('LỖI: Bạn chưa dán Link Google Apps Script vào code!');
-                return;
-            }
-
             // UI Loading
             resultDiv.classList.remove('hidden');
             resultDiv.innerHTML = '<div class="text-center py-4 text-blue-800 font-bold loading-dots">Đang kết nối Server...</div>';
@@ -228,7 +226,7 @@
                     console.error(err);
                     resultDiv.innerHTML = `<div class="text-center text-red-600 py-4 bg-red-50 rounded-lg border border-red-200">
                         <strong>Lỗi kết nối!</strong><br>
-                        <span class="text-xs">Vui lòng kiểm tra lại URL Script hoặc quyền truy cập.</span>
+                        <span class="text-xs">Hãy kiểm tra xem bạn đã mở quyền 'Anyone' (Bất kỳ ai) trong Google Script chưa.</span>
                     </div>`;
                 });
         });
@@ -243,7 +241,6 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
             btn.disabled = true;
 
-            // Sử dụng no-cors để tránh lỗi trình duyệt chặn, nhưng không đọc được response
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors', 
@@ -271,11 +268,6 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            if (GOOGLE_SCRIPT_URL.includes('DÁN_LINK_MỚI')) {
-                alert('LỖI: Bạn chưa dán Link Google Apps Script vào code!');
-                return;
-            }
-
             const phone = document.getElementById('phone-input').value;
             const name = document.getElementById('name-input').value || 'Khách vãng lai';
 
