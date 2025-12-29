@@ -8,7 +8,7 @@ const jobData = {
         desc: [
             'Chuẩn bị nguyên liệu, pha chế cà phê và các loại đồ uống theo menu.',
             'Tư vấn đồ uống cho khách hàng, order và tính tiền.',
-            'Vệ sinh khu vực quầy bar, dụng cụ pha chế sạch sẽ.',
+            'Vệ sinh khu vực quầy nước, dụng cụ pha chế sạch sẽ.',
             'Kiểm kê hàng hóa, báo cáo nguyên liệu tồn kho hằng ngày.'
         ],
         req: [
@@ -37,7 +37,7 @@ const jobData = {
         req: [
             'Có phương tiện đi lại, chịu khó di chuyển.',
             'Có khả năng giao tiếp tốt, thuyết phục khách hàng.',
-            'Ưu tiên ứng viên có kinh nghiệm sale tiêu dùng (FMCG).',
+            'Ưu tiên ứng viên có kinh nghiệm sale tiêu dùng (F&B).',
             'Đam mê kinh doanh, muốn kiếm thu nhập cao.'
         ],
         benefit: [
@@ -58,7 +58,7 @@ const jobData = {
             'Hỗ trợ các bộ phận khác khi quán đông khách.'
         ],
         req: [
-            'Ưu tiên Sinh viên làm thêm, rảnh các buổi tối hoặc cuối tuần.',
+            'Ưu tiên các bạn trẻ tuổi năng động, không vướng bận.',
             'Nhanh nhẹn, vui vẻ, hay cười, trung thực.',
             'Có trách nhiệm với ca làm việc của mình.',
             'Ngoại hình gọn gàng, sạch sẽ.'
@@ -66,7 +66,7 @@ const jobData = {
         benefit: [
             'Lương 16k/h + Thưởng nếu làm tốt/Lễ tết.',
             'Môi trường làm việc thoải mái, vui vẻ, không áp lực.',
-            'Được đăng ký lịch làm linh hoạt theo lịch học.',
+            'Được đăng ký lịch làm linh hoạt theo ca.',
             'Được uống nước miễn phí trong ca làm.'
         ]
     }
