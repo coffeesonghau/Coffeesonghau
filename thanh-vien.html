@@ -130,8 +130,6 @@
         // ==========================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5hfZcWLIB55y7DoI7mPvWzHGaev3hv-e1FTFmDMafBZSH8nDWvS2RXo2JIO9AWN0Zpw/exec'; 
         
-        const MILESTONE = 1; 
-
         // ------------------------------------------
         // 1. LOGIC CHECK-IN & TẠO VOUCHER QR
         // ------------------------------------------
@@ -205,7 +203,7 @@
         });
 
         // ------------------------------------------
-        // 2. LOGIC TRA CỨU (CÓ XỬ LÝ HẾT HẠN)
+        // 2. LOGIC TRA CỨU (CẬP NHẬT: HIỂN THỊ DANH SÁCH VOUCHER)
         // ------------------------------------------
         const searchBtn = document.getElementById('btn-search');
         const searchInput = document.getElementById('search-input');
@@ -222,7 +220,52 @@
                 .then(response => response.json())
                 .then(data => {
                     
-                    // A. MÃ HẾT HẠN (Mới)
+                    // A. TÌM THẤY DANH SÁCH VOUCHER KHẢ DỤNG
+                    if (data.status === 'success') {
+                        const listVouchers = data.vouchers; // Nhận mảng voucher từ Server
+                        
+                        // Vẽ từng thẻ Voucher
+                        let vouchersHTML = listVouchers.map((v, index) => `
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm relative overflow-hidden group hover:border-blue-500 transition">
+                                <div class="absolute top-0 right-0 bg-green-600 text-white text-[10px] px-3 py-1 font-bold rounded-bl-lg">Vé ${index + 1}</div>
+                                
+                                <div class="flex justify-between items-center mb-3">
+                                    <div>
+                                        <p class="text-[10px] text-gray-500 uppercase font-bold">Mã Voucher</p>
+                                        <p class="font-mono font-black text-xl text-red-800 tracking-wider">${v.id}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-gray-500 uppercase font-bold">Hết hạn lúc</p>
+                                        <p class="font-bold text-sm text-black">${v.expire}</p>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="redeemGift('${v.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded text-sm uppercase transition shadow-md flex justify-center items-center gap-2">
+                                    <i class="fa-solid fa-ticket"></i> Sử dụng vé này
+                                </button>
+                            </div>
+                        `).join('');
+
+                        resultDiv.innerHTML = `
+                            <div class="bg-blue-50 border-l-4 border-blue-500 shadow-lg rounded-r-lg p-5">
+                                <div class="flex justify-between items-end border-b border-blue-200 pb-3 mb-4">
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase font-bold">Khách hàng</p>
+                                        <h4 class="font-black text-xl text-gray-800">${data.name}</h4>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">${data.count} vé khả dụng</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="max-h-[400px] overflow-y-auto pr-1">
+                                    ${vouchersHTML}
+                                </div>
+                            </div>`;
+                        return;
+                    }
+
+                    // B. CÁC TRƯỜNG HỢP LỖI / HẾT HẠN
                     if (data.status === 'expired') {
                         resultDiv.innerHTML = `
                             <div class="bg-gray-100 border-l-8 border-gray-500 p-6 rounded-r-lg text-center opacity-80">
@@ -231,51 +274,15 @@
                                 <p class="text-gray-500 font-bold">Mã này đã quá hạn 48 giờ.</p>
                                 <p class="text-xs mt-2 text-gray-400">Ngày tạo: ${data.createdTime}</p>
                             </div>`;
-                        return;
-                    }
-
-                    // B. MÃ ĐÃ DÙNG
-                    if (data.status === 'used') {
+                    } else if (data.status === 'used') {
                         resultDiv.innerHTML = `
                             <div class="bg-red-50 border-l-8 border-red-500 p-6 rounded-r-lg text-center shadow-xl">
                                 <div class="text-6xl text-red-500 mb-4"><i class="fa-solid fa-circle-xmark"></i></div>
                                 <h3 class="text-2xl font-black text-red-900 uppercase mb-2">VOUCHER KHÔNG HỢP LỆ</h3>
                                 <p class="text-red-600 font-bold border-t border-red-200 pt-2">Đã sử dụng lúc: ${data.usedAt}</p>
                             </div>`;
-                        return;
-                    }
-
-                    // C. HỢP LỆ
-                    if (data.status === 'success') {
-                        const count = data.count;
-                        let actionHTML = '';
-                        
-                        if (count >= MILESTONE) {
-                            // Nếu tìm bằng Mã cụ thể thì hiện nút đổi luôn
-                            const redeemKey = (query.toUpperCase().startsWith('SH')) ? query : query; 
-                            
-                            actionHTML = `
-                                <div class="mt-6 p-6 rounded-xl bg-green-50 border-2 border-green-400 text-center shadow-lg">
-                                    <p class="text-green-800 font-black text-xl mb-4 uppercase"><i class="fa-solid fa-ticket"></i> Voucher Hợp Lệ</p>
-                                    <button onclick="redeemGift('${redeemKey}')" id="btn-redeem" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-10 rounded-full shadow-xl transition transform hover:scale-105 uppercase tracking-wider">
-                                        Xác nhận Sử dụng Ngay
-                                    </button>
-                                </div>
-                            `;
-                        } else {
-                            actionHTML = `<div class="mt-4 text-center text-gray-500 py-4 bg-gray-50 rounded">Khách hàng này hiện không có voucher khả dụng.</div>`;
-                        }
-
-                        resultDiv.innerHTML = `
-                            <div class="bg-white border-l-4 border-blue-500 shadow-lg rounded-r-lg p-6">
-                                <div class="flex justify-between items-start border-b border-gray-100 pb-4 mb-4">
-                                    <div><p class="text-xs text-gray-400 uppercase font-bold">Khách hàng</p><h4 class="font-black text-2xl text-gray-800">${data.name}</h4></div>
-                                    <div class="text-right"><p class="text-xs text-gray-400 uppercase font-bold">Số lượng khả dụng</p><span class="block text-4xl font-black text-blue-600">${count}</span></div>
-                                </div>
-                                ${actionHTML}
-                            </div>`;
                     } else {
-                        resultDiv.innerHTML = `<div class="text-center text-gray-500 font-bold py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">⚠️ Không tìm thấy dữ liệu!</div>`;
+                        resultDiv.innerHTML = `<div class="text-center text-gray-500 font-bold py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">⚠️ Không tìm thấy voucher khả dụng!</div>`;
                     }
                 })
                 .catch(err => {
@@ -306,9 +313,11 @@
         // 4. CÁC HÀM KHÁC (Redeem, Scanner, Menu)
         // ------------------------------------------
         window.redeemGift = function(inputKey) {
-            if(!confirm(`⚠️ Xác nhận sử dụng Voucher này?\nMã sẽ bị KHÓA sau khi bấm OK.`)) return;
-            const btn = document.getElementById('btn-redeem');
-            btn.innerHTML = 'Đang xử lý...'; btn.disabled = true;
+            if(!confirm(`⚠️ Xác nhận sử dụng Voucher: ${inputKey}?\nMã sẽ bị KHÓA ngay sau khi bấm OK.`)) return;
+            
+            // Tìm nút bấm tương ứng để hiện trạng thái Loading
+            const allBtns = document.querySelectorAll('button');
+            allBtns.forEach(b => b.disabled = true); // Khóa tạm tất cả nút
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -317,9 +326,12 @@
                 body: JSON.stringify({ phone: inputKey, type: 'REDEEM' })
             }).then(() => {
                 alert('✅ THÀNH CÔNG!\nVoucher đã được sử dụng.');
-                searchInput.value = inputKey; searchBtn.click(); 
+                // Refresh lại kết quả tìm kiếm để cập nhật danh sách
+                document.getElementById('btn-search').disabled = false;
+                document.getElementById('btn-search').click(); 
             }).catch(err => {
-                alert('❌ Lỗi kết nối!'); btn.disabled = false;
+                alert('❌ Lỗi kết nối!');
+                allBtns.forEach(b => b.disabled = false);
             });
         }
 
