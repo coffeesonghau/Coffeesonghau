@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vé Điện Tử | COFFEE Sông Hậu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="./style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 relative">
+        
+        <div class="bg-[#7a0b0b] p-4 text-center">
+            <h1 class="text-white font-black text-xl uppercase tracking-widest">COFFEE Sông Hậu</h1>
+            <p class="text-yellow-400 text-xs uppercase font-bold mt-1">Voucher Điện Tử</p>
+        </div>
+
+        <div id="ticket-content" class="p-6 text-center min-h-[300px] flex flex-col justify-center items-center">
+            <div class="loading-dots text-gray-400 font-bold">Đang tải dữ liệu vé...</div>
+        </div>
+
+        <div class="bg-gray-50 p-3 text-center border-t border-gray-100">
+            <p class="text-[10px] text-gray-500 italic">Vui lòng đưa mã này cho nhân viên để sử dụng.</p>
+            <a href="tel:0852494694" class="block mt-1 text-red-900 font-bold text-xs">Hotline: 0852.494.694</a>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // ⚠️ THAY LINK APP SCRIPT CỦA BẠN VÀO ĐÂY
+        // ==========================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5hfZcWLIB55y7DoI7mPvWzHGaev3hv-e1FTFmDMafBZSH8nDWvS2RXo2JIO9AWN0Zpw/exec'; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lấy Mã ID từ đường link (Ví dụ: kiem-tra-ve.html?id=SH12345678)
+            const urlParams = new URLSearchParams(window.location.search);
+            const voucherId = urlParams.get('id');
+            const container = document.getElementById('ticket-content');
+
+            if (!voucherId) {
+                container.innerHTML = `
+                    <div class="text-gray-400 text-6xl mb-4"><i class="fa-solid fa-circle-question"></i></div>
+                    <p class="text-gray-600 font-bold">Không tìm thấy mã vé.</p>
+                    <p class="text-sm text-gray-400 mt-2">Vui lòng kiểm tra lại đường link.</p>
+                `;
+                return;
+            }
+
+            // Gọi API kiểm tra
+            fetch(`${GOOGLE_SCRIPT_URL}?action=search&query=${voucherId}`)
+                .then(response => response.json())
+                .then(data => {
+                    
+                    // 1. TRƯỜNG HỢP HỢP LỆ (Status: success)
+                    if (data.status === 'success' && data.vouchers && data.vouchers.length > 0) {
+                        const v = data.vouchers[0]; // Lấy vé đầu tiên (vì tìm theo ID chỉ có 1)
+                        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${v.id}`;
+                        
+                        container.innerHTML = `
+                            <div class="inline-block p-2 border-2 border-dashed border-red-900 rounded-lg mb-4">
+                                <img src="${qrUrl}" alt="QR Code" class="w-40 h-40 object-cover rounded">
+                            </div>
+                            <h2 class="text-2xl font-black text-red-900 font-mono tracking-wider mb-1">${v.id}</h2>
+                            <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block">
+                                <i class="fa-solid fa-check-circle"></i> Đang hoạt động
+                            </div>
+                            <div class="w-full border-t border-gray-100 pt-4 text-left">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-xs text-gray-500 uppercase">Khách hàng:</span>
+                                    <span class="text-xs font-bold text-gray-800">${data.name}</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-xs text-gray-500 uppercase">Ngày tạo:</span>
+                                    <span class="text-xs font-bold text-gray-800">${v.created}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-xs text-gray-500 uppercase">Hết hạn:</span>
+                                    <span class="text-xs font-bold text-red-600">${v.expire}</span>
+                                </div>
+                            </div>
+                        `;
+                    } 
+                    // 2. TRƯỜNG HỢP ĐÃ DÙNG
+                    else if (data.status === 'used') {
+                        container.innerHTML = `
+                            <div class="text-gray-300 text-6xl mb-4 grayscale opacity-50"><i class="fa-solid fa-qrcode"></i></div>
+                            <h2 class="text-xl font-black text-gray-500 uppercase mb-2">VÉ ĐÃ SỬ DỤNG</h2>
+                            <p class="text-sm text-gray-400 mb-4">Mã vé này đã được đổi quà.</p>
+                            <div class="bg-gray-100 text-gray-500 px-4 py-2 rounded text-xs font-bold">
+                                Thời gian dùng: ${data.usedAt}
+                            </div>
+                        `;
+                    }
+                    // 3. TRƯỜNG HỢP HẾT HẠN
+                    else if (data.status === 'expired') {
+                        container.innerHTML = `
+                            <div class="text-gray-300 text-6xl mb-4"><i class="fa-solid fa-hourglass-end"></i></div>
+                            <h2 class="text-xl font-black text-gray-500 uppercase mb-2">VÉ HẾT HẠN</h2>
+                            <p class="text-sm text-gray-400">Rất tiếc, vé đã quá hạn 48 giờ.</p>
+                        `;
+                    }
+                    // 4. KHÔNG TỒN TẠI
+                    else {
+                        container.innerHTML = `
+                            <div class="text-red-300 text-6xl mb-4"><i class="fa-solid fa-circle-exclamation"></i></div>
+                            <p class="text-red-900 font-bold">Mã vé không tồn tại!</p>
+                        `;
+                    }
+                })
+                .catch(err => {
+                    container.innerHTML = `<p class="text-red-500">Lỗi kết nối Server!</p>`;
+                });
+        });
+    </script>
+</body>
+</html>

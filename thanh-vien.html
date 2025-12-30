@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thành Viên | COFFEE Sông Hậu</title>
+    <title>Quản Lý Thành Viên | COFFEE Sông Hậu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -12,126 +12,143 @@
     <link href="./style.css" rel="stylesheet"> 
 
     <style>
-        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #7a0b0b; }
-        #reader video { object-fit: cover; border-radius: 8px; }
-        .loading-dots:after { content: ' .'; animation: dots 1s steps(5, end) infinite; }
-        @keyframes dots {
-            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
-            40% { color: #333; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
-            60% { text-shadow: .25em 0 0 #333, .5em 0 0 rgba(0,0,0,0); }
-            80%, 100% { text-shadow: .25em 0 0 #333, .5em 0 0 #333; }
-        }
+        /* CSS bổ sung riêng cho trang này nếu cần */
+        .voucher-card { transition: all 0.2s ease; }
+        .voucher-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
 
-<body class="bg-[#fcfcfc] text-gray-900">
+<body class="bg-[#fcfcfc] text-gray-900 font-sans">
 
     <header class="bg-white sticky top-0 z-50 shadow-sm">
         <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
-            <span>Coffee Sông Hậu</span><span>Hotline: 0852.494.694</span>
+            <span>Admin System</span><span>Hotline: 0852.494.694</span>
         </div>
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center relative">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-black text-red-950">COFFEE<span class="text-yellow-600"> Sông Hậu</span></a>
-            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
-                <a href="index.html" class="hover:text-red-900 py-4">Trang Chủ</a>
-                <a href="sanpham.html" class="hover:text-red-900 py-4">Sản phẩm</a>
-                <a href="thanh-vien.html" class="text-red-900 py-4 border-b-2 border-red-900">Thành Viên</a>
+            
+            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center">
+                <a href="index.html" class="hover:text-red-900 py-2">Trang Chủ</a>
+                <a href="thanh-vien.html" class="text-red-900 py-2 border-b-2 border-red-900">Quản Lý Check-in</a>
             </div>
-            <div class="flex items-center space-x-4">
-                <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i class="fa-solid fa-bars text-2xl"></i></button>
-            </div>
+            
+            <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i class="fa-solid fa-bars text-xl"></i></button>
         </div>
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6">
-            <div class="flex flex-col space-y-2 text-[11px] font-bold uppercase tracking-wider text-gray-600">
-                <a href="index.html" class="py-2 border-b border-gray-50 hover:text-red-900">Trang Chủ</a>
-                <a href="thanh-vien.html" class="py-2 border-b border-gray-50 text-red-900">Thành Viên</a>
-            </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-4">
+            <a href="index.html" class="block py-2 text-xs font-bold uppercase text-gray-600">Trang Chủ</a>
+            <a href="thanh-vien.html" class="block py-2 text-xs font-bold uppercase text-red-900">Quản Lý</a>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-10 min-h-[60vh]">
+    <main class="container mx-auto px-4 py-8 min-h-[80vh]">
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-black text-red-950 uppercase mb-2">Hệ Thống Thành Viên</h1>
-            <p class="text-gray-500">Mua 1 Gói Cafe = 1 Voucher (HSD 48h)</p>
+            <h1 class="text-3xl md:text-4xl font-black text-red-950 uppercase mb-2">Hệ Thống Nhân Viên</h1>
+            <p class="text-gray-500 text-sm">Check-in tích điểm & Đổi quà cho khách hàng</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
 
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit">
-                <div class="flex items-center gap-3 mb-4 border-b border-red-100 pb-3">
-                    <div class="w-8 h-8 rounded-full bg-red-900 flex items-center justify-center text-white"><i class="fa-solid fa-user-check"></i></div>
-                    <h3 class="font-bold text-lg text-red-950 uppercase">Tạo Voucher Mới</h3>
+                <div class="flex items-center gap-3 mb-5 border-b border-red-100 pb-3">
+                    <div class="w-10 h-10 rounded-full bg-red-900 flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-red-950 uppercase leading-none">Khách Mua Hàng</h3>
+                        <span class="text-[10px] text-gray-400">Tạo voucher mới (HSD 48h)</span>
+                    </div>
                 </div>
+
                 <form id="member-form" class="space-y-4">
                     <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-1 block mb-1">Số điện thoại khách</label>
                         <input type="tel" id="phone-input" required pattern="[0-9]{10}"
-                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 font-bold text-lg text-red-900 placeholder-gray-400"
-                            placeholder="Nhập SĐT khách (09xxxx)...">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 font-bold text-lg text-red-900 placeholder-gray-400 transition"
+                            placeholder="09xx xxx xxx">
                     </div>
                     <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-1 block mb-1">Tên khách (Nếu có)</label>
                         <input type="text" id="name-input"
-                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 text-sm"
-                            placeholder="Tên khách (Tùy chọn)">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-red-900 text-sm transition"
+                            placeholder="Nhập tên...">
                     </div>
                     <button type="submit" id="submit-btn"
-                        class="w-full bg-red-900 text-white font-bold uppercase py-3 rounded-lg hover:bg-black transition shadow-lg flex justify-center items-center gap-2">
-                        <span>Lưu & Tạo Mã</span> <i class="fa-solid fa-paper-plane"></i>
+                        class="w-full bg-red-900 text-white font-bold uppercase py-3 rounded-lg hover:bg-black transition shadow-lg flex justify-center items-center gap-2 mt-2">
+                        <span>Lưu & Tạo Voucher</span> <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
-                <div id="form-status" class="mt-4 text-center hidden"></div>
+
+                <div id="form-status" class="mt-4 hidden animate-popup"></div>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit">
-                <div class="flex items-center gap-3 mb-4 border-b border-yellow-100 pb-3">
-                    <div class="w-8 h-8 rounded-full bg-yellow-600 flex items-center justify-center text-white"><i class="fa-solid fa-qrcode"></i></div>
-                    <h3 class="font-bold text-lg text-red-950 uppercase">Quét QR Code</h3>
-                </div>
-                <div class="relative bg-black rounded-lg overflow-hidden mb-4 min-h-[200px] flex flex-col justify-center">
-                    <div id="reader"></div>
-                    <div id="camera-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-0">
-                        <i class="fa-solid fa-camera text-4xl mb-2"></i> <span class="text-xs uppercase">Camera tắt</span>
+                <div class="flex items-center gap-3 mb-5 border-b border-yellow-100 pb-3">
+                    <div class="w-10 h-10 rounded-full bg-yellow-600 flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-red-950 uppercase leading-none">Quét Mã QR</h3>
+                        <span class="text-[10px] text-gray-400">Dùng khi khách đưa mã vé</span>
                     </div>
                 </div>
+
+                <div class="relative bg-black rounded-lg overflow-hidden mb-4 min-h-[250px] flex flex-col justify-center border-2 border-gray-800">
+                    <div id="reader" class="w-full h-full"></div>
+                    <div id="camera-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 z-0 bg-gray-100">
+                        <i class="fa-solid fa-camera text-5xl mb-3 text-gray-300"></i> 
+                        <span class="text-xs uppercase font-bold tracking-widest">Camera đang tắt</span>
+                    </div>
+                </div>
+
                 <div class="flex gap-2">
-                    <button id="start-scan" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg text-sm uppercase transition">Bật Cam</button>
-                    <button id="stop-scan" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg text-sm uppercase transition" disabled>Tắt</button>
+                    <button id="start-scan" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-4 rounded-lg text-sm uppercase transition shadow">
+                        <i class="fa-solid fa-power-off mr-1"></i> Bật Camera
+                    </button>
+                    <button id="stop-scan" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg text-sm uppercase transition" disabled>
+                        Tắt
+                    </button>
                 </div>
             </div>
 
-            <div class="md:col-span-2 bg-blue-50 p-6 rounded-xl shadow-inner border border-blue-100">
-                <div class="flex items-center gap-3 mb-4 border-b border-blue-200 pb-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white"><i class="fa-solid fa-magnifying-glass"></i></div>
-                    <h3 class="font-bold text-lg text-blue-900 uppercase">Tra Cứu & Đổi Voucher</h3>
+            <div class="md:col-span-2 bg-blue-50 p-6 rounded-xl shadow-inner border border-blue-100 mt-4">
+                <div class="flex items-center gap-3 mb-5 border-b border-blue-200 pb-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-blue-900 uppercase leading-none">Tra Cứu & Đổi Quà</h3>
+                        <span class="text-[10px] text-gray-500">Nhập SĐT hoặc Mã Voucher để kiểm tra</span>
+                    </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
                     <input type="text" id="search-input"
-                        class="flex-1 bg-white border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600 font-bold text-lg text-blue-900"
+                        class="flex-1 bg-white border border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-600 font-bold text-lg text-blue-900 placeholder-blue-300"
                         placeholder="Nhập Mã (SH...) hoặc SĐT...">
                     <button id="btn-search"
-                        class="bg-blue-600 text-white font-bold uppercase px-8 py-3 rounded-lg hover:bg-blue-700 transition shadow-lg whitespace-nowrap">
-                        Kiểm tra
+                        class="bg-blue-600 text-white font-bold uppercase px-8 py-3 rounded-lg hover:bg-blue-700 transition shadow-lg whitespace-nowrap flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-search"></i> Kiểm tra
                     </button>
                 </div>
 
-                <div id="search-result" class="mt-6 hidden"></div>
+                <div id="search-result" class="hidden"></div>
             </div>
 
         </div>
     </main>
 
-    <footer class="bg-red-950 text-white mt-10 pt-8 pb-8 text-center">
-        <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]"> © 2025 COFFEE Sông Hậu.</p>
+    <footer class="bg-white border-t border-gray-100 mt-10 py-6 text-center">
+        <p class="text-[10px] text-gray-400 uppercase tracking-widest">© 2025 System by COFFEE Sông Hậu</p>
     </footer>
 
     <script>
         // ==========================================
-        // ⚠️ THAY LINK APP SCRIPT CỦA BẠN VÀO ĐÂY
+        // ⚠️ LINK BACKEND GOOGLE SCRIPT (Update mới nhất)
         // ==========================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5hfZcWLIB55y7DoI7mPvWzHGaev3hv-e1FTFmDMafBZSH8nDWvS2RXo2JIO9AWN0Zpw/exec'; 
-        
+
         // ------------------------------------------
-        // 1. LOGIC CHECK-IN & TẠO VOUCHER QR
+        // 1. LOGIC CHECK-IN & TẠO LINK VOUCHER
         // ------------------------------------------
         const form = document.getElementById('member-form');
         const statusDiv = document.getElementById('form-status');
@@ -141,10 +158,12 @@
             e.preventDefault();
             
             const phone = document.getElementById('phone-input').value;
-            const name = document.getElementById('name-input').value || 'Khách vãng lai';
+            const name = document.getElementById('name-input').value || 'Khách hàng';
 
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang tạo mã...';
+            // UI Loading
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang xử lý...';
             submitBtn.disabled = true;
+            statusDiv.classList.add('hidden');
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -155,35 +174,29 @@
             .then(response => response.json()) 
             .then(data => {
                 if(data.status === 'success') {
-                    // --- TẠO QR & NÚT GỬI ZALO ---
-                    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${data.id}`;
+                    // --- TẠO LINK GỬI KHÁCH ---
+                    // Tự động lấy tên miền hiện tại để tạo link
+                    // Ví dụ: yoursite.com/kiem-tra-ve.html?id=SH12345
+                    const ticketLink = `${window.location.origin}/kiem-tra-ve.html?id=${data.id}`;
                     
-                    // Tính giờ hết hạn (Giả lập frontend + 48h)
-                    const now = new Date();
-                    now.setHours(now.getHours() + 48);
-                    const expireString = now.toLocaleString('vi-VN', { hour: '2-digit', minute:'2-digit', day:'2-digit', month:'2-digit' });
-                    
-                    // Nội dung tin nhắn Copy
-                    const msgContent = `☕ COFFEE Sông Hậu tặng bạn!\n🎫 Mã Voucher: ${data.id}\n⏰ Hạn dùng: ${expireString}\n(Vui lòng đưa tin nhắn này cho nhân viên để quét mã)`;
+                    // Nội dung tin nhắn Zalo
+                    const msgContent = `☕ COFFEE Sông Hậu gửi bạn Voucher!\n\n👉 Bấm vào link để lấy mã QR:\n${ticketLink}\n\n(Hạn sử dụng: 48h)`;
 
                     statusDiv.innerHTML = `
-                        <div class="p-4 bg-white border-2 border-dashed border-red-900 rounded-lg shadow-lg relative mt-4">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-900 text-white px-3 py-1 text-xs font-bold uppercase rounded shadow">Voucher Mới</div>
-                            
-                            <div class="flex flex-row items-center gap-4 mt-2">
-                                <img src="${qrUrl}" alt="QR Code" class="w-24 h-24 border border-gray-200 p-1 rounded">
-                                <div class="text-left flex-1">
-                                    <div class="font-mono text-xl font-black text-red-600 tracking-wider mb-1">${data.id}</div>
-                                    <p class="text-xs text-gray-500">Hết hạn: <span class="font-bold text-black">${expireString}</span></p>
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-green-100 p-2 rounded-full text-green-600"><i class="fa-solid fa-check"></i></div>
+                                <div>
+                                    <p class="text-xs text-gray-500 uppercase font-bold">Đã tạo mã thành công</p>
+                                    <p class="text-xl font-black text-red-800 font-mono tracking-wider">${data.id}</p>
                                 </div>
                             </div>
-
-                            <div class="mt-3 grid grid-cols-1 gap-2">
-                                <button onclick="sendZalo('${phone}', \`${msgContent}\`)" class="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold py-3 px-4 rounded flex items-center justify-center gap-2 transition uppercase">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" class="w-5 h-5 bg-white rounded-full p-0.5">
-                                    Copy & Mở Zalo Khách
-                                </button>
-                            </div>
+                            
+                            <button onclick="sendZalo('${phone}', \`${msgContent}\`)" class="w-full bg-[#0088FF] hover:bg-[#0077ee] text-white text-xs font-bold py-3 px-4 rounded flex items-center justify-center gap-2 transition shadow uppercase">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" class="w-4 h-4 bg-white rounded-full p-0.5">
+                                Gửi Link qua Zalo
+                            </button>
+                            <p class="text-[10px] text-gray-400 mt-2 text-center italic">Bấm nút trên rồi Paste (Dán) vào Zalo khách.</p>
                         </div>`;
                 } else {
                     throw new Error('Lỗi Server');
@@ -192,18 +205,19 @@
                 form.reset();
             })
             .catch(err => {
-                // Dự phòng lỗi JSON (no-cors)
-                statusDiv.innerHTML = `<div class="p-4 bg-green-100 text-green-800 rounded">✅ Đã lưu! (Không thể lấy mã ID do lỗi mạng, hãy tra cứu bằng SĐT).</div>`;
+                // Xử lý khi dùng no-cors (không nhận được JSON trả về nhưng request vẫn đi)
+                // Ta giả định thành công để báo nhân viên
+                statusDiv.innerHTML = `<div class="p-3 bg-yellow-50 text-yellow-800 rounded border border-yellow-200 text-sm"><i class="fa-solid fa-info-circle"></i> Đã gửi yêu cầu! Nếu không thấy mã hiện ra, vui lòng tra cứu lại bằng SĐT.</div>`;
                 statusDiv.classList.remove('hidden');
             })
             .finally(() => {
-                submitBtn.innerHTML = '<span>Lưu & Tạo Mã</span> <i class="fa-solid fa-paper-plane"></i>';
+                submitBtn.innerHTML = '<span>Lưu & Tạo Voucher</span> <i class="fa-solid fa-paper-plane"></i>';
                 submitBtn.disabled = false;
             });
         });
 
         // ------------------------------------------
-        // 2. LOGIC TRA CỨU (CẬP NHẬT: HIỂN THỊ DANH SÁCH VOUCHER)
+        // 2. LOGIC TRA CỨU & HIỂN THỊ DANH SÁCH VOUCHER
         // ------------------------------------------
         const searchBtn = document.getElementById('btn-search');
         const searchInput = document.getElementById('search-input');
@@ -214,85 +228,95 @@
             if (!query) { alert('Vui lòng nhập SĐT hoặc Mã SH!'); return; }
             
             resultDiv.classList.remove('hidden');
-            resultDiv.innerHTML = '<div class="text-center py-8 text-blue-800 font-bold loading-dots text-lg">Đang kết nối hệ thống...</div>';
+            resultDiv.innerHTML = '<div class="text-center py-10 text-blue-600"><i class="fa-solid fa-circle-notch fa-spin text-2xl"></i><p class="text-xs font-bold mt-2 uppercase">Đang tìm dữ liệu...</p></div>';
 
             fetch(`${GOOGLE_SCRIPT_URL}?action=search&query=${query}`)
                 .then(response => response.json())
                 .then(data => {
                     
-                    // A. TÌM THẤY DANH SÁCH VOUCHER KHẢ DỤNG
+                    // CASE A: TÌM THẤY DANH SÁCH VOUCHER KHẢ DỤNG
                     if (data.status === 'success') {
-                        const listVouchers = data.vouchers; // Nhận mảng voucher từ Server
+                        const listVouchers = data.vouchers; // Mảng chứa các voucher
                         
-                        // Vẽ từng thẻ Voucher
+                        // Tạo HTML cho từng thẻ Voucher
                         let vouchersHTML = listVouchers.map((v, index) => `
-                            <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm relative overflow-hidden group hover:border-blue-500 transition">
-                                <div class="absolute top-0 right-0 bg-green-600 text-white text-[10px] px-3 py-1 font-bold rounded-bl-lg">Vé ${index + 1}</div>
+                            <div class="voucher-card bg-white border border-gray-200 rounded-lg p-4 mb-3 relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 bg-green-600 text-white text-[10px] px-3 py-1 font-bold rounded-bl-lg shadow-sm">
+                                    Vé #${index + 1}
+                                </div>
                                 
-                                <div class="flex justify-between items-center mb-3">
+                                <div class="flex justify-between items-center mb-4 mt-1">
                                     <div>
-                                        <p class="text-[10px] text-gray-500 uppercase font-bold">Mã Voucher</p>
-                                        <p class="font-mono font-black text-xl text-red-800 tracking-wider">${v.id}</p>
+                                        <p class="text-[10px] text-gray-400 uppercase font-bold">Mã Voucher</p>
+                                        <p class="font-mono font-black text-xl text-red-700 tracking-wider">${v.id}</p>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="text-[10px] text-gray-500 uppercase font-bold">Hết hạn lúc</p>
-                                        <p class="font-bold text-sm text-black">${v.expire}</p>
+                                    <div class="text-right mr-8">
+                                        <p class="text-[10px] text-gray-400 uppercase font-bold">Hết hạn lúc</p>
+                                        <p class="font-bold text-sm text-black bg-gray-100 px-2 py-0.5 rounded">${v.expire}</p>
                                     </div>
                                 </div>
                                 
-                                <button onclick="redeemGift('${v.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded text-sm uppercase transition shadow-md flex justify-center items-center gap-2">
-                                    <i class="fa-solid fa-ticket"></i> Sử dụng vé này
+                                <button onclick="redeemGift('${v.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded text-xs uppercase transition shadow flex justify-center items-center gap-2">
+                                    <i class="fa-solid fa-ticket"></i> Sử dụng vé này ngay
                                 </button>
                             </div>
                         `).join('');
 
                         resultDiv.innerHTML = `
-                            <div class="bg-blue-50 border-l-4 border-blue-500 shadow-lg rounded-r-lg p-5">
+                            <div class="bg-blue-50 border-l-4 border-blue-500 shadow-md rounded-r-lg p-5 animate-popup">
                                 <div class="flex justify-between items-end border-b border-blue-200 pb-3 mb-4">
                                     <div>
-                                        <p class="text-xs text-gray-500 uppercase font-bold">Khách hàng</p>
-                                        <h4 class="font-black text-xl text-gray-800">${data.name}</h4>
+                                        <p class="text-xs text-blue-400 uppercase font-bold">Khách hàng</p>
+                                        <h4 class="font-black text-xl text-blue-900">${data.name}</h4>
                                     </div>
                                     <div class="text-right">
-                                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">${data.count} vé khả dụng</span>
+                                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">${data.count} vé khả dụng</span>
                                     </div>
                                 </div>
                                 
-                                <div class="max-h-[400px] overflow-y-auto pr-1">
+                                <div class="max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
                                     ${vouchersHTML}
                                 </div>
                             </div>`;
                         return;
                     }
 
-                    // B. CÁC TRƯỜNG HỢP LỖI / HẾT HẠN
+                    // CASE B: VOUCHER HẾT HẠN
                     if (data.status === 'expired') {
                         resultDiv.innerHTML = `
-                            <div class="bg-gray-100 border-l-8 border-gray-500 p-6 rounded-r-lg text-center opacity-80">
-                                <div class="text-6xl text-gray-400 mb-4"><i class="fa-solid fa-hourglass-end"></i></div>
-                                <h3 class="text-2xl font-black text-gray-600 uppercase mb-2">VOUCHER ĐÃ HẾT HẠN</h3>
-                                <p class="text-gray-500 font-bold">Mã này đã quá hạn 48 giờ.</p>
-                                <p class="text-xs mt-2 text-gray-400">Ngày tạo: ${data.createdTime}</p>
+                            <div class="bg-gray-100 border-l-4 border-gray-500 p-6 rounded-r-lg text-center opacity-75">
+                                <i class="fa-solid fa-hourglass-end text-4xl text-gray-400 mb-2"></i>
+                                <h3 class="text-lg font-black text-gray-600 uppercase">Voucher Đã Hết Hạn</h3>
+                                <p class="text-sm text-gray-500 mt-1">Mã này đã quá hạn 48 giờ kể từ lúc tạo.</p>
+                                <p class="text-xs mt-3 border-t border-gray-300 pt-2 text-gray-400">Ngày tạo: ${data.createdTime}</p>
                             </div>`;
-                    } else if (data.status === 'used') {
+                    } 
+                    // CASE C: VOUCHER ĐÃ DÙNG
+                    else if (data.status === 'used') {
                         resultDiv.innerHTML = `
-                            <div class="bg-red-50 border-l-8 border-red-500 p-6 rounded-r-lg text-center shadow-xl">
-                                <div class="text-6xl text-red-500 mb-4"><i class="fa-solid fa-circle-xmark"></i></div>
-                                <h3 class="text-2xl font-black text-red-900 uppercase mb-2">VOUCHER KHÔNG HỢP LỆ</h3>
-                                <p class="text-red-600 font-bold border-t border-red-200 pt-2">Đã sử dụng lúc: ${data.usedAt}</p>
+                            <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg text-center shadow-sm">
+                                <i class="fa-solid fa-circle-xmark text-4xl text-red-500 mb-2"></i>
+                                <h3 class="text-lg font-black text-red-900 uppercase">Voucher Không Hợp Lệ</h3>
+                                <p class="text-sm text-red-600 font-bold mt-1">Đã sử dụng lúc: ${data.usedAt}</p>
                             </div>`;
-                    } else {
-                        resultDiv.innerHTML = `<div class="text-center text-gray-500 font-bold py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">⚠️ Không tìm thấy voucher khả dụng!</div>`;
+                    } 
+                    // CASE D: KHÔNG TÌM THẤY
+                    else {
+                        resultDiv.innerHTML = `
+                            <div class="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                <i class="fa-regular fa-folder-open text-4xl text-gray-300 mb-2"></i>
+                                <p class="text-gray-500 font-bold text-sm">Không tìm thấy voucher nào khả dụng.</p>
+                            </div>`;
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    resultDiv.innerHTML = `<div class="text-center text-red-600 py-4">Lỗi kết nối Server!</div>`;
+                    resultDiv.innerHTML = `<div class="text-center text-red-600 py-4 font-bold text-sm"><i class="fa-solid fa-wifi"></i> Lỗi kết nối Server!</div>`;
                 });
         });
 
         // ------------------------------------------
-        // 3. HÀM GỬI ZALO (Copy & Open)
+        // 3. HÀM GỬI ZALO (Copy & Open Link)
         // ------------------------------------------
         function sendZalo(phone, content) {
             navigator.clipboard.writeText(content).then(() => {
@@ -300,41 +324,50 @@
                 if (zaloPhone.startsWith('0')) zaloPhone = '84' + zaloPhone.substring(1);
 
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                const zaloLink = `https://zalo.me/${zaloPhone}`;
+                
                 if (isMobile) {
-                    window.location.href = `https://zalo.me/${zaloPhone}`;
+                    window.location.href = zaloLink;
                 } else {
-                    window.open(`https://zalo.me/${zaloPhone}`, '_blank');
+                    window.open(zaloLink, '_blank');
                 }
-                alert('✅ Đã COPY nội dung!\nZalo sẽ mở ngay bây giờ, bạn hãy nhấn PASTE (Dán) để gửi.');
-            }).catch(() => alert('Lỗi copy. Hãy chụp màn hình gửi khách.'));
+                alert('✅ Đã COPY Link Voucher!\nZalo sẽ mở ngay bây giờ, bạn hãy nhấn PASTE (Dán) để gửi cho khách.');
+            }).catch(() => alert('Lỗi copy tự động. Vui lòng copy thủ công.'));
         }
 
         // ------------------------------------------
-        // 4. CÁC HÀM KHÁC (Redeem, Scanner, Menu)
+        // 4. HÀM ĐỔI QUÀ (REDEEM) - Xử lý từng vé
         // ------------------------------------------
-        window.redeemGift = function(inputKey) {
-            if(!confirm(`⚠️ Xác nhận sử dụng Voucher: ${inputKey}?\nMã sẽ bị KHÓA ngay sau khi bấm OK.`)) return;
+        window.redeemGift = function(targetId) {
+            if(!confirm(`⚠️ XÁC NHẬN SỬ DỤNG?\n\nMã Voucher: ${targetId}\n\nVé này sẽ bị KHÓA vĩnh viễn sau khi bấm OK.`)) return;
             
-            // Tìm nút bấm tương ứng để hiện trạng thái Loading
+            // Khóa tạm giao diện
             const allBtns = document.querySelectorAll('button');
-            allBtns.forEach(b => b.disabled = true); // Khóa tạm tất cả nút
+            allBtns.forEach(b => b.disabled = true);
+            document.body.style.cursor = 'wait';
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: inputKey, type: 'REDEEM' })
+                // Gửi đúng mã ID của vé cần đổi
+                body: JSON.stringify({ phone: targetId, type: 'REDEEM' })
             }).then(() => {
                 alert('✅ THÀNH CÔNG!\nVoucher đã được sử dụng.');
-                // Refresh lại kết quả tìm kiếm để cập nhật danh sách
-                document.getElementById('btn-search').disabled = false;
+                // Refresh lại kết quả tìm kiếm để cập nhật danh sách (xóa vé vừa dùng)
+                document.body.style.cursor = 'default';
+                allBtns.forEach(b => b.disabled = false);
                 document.getElementById('btn-search').click(); 
             }).catch(err => {
                 alert('❌ Lỗi kết nối!');
+                document.body.style.cursor = 'default';
                 allBtns.forEach(b => b.disabled = false);
             });
         }
 
+        // ------------------------------------------
+        // 5. CAMERA SCANNER
+        // ------------------------------------------
         let html5QrcodeScanner = null;
         const startScanBtn = document.getElementById('start-scan');
         const stopScanBtn = document.getElementById('stop-scan');
@@ -343,11 +376,23 @@
         startScanBtn.addEventListener('click', () => {
             placeholder.style.display = 'none';
             startScanBtn.disabled = true; stopScanBtn.disabled = false;
+            
             html5QrcodeScanner = new Html5Qrcode("reader");
-            html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
+            // Cấu hình: Ưu tiên cam sau, vùng quét vuông vức
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            
+            html5QrcodeScanner.start({ facingMode: "environment" }, config,
                 (decodedText) => {
-                    searchInput.value = decodedText; searchBtn.click(); stopScanning();
-                }).catch(() => { stopScanning(); alert("Lỗi Camera!"); });
+                    // Khi quét được: Tắt cam -> Điền vào ô tìm kiếm -> Bấm tìm
+                    stopScanning();
+                    searchInput.value = decodedText; 
+                    document.getElementById('btn-search').click();
+                })
+                .catch((err) => { 
+                    console.log(err);
+                    alert("Không thể mở Camera. Vui lòng cấp quyền!"); 
+                    stopScanning();
+                });
         });
 
         stopScanBtn.addEventListener('click', stopScanning);
@@ -355,12 +400,15 @@
         function stopScanning() {
             if (html5QrcodeScanner) {
                 html5QrcodeScanner.stop().then(() => {
-                    html5QrcodeScanner.clear(); placeholder.style.display = 'flex';
-                    startScanBtn.disabled = false; stopScanBtn.disabled = true;
-                });
+                    html5QrcodeScanner.clear(); 
+                    placeholder.style.display = 'flex';
+                    startScanBtn.disabled = false; 
+                    stopScanBtn.disabled = true;
+                }).catch(err => console.log('Stop failed', err));
             }
         }
 
+        // Mobile Menu Toggle
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
