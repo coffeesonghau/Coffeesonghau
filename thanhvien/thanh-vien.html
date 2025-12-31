@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
     <link href="./thanhvien.css" rel="stylesheet"> 
+    <link href="./login.css" rel="stylesheet"> 
 
     <style>
         /* CSS bổ sung riêng cho trang này nếu cần */
@@ -20,6 +21,33 @@
 
 <body class="bg-[#fcfcfc] text-gray-900 font-sans">
 
+    <div id="login-overlay">
+        <div class="login-box">
+            <div class="mb-4">
+                <i class="fa-solid fa-shield-halved text-5xl text-[#7a0b0b]"></i>
+            </div>
+            <h2 class="text-2xl font-black text-[#7a0b0b] uppercase mb-1">COFFEE Sông Hậu</h2>
+            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-6">Hệ thống quản trị nội bộ</p>
+            
+            <div class="text-left">
+                <label class="text-xs font-bold text-gray-600 uppercase ml-1">Mật khẩu truy cập</label>
+                <input type="password" id="login-pass" class="login-input" placeholder="Nhập mật khẩu IT cấp...">
+            </div>
+
+            <button id="btn-login-submit" class="login-btn">
+                Đăng nhập hệ thống
+            </button>
+            
+            <p id="login-error" class="error-msg">Sai mật khẩu!</p>
+            
+            <div class="mt-6 border-t pt-4">
+                <p class="text-[10px] text-gray-400 italic">
+                    <i class="fa-solid fa-lock"></i> Kết nối bảo mật SHA-256. 
+                    <br>Tự động đăng xuất sau 15 phút không sử dụng.
+                </p>
+            </div>
+        </div>
+    </div>
     <header class="bg-white sticky top-0 z-50 shadow-sm">
         <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
             <span>Admin System</span><span>Hotline: 0852.494.694</span>
@@ -412,5 +440,7 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
     </script>
+    
+    <script src="./login.js"></script>
 </body>
 </html>
