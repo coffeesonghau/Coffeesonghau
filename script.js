@@ -420,5 +420,5 @@ function initTetEffect() {
         
         // Lưu ý: Các bông hoa ĐANG rơi sẽ tiếp tục rơi cho đến khi 
         // chạm đáy màn hình rồi mới biến mất để nhìn tự nhiên hơn.
-    }, 10000); // 10000ms = 10 giây
+    }, 9000); // 10000ms = 10 giây
 }
