@@ -356,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initSearch();
     initPromoPopup();
+    initTetEffect();
     
     // Trang Chủ
     if (document.getElementById('slider')) {
@@ -369,3 +370,57 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProductDetail();
     }
 });
+
+
+// ======================================================
+// 9. HIỆU ỨNG HOA MAI RƠI (PHIÊN BẢN NHIỀU HOA)
+// ======================================================
+function initTetEffect() {
+    const container = document.body;
+    
+    // Hình ảnh bông mai (Dạng Base64 để không cần link ảnh ngoài, đảm bảo tải nhanh)
+    const apricotImage = "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23FFD700' d='M256 0c-25 0-48 20-48 45 0 15 10 30 25 38-30-10-60 5-60 40 0 20 15 35 35 40-35-5-65 20-65 55 0 25 20 45 45 45 15 0 30-10 38-25 10 30-5 60-40 60-20 0-35-15-40-35 5 35-20 65-55 65-25 0-45-20-45-45 0-15 10-30 25-38-30 10-60-5-60-40 0-20 15-35 35-40-35 5-65-20-65-55 0-25 20-45 45-45 15 0 30 10 38 25-10-30 5-60 40-60 20 0 35 15 40 35-5-35 20-65 55-65 25 0 45 20 45 45 0 15-10 30-25 38 30-10 60 5 60 40 0 20-15 35-35 40 35 5 65-20 65 55 0 25-20 45-45 45-15 0-30-10-38 25 10 30-5 60-40 60-20 0-35-15-40-35 5 35-20 65-55 65-25 0-45-20-45-45 0-15-10-30-25-38 30 10 60-5 60-40 0-20-15-35-35-40 35-5 65 20 65 55 0 25-20 45-45 45-15 0-30 10-38-25 10 30-5 60-40 60-20 0-35 15-40 35 5-35-20-65-55-65z'/%3E%3Cpath fill='%23FFA500' d='M256 192c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64z'/%3E%3C/svg%3E";
+
+    // --- CẤU HÌNH SỐ LƯỢNG ---
+    // Tăng số lượng tối đa lên 100 bông cùng lúc
+    const maxFlowers = 100; 
+    let flowerCount = 0;
+
+    function createFlower() {
+        // Nếu đã đủ số lượng hoa thì dừng tạo mới để tránh lag
+        if (flowerCount >= maxFlowers) return;
+
+        const flower = document.createElement('img');
+        flower.src = apricotImage;
+        flower.classList.add('apricot-flower');
+        
+        // 1. Vị trí xuất hiện: Ngẫu nhiên từ trái qua phải (0% -> 100% chiều rộng)
+        flower.style.left = Math.random() * 100 + 'vw';
+        
+        // 2. Kích thước: Ngẫu nhiên từ 10px đến 35px (tạo hiệu ứng xa gần)
+        const size = Math.random() * 25 + 10; 
+        flower.style.width = size + 'px';
+        flower.style.height = size + 'px';
+        
+        // 3. Độ mờ: Hoa nhỏ sẽ mờ hơn (giống như ở xa)
+        flower.style.opacity = size < 20 ? 0.7 : 1;
+
+        // 4. Tốc độ rơi: Random từ 5s đến 12s (hoa to rơi nhanh hơn, hoa nhỏ rơi chậm hơn)
+        const duration = Math.random() * 7 + 5; 
+        flower.style.animationDuration = duration + 's';
+
+        // 5. Thêm hoa vào trang
+        container.appendChild(flower);
+        flowerCount++;
+
+        // 6. Dọn dẹp: Khi hoa rơi xuống đáy xong thì xóa đi để giải phóng bộ nhớ
+        flower.addEventListener('animationend', () => {
+            flower.remove();
+            flowerCount--;
+        });
+    }
+
+    // --- TỐC ĐỘ SINH HOA ---
+    // Gọi hàm tạo hoa mỗi 150ms (0.15 giây) để hoa ra liên tục và dày đặc
+    setInterval(createFlower, 150);
+}

@@ -220,3 +220,44 @@ aside ul li:hover {
 .group-hover\:animate-shine:hover {
     animation: shine 0.75s;
 }
+
+/* ========================================= */
+/* HIỆU ỨNG HOA MAI RƠI (TẾT)               */
+/* ========================================= */
+
+.apricot-flower {
+    position: fixed;
+    top: -10%;
+    z-index: 9999;
+    user-select: none;
+    pointer-events: none; /* Để chuột bấm xuyên qua hoa được */
+    animation-name: fall-sway;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fall-sway {
+    0% {
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    20% {
+        transform: translateX(-20px) rotate(45deg);
+    }
+    40% {
+        transform: translateX(20px) rotate(90deg);
+    }
+    60% {
+        transform: translateX(-20px) rotate(135deg);
+        opacity: 0.8;
+    }
+    80% {
+        transform: translateX(20px) rotate(180deg);
+    }
+    100% {
+        top: 110%;
+        transform: translateX(-20px) rotate(225deg);
+        opacity: 0;
+    }
+}
