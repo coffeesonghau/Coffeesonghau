@@ -381,7 +381,7 @@ function initTetEffect() {
     // Hình ảnh bông mai (Base64)
     const apricotImage = "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23FFD700' d='M256 0c-25 0-48 20-48 45 0 15 10 30 25 38-30-10-60 5-60 40 0 20 15 35 35 40-35-5-65 20-65 55 0 25 20 45 45 45 15 0 30-10 38-25 10 30-5 60-40 60-20 0-35-15-40-35 5 35-20 65-55 65-25 0-45-20-45-45 0-15 10-30 25-38-30 10-60-5-60-40 0-20 15-35 35-40-35 5-65-20-65-55 0-25 20-45 45-45 15 0 30 10 38 25-10-30 5-60 40-60 20 0 35 15 40 35-5-35 20-65 55-65 25 0 45 20 45 45 0 15-10 30-25 38 30-10 60 5 60 40 0 20-15 35-35 40 35 5 65-20 65 55 0 25-20 45-45 45-15 0-30-10-38 25 10 30-5 60-40 60-20 0-35 15-40 35 5-35-20-65-55-65z'/%3E%3Cpath fill='%23FFA500' d='M256 192c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64z'/%3E%3C/svg%3E";
 
-    const maxFlowers = 100; 
+    const maxFlowers = 90; 
     let flowerCount = 0;
 
     function createFlower() {
@@ -420,5 +420,5 @@ function initTetEffect() {
         
         // Lưu ý: Các bông hoa ĐANG rơi sẽ tiếp tục rơi cho đến khi 
         // chạm đáy màn hình rồi mới biến mất để nhìn tự nhiên hơn.
-    }, 9000); // 10000ms = 10 giây
+    }, 4000); // 10000ms = 10 giây
 }
