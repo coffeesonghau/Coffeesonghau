@@ -356,7 +356,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initSearch();
     initPromoPopup();
-    initTetEffect();
     
     // Trang Chủ
     if (document.getElementById('slider')) {
@@ -370,55 +369,3 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProductDetail();
     }
 });
-
-
-// ======================================================
-// 9. HIỆU ỨNG HOA MAI RƠI (10 GIÂY TỰ NGẮT)
-// ======================================================
-function initTetEffect() {
-    const container = document.body;
-    
-    // Hình ảnh bông mai (Base64)
-    const apricotImage = "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23FFD700' d='M256 0c-25 0-48 20-48 45 0 15 10 30 25 38-30-10-60 5-60 40 0 20 15 35 35 40-35-5-65 20-65 55 0 25 20 45 45 45 15 0 30-10 38-25 10 30-5 60-40 60-20 0-35-15-40-35 5 35-20 65-55 65-25 0-45-20-45-45 0-15 10-30 25-38-30 10-60-5-60-40 0-20 15-35 35-40-35 5-65-20-65-55 0-25 20-45 45-45 15 0 30 10 38 25-10-30 5-60 40-60 20 0 35 15 40 35-5-35 20-65 55-65 25 0 45 20 45 45 0 15-10 30-25 38 30-10 60 5 60 40 0 20-15 35-35 40 35 5 65-20 65 55 0 25-20 45-45 45-15 0-30-10-38 25 10 30-5 60-40 60-20 0-35 15-40 35 5-35-20-65-55-65z'/%3E%3Cpath fill='%23FFA500' d='M256 192c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64z'/%3E%3C/svg%3E";
-
-    const maxFlowers = 90; 
-    let flowerCount = 0;
-
-    function createFlower() {
-        if (flowerCount >= maxFlowers) return;
-
-        const flower = document.createElement('img');
-        flower.src = apricotImage;
-        flower.classList.add('apricot-flower');
-        
-        flower.style.left = Math.random() * 100 + 'vw';
-        const size = Math.random() * 25 + 10; 
-        flower.style.width = size + 'px';
-        flower.style.height = size + 'px';
-        flower.style.opacity = size < 20 ? 0.7 : 1;
-
-        const duration = Math.random() * 7 + 5; 
-        flower.style.animationDuration = duration + 's';
-
-        container.appendChild(flower);
-        flowerCount++;
-
-        flower.addEventListener('animationend', () => {
-            flower.remove();
-            flowerCount--;
-        });
-    }
-
-    // --- BẮT ĐẦU HIỆU ỨNG ---
-    // Gán vào biến flowerInterval để quản lý
-    const flowerInterval = setInterval(createFlower, 150);
-
-    // --- HẸN GIỜ TẮT SAU 10 GIÂY ---
-    setTimeout(() => {
-        clearInterval(flowerInterval); // Dừng tạo hoa mới
-        console.log("Đã dừng hiệu ứng hoa rơi"); 
-        
-        // Lưu ý: Các bông hoa ĐANG rơi sẽ tiếp tục rơi cho đến khi 
-        // chạm đáy màn hình rồi mới biến mất để nhìn tự nhiên hơn.
-    }, 4000); // 10000ms = 10 giây
-}
