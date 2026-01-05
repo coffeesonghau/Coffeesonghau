@@ -519,7 +519,35 @@
     <script src="script.js"></script>
 
     <script>
+        // ==========================================
+        // HÀM HỖ TRỢ: CHUYỂN TIẾNG VIỆT CÓ DẤU -> KHÔNG DẤU
+        // ==========================================
+        function removeVietnameseTones(str) {
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            // Một số bộ gõ kết hợp
+            str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); 
+            str = str.replace(/\u02C6|\u0306|\u031B/g, ""); 
+            // Loại bỏ khoảng trắng thừa
+            str = str.trim();
+            return str.toLowerCase(); // Chuyển luôn về chữ thường
+        }
+
+        // ==========================================
         // 1. Hàm lọc theo Nút bấm (Thành phố)
+        // ==========================================
         function filterStores(city, btnElement) {
             const items = document.querySelectorAll('.store-item');
             const buttons = document.querySelectorAll('.filter-btn');
@@ -529,22 +557,19 @@
             // Xử lý UI nút bấm
             buttons.forEach(btn => {
                 btn.classList.remove('active', 'bg-red-900', 'text-white', 'border-transparent');
-                btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200'); // Reset style
+                btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
             });
 
-            // Active nút được bấm
             if (btnElement) {
-                btnElement.classList.add('active');
+                btnElement.classList.add('active', 'bg-red-900', 'text-white', 'border-transparent');
                 btnElement.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
             }
 
-            // Xóa nội dung ô tìm kiếm khi bấm nút lọc (để tránh xung đột logic)
+            // Xóa ô tìm kiếm để tránh xung đột
             if (searchInput) searchInput.value = '';
 
-            // Lọc item
             items.forEach(item => {
                 const itemCity = item.getAttribute('data-city');
-
                 if (city === 'all' || itemCity === city) {
                     item.classList.remove('store-hidden');
                     count++;
@@ -556,24 +581,40 @@
             updateCount(count);
         }
 
-        // 2. Hàm tìm kiếm (Real-time)
+        // ==========================================
+        // 2. Hàm tìm kiếm (NÂNG CẤP: CÓ DẤU & KHÔNG DẤU)
+        // ==========================================
         const searchInput = document.getElementById('store-search');
         if (searchInput) {
             searchInput.addEventListener('keyup', (e) => {
-                const query = e.target.value.toLowerCase().trim();
+                // 1. Lấy từ khóa khách nhập -> chuyển về không dấu
+                const query = removeVietnameseTones(e.target.value);
+                
                 const items = document.querySelectorAll('.store-item');
                 const buttons = document.querySelectorAll('.filter-btn');
                 let count = 0;
 
-                // Khi tìm kiếm, bỏ active ở các nút lọc
+                // Reset nút lọc về trạng thái "Tất cả" (giao diện)
                 buttons.forEach(btn => btn.classList.remove('active', 'bg-red-900', 'text-white'));
-                buttons[0].classList.add('bg-white', 'text-gray-600'); // Reset về màu thường
+                if(buttons.length > 0) {
+                     // Tùy chọn: Highlight lại nút Tất cả hoặc để trắng
+                     buttons[0].classList.add('bg-white', 'text-gray-600'); 
+                }
 
                 items.forEach(item => {
-                    // Lấy dữ liệu từ attribute data-search
-                    const searchData = item.getAttribute('data-search') || '';
+                    // 2. Lấy dữ liệu data-search gốc
+                    const rawSearchData = item.getAttribute('data-search') || '';
+                    
+                    // 3. Lấy thêm cả nội dung hiển thị (Tên quán, địa chỉ...) để tìm cho chính xác hơn
+                    // (Mẹo: gộp cả data-search và text hiển thị lại để tìm)
+                    const visibleText = item.innerText; 
+                    const fullData = rawSearchData + " " + visibleText;
 
-                    if (searchData.includes(query)) {
+                    // 4. Chuyển dữ liệu của quán về không dấu
+                    const dataNormalized = removeVietnameseTones(fullData);
+
+                    // 5. So sánh: Dữ liệu (đã chuẩn hóa) CÓ CHỨA Từ khóa (đã chuẩn hóa) không?
+                    if (dataNormalized.includes(query)) {
                         item.classList.remove('store-hidden');
                         count++;
                     } else {
@@ -585,7 +626,9 @@
             });
         }
 
-        // 3. Hàm cập nhật số lượng & Hiển thị thông báo rỗng
+        // ==========================================
+        // 3. Hàm cập nhật số lượng
+        // ==========================================
         function updateCount(count) {
             const countLabel = document.getElementById('result-count');
             const noResult = document.getElementById('no-result');
@@ -599,6 +642,7 @@
             }
         }
     </script>
+    
 </body>
 
 </html>
