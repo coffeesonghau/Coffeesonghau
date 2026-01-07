@@ -58,8 +58,8 @@ const jobData = {
             'Hỗ trợ các bộ phận khác khi quán đông khách.'
         ],
         req: [
-            'Ưu tiên các bạn trẻ tuổi năng động, không vướng bận.',
-            'Nhanh nhẹn, vui vẻ, hay cười, trung thực.',
+            'Ưu tiên các bạn trẻ tuổi năng động, không vướng bận gia đình.',
+            'Nhanh nhẹn, vui vẻ, trung thực.',
             'Có trách nhiệm với ca làm việc của mình.',
             'Ngoại hình gọn gàng, sạch sẽ.'
         ],
