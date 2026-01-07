@@ -80,15 +80,23 @@ function renderProducts(products) {
                 </div>
                 
                 <div class="p-4 flex flex-col flex-1">
-                    <div class="text-[10px] text-gray-400 uppercase font-bold mb-1">${p.category === 'rang-xay' ? 'Rang Xay' : 'Hòa Tan'}</div>
+                    <div class="text-[10px] text-gray-400 uppercase font-bold mb-1">
+    ${(function (cat) {
+                if (cat === 'cafe-hat') return 'Cà Phê Hạt';
+                if (cat === 'rang-xay') return 'Rang Xay';
+                if (cat === 'may-pha') return 'Máy Pha Chế';
+                if (cat === 'dung-cu') return 'Dụng Cụ';
+                return 'Hòa Tan'; // Mặc định cho best-seller
+            })(p.category)}
+</div>
                     <h3 class="text-sm font-bold text-gray-800 line-clamp-2 h-10 mb-2 cursor-pointer hover:text-red-900 transition" onclick="window.location.href='product-detail.html?id=${p.id}'">
                         ${p.name}
                     </h3>
                     <div class="mt-auto flex justify-between items-end border-t border-dashed border-gray-200 pt-3">
                         <span class="text-red-900 font-black text-lg">
-    ${p.price === 1 
-        ? '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>' 
-        : p.price.toLocaleString() + 'đ'}
+    ${p.price === 1
+                ? '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>'
+                : p.price.toLocaleString() + 'đ'}
 </span>
                         <button onclick="window.location.href='product-detail.html?id=${p.id}'" class="text-gray-400 hover:text-red-900 text-sm" title="Xem chi tiết">
                             <i class="fa-solid fa-arrow-right"></i>
@@ -202,7 +210,7 @@ function renderPagination(filteredList) {
 function changePage(filteredList) {
     renderProducts(filteredList);
     renderPagination(filteredList);
-    window.scrollTo({ top: 300, behavior: 'smooth' }); 
+    window.scrollTo({ top: 300, behavior: 'smooth' });
 }
 
 // 8. CẬP NHẬT SỐ LƯỢNG (Sidebar)
@@ -221,6 +229,11 @@ function updateCounts() {
     const countMay = document.querySelector('.count-may');
     if (countMay) {
         countMay.innerText = allProducts.filter(p => p.category === 'may-pha').length;
+    }
+
+    const countHat = document.querySelector('.count-hat');
+    if (countHat) {
+        countHat.innerText = allProducts.filter(p => p.category === 'cafe-hat').length;
     }
 
     // --- THÊM CODE ĐẾM DỤNG CỤ ---

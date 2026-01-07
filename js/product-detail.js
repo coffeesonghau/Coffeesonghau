@@ -8,7 +8,7 @@ function getProductImages(product) {
     if (product.gallery && product.gallery.length > 0) {
         return product.gallery;
     }
-    
+
     // ƯU TIÊN 2: Nếu không có gallery riêng, dùng ảnh chính lặp lại 4 lần (Cơ chế Fallback)
     return [
         product.img,
@@ -86,9 +86,9 @@ function renderProductDetail() {
             <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
             
             <div class="text-red-900 font-black text-sm">
-                ${p.price === 1 
-                    ? '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>' 
-                    : p.price.toLocaleString() + 'đ'}
+                ${p.price === 1
+            ? '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>'
+            : p.price.toLocaleString() + 'đ'}
             </div>
         </div>
     `).join('');
@@ -105,7 +105,16 @@ function renderProductDetail() {
             <div class="lg:w-1/2 flex flex-col justify-center">
                 <nav class="text-[10px] uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
                     <a href="index.html" class="hover:text-red-900 transition"><i class="fa-solid fa-house"></i></a> / 
-                    <span class="text-red-900 font-bold border-b border-red-900 pb-0.5">${product.category === 'rang-xay' ? 'Cà phê Rang Xay' : 'Cà phê Hòa Tan'}</span>
+                    <span class="text-red-900 font-bold border-b border-red-900 pb-0.5">
+                        ${(() => {
+                            if (product.category === 'rang-xay') return 'Cà phê Rang Xay';
+                            if (product.category === 'cafe-hat') return 'Cà phê Hạt'; // Thêm dòng này
+                            if (product.category === 'best-seller') return 'Cà phê Hòa Tan';
+                            if (product.category === 'may-pha') return 'Máy Pha Cà Phê';
+                            if (product.category === 'dung-cu') return 'Dụng Cụ';
+                            return 'Sản phẩm';
+                        })()}
+                    </span>
                 </nav>
                 
                 <h1 class="text-3xl md:text-4xl font-black text-red-950 mb-3 leading-tight uppercase tracking-tight">${product.name}</h1>
@@ -120,9 +129,9 @@ function renderProductDetail() {
                 <div class="bg-red-50 p-5 rounded-lg mb-8 border border-red-100 product-description-container">
                     <div id="desc-content" class="desc-content ${product.price === 1 ? '' : 'collapsed'} text-gray-700 text-sm leading-relaxed">
                         
-                        ${product.price === 1 
-                            ? '<p class="italic text-gray-500 font-medium">Nội dung đang cập nhật...</p>' 
-                            : `
+                        ${product.price === 1
+            ? '<p class="italic text-gray-500 font-medium">Nội dung đang cập nhật...</p>'
+            : `
                                 <div class="mb-4">
                                     ${descriptionText}
                                 </div>
@@ -137,7 +146,7 @@ function renderProductDetail() {
                                     ${detailsText}
                                 </div>
                             `
-                        }
+        }
                     </div>
                     
                     ${product.price !== 1 ? `
@@ -203,7 +212,7 @@ function toggleDescription() {
 document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     if (menuBtn && mobileMenu) {
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -215,12 +224,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     renderProductDetail();
-    
+
     const searchBtn = document.getElementById('search-toggle-btn');
     const searchBox = document.getElementById('search-box');
-    if(searchBtn && searchBox) {
+    if (searchBtn && searchBox) {
         searchBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             searchBox.classList.toggle('hidden');

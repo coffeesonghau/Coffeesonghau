@@ -5,7 +5,7 @@ window.dbProducts = [
     // --- CÀ PHÊ RANG XAY ---
     { 
         id: 1, 
-        name: "Cà Phê Rang Xay No.1", 
+        name: "Cà Phê Rang Mộc (Sản phẩm mẫu)", 
         price: 260000, 
         category: "rang-xay", 
         img: "img/2.jpg",
@@ -26,7 +26,48 @@ window.dbProducts = [
         }
     },
 
-    { id: 2, name: "Đang cập nhật sản phẩm", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
+    { 
+        id: 2, 
+        name: "Cà Phê Gu Mạnh Mẽ 2", 
+        price: 250000, 
+        category: "rang-xay", 
+        img: "imgsp/cafemm2.1.jpg",
+        gallery: [
+            "imgsp/cafemm2.1.jpg", 
+            "imgsp/cafemm2.2.png", 
+        ],
+        info: {
+            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> 70% Robusta - 30% Arabica.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Socola đen, hạt dẻ, hậu vị ngọt sâu.</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    { 
+        id: 3, 
+        name: "Cà Phê Hạt", 
+        price: 250000, 
+        category: "cafe-hat", 
+        img: "imgsp/cafehat.jpg",
+        gallery: [
+            "imgsp/cafehat.jpg",  
+        ],
+        info: {
+            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> 70% Robusta - 30% Arabica.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Socola đen, hạt dẻ, hậu vị ngọt sâu.</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    { id: 88, name: "Đang cập nhật sản phẩm", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 3, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 4, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 5, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COFFEE Sông Hậu | Hệ thống phân phối Cà phê chuyên nghiệp</title>
-    <link rel="icon" type="image/jpeg" href="img/logosh.jpg5 55"> 
+    <link rel="icon" type="image/jpeg" href="img/logosh.jpg"> 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="./style.css" rel="stylesheet">
@@ -275,6 +275,52 @@
         </div>
     </section>
 
+    <section class="container mx-auto px-4 mt-8 mb-4">
+        <div class="flex items-center mb-6 border-b-2 border-gray-300">
+            <h3 class="bg-gray-600 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest">
+                <i class="fa-regular fa-clock mr-2"></i>Sản phẩm sắp ra mắt
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white border border-dashed border-gray-300 p-4 rounded-lg relative opacity-75 hover:opacity-100 transition cursor-not-allowed">
+                <div class="absolute top-2 right-2 z-10 bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">Coming Soon</div>
+                <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-100">
+                    <img src="img/sapramat.png" class="w-full h-full object-cover grayscale">
+                </div>
+                <h4 class="text-[12px] font-bold text-gray-600 line-clamp-2 h-9 mb-2 uppercase">Trọn Bộ quà tết Sông Hậu</h4>
+                <div class="text-sm font-bold text-red-900">Dự kiến: 02/2026</div>
+            </div>
+
+            <div class="bg-white border border-dashed border-gray-300 p-4 rounded-lg relative opacity-75 hover:opacity-100 transition cursor-not-allowed">
+                <div class="absolute top-2 right-2 z-10 bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">Coming Soon</div>
+                <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-100">
+                    <img src="img/sapramat.png" class="w-full h-full object-cover grayscale">
+                </div>
+                <h4 class="text-[12px] font-bold text-gray-600 line-clamp-2 h-9 mb-2 uppercase">Cà Phê Rang Mộc</h4>
+                <div class="text-sm font-bold text-red-900">Dự kiến: 02/2026</div>
+            </div>
+
+            <div class="bg-white border border-dashed border-gray-300 p-4 rounded-lg relative opacity-75 hover:opacity-100 transition cursor-not-allowed">
+                <div class="absolute top-2 right-2 z-10 bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">Coming Soon</div>
+                <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-100">
+                    <img src="img/sapramat.png" class="w-full h-full object-cover grayscale">
+                </div>
+                <h4 class="text-[12px] font-bold text-gray-600 line-clamp-2 h-9 mb-2 uppercase">Cà Phê Cao Cấp</h4>
+                <div class="text-sm font-bold text-red-900">Dự Kiến: 02/2026</div>
+            </div>
+
+            <div class="bg-white border border-dashed border-gray-300 p-4 rounded-lg relative opacity-75 hover:opacity-100 transition cursor-not-allowed">
+                <div class="absolute top-2 right-2 z-10 bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">Coming Soon</div>
+                <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-100">
+                    <img src="img/sapramat.png" class="w-full h-full object-cover grayscale">
+                </div>
+                <h4 class="text-[12px] font-bold text-gray-600 line-clamp-2 h-9 mb-2 uppercase">Thực Phẩm Tết 2026</h4>
+                <div class="text-sm font-bold text-red-900">Đang nghiên cứu</div>
+            </div>
+        </div>
+    </section>
+
     <section class="container mx-auto px-4 py-12">
         <div class="flex items-center mb-6 border-b-2 border-red-900">
             <h3 class="bg-red-900 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest">Cà Phê Rang Xay</h3>
@@ -288,6 +334,28 @@
                 Xem tất cả <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
             </a>
         </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-12">
+        <div class="flex items-center mb-6 border-b-2 border-red-900">
+            <h3 class="bg-red-900 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest">Cà Phê Hạt</h3>
+        </div>
+
+        <div id="grid-cafe-hat" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 scroll-mt-24"></div>
+
+        <div class="mt-6 text-center">
+            <a href="sanpham.html"
+                class="text-xs font-bold text-gray-500 hover:text-red-900 uppercase transition-colors duration-300">
+                Xem tất cả <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="flex items-center mb-6 border-b-2 border-gray-200">
+            <h3 class="bg-gray-800 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest">Cà Phê Best Seller</h3>
+        </div>
+        <div id="grid-best-seller" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 scroll-mt-24"></div>
     </section>
 
     <section class="container mx-auto px-4 mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -307,14 +375,6 @@
                 <p class="text-xs opacity-80">Chiết khấu ưu đãi cho doanh nghiệp</p>
             </div>
         </a>
-    </section>
-
-    <section class="container mx-auto px-4 py-8">
-        <div class="flex items-center mb-6 border-b-2 border-gray-200">
-            <h3 class="bg-gray-800 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest">Cà Phê Best Seller
-            </h3>
-        </div>
-        <div id="grid-best-seller" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 scroll-mt-24"></div>
     </section>
 
     <footer class="bg-red-950 text-white mt-20 pt-16 pb-8">

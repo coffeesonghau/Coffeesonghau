@@ -360,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trang Chủ
     if (document.getElementById('slider')) {
         initSlider();
+        renderSection('cafe-hat', 'grid-cafe-hat')
         renderSection('rang-xay', 'grid-rang-xay');
         renderSection('best-seller', 'grid-best-seller');
     }
