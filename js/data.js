@@ -31,9 +31,9 @@ window.dbProducts = [
         name: "Cà Phê Gu Mạnh Mẽ 2", 
         price: 250000, 
         category: "rang-xay", 
-        img: "imgsp/cafemm2.1.jpg",
+        img: "img/cafemm21.jpg",
         gallery: [
-            "img/cafemm2.1.jpg", 
+            "img/cafemm21.jpg", 
             "img/cafemm22.jpg", 
         ],
         info: {
