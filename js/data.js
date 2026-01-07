@@ -33,8 +33,8 @@ window.dbProducts = [
         category: "rang-xay", 
         img: "imgsp/cafemm2.1.jpg",
         gallery: [
-            "imgsp/cafemm2.1.jpg", 
-            "imgsp/cafemm2.2.png", 
+            "img/cafemm2.1.jpg", 
+            "img/cafemm22.jpg", 
         ],
         info: {
             description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica, Robusta, Culi.",
