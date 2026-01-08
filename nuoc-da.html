@@ -5,48 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nước Đá Tinh Khiết | COFFEE Sông Hậu</title>
-
+    <link rel="icon" type="image/jpeg" href="img/logosh.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="./style.css" rel="stylesheet">
     <style>
-        /* CSS riêng cho hiệu ứng Tab */
-        .tab-btn.active {
-            color: #7f1d1d; /* red-900 */
-            border-bottom: 2px solid #7f1d1d;
-            background-color: #fef2f2; /* red-50 */
-            font-weight: 700;
-        }
+        /* Mặc định ẩn tất cả nội dung tab */
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeEffect 0.5s;
+            /* Hiệu ứng chuyển động */
         }
+
+        /* Chỉ hiện nội dung có class active */
         .tab-content.active {
             display: block;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Hiệu ứng làm mờ dần khi xuất hiện */
+        @keyframes fadeEffect {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Style cho nút bấm khi đang chọn (Tab active) */
+        .tab-btn.active {
+            color: #7f1d1d;
+            /* text-red-900 */
+            background-color: #fef2f2;
+            /* bg-red-50 */
+            border-bottom: 2px solid #7f1d1d;
+            /* Gạch chân đỏ */
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body class="bg-[#fcfcfc] text-gray-900">
-
-    <div class="ticker-container">
-        <div class="ticker-wrapper">
-            <div class="ticker-content">
-                <span class="ticker-item"><i class="fa-solid fa-snowflake mr-2"></i> Cung cấp đá viên tinh khiết</span>
-                <span class="ticker-item"><i class="fa-solid fa-truck-fast mr-2"></i> Giao hàng nhanh cho quán Cafe</span>
-                <span class="ticker-item"><i class="fa-solid fa-phone mr-2"></i> Hotline đặt đá: 0852.494.694</span>
-            </div>
-            <div class="ticker-content">
-                <span class="ticker-item"><i class="fa-solid fa-snowflake mr-2"></i> Cung cấp đá viên tinh khiết</span>
-                <span class="ticker-item"><i class="fa-solid fa-truck-fast mr-2"></i> Giao hàng nhanh cho quán Cafe</span>
-                <span class="ticker-item"><i class="fa-solid fa-phone mr-2"></i> Hotline đặt đá: 0852.494.694</span>
-            </div>
-        </div>
-    </div>
 
     <header class="bg-white sticky top-0 z-50 shadow-sm">
         <div
@@ -71,16 +71,16 @@
                         class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
                         <a href="#"
                             class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê hạt</a>
+                            Phê hạt </a>
                         <a href="#"
                             class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê bột</a>
+                            Phê Bột</a>
                         <a href="#"
                             class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê cao cấp</a>
-                        <a href="#"
+                            Phê Cao Cấp</a>
+                        <a href="nuoc-da.html"
                             class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Nước
-                             đá tinh khiết</a>
+                            Đá viên</a>
                         <a href="index.html#grid-best-seller"
                             class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 normal-case font-medium text-sm text-gray-600">Best
                             seller</a>
@@ -145,14 +145,19 @@
                     </button>
                     <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
                         <a href="#"
-                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Cà
-                            Phê hạt</a>
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
+                            Phê Hạt</a>
                         <a href="#"
-                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Cà
-                            Phê bột</a>
-                        <a href="#" class="block py-3 text-gray-500 hover:text-red-900 normal-case">Cà Phê Cao Cấp</a>
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
+                            Phê Bột</a>
+                        <a href="#"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
+                            Phê Cao Cấp</a>
+                        <a href="nuoc-da.html"
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Nước
+                            Đá Viên</a>
                         <a href="index.html#grid-best-seller"
-                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Best
+                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 normal-case font-medium text-sm text-gray-600">Best
                             Seller</a>
                     </div>
                 </div>
@@ -189,28 +194,46 @@
         <img src="img/nuocda1.png" class="w-full h-full object-cover" alt="Nước đá tinh khiết">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-transparent flex items-center px-4 md:px-20">
             <div class="text-white max-w-2xl animate-popup">
-                <span class="bg-blue-500 text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-wider mb-4 inline-block">Sản xuất & Phân phối</span>
-                <h1 class="text-3xl md:text-5xl font-black uppercase mb-4 leading-tight">Nước Đá Tinh Khiết <br><span class="text-blue-300">Công Nghệ RO</span></h1>
-                <p class="mb-6 opacity-90 text-sm md:text-base font-medium">Chuyên cung cấp đá viên sạch cho Nhà hàng, Quán Cafe, Trà sữa tại Bạc Liêu & Cà Mau.</p>
-                <a href="#dat-hang" class="inline-block bg-white text-blue-900 px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-yellow-500 hover:text-white transition rounded-full shadow-lg">Đặt hàng ngay</a>
+                <span
+                    class="bg-blue-500 text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-wider mb-4 inline-block">Sản
+                    xuất & Phân phối</span>
+                <h1 class="text-3xl md:text-5xl font-black uppercase mb-4 leading-tight">Nước Đá Tinh Khiết <br><span
+                        class="text-blue-300">Công Nghệ RO</span></h1>
+                <p class="mb-6 opacity-90 text-sm md:text-base font-medium">Chuyên cung cấp đá viên sạch cho Nhà hàng,
+                    Quán Cafe, Trà sữa tại Bạc Liêu & Cà Mau.</p>
+                <a href="#dat-hang"
+                    class="inline-block bg-white text-blue-900 px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-yellow-500 hover:text-white transition rounded-full shadow-lg">Đặt
+                    hàng ngay</a>
             </div>
         </div>
     </div>
 
     <section class="container mx-auto px-4 py-16">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:-translate-y-2 transition duration-300">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-shield-halved"></i></div>
+            <div
+                class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:-translate-y-2 transition duration-300">
+                <div
+                    class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
                 <h3 class="font-bold text-lg text-red-950 uppercase mb-2">Chuẩn Vệ Sinh ATTP</h3>
                 <p class="text-sm text-gray-500">Quy trình sản xuất khép kín, công nghệ RO, an toàn tuyệt đối.</p>
             </div>
-            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:-translate-y-2 transition duration-300">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-cubes"></i></div>
+            <div
+                class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:-translate-y-2 transition duration-300">
+                <div
+                    class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-cubes"></i>
+                </div>
                 <h3 class="font-bold text-lg text-red-950 uppercase mb-2">Đá Viên Tinh Khiết</h3>
                 <p class="text-sm text-gray-500">TInh khiết cao giúp đá sạch hơn, an toàn cho quán.</p>
             </div>
-            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:-translate-y-2 transition duration-300">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-truck-fast"></i></div>
+            <div
+                class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:-translate-y-2 transition duration-300">
+                <div
+                    class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
                 <h3 class="font-bold text-lg text-red-950 uppercase mb-2">Giao Hàng Thần Tốc</h3>
                 <p class="text-sm text-gray-500">Đội ngũ chuyên nghiệp, cam kết giao nhanh trong 30-60 phút.</p>
             </div>
@@ -223,10 +246,14 @@
                 <h2 class="text-3xl font-black text-red-950 uppercase text-center">Thông tin đặt hàng</h2>
             </div>
 
-            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row mb-12">
+            <div
+                class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row mb-12">
                 <div class="md:w-1/2 h-64 md:h-auto relative bg-gray-200">
-                    <img src="img/nuocda1.png" class="absolute inset-0 w-full h-full object-cover" alt="Đá viên tinh khiết">
-                    <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 uppercase rounded">Bán chạy</div>
+                    <img src="img/nuocda1.png" class="absolute inset-0 w-full h-full object-cover"
+                        alt="Đá viên tinh khiết">
+                    <div
+                        class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 uppercase rounded">
+                        Bán chạy</div>
                 </div>
 
                 <div class="md:w-1/2 p-8 flex flex-col justify-center">
@@ -234,28 +261,36 @@
                     <div class="w-10 h-1 bg-yellow-500 mb-4"></div>
 
                     <ul class="space-y-3 text-sm text-gray-600 mb-8">
-                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Kích cỡ tiêu chuẩn Viên lớn, Viên nhỏ.</li>
-                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Đóng bao bì sạch sẽ (Bao 15kg).</li>
-                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Nguồn nước đạt chuẩn Bộ Y Tế.</li>
-                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Giá sỉ cạnh tranh nhất khu vực.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Kích cỡ
+                            tiêu chuẩn Viên lớn, Viên nhỏ.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Đóng bao
+                            bì sạch sẽ (Bao 15kg).</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Nguồn
+                            nước đạt chuẩn Bộ Y Tế.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-blue-500 mt-1 mr-2"></i> Giá sỉ
+                            cạnh tranh nhất khu vực.</li>
                     </ul>
 
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6 flex justify-between items-center">
+                    <div
+                        class="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6 flex justify-between items-center">
                         <div>
                             <p class="text-xs font-bold text-gray-500 uppercase mb-1">Giá bán lẻ / Sỉ:</p>
                             <p class="text-2xl font-black text-red-900">Liên hệ</p>
                         </div>
                         <div class="text-right">
-                            <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-1 rounded">Chiết khấu cao</span>
+                            <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-1 rounded">Chiết khấu
+                                cao</span>
                             <p class="text-[10px] text-gray-400 italic mt-1 max-w-[120px]">Cho Đại lý & Quán lấy SLL</p>
                         </div>
                     </div>
 
                     <div class="flex gap-3">
-                        <a href="tel:0852494694" class="flex-1 bg-red-900 text-white text-center py-3 rounded-lg font-bold uppercase text-xs hover:bg-black transition flex items-center justify-center gap-2 shadow-lg shadow-red-900/20">
+                        <a href="tel:0852494694"
+                            class="flex-1 bg-red-900 text-white text-center py-3 rounded-lg font-bold uppercase text-xs hover:bg-black transition flex items-center justify-center gap-2 shadow-lg shadow-red-900/20">
                             <i class="fa-solid fa-phone animate-pulse"></i> Gọi 0852.494.694
                         </a>
-                        <a href="https://zalo.me/0852494694" class="flex-1 bg-blue-600 text-white text-center py-3 rounded-lg font-bold uppercase text-xs hover:bg-blue-700 transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20">
+                        <a href="https://zalo.me/0852494694"
+                            class="flex-1 bg-blue-600 text-white text-center py-3 rounded-lg font-bold uppercase text-xs hover:bg-blue-700 transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20">
                             Chat Zalo
                         </a>
                     </div>
@@ -264,27 +299,36 @@
 
             <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="flex flex-wrap border-b border-gray-200 bg-gray-50">
-                    <button class="tab-btn active px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center" onclick="openTab(event, 'tab-shipping')">
+                    <button
+                        class="tab-btn active px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center"
+                        onclick="openTab(event, 'tab-shipping')">
                         <i class="fa-solid fa-truck mr-2"></i> Vận chuyển
                     </button>
-                    <button class="tab-btn px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center" onclick="openTab(event, 'tab-order')">
+                    <button
+                        class="tab-btn px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center"
+                        onclick="openTab(event, 'tab-order')">
                         <i class="fa-solid fa-clipboard-list mr-2"></i> Quy định đặt hàng
                     </button>
-                    <button class="tab-btn px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center" onclick="openTab(event, 'tab-payment')">
+                    <button
+                        class="tab-btn px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center"
+                        onclick="openTab(event, 'tab-payment')">
                         <i class="fa-solid fa-wallet mr-2"></i> Thanh toán
                     </button>
-                    <button class="tab-btn px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center" onclick="openTab(event, 'tab-quality')">
+                    <button
+                        class="tab-btn px-6 py-4 text-sm text-gray-600 hover:text-red-900 hover:bg-red-50 transition flex-1 sm:flex-none text-center"
+                        onclick="openTab(event, 'tab-quality')">
                         <i class="fa-solid fa-certificate mr-2"></i> Cam kết
                     </button>
                 </div>
 
                 <div class="p-6 md:p-8 bg-white min-h-[250px]">
-                    
+
                     <div id="tab-shipping" class="tab-content active">
                         <h4 class="font-bold text-red-900 text-lg mb-4 uppercase">Chính sách giao nhận & Phí Ship</h4>
                         <div class="space-y-4 text-sm text-gray-700">
                             <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                <p class="font-bold text-blue-800 mb-1"><i class="fa-solid fa-location-dot mr-2"></i> Khu vực Miễn Phí (Free Ship)</p>
+                                <p class="font-bold text-blue-800 mb-1"><i class="fa-solid fa-location-dot mr-2"></i>
+                                    Khu vực Miễn Phí (Free Ship)</p>
                                 <ul class="list-disc pl-5 space-y-1 mt-2 text-gray-600">
                                     <li>Nội ô Thành phố Bạc Liêu (Bán kính < 5km).</li>
                                     <li>Các Khách Hàng đến nơi nhà máy sản xuất.</li>
@@ -292,7 +336,8 @@
                                 </ul>
                             </div>
                             <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
-                                <p class="font-bold text-yellow-800 mb-1"><i class="fa-solid fa-coins mr-2"></i> Phụ thu vận chuyển</p>
+                                <p class="font-bold text-yellow-800 mb-1"><i class="fa-solid fa-coins mr-2"></i> Phụ thu
+                                    vận chuyển</p>
                                 <p class="mb-2">Áp dụng cho đơn hàng xa trung tâm theo số lượng:</p>
                                 <ul class="list-disc pl-5 space-y-1 text-gray-600">
                                     <li>Từ 5km - 10km: Phụ thu <strong>Phí thỏa thuận</strong> / chuyến.</li>
@@ -309,17 +354,36 @@
                             <div>
                                 <h5 class="font-bold text-gray-800 mb-2 border-b pb-1">Số lượng tối thiểu</h5>
                                 <ul class="text-sm text-gray-600 space-y-2">
-                                    <li class="flex items-center"><i class="fa-solid fa-circle-check text-green-500 mr-2 text-xs"></i> Khách lẻ: Tối thiểu 1 bao (15kg) tuyến đường.</li>
-                                    <li class="flex items-center"><i class="fa-solid fa-circle-check text-green-500 mr-2 text-xs"></i> Giao tận nơi: Tối thiểu <strong>10 bao</strong> trở lên.</li>
-                                    <li class="flex items-center"><i class="fa-solid fa-circle-check text-green-500 mr-2 text-xs"></i> Khách sỉ/Đại lý: Vui lòng liên hệ để có xe tải giao hàng riêng.</li>
+                                    <li class="flex items-center">
+                                        <i class="fa-solid fa-circle-check text-green-500 mr-2 text-xs"></i>
+                                        Khách lẻ: Tối thiểu 1 bao (15kg) tuyến đường.
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa-solid fa-circle-check text-green-500 mr-2 text-xs"></i>
+                                        Giao tận nơi: Tối thiểu <strong class="mx-1">10 bao</strong> trở lên.
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa-solid fa-circle-check text-green-500 mr-2 text-xs"></i>
+                                        Khách sỉ/Đại lý: Vui lòng liên hệ để có xe tải giao hàng riêng.
+                                    </li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="font-bold text-gray-800 mb-2 border-b pb-1">Thời gian giao hàng</h5>
                                 <ul class="text-sm text-gray-600 space-y-2">
-                                    <li class="flex items-center"><i class="fa-solid fa-clock text-blue-500 mr-2"></i> Hoạt động: <strong>5:00 Sáng - 17:00 chiều</strong>.</li>
-                                    <li class="flex items-center"><i class="fa-solid fa-bolt text-yellow-500 mr-2"></i> Thời gian giao: Theo tuyến đường và mật độ giao thông <br> Giao theo giờ làm việc.</li>
-                                    <li class="flex items-center"><i class="fa-solid fa-calendar-days text-gray-500 mr-2"></i> Lễ/Tết: Phục vụ xuyên suốt (Có thể điều chỉnh giá nhẹ).</li>
+                                    <li class="flex items-center">
+                                        <i class="fa-solid fa-clock text-blue-500 mr-2"></i>
+                                        Hoạt động: <strong class="ml-2">5:00 Sáng - 17:00 chiều</strong>.
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa-solid fa-bolt text-yellow-500 mr-2"></i>
+                                        Thời gian giao: Theo tuyến đường và mật độ giao thông <br> Giao theo giờ làm
+                                        việc.
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa-solid fa-calendar-days text-gray-500 mr-2"></i>
+                                        Lễ/Tết: Phục vụ xuyên suốt (Có thể điều chỉnh giá nhẹ).
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -328,12 +392,14 @@
                     <div id="tab-payment" class="tab-content">
                         <h4 class="font-bold text-red-900 text-lg mb-4 uppercase">Phương thức thanh toán</h4>
                         <div class="space-y-4 text-sm">
-                            <p class="text-gray-600">Chúng tôi hỗ trợ đa dạng các hình thức thanh toán để thuận tiện nhất cho khách hàng:</p>
+                            <p class="text-gray-600">Chúng tôi hỗ trợ đa dạng các hình thức thanh toán để thuận tiện
+                                nhất cho khách hàng:</p>
                             <div class="flex flex-col md:flex-row gap-4">
                                 <div class="flex-1 border p-4 rounded bg-gray-50 text-center">
                                     <i class="fa-solid fa-money-bill-wave text-3xl text-green-600 mb-2"></i>
                                     <h5 class="font-bold">Tiền mặt</h5>
-                                    <p class="text-xs text-gray-500 mt-1">Thanh toán trực tiếp cho nhân viên giao hàng khi nhận đá.</p>
+                                    <p class="text-xs text-gray-500 mt-1">Thanh toán trực tiếp cho nhân viên giao hàng
+                                        khi nhận đá.</p>
                                 </div>
                                 <div class="flex-1 border p-4 rounded bg-gray-50 text-center">
                                     <i class="fa-solid fa-qrcode text-3xl text-blue-600 mb-2"></i>
@@ -355,7 +421,8 @@
                             <li class="flex items-start">
                                 <i class="fa-solid fa-medal text-yellow-500 text-xl mr-3 mt-1"></i>
                                 <div>
-                                    <strong class="text-gray-900 block">Chất lượng nước đá sạch 99.9% trong Nhà máy sản xuất</strong>
+                                    <strong class="text-gray-900 block">Chất lượng nước đá sạch 99.9% trong Nhà máy sản
+                                        xuất</strong>
                                     Sản phẩm được kiểm nghiệm định kỳ / Đảm bảo không chứa kim loại nặng.
                                 </div>
                             </li>
@@ -363,7 +430,8 @@
                                 <i class="fa-solid fa-scale-balanced text-blue-500 text-xl mr-3 mt-1"></i>
                                 <div>
                                     <strong class="text-gray-900 block">Đủ cân - Đủ ký</strong>
-                                    Cam kết giao đủ số lượng bao.đóng gói chắc chắn, không bị rách, hở trong quá trình vận chuyển.
+                                    Cam kết giao đủ số lượng bao.đóng gói chắc chắn, không bị rách, hở trong quá trình
+                                    vận chuyển.
                                 </div>
                             </li>
                             <li class="flex items-start">
@@ -377,7 +445,7 @@
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
     </section>
 
     <section class="container mx-auto px-4 py-16">
@@ -385,8 +453,10 @@
             <i class="fa-solid fa-snowflake absolute -top-10 -left-10 text-9xl text-white/5 rotate-12"></i>
             <i class="fa-solid fa-glass-water absolute -bottom-10 -right-10 text-9xl text-white/5 -rotate-12"></i>
 
-            <h2 class="text-2xl md:text-3xl font-black uppercase mb-4 relative z-10">Đối tác tin cậy của các quán Cafe</h2>
-            <p class="text-gray-300 mb-8 max-w-2xl mx-auto relative z-10">Chúng tôi không chỉ bán nước đá, chúng tôi cung cấp giải pháp giải khát an toàn cho công việc kinh doanh của bạn.</p>
+            <h2 class="text-2xl md:text-3xl font-black uppercase mb-4 relative z-10">Đối tác tin cậy của các quán Cafe
+            </h2>
+            <p class="text-gray-300 mb-8 max-w-2xl mx-auto relative z-10">Chúng tôi không chỉ bán nước đá, chúng tôi
+                cung cấp giải pháp giải khát an toàn cho công việc kinh doanh của bạn.</p>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-bold uppercase tracking-wide relative z-10">
                 <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/10">
@@ -419,12 +489,15 @@
                     <a href="https://www.facebook.com/profile.php?id=61585402033689&locale=vi_VN"
                         class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
                             class="fab fa-facebook-f text-xs"></i></a>
-                    <a href="#"
-                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
-                            class="fab fa-youtube text-xs"></i></a>
-                    <a href="#"
-                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"><i
-                            class="fab fa-instagram text-xs"></i></a>
+                    <a href="mailto:congtynamduongbl@gmail.com?subject=Liên hệ từ Website"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition"
+                        title="Gửi email cho Nam Dương">
+                        <i class="fas fa-envelope text-xs"></i>
+                    </a>
+                    <a href="tel:0852494694"
+                        class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-yellow-600 transition">
+                        <i class="fas fa-phone text-xs"></i>
+                    </a>
                 </div>
             </div>
 
@@ -433,8 +506,6 @@
                     trợ</h4>
                 <ul class="text-sm text-gray-400 space-y-3">
                     <li><a href="policy.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
-                    <li><a href="quy-trinh-dat-hang.html" class="hover:text-yellow-600 transition">Chính sách vận chuyển
-                        </a></li>
                     <li><a href="return-policy.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a>
                     </li>
                     <li><a href="quy-trinh-dat-hang.html" class="hover:text-yellow-600 transition">Hướng dẫn mua
@@ -448,9 +519,7 @@
                     Sông Hậu</h4>
                 <ul class="text-sm text-gray-400 space-y-3">
                     <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
-                    <li><a href="story.html" class="hover:text-yellow-600 transition">Tin tức & Sự kiện</a></li>
-                    <li><a href="distribution.html" class="hover:text-yellow-600 transition">Hệ thống phân phối</a></li>
-                    <li><a href="about.html" class="hover:text-yellow-600 transition">Thông Tin</a></li>
+                    <li><a href="about.html" class="hover:text-yellow-600 transition">Về chúng tôi</a></li>
                     <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
                 </ul>
             </div>
@@ -480,17 +549,12 @@
             </p>
         </div>
     </footer>
-
-    <a href="https://m.me/1003418946177388" target="_blank" class="messenger-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z"/></svg>
-        <span>Chat ngay</span>
-    </a>
-
+    
     <script>
         // 1. Logic chuyển đổi Tab
         function openTab(evt, tabName) {
             var i, tabContent, tabBtn;
-            
+
             // Ẩn tất cả nội dung
             tabContent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabContent.length; i++) {
@@ -530,4 +594,5 @@
         }
     </script>
 </body>
+
 </html>
