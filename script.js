@@ -20,21 +20,25 @@ function toggleSubMenu(btn) {
 }
 
 // ======================================================
-// 2. HIỂN THỊ SẢN PHẨM (TRANG CHỦ)
+// 2. HIỂN THỊ SẢN PHẨM (ĐÃ CẬP NHẬT GIỚI HẠN HIỂN THỊ)
 // ======================================================
-function renderSection(category, targetId) {
+function renderSection(category, targetId, limit = null) {
     const grid = document.getElementById(targetId);
     if (!grid) return;
 
     // LỌC: Chỉ lấy sản phẩm giá > 0
     const filtered = products.filter(p => p.category === category && p.price > 0);
     
-    if (filtered.length === 0) {
+    // LOGIC GIỚI HẠN SỐ LƯỢNG (MỚI)
+    // Nếu có truyền limit thì cắt mảng, nếu không (null) thì lấy hết
+    const itemsToRender = limit ? filtered.slice(0, limit) : filtered;
+
+    if (itemsToRender.length === 0) {
         grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full text-center">Sản phẩm đang được cập nhật...</p>';
         return;
     }
 
-    grid.innerHTML = filtered.map(p => {
+    grid.innerHTML = itemsToRender.map(p => {
         // LOGIC GIÁ: Nếu giá là 1 thì hiện "Liên hệ", ngược lại hiện tiền
         const priceDisplay = p.price === 1 
             ? '<span class="text-blue-700 font-bold text-sm">Liên hệ báo giá</span>' 
@@ -360,8 +364,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trang Chủ
     if (document.getElementById('slider')) {
         initSlider();
-        renderSection('cafe-hat', 'grid-cafe-hat')
-        renderSection('rang-xay', 'grid-rang-xay');
+        renderSection('cafe-hat', 'grid-cafe-hat');
+        
+        // --- CHỈNH SỬA Ở ĐÂY ---
+        // Tham số thứ 3 là 10 -> Giới hạn hiển thị 10 sản phẩm
+        renderSection('rang-xay', 'grid-rang-xay', 10); 
+        // -----------------------
+
         renderSection('best-seller', 'grid-best-seller');
     }
 

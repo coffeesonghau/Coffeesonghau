@@ -188,35 +188,87 @@ aside ul li:hover {
     display: flex !important;
 }
 
-.messenger-btn {
+.fixed-contact-group {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #0084FF; /* Màu xanh chuẩn Messenger */
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
+    display: flex;
+    flex-direction: column; /* Xếp chồng lên nhau */
+    gap: 15px; /* Khoảng cách giữa 2 nút */
+    z-index: 9999;
+    align-items: flex-end; /* Căn phải */
+}
+
+.floating-btn {
     display: flex;
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 9999; /* Đảm bảo nút luôn nổi trên cùng */
-    transition: transform 0.3s ease;
+    border-radius: 50px;
+    padding: 5px; /* Padding nhỏ cho khung ngoài */
+    background: white; /* Nền trắng để icon nổi bật */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    width: 50px; /* Mặc định thu gọn chỉ hiện icon */
+    white-space: nowrap;
 }
 
-.messenger-btn:hover {
-    transform: scale(1.05); /* Hiệu ứng phóng to khi di chuột vào */
-    background-color: #0078e7;
+/* Khi di chuột vào thì dãn ra hiện chữ */
+.floating-btn:hover {
+    width: 180px; /* Độ rộng khi mở ra */
+    padding-right: 20px; 
 }
-/* Hiệu ứng lướt sáng cho nút (Shine Effect) */
-@keyframes shine {
-    100% {
-        left: 200%;
-    }
+
+/* Phần chứa Icon tròn */
+.floating-btn .icon-holder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    font-size: 18px;
+    position: relative;
+    z-index: 2;
 }
-.group-hover\:animate-shine:hover {
-    animation: shine 0.75s;
+
+/* Hiệu ứng rung lắc cho nút Gọi */
+.phone-btn .icon-holder {
+    background-color: #dc2626; /* Màu đỏ */
+    animation: phone-shake 1.5s infinite;
+}
+
+/* Màu cho nút Messenger */
+.messenger-btn .icon-holder {
+    background-color: #0084FF; /* Màu xanh Messenger */
+}
+
+/* Chữ hiển thị bên cạnh */
+.floating-btn .text-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
+    font-family: Arial, sans-serif;
+}
+
+.floating-btn:hover .text-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Animation Rung Lắc */
+@keyframes phone-shake {
+    0% { transform: rotate(0) scale(1) skew(1deg); }
+    10% { transform: rotate(-25deg) scale(1) skew(1deg); }
+    20% { transform: rotate(25deg) scale(1) skew(1deg); }
+    30% { transform: rotate(-25deg) scale(1) skew(1deg); }
+    40% { transform: rotate(25deg) scale(1) skew(1deg); }
+    50% { transform: rotate(0) scale(1) skew(1deg); }
+    100% { transform: rotate(0) scale(1) skew(1deg); }
 }
