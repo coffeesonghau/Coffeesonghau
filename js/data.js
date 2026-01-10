@@ -6,7 +6,7 @@ window.dbProducts = [
     { 
         id: 1, 
         name: "Cà Phê Rang Mộc (Sản phẩm mẫu)", 
-        price: 260000, 
+        price: 1, 
         category: "rang-xay", 
         img: "img/2.jpg",
         gallery: [
@@ -29,7 +29,7 @@ window.dbProducts = [
     { 
         id: 2, 
         name: "Cà Phê Gu Mạnh Mẽ 2", 
-        price: 250000, 
+        price: 1,
         category: "rang-xay", 
         img: "img/cafemm21.jpg",
         gallery: [
@@ -50,7 +50,7 @@ window.dbProducts = [
     { 
         id: 3, 
         name: "Cà Phê Hạt", 
-        price: 250000, 
+        price: 1, 
         category: "cafe-hat", 
         img: "imgsp/cafehat.jpg",
         gallery: [
