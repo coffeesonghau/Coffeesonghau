@@ -67,20 +67,20 @@ window.dbProducts = [
         }
     },
 
-    { id: 88, name: "Đang cập nhật sản phẩm", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 89, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 4, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
+    { id: 4, name: "Đang cập nhật sản phẩm", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 5, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
+    { id: 6, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
+    { id: 7, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
+    { id: 8, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 9, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 10, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 11, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 12, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 13, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 16, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
 
     // --- CÀ PHÊ HÒA TAN ---
     { 
-        id: 6, 
+        id: 14, 
         name: "Cà Phê Sữa 3in1 (Hộp)", 
         price: 0, 
         category: "best-seller", 
@@ -90,14 +90,14 @@ window.dbProducts = [
             details: "<p>Hộp 18 gói x 17g. Thích hợp làm quà tặng hoặc sử dụng văn phòng.</p>"
         }
     },
-    { id: 7, name: "Cà phê Đen Hòa Tan", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1512568400610-64da2dca8545?w=500" },
-    { id: 8, name: "Cappuccino Muối", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500" },
-    { id: 14, name: "Cà Phê Sữa Dừa", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1541167760496-162955ed8a9f?w=500" },
-    { id: 15, name: "Trà Sữa Matcha Coffee", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1536452329015-d736360344b4?w=500" },
+    { id: 15, name: "Cà phê Đen Hòa Tan", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1512568400610-64da2dca8545?w=500" },
+    { id: 16, name: "Cappuccino Muối", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500" },
+    { id: 17, name: "Cà Phê Sữa Dừa", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1541167760496-162955ed8a9f?w=500" },
+    { id: 18, name: "Trà Sữa Matcha Coffee", price: 0, category: "best-seller", img: "https://images.unsplash.com/photo-1536452329015-d736360344b4?w=500" },
 
     // --- MÁY PHA CÀ PHÊ DEMO KHÔNG ĐƯỢC THAY ĐỔI ---
     { 
-        id: 20, 
+        id: 19, 
         name: "Máy Pha Espresso Home", 
         price: 0, 
         category: "may-pha", 
@@ -121,7 +121,7 @@ window.dbProducts = [
 
     // --- DỤNG CỤ PHA CHẾ ---
     { 
-        id: 21, 
+        id: 20, 
         name: "Ca Đánh Sữa Inox", 
         price: 0, 
         category: "dung-cu", 
