@@ -4,91 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wifi Cà Phê Sông Hậu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Reset CSS cơ bản */
+        /* --- RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body, html { height: 100%; font-family: 'Roboto', sans-serif; overflow: hidden; background: #000; }
 
-        /* Hình nền Poster */
-        .bg-image {
-            background-image: url('img/kmthang.jpg'); /* Đảm bảo file ảnh này có thật trong thư mục img */
-            height: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+        /* --- BACKGROUND POSTER --- */
+        .poster-container {
             position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #000; /* Màu nền đen lót dưới */
         }
 
-        /* Lớp phủ màu tối */
-        .overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+        .bg-image {
+            width: 100%;
+            height: 100%;
+            /* Quan trọng: dùng contain để hiển thị FULL poster không bị cắt */
+            /* Hoặc dùng 'cover' nếu muốn tràn màn hình (nhưng có thể mất chữ ở mép) */
+            background-image: url('img/kmthang.jpg'); 
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover; 
+            transition: opacity 0.5s ease;
+        }
+
+        /* --- THANH ĐIỀU KHIỂN DƯỚI ĐÁY (BOTTOM SHEET) --- */
+        .bottom-sheet {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            /* Màu nền đen mờ nhẹ ở dưới đáy để nút nổi bật */
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0) 100%);
+            padding: 40px 20px 30px 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Đẩy nội dung ra 2 đầu trên dưới */
             align-items: center;
-            padding: 40px 20px;
+            justify-content: flex-end;
+            z-index: 10;
+            min-height: 25vh; /* Chiếm tối đa 25% màn hình dưới */
+        }
+
+        .brand-text {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
             text-align: center;
         }
 
-        /* Phần nội dung phía trên */
-        .content-top { color: #fff; margin-top: 15vh; }
-        .logo-text { font-size: 2.5rem; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
-        .tagline { font-size: 1.2rem; font-weight: 300; opacity: 0.9; }
-
-        /* Phần nút bấm phía dưới */
-        .content-bottom { width: 100%; margin-bottom: 30px; }
-
-        /* Thiết kế nút bấm */
+        /* --- NÚT KẾT NỐI --- */
         .connect-btn {
-            display: block;
-            width: 80%; max-width: 300px; margin: 0 auto; padding: 15px 0;
-            background-color: #d97706; /* Màu cam */
-            color: white; border: none; border-radius: 50px;
-            font-size: 1.2rem; font-weight: bold; text-transform: uppercase;
+            background-color: #d97706; /* Màu cam thương hiệu */
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 0;
+            width: 100%;
+            max-width: 350px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: background 0.3s;
+            position: relative;
         }
+
         .connect-btn:hover { background-color: #b45309; }
         .connect-btn:active { transform: scale(0.98); }
+
+        /* --- SPINNER --- */
+        .spinner {
+            display: none;
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
     </style>
 </head>
-
 <body>
 
-    <div class="bg-image">
-        <div class="overlay">
+    <div class="poster-container">
+        <div class="bg-image"></div>
 
-            <div class="content-top">
-                <h1 class="logo-text">Cà Phê Sông Hậu</h1>
-                <p class="tagline">Thư giãn bên dòng sông, kết nối không giới hạn.</p>
-            </div>
+        <div class="bottom-sheet">
+            
+            <h2 class="brand-text">Chào mừng đến Cà Phê Sông Hậu</h2>
 
-            <div class="content-bottom">
-                <form id="login-form" method="post" action="login">
-                    
-                    <input type="hidden" name="dst" value="https://www.coffeesonghau.com" />
-                    <input type="hidden" name="popup" value="true" />
+            <form id="login-form" method="post" action="login" style="width: 100%; display: flex; justify-content: center;">
+                <input type="hidden" name="op" value="auth" /> 
+                <input type="hidden" name="cmd" value="authenticate" />
+                <input type="hidden" name="dst" value="https://www.coffeesonghau.com" />
+                <input type="hidden" name="popup" value="true" />
 
-                    <button type="submit" class="connect-btn" onclick="handleConnectBtnText(this)">
-                        KẾT NỐI NGAY
-                    </button>
-                </form>
-            </div>
-
+                <button type="submit" class="connect-btn" id="btn-connect" onclick="handleSubmit(event)">
+                    <span id="btn-text">KẾT NỐI WIFI MIỄN PHÍ</span>
+                    <div class="spinner" id="btn-spinner"></div>
+                </button>
+            </form>
         </div>
     </div>
 
     <script>
-        function handleConnectBtnText(btn) {
-            btn.innerText = "ĐANG KẾT NỐI...";
-            // Thử đóng cửa sổ sau 2 giây
-            setTimeout(function () {
-                try { window.close(); } catch (e) { }
-            }, 2000);
+        function handleSubmit(e) {
+            var btn = document.getElementById('btn-connect');
+            var text = document.getElementById('btn-text');
+            var spinner = document.getElementById('btn-spinner');
+
+            // Hiệu ứng khi bấm
+            btn.style.opacity = "0.8";
+            text.style.display = "none";
+            spinner.style.display = "block";
+            btn.disabled = true;
+
+            // Chờ một chút để đảm bảo form submit
+            setTimeout(function() {
+                 try { window.location.href = "https://www.coffeesonghau.com"; } catch(ex){}
+            }, 3000);
         }
     </script>
-
 </body>
 </html>
