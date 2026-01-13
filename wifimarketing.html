@@ -1,31 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wifi Cà Phê Sông Hậu</title>
     <style>
         /* Reset CSS cơ bản */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-        body,
-        html {
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* Hình nền Poster (Thay đổi đường dẫn ảnh của bạn ở đây) */
+        /* Hình nền Poster */
         .bg-image {
-            /* Dùng ảnh view sông hoàng hôn làm ví dụ */
-            background-image: url('img/kmthang.jpg');
-            /* Hãy thay bằng link ảnh poster chất lượng cao của bạn */
-
-            /* Cấu hình để ảnh luôn phủ kín màn hình */
+            background-image: url('img/kmthang.jpg'); /* Đảm bảo file ảnh này có thật trong thư mục img */
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
@@ -33,87 +19,39 @@
             position: relative;
         }
 
-        /* Lớp phủ màu tối để làm nổi bật chữ */
+        /* Lớp phủ màu tối */
         .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4);
-            /* Màu đen mờ 40% */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            /* Căn đều trên dưới */
+            justify-content: space-between; /* Đẩy nội dung ra 2 đầu trên dưới */
             align-items: center;
             padding: 40px 20px;
             text-align: center;
         }
 
         /* Phần nội dung phía trên */
-        .content-top {
-            color: #fff;
-            margin-top: 20vh;
-            /* Cách đỉnh màn hình 20% */
-        }
-
-        .logo-text {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            font-weight: 300;
-            opacity: 0.9;
-        }
+        .content-top { color: #fff; margin-top: 15vh; }
+        .logo-text { font-size: 2.5rem; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        .tagline { font-size: 1.2rem; font-weight: 300; opacity: 0.9; }
 
         /* Phần nút bấm phía dưới */
-        .content-bottom {
-            width: 100%;
-            margin-bottom: 30px;
-        }
+        .content-bottom { width: 100%; margin-bottom: 30px; }
 
         /* Thiết kế nút bấm */
         .connect-btn {
             display: block;
-            width: 80%;
-            /* Chiều rộng nút */
-            max-width: 300px;
-            margin: 0 auto;
-            padding: 15px 0;
-
-            /* Màu cam đất ấm áp phù hợp với hoàng hôn/gỗ */
-            background-color: #d97706;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            /* Bo tròn nút */
-
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
+            width: 80%; max-width: 300px; margin: 0 auto; padding: 15px 0;
+            background-color: #d97706; /* Màu cam */
+            color: white; border: none; border-radius: 50px;
+            font-size: 1.2rem; font-weight: bold; text-transform: uppercase;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             transition: background-color 0.3s, transform 0.1s;
         }
-
-        .connect-btn:hover {
-            background-color: #b45309;
-        }
-
-        .connect-btn:active {
-            transform: scale(0.98);
-            /* Hiệu ứng nhấn nút */
-        }
-
-        /* Ẩn form đi, chỉ hiện nút */
-        #login-form {
-            width: 100%;
-        }
+        .connect-btn:hover { background-color: #b45309; }
+        .connect-btn:active { transform: scale(0.98); }
     </style>
 </head>
 
@@ -127,23 +65,25 @@
                 <p class="tagline">Thư giãn bên dòng sông, kết nối không giới hạn.</p>
             </div>
 
-            <form id="login-form" method="post" action="http://192.168.1.1/login">
+            <div class="content-bottom">
+                <form id="login-form" method="post" action="http://192.168.1.1/login">
+                    
+                    <input type="hidden" name="dst" value="https://coffeesonghau.com/" />
+                    <input type="hidden" name="popup" value="true" />
 
-                <input type="hidden" name="dst" value="https://coffeesonghau.com/" />
-
-                <input type="hidden" name="popup" value="true" />
-
-                <button type="submit">KẾT NỐI NGAY</button>
-            </form>
+                    <button type="submit" class="connect-btn" onclick="handleConnectBtnText(this)">
+                        KẾT NỐI NGAY
+                    </button>
+                </form>
+            </div>
 
         </div>
     </div>
 
     <script>
-        // Hàm nhỏ để thay đổi text nút khi bấm vào cho người dùng biết đang xử lý
         function handleConnectBtnText(btn) {
             btn.innerText = "ĐANG KẾT NỐI...";
-            // Thử đóng cửa sổ sau 2 giây (Lưu ý: Thường không hoạt động trên mobile hiện đại, nhưng cứ thêm vào như phương án dự phòng)
+            // Thử đóng cửa sổ sau 2 giây
             setTimeout(function () {
                 try { window.close(); } catch (e) { }
             }, 2000);
@@ -151,5 +91,4 @@
     </script>
 
 </body>
-
 </html>
