@@ -11,37 +11,6 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/product-detail.css">
-    <style>
-    /* 1. Khoảng cách giữa TÊN SẢN PHẨM và GIÁ (Đẩy nguyên cục giá xuống) */
-    #product-detail-container h1 + div {
-        margin-top: 10px !important; 
-    }
-
-    /* Cấu hình khung chứa giá */
-    #product-detail-container .text-red-600.text-3xl {
-        position: relative;
-        display: inline-flex;
-        flex-direction: column;
-    }
-
-    /* 2. CẤU HÌNH DÒNG CHỮ NHỎ */
-    #product-detail-container .text-red-600.text-3xl::after {
-        content: "ⓘ Giá có thể thay đổi tùy thời điểm"; 
-        
-        /* --- BẠN CHỈNH KHOẢNG CÁCH Ở DÒNG DƯỚI ĐÂY --- */
-        margin-top: 10px;  /* <--- Tăng số này lên (ví dụ 10px, 20px) để dòng chữ xa giá tiền hơn */
-        /* --------------------------------------------- */
-
-        font-family: sans-serif !important; 
-        font-weight: 400; 
-        font-size: 13px; 
-        font-style: normal; 
-        color: #dc2626;
-        line-height: 1.5;
-        text-transform: none;
-        letter-spacing: normal;
-    }
-</style>
 </head>
 
 <body class="bg-[#fcfcfc] text-gray-900">
@@ -325,7 +294,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
     <script src="js/data.js"></script>
     <script src="js/product-detail.js"></script>
 </body>
