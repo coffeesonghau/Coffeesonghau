@@ -120,10 +120,15 @@ function renderProductDetail() {
                 <h1 class="text-3xl md:text-4xl font-black text-red-950 mb-3 leading-tight uppercase tracking-tight">${product.name}</h1>
                 
                 <div class="mb-6">
-                    <div class="flex items-end gap-3">
+                    <div class="flex flex-col gap-1">
                          <span class="text-3xl font-black text-red-600">
                             ${product.price === 1 ? "Liên hệ" : product.price.toLocaleString() + " VNĐ"}
                          </span>
+                         ${product.price !== 1 ? `
+                         <span class="text-[11px] font-bold text-yellow-600 italic">
+                             !  giá có thể thay đổi tùy thời điểm
+                         </span>
+                         ` : ''}
                     </div>
                 </div>
                 
