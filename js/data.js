@@ -6,7 +6,7 @@ window.dbProducts = [
     { 
         id: 1, 
         name: "Cà Phê Gu Mạnh Mẽ 2", 
-        price: 250000,
+        price: 300000,
         category: "rang-xay", 
         img: "img/cafemm21.jpg",
         gallery: [
@@ -27,7 +27,7 @@ window.dbProducts = [
     { 
         id: 2, 
         name: "Cà Phê Hạt", 
-        price: 250000, 
+        price: 300000, 
         category: "cafe-hat", 
         img: "imgsp/cafehat.jpg",
         gallery: [
@@ -44,7 +44,7 @@ window.dbProducts = [
         }
     },
 
-    { id: 3, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
+    { id: 3, name: "Sắp ra mắt (dự kiến 1/2/2026)", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 4, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 5, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 6, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
