@@ -18,7 +18,7 @@ window.dbProducts = [
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> hậu vị ngọt sâu.</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
