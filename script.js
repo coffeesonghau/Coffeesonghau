@@ -1,3 +1,5 @@
+// js/script.js
+
 // ======================================================
 // 1. DỮ LIỆU & HÀM HỖ TRỢ CHUNG
 // ======================================================
@@ -26,7 +28,8 @@ function renderSection(category, targetId, limit = null) {
     const grid = document.getElementById(targetId);
     if (!grid) return;
 
-    // LỌC: Chỉ lấy sản phẩm giá > 0
+    // LỌC: Chỉ lấy sản phẩm giá > 0 (Hoặc giá đặc biệt như 1, 2)
+    // Lưu ý: data gốc đang để ID 3 giá = 2, nên ta lọc p.price > 0 là đủ
     const filtered = products.filter(p => p.category === category && p.price > 0);
     
     // LOGIC GIỚI HẠN SỐ LƯỢNG (MỚI)
@@ -39,10 +42,19 @@ function renderSection(category, targetId, limit = null) {
     }
 
     grid.innerHTML = itemsToRender.map(p => {
-        // LOGIC GIÁ: Nếu giá là 1 thì hiện "Liên hệ", ngược lại hiện tiền
-        const priceDisplay = p.price === 1 
-            ? '<span class="text-blue-700 font-bold text-sm">Liên hệ báo giá</span>' 
-            : `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>`;
+        // --- SỬA LOGIC GIÁ TẠI ĐÂY ---
+        let priceDisplay = '';
+        
+        if (p.price === 1) {
+            // Giá = 1: Liên hệ
+            priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ báo giá</span>';
+        } else if (p.price === 2) {
+            // Giá = 2: Sắp ra mắt
+            priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
+        } else {
+            // Giá tiền bình thường
+            priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>`;
+        }
 
         return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
@@ -229,7 +241,7 @@ function initMobileMenu() {
 }
 
 // ======================================================
-// 6. TRANG CHI TIẾT SẢN PHẨM
+// 6. TRANG CHI TIẾT SẢN PHẨM (DỰ PHÒNG - NẾU DÙNG SCRIPT.JS CHO TRANG CHI TIẾT)
 // ======================================================
 function renderProductDetail() {
     const container = document.getElementById('product-detail-container');
@@ -249,11 +261,16 @@ function renderProductDetail() {
         return;
     }
 
-    // Giá chính
-    let mainPriceHTML = product.price === 1 
-        ? `<span class="text-3xl font-black text-blue-700 uppercase">Liên hệ báo giá</span>`
-        : `<span class="text-3xl font-black text-red-600">${product.price.toLocaleString()} VNĐ</span>
-           <span class="text-sm text-gray-400 line-through mb-1.5">Giá thị trường: ${(product.price * 1.2).toLocaleString()}đ</span>`;
+    // --- SỬA LOGIC GIÁ (DETAIL) ---
+    let mainPriceHTML = '';
+    if (product.price === 1) {
+        mainPriceHTML = `<span class="text-3xl font-black text-blue-700 uppercase">Liên hệ báo giá</span>`;
+    } else if (product.price === 2) {
+        mainPriceHTML = `<span class="text-3xl font-black text-orange-600 uppercase">Sắp ra mắt</span>`;
+    } else {
+        mainPriceHTML = `<span class="text-3xl font-black text-red-600">${product.price.toLocaleString()} VNĐ</span>
+                         <span class="text-sm text-gray-400 line-through mb-1.5">Giá thị trường: ${(product.price * 1.2).toLocaleString()}đ</span>`;
+    }
 
     // Sản phẩm liên quan
     const relatedProducts = products
@@ -261,9 +278,11 @@ function renderProductDetail() {
         .slice(0, 4);
 
     const relatedHTML = relatedProducts.map(p => {
-        const smallPriceDisplay = p.price === 1 
-            ? '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>' 
-            : `<div class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</div>`;
+        // --- SỬA LOGIC GIÁ (RELATED) ---
+        let smallPriceDisplay = '';
+        if (p.price === 1) smallPriceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>';
+        else if (p.price === 2) smallPriceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
+        else smallPriceDisplay = `<div class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</div>`;
 
         return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">

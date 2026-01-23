@@ -14,7 +14,7 @@ window.dbProducts = [
             "img/cafemm22.jpg", 
         ],
         info: {
-            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica, Robusta, Culi.",
+            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica, Robusta, Culi. (vị nguyên bản từ cafe hạt)",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
@@ -24,7 +24,7 @@ window.dbProducts = [
         }
     },
 
-    { 
+    {
         id: 2, 
         name: "Cà Phê Hạt", 
         price: 300000, 
@@ -36,15 +36,31 @@ window.dbProducts = [
         info: {
             description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> 70% Robusta - 30% Arabica.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Socola đen, hạt dẻ, hậu vị ngọt sâu.</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
 
-    { id: 3, name: "Sắp ra mắt (dự kiến 1/2/2026)", price: 1, category: "rang-xay", img: "img/chuacosanpham.png" },
+    {
+        id: 3, 
+        name: "Sắp ra mắt 01/02/2026", 
+        price: 2, 
+        category: "rang-xay", 
+        img: "img/chuacosanpham.png",
+        gallery: [
+            "img/chuacosanpham.png",  
+        ],
+        info: {
+            description: "Dòng sản phẩm cao cấp đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty. Giữ trọn hương vị mộc nguyên bản, chuẩn vị tự nhiên và tinh tuyển ở phân khúc cao cấp nhất – Sông Hậu Premium.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Tham khảo.</p>
+            `
+        }
+    },
+    
     { id: 4, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 5, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 6, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },

@@ -1,3 +1,5 @@
+// js/sanpham.js
+
 // 1. DATABASE SẢN PHẨM GỐC (Lấy từ data.js)
 let baseProducts = window.dbProducts || [];
 
@@ -119,6 +121,16 @@ function renderProducts(products) {
         else if (p.category === 'dung-cu') categoryName = 'Dụng Cụ';
         else if (p.category === 'best-seller') categoryName = 'Bán Chạy';
 
+        // --- SỬA LOGIC GIÁ (TRANG DANH SÁCH) ---
+        let priceDisplay = '';
+        if (p.price === 1) {
+            priceDisplay = '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>';
+        } else if (p.price === 2) {
+             priceDisplay = '<span class="text-sm text-orange-600 font-bold">Sắp ra mắt</span>';
+        } else {
+             priceDisplay = p.price.toLocaleString() + 'đ';
+        }
+
         const html = `
             <div class="product-card fade-in-item" style="animation-delay: ${delay}ms">
                 <div class="card-img-container cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
@@ -134,7 +146,7 @@ function renderProducts(products) {
                     </h3>
                     <div class="mt-auto flex justify-between items-end border-t border-dashed border-gray-200 pt-3">
                         <span class="text-red-900 font-black text-lg">
-                            ${p.price <= 1 ? '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>' : p.price.toLocaleString() + 'đ'}
+                            ${priceDisplay}
                         </span>
                         <button onclick="window.location.href='product-detail.html?id=${p.id}'" class="text-gray-400 hover:text-red-900 text-sm" title="Xem chi tiết">
                             <i class="fa-solid fa-arrow-right"></i>

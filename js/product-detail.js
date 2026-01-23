@@ -1,3 +1,5 @@
+// js/product-detail.js
+
 // 1. DỮ LIỆU SẢN PHẨM (Lấy từ data.js)
 const products = window.dbProducts || [];
 
@@ -82,17 +84,40 @@ function renderProductDetail() {
     .filter((p) => p.category === product.category && p.id !== product.id && p.price !== 0)
     .slice(0, 4);
 
-  const relatedHTML = relatedProducts.map((p) => `
+  const relatedHTML = relatedProducts.map((p) => {
+        // --- SỬA LOGIC GIÁ (RELATED) ---
+        let priceDisplay = '';
+        if (p.price === 1) priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>';
+        else if (p.price === 2) priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
+        else priceDisplay = p.price.toLocaleString() + "đ";
+
+        return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
             <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50">
                 <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
             </div>
             <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
             <div class="text-red-900 font-black text-sm">
-                ${p.price === 1 ? '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>' : p.price.toLocaleString() + "đ"}
+                ${priceDisplay}
             </div>
         </div>
-    `).join("");
+    `}).join("");
+
+    // --- SỬA LOGIC GIÁ (DETAIL MAIN) ---
+    let mainPriceHTML = '';
+    let warningNote = '';
+
+    if (product.price === 1) {
+        mainPriceHTML = "Liên hệ";
+    } else if (product.price === 2) {
+        mainPriceHTML = "Sắp ra mắt";
+    } else {
+        mainPriceHTML = product.price.toLocaleString() + " VNĐ";
+        warningNote = `
+             <span class="text-[11px] font-bold text-yellow-600 italic">
+                 !  giá có thể thay đổi tùy thời điểm
+             </span>`;
+    }
 
   container.innerHTML = `
         <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 bg-white p-6 md:p-10 rounded-xl shadow-sm border border-gray-100 mb-16 relative">
@@ -121,19 +146,15 @@ function renderProductDetail() {
                 
                 <div class="mb-6">
                     <div class="flex flex-col gap-1">
-                         <span class="text-3xl font-black text-red-600">
-                            ${product.price === 1 ? "Liên hệ" : product.price.toLocaleString() + " VNĐ"}
+                         <span class="text-3xl font-black ${product.price === 2 ? 'text-orange-600' : 'text-red-600'}">
+                            ${mainPriceHTML}
                          </span>
-                         ${product.price !== 1 ? `
-                         <span class="text-[11px] font-bold text-yellow-600 italic">
-                             !  giá có thể thay đổi tùy thời điểm
-                         </span>
-                         ` : ''}
+                         ${warningNote}
                     </div>
                 </div>
                 
                 <div class="bg-red-50 p-5 rounded-lg mb-8 border border-red-100 product-description-container">
-                    <div id="desc-content" class="desc-content ${product.price === 1 ? "" : "collapsed"} text-gray-700 text-sm leading-relaxed">
+                    <div id="desc-content" class="desc-content ${product.price <= 2 ? "" : "collapsed"} text-gray-700 text-sm leading-relaxed">
                         <div class="mb-4">${descriptionText}</div>
                         <ul class="space-y-2 mb-3">
                             <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i> 100% Nguyên chất</li>
@@ -144,7 +165,7 @@ function renderProductDetail() {
                             ${detailsText}
                         </div>
                     </div>
-                    ${product.price !== 1 ? `
+                    ${product.price > 2 ? `
                     <button id="toggle-desc-btn" class="toggle-desc-btn" onclick="toggleDescription()">
                         Xem thêm chi tiết <i class="fa-solid fa-chevron-down ml-1"></i>
                     </button>
