@@ -46,7 +46,7 @@ window.dbProducts = [
 
     {
         id: 3, 
-        name: "Sắp ra mắt 01/02/2026", 
+        name: "Dự kiến 01/02/2026", 
         price: 2, 
         category: "rang-xay", 
         img: "img/chuacosanpham.png",
@@ -60,7 +60,7 @@ window.dbProducts = [
             `
         }
     },
-    
+
     { id: 4, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 5, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 6, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
