@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Khảo sát khách hàng</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="KSKH/khaosatkhachhang.css">
+</head>
+<body>
+
+<form id="surveyForm">
+
+<!-- STEP 0 -->
+<section class="step active">
+  <h1>KHẢO SÁT CHẤT LƯỢNG<br>DỊCH VỤ & SẢN PHẨM CÀ PHÊ</h1>
+
+  <input type="text" name="name" placeholder="Họ tên / Tên cửa hàng *" required>
+  <input type="tel" name="phone" placeholder="Số điện thoại *" required>
+
+  <button type="button" onclick="nextStep()">BẮT ĐẦU</button>
+</section>
+
+<!-- STEP 1 -->
+<section class="step">
+  <h2>1. Chất lượng dịch vụ sản phẩm cà phê</h2>
+
+  <p>1.1 Bạn đánh giá chất lượng dịch vụ?</p>
+  <div class="radio">
+    <label><input type="radio" name="q1_1" value="Rất tốt" required>Rất tốt</label>
+    <label><input type="radio" name="q1_1" value="Tốt">Tốt</label>
+    <label><input type="radio" name="q1_1" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q1_1" value="Kém">Kém</label>
+    <label><input type="radio" name="q1_1" value="Rất kém">Rất kém</label>
+  </div>
+
+  <p>1.2 Sản phẩm có đáp ứng mong đợi?</p>
+  <div class="radio">
+    <label><input type="radio" name="q1_2" value="Hoàn toàn đáp ứng" required>Hoàn toàn đáp ứng</label>
+    <label><input type="radio" name="q1_2" value="Khá đáp ứng">Khá đáp ứng</label>
+    <label><input type="radio" name="q1_2" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q1_2" value="Chưa đáp ứng">Chưa đáp ứng</label>
+    <label><input type="radio" name="q1_2" value="Rất không hài lòng">Rất không hài lòng</label>
+  </div>
+
+  <button type="button" onclick="nextStep()">TIẾP TỤC</button>
+</section>
+
+<!-- STEP 2 -->
+<section class="step">
+  <h2>2. Chất lượng nhân viên giao hàng</h2>
+
+  <p>2.1 Thái độ nhân viên?</p>
+  <div class="radio">
+    <label><input type="radio" name="q2_1" value="Rất thân thiện" required>Rất thân thiện</label>
+    <label><input type="radio" name="q2_1" value="Thân thiện">Thân thiện</label>
+    <label><input type="radio" name="q2_1" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q2_1" value="Không thân thiện">Không thân thiện</label>
+    <label><input type="radio" name="q2_1" value="Rất tệ">Rất tệ</label>
+  </div>
+
+  <p>2.2 Thời gian giao hàng?</p>
+  <div class="radio">
+    <label><input type="radio" name="q2_2" value="Rất đúng hẹn" required>Rất đúng hẹn</label>
+    <label><input type="radio" name="q2_2" value="Khá đúng hẹn">Khá đúng hẹn</label>
+    <label><input type="radio" name="q2_2" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q2_2" value="Trễ">Trễ</label>
+    <label><input type="radio" name="q2_2" value="Rất trễ">Rất trễ</label>
+  </div>
+
+  <button type="button" onclick="nextStep()">TIẾP TỤC</button>
+</section>
+
+<!-- STEP 3 -->
+<section class="step">
+  <h2>3. Chất lượng nước đá</h2>
+
+  <p>3.1 Chất lượng nước đá?</p>
+  <div class="radio">
+    <label><input type="radio" name="q3_1" value="Tốt" required>Tốt</label>
+    <label><input type="radio" name="q3_1" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q3_1" value="Quá tệ">Quá tệ</label>
+  </div>
+
+  <p>3.2 Có mùi lạ / tạp chất?</p>
+  <div class="radio">
+    <label><input type="radio" name="q3_2" value="Không có" required>Không có</label>
+    <label><input type="radio" name="q3_2" value="Ít">Ít</label>
+    <label><input type="radio" name="q3_2" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q3_2" value="Nhiều">Nhiều</label>
+    <label><input type="radio" name="q3_2" value="Rất nhiều">Rất nhiều</label>
+  </div>
+
+  <button type="button" onclick="nextStep()">TIẾP TỤC</button>
+</section>
+
+<!-- STEP 4 -->
+<section class="step">
+  <h2>4. Chất lượng cà phê / nước uống</h2>
+
+  <p>4.1 Hương vị?</p>
+  <div class="radio">
+    <label><input type="radio" name="q4_1" value="Rất ngon" required>Rất ngon</label>
+    <label><input type="radio" name="q4_1" value="Ngon">Ngon</label>
+    <label><input type="radio" name="q4_1" value="Bình thường">Bình thường</label>
+    <label><input type="radio" name="q4_1" value="Khó uống">Khó uống</label>
+    <label><input type="radio" name="q4_1" value="Rất tệ">Rất tệ</label>
+  </div>
+
+  <p>5. Chấm điểm tổng thể (1–10)</p>
+  <input type="range" name="score" min="1" max="10" value="5"
+         oninput="scoreText.innerText=this.value">
+  <div class="score">Điểm: <b id="scoreText">5</b>/10</div>
+
+  <button type="submit">GỬI KHẢO SÁT</button>
+</section>
+
+</form>
+
+<script src="KSKH/khaosatkhachhang.js"></script>
+</body>
+</html>
