@@ -7,7 +7,7 @@ window.dbProducts = [
         id: 1, 
         name: "Cà Phê Gu Mạnh Mẽ 2", 
         price: 300000,
-        category: "rang-xay", 
+        category: ["rang-xay", "best-seller"],
         img: "img/cafemm21.jpg",
         gallery: [
             "img/cafemm21.jpg", 
@@ -46,7 +46,7 @@ window.dbProducts = [
 
     {
         id: 3, 
-        name: "Dự kiến 01/02/2026", 
+        name: "Dự kiến 10/02/2026", 
         price: 2, 
         category: "rang-xay", 
         img: "img/chuacosanpham.png",

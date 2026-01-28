@@ -28,38 +28,44 @@ function renderSection(category, targetId, limit = null) {
     const grid = document.getElementById(targetId);
     if (!grid) return;
 
-    // LỌC: Chỉ lấy sản phẩm giá > 0 (Hoặc giá đặc biệt như 1, 2)
-    // Lưu ý: data gốc đang để ID 3 giá = 2, nên ta lọc p.price > 0 là đủ
-    const filtered = products.filter(p => p.category === category && p.price > 0);
+    // --- SỬA LỖI Ở ĐÂY ---
+    // Logic mới: Kiểm tra xem category có NẰM TRONG mảng danh mục của sản phẩm không
+    const filtered = products.filter(p => {
+        // Kiểm tra giá > 0
+        if (p.price <= 0) return false;
+
+        // Nếu data là mảng (ví dụ ["best-seller", "rang-xay"])
+        if (Array.isArray(p.category)) {
+            return p.category.includes(category);
+        }
+        
+        // Nếu data là chuỗi bình thường (ví dụ "rang-xay")
+        return p.category === category;
+    });
+    // ---------------------
     
-    // LOGIC GIỚI HẠN SỐ LƯỢNG (MỚI)
-    // Nếu có truyền limit thì cắt mảng, nếu không (null) thì lấy hết
     const itemsToRender = limit ? filtered.slice(0, limit) : filtered;
 
     if (itemsToRender.length === 0) {
-        grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full text-center">Sản phẩm đang được cập nhật...</p>';
+        grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full text-center">Đang cập nhật sản phẩm...</p>';
         return;
     }
 
     grid.innerHTML = itemsToRender.map(p => {
-        // --- SỬA LOGIC GIÁ TẠI ĐÂY ---
         let priceDisplay = '';
-        
         if (p.price === 1) {
-            // Giá = 1: Liên hệ
             priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ báo giá</span>';
         } else if (p.price === 2) {
-            // Giá = 2: Sắp ra mắt
             priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
         } else {
-            // Giá tiền bình thường
             priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>`;
         }
 
         return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
-            <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50">
+            <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50 relative">
                 <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                ${category === 'best-seller' ? '<div class="absolute top-2 right-2 bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md">HOT</div>' : ''}
             </div>
             <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
             <div class="flex justify-between items-center border-t pt-3 mt-3">
