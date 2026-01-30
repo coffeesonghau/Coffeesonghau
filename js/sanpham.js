@@ -39,18 +39,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * 4.1 HÀM MỞ MENU CON TRÊN MOBILE (BỔ SUNG)
- * Được gọi từ thuộc tính onclick="toggleSubMenu(this)" trong HTML
+ * HÀM HỖ TRỢ KIỂM TRA DANH MỤC (QUAN TRỌNG)
+ * Giúp xử lý cả trường hợp category là chuỗi (VD: "rang-xay")
+ * hoặc là mảng (VD: ["rang-xay", "best-seller"])
+ */
+function checkCategory(product, filterName) {
+    // Nếu chọn tất cả thì luôn đúng
+    if (filterName === 'all') return true;
+    
+    // Nếu sản phẩm có nhiều danh mục (dạng Mảng)
+    if (Array.isArray(product.category)) {
+        return product.category.includes(filterName);
+    }
+    
+    // Nếu sản phẩm chỉ có 1 danh mục (dạng Chuỗi)
+    return product.category === filterName;
+}
+
+/**
+ * 4.1 HÀM MỞ MENU CON TRÊN MOBILE
  */
 function toggleSubMenu(button) {
-    // Tìm phần tử .sub-menu nằm ngay sau button hoặc trong cùng cha .group-menu
     const subMenu = button.nextElementSibling;
     const icon = button.querySelector('i');
 
     if (subMenu) {
         const isHidden = subMenu.classList.contains('hidden');
-        
-        // Đóng tất cả các sub-menu khác đang mở (nếu muốn)
         document.querySelectorAll('.sub-menu').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.group-menu i').forEach(el => el.style.transform = 'rotate(0deg)');
 
@@ -68,9 +82,9 @@ function toggleSubMenu(button) {
 function applyFilters() {
     let filtered = [...allProducts];
 
-    // a. Lọc theo danh mục
+    // a. Lọc theo danh mục (Sử dụng hàm checkCategory mới)
     if (currentFilter !== 'all') {
-        filtered = filtered.filter(p => p.category === currentFilter);
+        filtered = filtered.filter(p => checkCategory(p, currentFilter));
     }
 
     // b. Lọc theo tìm kiếm
@@ -89,12 +103,12 @@ function applyFilters() {
     const showCountEl = document.getElementById('show-count');
     if(showCountEl) showCountEl.innerText = filtered.length;
 
-    // e. Render (Nếu đổi filter thì phải tính lại phân trang)
+    // e. Render
     renderPagination(filtered);
     renderProducts(filtered);
 }
 
-// 6. HÀM RENDER SẢN PHẨM (Đã cắt theo trang)
+// 6. HÀM RENDER SẢN PHẨM
 function renderProducts(products) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
@@ -105,7 +119,6 @@ function renderProducts(products) {
         return;
     }
 
-    // Tính toán cắt mảng (Slice) cho phân trang
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pageItems = products.slice(startIndex, endIndex);
@@ -113,15 +126,21 @@ function renderProducts(products) {
     pageItems.forEach((p, index) => {
         const delay = index * 50;
         
-        // Xác định nhãn danh mục
+        // Xác định nhãn danh mục hiển thị (Ưu tiên danh mục chính nếu là mảng)
+        let catSlug = Array.isArray(p.category) ? p.category[0] : p.category;
+        
+        // Mapping tên hiển thị cho đẹp
         let categoryName = 'Sản phẩm';
-        if (p.category === 'cafe-hat') categoryName = 'Cà Phê Hạt';
-        else if (p.category === 'rang-xay') categoryName = 'Rang Xay';
-        else if (p.category === 'may-pha') categoryName = 'Máy Pha Chế';
-        else if (p.category === 'dung-cu') categoryName = 'Dụng Cụ';
-        else if (p.category === 'best-seller') categoryName = 'Bán Chạy';
+        switch(catSlug) {
+            case 'cafe-hat': categoryName = 'Cà Phê Hạt'; break;
+            case 'rang-xay': categoryName = 'Rang Xay'; break;
+            case 'cao-cap': categoryName = 'Cao Cấp'; break;
+            case 'best-seller': categoryName = 'Bán Chạy'; break;
+            case 'dung-cu': categoryName = 'Dụng Cụ'; break;
+            case 'may-pha': categoryName = 'Máy Pha'; break;
+            default: categoryName = 'Sản phẩm';
+        }
 
-        // --- SỬA LOGIC GIÁ (TRANG DANH SÁCH) ---
         let priceDisplay = '';
         if (p.price === 1) {
             priceDisplay = '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>';
@@ -159,7 +178,7 @@ function renderProducts(products) {
     });
 }
 
-// 7. HÀM TẠO NÚT PHÂN TRANG THÔNG MINH
+// 7. HÀM TẠO NÚT PHÂN TRANG
 function renderPagination(filteredList) {
     const paginationContainer = document.getElementById('pagination');
     if(!paginationContainer) return;
@@ -168,7 +187,6 @@ function renderPagination(filteredList) {
     const totalPages = Math.ceil(filteredList.length / itemsPerPage);
     if (totalPages <= 1) return;
 
-    // --- NÚT PREVIOUS (<) ---
     const prevBtn = document.createElement('button');
     prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
     prevBtn.className = `pagination-btn ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
@@ -181,7 +199,6 @@ function renderPagination(filteredList) {
     };
     paginationContainer.appendChild(prevBtn);
 
-    // --- LOGIC TẠO SỐ TRANG ---
     const maxVisibleButtons = 5;
     if (totalPages <= maxVisibleButtons) {
         for (let i = 1; i <= totalPages; i++) {
@@ -211,7 +228,6 @@ function renderPagination(filteredList) {
         addPageButton(totalPages, filteredList, paginationContainer);
     }
 
-    // --- NÚT NEXT (>) ---
     const nextBtn = document.createElement('button');
     nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
     nextBtn.className = `pagination-btn ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
@@ -242,15 +258,20 @@ function changePage(filteredList) {
     window.scrollTo({ top: 300, behavior: 'smooth' });
 }
 
-// 8. CẬP NHẬT SỐ LƯỢNG (Sidebar)
+// 8. CẬP NHẬT SỐ LƯỢNG (ĐÃ SỬA LẠI KHỚP VỚI FILE HTML CỦA BẠN)
 function updateCounts() {
+    // Sử dụng checkCategory để đếm chính xác (kể cả sản phẩm thuộc 2 danh mục)
     const counts = {
+        // Selector class trong HTML : Key category cần đếm
         '.count-all': allProducts.length,
-        '.count-rx': allProducts.filter(p => p.category === 'rang-xay').length,
-        '.count-ht': allProducts.filter(p => p.category === 'best-seller').length,
-        '.count-may': allProducts.filter(p => p.category === 'may-pha').length,
-        '.count-hat': allProducts.filter(p => p.category === 'cafe-hat').length,
-        '.count-cu': allProducts.filter(p => p.category === 'dung-cu').length
+        '.count-hat': allProducts.filter(p => checkCategory(p, 'cafe-hat')).length,
+        '.count-rx': allProducts.filter(p => checkCategory(p, 'rang-xay')).length,
+        '.count-pre': allProducts.filter(p => checkCategory(p, 'cao-cap')).length,
+        '.count-ht': allProducts.filter(p => checkCategory(p, 'best-seller')).length,
+        
+        // Lưu ý: Trong HTML bạn để data-filter="dung-cu" và class="count-pm"
+        // Nên ở đây ta đếm 'dung-cu' và gán vào class .count-pm
+        '.count-pm': allProducts.filter(p => checkCategory(p, 'dung-cu')).length 
     };
 
     for (let selector in counts) {
