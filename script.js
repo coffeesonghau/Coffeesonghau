@@ -22,31 +22,28 @@ function toggleSubMenu(btn) {
 }
 
 // ======================================================
-// 2. HIỂN THỊ SẢN PHẨM (ĐÃ CẬP NHẬT GIỚI HẠN HIỂN THỊ)
+// 2. HIỂN THỊ SẢN PHẨM (ĐÃ SỬA: ICON VƯƠNG MIỆN TO & GÓC PHẢI)
 // ======================================================
 function renderSection(category, targetId, limit = null) {
     const grid = document.getElementById(targetId);
     if (!grid) return;
 
-    // --- SỬA LỖI Ở ĐÂY ---
-    // Logic mới: Kiểm tra xem category có NẰM TRONG mảng danh mục của sản phẩm không
+    // Lọc sản phẩm
     const filtered = products.filter(p => {
-        // Kiểm tra giá > 0
         if (p.price <= 0) return false;
-
-        // Nếu data là mảng (ví dụ ["best-seller", "rang-xay"])
         if (Array.isArray(p.category)) {
             return p.category.includes(category);
         }
-        
-        // Nếu data là chuỗi bình thường (ví dụ "rang-xay")
         return p.category === category;
     });
-    // ---------------------
     
     const itemsToRender = limit ? filtered.slice(0, limit) : filtered;
 
     if (itemsToRender.length === 0) {
+        if(targetId === 'grid-cao-cap') {
+             grid.parentElement.style.display = 'none'; 
+             return;
+        }
         grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full text-center">Đang cập nhật sản phẩm...</p>';
         return;
     }
@@ -61,12 +58,33 @@ function renderSection(category, targetId, limit = null) {
             priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>`;
         }
 
+        // --- KIỂM TRA CAO CẤP ---
+        const isPremium = (Array.isArray(p.category) && p.category.includes('cao-cap')) || p.category === 'cao-cap';
+        
+        // SỬA ĐỔI 1: VƯƠNG MIỆN (To hơn + Góc phải)
+        // - top-0 right-0: Dính sát góc trên bên phải
+        // - w-10 h-10: Kích thước ô vuông to hơn (40px)
+        // - text-xl: Icon to hơn
+        // - rounded-bl-xl: Bo tròn góc dưới bên trái cho mềm mại
+        const crownBadge = isPremium 
+            ? `<div class="absolute top-0 right-0 bg-yellow-500 text-white w-10 h-10 flex items-center justify-center rounded-bl-xl shadow-md z-20" title="Sản phẩm Cao Cấp">
+                 <i class="fas fa-crown text-xl"></i>
+               </div>` 
+            : '';
+        
+        // SỬA ĐỔI 2: NHÃN HOT (Chuyển sang góc trái để không bị vương miện đè)
+        const hotBadge = category === 'best-seller' 
+            ? '<div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md z-10">HOT</div>' 
+            : '';
+
         return `
-        <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
+        <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer relative" onclick="window.location.href='product-detail.html?id=${p.id}'">
+            
             <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50 relative">
                 <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                ${category === 'best-seller' ? '<div class="absolute top-2 right-2 bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md">HOT</div>' : ''}
-            </div>
+                
+                ${crownBadge} ${hotBadge}   </div>
+
             <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
             <div class="flex justify-between items-center border-t pt-3 mt-3">
                 ${priceDisplay}
@@ -389,13 +407,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trang Chủ
     if (document.getElementById('slider')) {
         initSlider();
-        renderSection('cafe-hat', 'grid-cafe-hat');
         
-        // --- CHỈNH SỬA Ở ĐÂY ---
-        // Tham số thứ 3 là 10 -> Giới hạn hiển thị 10 sản phẩm
+        // --- THÊM DÒNG NÀY ĐỂ RENDER CÀ PHÊ CAO CẤP ---
+        renderSection('cao-cap', 'grid-cao-cap');
+        // ---------------------------------------------
+        
+        renderSection('cafe-hat', 'grid-cafe-hat');
         renderSection('rang-xay', 'grid-rang-xay', 10); 
-        // -----------------------
-
         renderSection('best-seller', 'grid-best-seller');
     }
 

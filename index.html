@@ -182,7 +182,7 @@
                 </div>
                 <ul class="flex flex-col">
                     <li class="border-b hover:bg-red-50">
-                        <a href="https://www.coffeesonghau.com/product-detail.html?id=4" class="flex items-center justify-between px-4 py-3 text-sm">
+                        <a href="index.html#grid-cao-cap" class="flex items-center justify-between px-4 py-3 text-sm">
                             <span>Cà phê Cao Cấp</span>
                             <i class="fas fa-crown text-yellow-500"></i>
                         </a>
@@ -191,7 +191,7 @@
                         <a href="index.html#grid-rang-xay" class="block px-4 py-3 text-sm">Cà phê Rang Xay</a>
                     </li>
                     <li class="border-b hover:bg-red-50">
-                        <a href="https://www.coffeesonghau.com/product-detail.html?id=2" class="block px-4 py-3 text-sm">Cà phê Hạt</a>
+                        <a href="index.html#grid-cafe-hat" class="block px-4 py-3 text-sm">Cà phê Hạt</a>
                     </li>
 
                     <input type="checkbox" id="toggle-input">
@@ -291,9 +291,21 @@
         <div class="mt-6 text-center">
             <a href="sanpham.html"
                 class="text-xs font-bold text-gray-500 hover:text-red-900 uppercase transition-colors duration-300">
-                Xem tất cả <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                Xem tất cả <i class="fa-solid fa-chevron-right ml-2 text-[20px]"></i>
             </a>
         </div>
+    </section>
+
+    <div id="grid-cao-cap" class="hidden"></div>
+
+    <section class="container mx-auto px-4 py-12 bg-gray-50 hidden">
+        <div class="flex items-center mb-6 border-b-2 border-yellow-600">
+            <h3 class="bg-yellow-600 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest">
+                <i class="fas fa-crown mr-2 text-white"></i>Sông Hậu Premium
+            </h3>
+        </div>
+
+        <div id="grid-cao-cap" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 scroll-mt-24"></div>
     </section>
 
     <section class="container mx-auto px-4 py-12">
@@ -468,7 +480,7 @@
             </p>
         </div>
     </footer>
-    u m
+
     <div id="promo-popup" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
         <div id="popup-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity"></div>
 

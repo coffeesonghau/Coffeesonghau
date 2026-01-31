@@ -65,7 +65,7 @@ window.dbProducts = [
         id: 4, 
         name: "Dự kiến 10/02/2026", 
         price: 2, 
-        category: "cao-cap", 
+        category: ["cao-cap", "rang-xay"], 
         img: "img/chuacosanpham.png",
         gallery: [
             "img/chuacosanpham.png",  
