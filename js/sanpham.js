@@ -108,7 +108,7 @@ function applyFilters() {
     renderProducts(filtered);
 }
 
-// 6. HÀM RENDER SẢN PHẨM
+// 6. HÀM RENDER SẢN PHẨM (ĐÃ CẬP NHẬT: THÊM VƯƠNG MIỆN)
 function renderProducts(products) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
@@ -126,10 +126,9 @@ function renderProducts(products) {
     pageItems.forEach((p, index) => {
         const delay = index * 50;
         
-        // Xác định nhãn danh mục hiển thị (Ưu tiên danh mục chính nếu là mảng)
+        // Xác định nhãn danh mục
         let catSlug = Array.isArray(p.category) ? p.category[0] : p.category;
         
-        // Mapping tên hiển thị cho đẹp
         let categoryName = 'Sản phẩm';
         switch(catSlug) {
             case 'cafe-hat': categoryName = 'Cà Phê Hạt'; break;
@@ -150,11 +149,24 @@ function renderProducts(products) {
              priceDisplay = p.price.toLocaleString() + 'đ';
         }
 
+        // --- ĐOẠN CODE MỚI: TẠO ICON VƯƠNG MIỆN ---
+        // Kiểm tra xem sản phẩm có thuộc nhóm 'cao-cap' không
+        const isPremium = checkCategory(p, 'cao-cap');
+        
+        // Tạo HTML Vương miện (Góc phải, giống trang chủ)
+        const crownBadge = isPremium 
+            ? `<div class="absolute top-0 right-0 bg-yellow-500 text-white w-10 h-10 flex items-center justify-center rounded-bl-xl shadow-md z-20" title="Sản phẩm Cao Cấp">
+                 <i class="fas fa-crown text-xl"></i>
+               </div>` 
+            : '';
+        // -------------------------------------------
+
         const html = `
             <div class="product-card fade-in-item" style="animation-delay: ${delay}ms">
-                <div class="card-img-container cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
+                <div class="card-img-container cursor-pointer relative" onclick="window.location.href='product-detail.html?id=${p.id}'">
                     <img src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/400'">
-                </div>
+                    
+                    ${crownBadge} </div>
                 
                 <div class="p-4 flex flex-col flex-1">
                     <div class="text-[10px] text-gray-400 uppercase font-bold mb-1">

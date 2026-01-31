@@ -78,9 +78,57 @@ window.dbProducts = [
         }
     },
 
-    { id: 5, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 6, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 7, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
+    {
+        id: 5, 
+        name: "Gu Truyền Thống - 2026", 
+        price: 2, 
+        category: "rang-xay",
+        img: "img/chuacosanpham.png",
+        gallery: [
+            "img/chuacosanpham.png",  
+        ],
+        info: {
+            description: "Dòng sản phẩm Gu Truyền Thống phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+            `
+        }
+    },
+
+    {
+        id: 6, 
+        name: "Gu Cận Đại - 2026", 
+        price: 2, 
+        category: "rang-xay",
+        img: "img/chuacosanpham.png",
+        gallery: [
+            "img/chuacosanpham.png",  
+        ],
+        info: {
+            description: "Dòng sản phẩm Gu Cận Đại phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+            `
+        }
+    },
+
+    {
+        id: 7, 
+        name: "Gu Mạnh Mẽ - 2026", 
+        price: 2, 
+        category: "rang-xay",
+        img: "img/chuacosanpham.png",
+        gallery: [
+            "img/chuacosanpham.png",  
+        ],
+        info: {
+            description: "Dòng sản phẩm Gu Mạnh Mẽ phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+            `
+        }
+    },
+    
     { id: 8, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 9, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
     { id: 10, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
