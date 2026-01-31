@@ -45,28 +45,11 @@ window.dbProducts = [
     },
 
     {
-        id: 3, 
-        name: "Dự kiến 10/02/2026", 
-        price: 2, 
-        category: "rang-xay", 
-        img: "img/chuacosanpham.png",
-        gallery: [
-            "img/chuacosanpham.png",  
-        ],
-        info: {
-            description: "Dòng sản phẩm cao cấp đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty. Giữ trọn hương vị mộc nguyên bản, chuẩn vị tự nhiên và tinh tuyển ở phân khúc cao cấp nhất – Sông Hậu Premium.",
-            details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Tham khảo.</p>
-            `
-        }
-    },
-
-    {
         id: 4, 
-        name: "Dự kiến 10/02/2026", 
+        name: "Sông Hậu Premium", 
         price: 2, 
         category: ["cao-cap", "rang-xay"], 
-        img: "img/chuacosanpham.png",
+        img: "img/spm.jpg",
         gallery: [
             "img/chuacosanpham.png",  
         ],
