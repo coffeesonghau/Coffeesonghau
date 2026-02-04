@@ -114,17 +114,17 @@ const systemData = [
         searchTags: "nhuong quyen song hau phuoc long bac lieu",
         name: "Sông Hậu Phước Long",
         address: "TT. Phước Long, Huyện Phước Long, BL",
-        image: "img/SHphuoclongNQ.jpg",
+        image: "chuoihethong/SHphuoclongNQ.webp",
         mapLink: "https://maps.app.goo.gl/s12ovPaD52eF9mwy7"
     },
     {
         id: "fran-02",
         type: "franchise",
-        city: "ca-mau",
-        searchTags: "nhuong quyen song hau nam can ca mau",
-        name: "Sông Hậu 32",
-        address: "21 Bà Huyện Thanh Quan, Phường 7, Bạc Liêu", // Lưu ý: Địa chỉ gốc trong HTML cũ ghi Phường 7 Bạc Liêu nhưng tag là Cà Mau, tôi giữ nguyên data gốc.
-        image: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600",
+        city: "bac-lieu",
+        searchTags: "nhuong quyen song hau qk cầu sập huy liệu xã hoà bình",
+        name: "Sông Hậu QK",
+        address: "Long Thạnh, Vĩnh Lợi, Bạc Liêu,", // Lưu ý: Địa chỉ gốc trong HTML cũ ghi Phường 7 Bạc Liêu nhưng tag là Cà Mau, tôi giữ nguyên data gốc.
+        image: "chuoihethong/SHQK.webp",
         mapLink: "https://maps.app.goo.gl/55qa3L2RqXHgJvGr9"
-    }
+    },
 ];

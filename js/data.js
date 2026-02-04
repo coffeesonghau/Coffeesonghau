@@ -29,9 +29,9 @@ window.dbProducts = [
         name: "Cà Phê Hạt", 
         price: 300000, 
         category: "cafe-hat", 
-        img: "imgsp/cafehat.jpg",
+        img: "img/hatcaphe2.webp",
         gallery: [
-            "imgsp/cafehat.jpg",  
+            "img/hatcaphe2.webp",  
         ],
         info: {
             description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
