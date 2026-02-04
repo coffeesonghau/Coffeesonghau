@@ -3,10 +3,28 @@
 // Khai báo biến toàn cục để các file khác đều gọi được
 window.dbProducts = [
     // --- CÀ PHÊ RANG XAY ---
-    { 
+    {
         id: 1, 
-        name: "Cà Phê Gu Mạnh Mẽ 2", 
-        price: 300000,
+        name: "Sông Hậu Premium", 
+        price: 2, 
+        category: ["cao-cap", "rang-xay"], 
+        img: "img/SHpremiumMT.webp",
+        gallery: [
+            "img/SHpremiumMT.webp", 
+            "img/SHpremiumMS.webp", 
+        ],
+        info: {
+            description: "Dòng sản phẩm cao cấp đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty. Giữ trọn hương vị mộc nguyên bản, chuẩn vị tự nhiên và tinh tuyển ở phân khúc cao cấp nhất – Sông Hậu Premium.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Tham khảo.</p>
+            `
+        }
+    },
+
+    { 
+        id: 4, 
+        name: "SH Gu Mạnh Mẽ 2", 
+        price: 180000,
         category: ["rang-xay", "best-seller"],
         img: "img/cafemm21.jpg",
         gallery: [
@@ -40,23 +58,6 @@ window.dbProducts = [
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
-            `
-        }
-    },
-
-    {
-        id: 4, 
-        name: "Sông Hậu Premium", 
-        price: 2, 
-        category: ["cao-cap", "rang-xay"], 
-        img: "img/spm.jpg",
-        gallery: [
-            "img/chuacosanpham.png",  
-        ],
-        info: {
-            description: "Dòng sản phẩm cao cấp đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty. Giữ trọn hương vị mộc nguyên bản, chuẩn vị tự nhiên và tinh tuyển ở phân khúc cao cấp nhất – Sông Hậu Premium.",
-            details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Tham khảo.</p>
             `
         }
     },
