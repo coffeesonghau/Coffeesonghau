@@ -14,9 +14,15 @@ window.dbProducts = [
             "img/SHpremiumMS.webp", 
         ],
         info: {
-            description: "Dòng sản phẩm cao cấp đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty. Giữ trọn hương vị mộc nguyên bản, chuẩn vị tự nhiên và tinh tuyển ở phân khúc cao cấp nhất – Sông Hậu Premium.",
+            description: "Dòng sản phẩm Cao Cấp đánh dấu sự trở lại với diện mạo và tầm vóc mới, Sông Hậu Premium giữ trọn hương vị mộc nguyên bản, tinh tuyển từ những gì tự nhiên nhất và định hướng hoàn toàn mới phân khúc cao cấp nhất – Sông Hậu Premium.",
+            highlights: [
+                "100% Nguyên chất thượng hạng",
+                "Rang xay thủ công",
+                "Đóng gói hộp quà sang trọng",
+                "Hương vị mộc bản tự nhiên"
+            ],
             details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Tham khảo.</p>
+                <p class="mb-2">- <strong>Thông tin:</strong> Đang Cập Nhật...</p>
             `
         }
     },

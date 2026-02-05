@@ -66,6 +66,20 @@ function renderProductDetail() {
     detailsText = product.info.details;
   }
 
+  // --- XỬ LÝ PHẦN ĐẶC ĐIỂM NỔI BẬT (HIGHLIGHTS) TỰ ĐỘNG ---
+  let highlightsHTML = "";
+  if (product.info && product.info.highlights && product.info.highlights.length > 0) {
+      const listItems = product.info.highlights.map(text => `
+        <li class="flex items-start text-gray-600">
+            <i class="fas fa-check text-green-500 mr-3 w-4 mt-1 shrink-0"></i> 
+            <span>${text}</span>
+        </li>
+      `).join("");
+      
+      highlightsHTML = `<ul class="space-y-2 mb-3">${listItems}</ul>`;
+  }
+  // ----------------------------------------------------------------
+
   const galleryHTML = `
         <div class="gallery-container">
             <div class="main-image-frame group">
@@ -81,34 +95,20 @@ function renderProductDetail() {
         </div>
     `;
 
-  // --- SỬA LOGIC RANDOM & LỌC ĐA DẠNG ---
-  
-  // Bước 1: Chuẩn hóa danh mục hiện tại thành Mảng (nếu nó là chuỗi)
+  // --- LOGIC RANDOM & LỌC ĐA DẠNG ---
   const currentCategories = Array.isArray(product.category) ? product.category : [product.category];
 
-  // Bước 2: Lọc sản phẩm liên quan
   let candidates = products.filter((p) => {
-      // Bỏ qua chính nó
       if (p.id === product.id) return false;
-      // Bỏ qua sản phẩm giá = 0 (đang cập nhật)
       if (p.price === 0) return false;
-
-      // Chuẩn hóa danh mục của sản phẩm đang xét
       const pCategories = Array.isArray(p.category) ? p.category : [p.category];
-
-      // Kiểm tra xem có BẤT KỲ danh mục nào trùng nhau không (Intersection)
       const hasCommonCategory = currentCategories.some(cate => pCategories.includes(cate));
-      
       return hasCommonCategory;
   });
   
-  // Bước 3: Xáo trộn ngẫu nhiên danh sách ứng viên
   candidates.sort(() => 0.5 - Math.random());
-
-  // Bước 4: Lấy 4 sản phẩm đầu tiên
   const relatedProducts = candidates.slice(0, 4);
-  
-  // --- KẾT THÚC SỬA ---
+  // ----------------------------------
 
   const relatedHTML = relatedProducts.map((p) => {
         let priceDisplay = '';
@@ -128,13 +128,11 @@ function renderProductDetail() {
         </div>
     `}).join("");
 
-    // Hiển thị Breadcrumb (Đường dẫn) thông minh hơn
     const breadcrumbText = Array.isArray(product.category) 
         ? (product.category.includes("may-pha") ? "Máy Pha Cà Phê" : "Sản Phẩm")
         : (product.category === "rang-xay" ? "Cà phê Rang Xay" : 
            product.category === "cafe-hat" ? "Cà phê Hạt" : "Sản Phẩm");
 
-    // Xử lý giá sản phẩm chính
     let mainPriceHTML = '';
     let warningNote = '';
 
@@ -180,11 +178,10 @@ function renderProductDetail() {
                 <div class="bg-red-50 p-5 rounded-lg mb-8 border border-red-100 product-description-container">
                     <div id="desc-content" class="desc-content ${product.price <= 2 ? "" : "collapsed"} text-gray-700 text-sm leading-relaxed">
                         <div class="mb-4">${descriptionText}</div>
-                        <ul class="space-y-2 mb-3">
-                            <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i> 100% Nguyên chất</li>
-                            <li class="flex items-center text-gray-600"><i class="fas fa-box-open text-yellow-600 mr-3 w-4"></i> Đóng gói tiêu chuẩn</li>
-                        </ul>
-                        <div class="mt-4 pt-4 border-t border-red-200">
+                        
+                        ${highlightsHTML}
+                        
+                        <div class="detail-block-hidden mt-4 pt-4 border-t border-red-200">
                             <h4 class="font-bold text-red-900 mb-2">THÔNG TIN CHI TIẾT:</h4>
                             ${detailsText}
                         </div>
