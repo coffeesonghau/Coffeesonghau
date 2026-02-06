@@ -27,10 +27,34 @@ window.dbProducts = [
             `
         }
     },
-
+    
     {
         id: 2, 
-        name: "Cà Phê Truyền Thống 2 (250g)", 
+        name: "SH Truyền Thống 1 (250g)", 
+        price: 60000, 
+        unit: "Gói", // Thêm đơn vị
+        category: "rang-xay", 
+        img: "img/SHTruyenthong2026.webp",
+        gallery: [
+            "img/SHTruyenthong12026MT.webp",
+            "img/SHtruyenthong2026MS.webp",
+              
+        ],
+        info: {
+            description: "Sông Hậu Truyền Thống 1 là phiên bản nâng cấp từ dòng truyền thống cũ, mang đến sự cân bằng tinh tế trong từng giọt cà phê. Với công thức phối trộn bí mật giữa Arabica thơm dịu và Robusta Culi đậm đà, sản phẩm giữ trọn vị mạnh mẽ đúng gu phin Việt nhưng hậu vị êm ái hơn. dòng sản phẩm Tiêu chuẩn (Standard), Truyền Thống 1 đề cao sự mộc mạc, giản dị và tính thực tế. Đây là giải pháp tối ưu cho nhu cầu thưởng thức hàng ngày tại gia đình hay văn phòng: ít cầu kỳ về hình thức, tập trung toàn bộ vào chất lượng hạt để đánh thức sự tỉnh táo trong bạn với mức chi phí hợp lý nhất.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Nâng cấp điều chỉnh từ Truyền Thống 2 2010</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 3, 
+        name: "SH Truyền Thống 2 (250g)", 
         price: 60000, 
         unit: "Gói", // Thêm đơn vị
         category: "rang-xay",
@@ -50,6 +74,7 @@ window.dbProducts = [
             `
         }
     },
+
 
     { 
         id: 4, 
@@ -74,7 +99,7 @@ window.dbProducts = [
     },
 
     {
-        id: 2, 
+        id: 99, 
         name: "Cà Phê Hạt", 
         price: 300000, 
         unit: "Kg", // Thêm đơn vị
@@ -90,24 +115,6 @@ window.dbProducts = [
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
-            `
-        }
-    },
-
-    {
-        id: 5, 
-        name: "Gu Truyền Thống - 2026", 
-        price: 2, 
-        unit: "Gói",
-        category: "rang-xay",
-        img: "img/chuacosanpham.png",
-        gallery: [
-            "img/chuacosanpham.png",  
-        ],
-        info: {
-            description: "Dòng sản phẩm Gu Truyền Thống phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
-            details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
             `
         }
     },
