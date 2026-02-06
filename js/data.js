@@ -7,8 +7,9 @@ window.dbProducts = [
         id: 1, 
         name: "Sông Hậu Premium", 
         price: 2, 
+        unit: "Gói", // Thêm đơn vị
         category: ["cao-cap", "rang-xay"], 
-        img: "img/SHpremiumMT.webp",
+        img: "img/SHpremium1.webp",
         gallery: [
             "img/SHpremiumMT.webp", 
             "img/SHpremiumMS.webp", 
@@ -27,10 +28,33 @@ window.dbProducts = [
         }
     },
 
+    {
+        id: 2, 
+        name: "Cà Phê Truyền Thống 1 (250g)", 
+        price: 60000, 
+        unit: "Gói", // Thêm đơn vị
+        category: "rang-xay",
+        img: "img/SHtruyenthong2026.webp",
+        gallery: [
+            "img/SHtruyenthong2026MT.webp",
+            "img/SHtruyenthong2026MS.webp"  
+        ],
+        info: {
+            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
     { 
         id: 4, 
         name: "SH Gu Mạnh Mẽ 2", 
         price: 180000,
+        unit: "Kg", // Thêm đơn vị
         category: ["rang-xay", "best-seller"],
         img: "img/cafemm21.jpg",
         gallery: [
@@ -52,6 +76,7 @@ window.dbProducts = [
         id: 2, 
         name: "Cà Phê Hạt", 
         price: 300000, 
+        unit: "Kg", // Thêm đơn vị
         category: "cafe-hat", 
         img: "img/hatcaphe2.webp",
         gallery: [
@@ -72,6 +97,7 @@ window.dbProducts = [
         id: 5, 
         name: "Gu Truyền Thống - 2026", 
         price: 2, 
+        unit: "Gói",
         category: "rang-xay",
         img: "img/chuacosanpham.png",
         gallery: [
@@ -89,6 +115,7 @@ window.dbProducts = [
         id: 6, 
         name: "Gu Cận Đại - 2026", 
         price: 2, 
+        unit: "Gói",
         category: "rang-xay",
         img: "img/chuacosanpham.png",
         gallery: [
@@ -106,6 +133,7 @@ window.dbProducts = [
         id: 7, 
         name: "Gu Mạnh Mẽ - 2026", 
         price: 2, 
+        unit: "Gói",
         category: "rang-xay",
         img: "img/chuacosanpham.png",
         gallery: [
@@ -132,6 +160,7 @@ window.dbProducts = [
         id: 97, 
         name: "Máy Pha Cà Phê Công Nghiệp", 
         price: 0, // Ví dụ giá 15 triệu
+        unit: "Cái", // Thêm đơn vị
         category: "may-pha", // Đã sửa category
         
         // Ảnh demo máy pha (thay vì ảnh hạt cafe)

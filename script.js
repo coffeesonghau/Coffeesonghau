@@ -5,7 +5,7 @@
 // ======================================================
 const products = window.dbProducts || [];
 
-// Hàm mở menu con (Dùng cho Mobile Menu trong HTML mới)
+// Hàm mở menu con (Dùng cho Mobile Menu)
 function toggleSubMenu(btn) {
     const subMenu = btn.nextElementSibling;
     const icon = btn.querySelector('i');
@@ -22,13 +22,13 @@ function toggleSubMenu(btn) {
 }
 
 // ======================================================
-// 2. HIỂN THỊ SẢN PHẨM (ĐÃ SỬA: ICON VƯƠNG MIỆN TO & GÓC PHẢI)
+// 2. HIỂN THỊ SẢN PHẨM TRÊN TRANG CHỦ (ĐÃ CẬP NHẬT ĐƠN VỊ TÍNH)
 // ======================================================
 function renderSection(category, targetId, limit = null) {
     const grid = document.getElementById(targetId);
     if (!grid) return;
 
-    // Lọc sản phẩm
+    // Lọc sản phẩm theo danh mục và giá hợp lệ
     const filtered = products.filter(p => {
         if (p.price <= 0) return false;
         if (Array.isArray(p.category)) {
@@ -37,10 +37,13 @@ function renderSection(category, targetId, limit = null) {
         return p.category === category;
     });
     
+    // Giới hạn số lượng hiển thị nếu có tham số limit
     const itemsToRender = limit ? filtered.slice(0, limit) : filtered;
 
+    // Nếu không có sản phẩm
     if (itemsToRender.length === 0) {
         if(targetId === 'grid-cao-cap') {
+             // Ẩn luôn section nếu là cao cấp mà ko có data
              grid.parentElement.style.display = 'none'; 
              return;
         }
@@ -48,31 +51,31 @@ function renderSection(category, targetId, limit = null) {
         return;
     }
 
+    // Render danh sách sản phẩm
     grid.innerHTML = itemsToRender.map(p => {
         let priceDisplay = '';
+        
+        // --- [MỚI] LOGIC HIỂN THỊ ĐƠN VỊ TÍNH (/Kg, /Gói) ---
+        const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';
+
         if (p.price === 1) {
             priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ báo giá</span>';
         } else if (p.price === 2) {
             priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
         } else {
-            priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>`;
+            // Hiển thị: Giá tiền + Đơn vị
+            priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>${unitHtml}`;
         }
-
-        // --- KIỂM TRA CAO CẤP ---
-        const isPremium = (Array.isArray(p.category) && p.category.includes('cao-cap')) || p.category === 'cao-cap';
         
-        // SỬA ĐỔI 1: VƯƠNG MIỆN (To hơn + Góc phải)
-        // - top-0 right-0: Dính sát góc trên bên phải
-        // - w-10 h-10: Kích thước ô vuông to hơn (40px)
-        // - text-xl: Icon to hơn
-        // - rounded-bl-xl: Bo tròn góc dưới bên trái cho mềm mại
+        // --- KIỂM TRA & HIỂN THỊ ICON VƯƠNG MIỆN (CAO CẤP) ---
+        const isPremium = (Array.isArray(p.category) && p.category.includes('cao-cap')) || p.category === 'cao-cap';
         const crownBadge = isPremium 
             ? `<div class="absolute top-0 right-0 bg-yellow-500 text-white w-10 h-10 flex items-center justify-center rounded-bl-xl shadow-md z-20" title="Sản phẩm Cao Cấp">
                  <i class="fas fa-crown text-xl"></i>
                </div>` 
             : '';
         
-        // SỬA ĐỔI 2: NHÃN HOT (Chuyển sang góc trái để không bị vương miện đè)
+        // --- KIỂM TRA & HIỂN THỊ NHÃN HOT (BEST SELLER) ---
         const hotBadge = category === 'best-seller' 
             ? '<div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md z-10">HOT</div>' 
             : '';
@@ -82,12 +85,15 @@ function renderSection(category, targetId, limit = null) {
             
             <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50 relative">
                 <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                
-                ${crownBadge} ${hotBadge}   </div>
+                ${crownBadge} ${hotBadge}
+            </div>
 
             <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
+            
             <div class="flex justify-between items-center border-t pt-3 mt-3">
-                ${priceDisplay}
+                <div class="flex items-center">
+                    ${priceDisplay}
+                </div>
                 <button class="text-gray-400 hover:text-red-900"><i class="fa-solid fa-cart-plus"></i></button>
             </div>
         </div>
@@ -118,12 +124,13 @@ function initSearch() {
         }
     });
 
-    // Xử lý tìm kiếm
+    // Xử lý tìm kiếm khi nhấn Enter
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = searchInput.value.toLowerCase().trim();
             if (query === "") return;
             
+            // Tìm sản phẩm đầu tiên khớp tên
             const found = products.find(p => p.name.toLowerCase().includes(query) && p.price > 0);
             
             if (found) {
@@ -136,7 +143,7 @@ function initSearch() {
 }
 
 // ======================================================
-// 4. SLIDER TỰ ĐỘNG & KÉO THẢ (NÂNG CẤP)
+// 4. SLIDER TỰ ĐỘNG & KÉO THẢ (TOUCH SWIPE)
 // ======================================================
 function initSlider() {
     const sliderContainer = document.getElementById('slider-container');
@@ -147,7 +154,7 @@ function initSlider() {
 
     let currentSlide = 0;
     let autoPlayInterval;
-    const totalSlides = 3; // Số lượng slide
+    const totalSlides = 3; // Số lượng slide mặc định
 
     // --- A. Hàm chuyển Slide ---
     function moveSlider(index) {
@@ -184,10 +191,9 @@ function initSlider() {
     let isDragging = false;
     let startPos = 0;
     let currentTranslate = 0;
-    let prevTranslate = 0;
     let sliderWidth = sliderContainer.offsetWidth;
 
-    // Ngăn kéo ảnh mặc định
+    // Ngăn kéo ảnh mặc định của trình duyệt
     slider.querySelectorAll('img').forEach(img => {
         img.addEventListener('dragstart', (e) => e.preventDefault());
     });
@@ -234,7 +240,7 @@ function initSlider() {
         return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
     }
 
-    // Gán sự kiện
+    // Gán sự kiện Touch & Mouse
     slider.addEventListener('touchstart', touchStart);
     slider.addEventListener('touchend', touchEnd);
     slider.addEventListener('touchmove', touchMove);
@@ -265,7 +271,7 @@ function initMobileMenu() {
 }
 
 // ======================================================
-// 6. TRANG CHI TIẾT SẢN PHẨM (DỰ PHÒNG - NẾU DÙNG SCRIPT.JS CHO TRANG CHI TIẾT)
+// 6. TRANG CHI TIẾT SẢN PHẨM (DỰ PHÒNG - NẾU DÙNG SCRIPT.JS)
 // ======================================================
 function renderProductDetail() {
     const container = document.getElementById('product-detail-container');
@@ -285,15 +291,18 @@ function renderProductDetail() {
         return;
     }
 
-    // --- SỬA LOGIC GIÁ (DETAIL) ---
+    // --- [MỚI] LOGIC GIÁ & ĐƠN VỊ (Trang Chi Tiết) ---
     let mainPriceHTML = '';
+    const bigUnit = product.unit ? `<span class="text-xl font-bold text-gray-500 ml-1">/${product.unit}</span>` : '';
+
     if (product.price === 1) {
         mainPriceHTML = `<span class="text-3xl font-black text-blue-700 uppercase">Liên hệ báo giá</span>`;
     } else if (product.price === 2) {
         mainPriceHTML = `<span class="text-3xl font-black text-orange-600 uppercase">Sắp ra mắt</span>`;
     } else {
         mainPriceHTML = `<span class="text-3xl font-black text-red-600">${product.price.toLocaleString()} VNĐ</span>
-                         <span class="text-sm text-gray-400 line-through mb-1.5">Giá thị trường: ${(product.price * 1.2).toLocaleString()}đ</span>`;
+                         ${bigUnit}
+                         <span class="block text-sm text-gray-400 line-through mt-1">Giá thị trường: ${(product.price * 1.2).toLocaleString()}đ</span>`;
     }
 
     // Sản phẩm liên quan
@@ -302,11 +311,13 @@ function renderProductDetail() {
         .slice(0, 4);
 
     const relatedHTML = relatedProducts.map(p => {
-        // --- SỬA LOGIC GIÁ (RELATED) ---
+        // --- [MỚI] LOGIC GIÁ & ĐƠN VỊ (Sản phẩm liên quan) ---
         let smallPriceDisplay = '';
+        const smallUnit = p.unit ? `<span class="text-xs font-normal text-gray-500">/${p.unit}</span>` : '';
+        
         if (p.price === 1) smallPriceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>';
         else if (p.price === 2) smallPriceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
-        else smallPriceDisplay = `<div class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</div>`;
+        else smallPriceDisplay = `<div class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ ${smallUnit}</div>`;
 
         return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
@@ -318,6 +329,7 @@ function renderProductDetail() {
         </div>
     `}).join('');
 
+    // Render HTML chi tiết
     container.innerHTML = `
         <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 bg-white p-6 md:p-10 rounded-xl shadow-sm border border-gray-100 mb-16 relative">
             <div class="absolute top-0 left-0 bg-yellow-500 text-white text-[10px] font-bold px-3 py-1 uppercase rounded-tl-xl rounded-br-xl z-10">Best Seller</div>
@@ -330,7 +342,7 @@ function renderProductDetail() {
                     <span class="text-red-900 font-bold border-b border-red-900 pb-0.5">${product.category === 'rang-xay' ? 'Cà phê Rang Xay' : 'Cà phê Hòa Tan'}</span>
                 </nav>
                 <h1 class="text-3xl md:text-4xl font-black text-red-950 mb-3 leading-tight uppercase tracking-tight">${product.name}</h1>
-                <div class="flex items-end gap-3 mb-6">${mainPriceHTML}</div>
+                <div class="flex flex-col items-start gap-1 mb-6">${mainPriceHTML}</div>
                 <div class="bg-red-50 p-4 rounded-lg mb-8 border border-red-100">
                     <p class="text-gray-700 text-sm leading-relaxed mb-3">
                         ${product.info ? product.info.description : `Hương vị đậm đà truyền thống từ dòng sản phẩm <strong>${product.name}</strong>.`}
@@ -376,6 +388,7 @@ function initPromoPopup() {
 
     if (!popup) return;
 
+    // Kiểm tra xem đã hiển thị chưa
     const isPopupShown = sessionStorage.getItem('popupShown');
 
     if (!isPopupShown) {
@@ -404,20 +417,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
     initPromoPopup();
     
-    // Trang Chủ
+    // Trang Chủ (Có Slider và các Grid sản phẩm)
     if (document.getElementById('slider')) {
         initSlider();
         
-        // --- THÊM DÒNG NÀY ĐỂ RENDER CÀ PHÊ CAO CẤP ---
-        renderSection('cao-cap', 'grid-cao-cap');
-        // ---------------------------------------------
-        
-        renderSection('cafe-hat', 'grid-cafe-hat');
-        renderSection('rang-xay', 'grid-rang-xay', 10); 
-        renderSection('best-seller', 'grid-best-seller');
+        // Render các khu vực sản phẩm
+        renderSection('cao-cap', 'grid-cao-cap'); // Cà phê Cao cấp
+        renderSection('cafe-hat', 'grid-cafe-hat'); // Cà phê Hạt
+        renderSection('rang-xay', 'grid-rang-xay', 10); // Cà phê Rang Xay (Lấy 10 sp)
+        renderSection('best-seller', 'grid-best-seller'); // Sản phẩm bán chạy
     }
 
-    // Trang Chi Tiết
+    // Trang Chi Tiết (Nếu trang này dùng script.js thay vì product-detail.js)
     if (document.getElementById('product-detail-container')) {
         renderProductDetail();
     }

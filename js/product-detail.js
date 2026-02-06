@@ -110,11 +110,15 @@ function renderProductDetail() {
   const relatedProducts = candidates.slice(0, 4);
   // ----------------------------------
 
+  // --- RENDER SẢN PHẨM LIÊN QUAN (ĐÃ CẬP NHẬT UNIT) ---
   const relatedHTML = relatedProducts.map((p) => {
         let priceDisplay = '';
+        // Unit cho sản phẩm liên quan
+        const smallUnit = p.unit ? `<span class="text-xs font-normal text-gray-500">/${p.unit}</span>` : '';
+
         if (p.price === 1) priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>';
         else if (p.price === 2) priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
-        else priceDisplay = p.price.toLocaleString() + "đ";
+        else priceDisplay = `${p.price.toLocaleString()}đ ${smallUnit}`;
 
         return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
@@ -133,15 +137,19 @@ function renderProductDetail() {
         : (product.category === "rang-xay" ? "Cà phê Rang Xay" : 
            product.category === "cafe-hat" ? "Cà phê Hạt" : "Sản Phẩm");
 
+    // --- RENDER GIÁ CHÍNH (ĐÃ CẬP NHẬT UNIT) ---
     let mainPriceHTML = '';
     let warningNote = '';
+
+    // Unit cho sản phẩm chính (to hơn chút)
+    const bigUnit = product.unit ? `<span class="text-xl font-bold text-gray-500 ml-1">/${product.unit}</span>` : '';
 
     if (product.price === 1) {
         mainPriceHTML = "Liên hệ";
     } else if (product.price === 2) {
         mainPriceHTML = "Sắp ra mắt";
     } else {
-        mainPriceHTML = product.price.toLocaleString() + " VNĐ";
+        mainPriceHTML = `${product.price.toLocaleString()} VNĐ ${bigUnit}`;
         warningNote = `
              <span class="text-[11px] font-bold text-yellow-600 italic">
                  !  giá có thể thay đổi tùy thời điểm

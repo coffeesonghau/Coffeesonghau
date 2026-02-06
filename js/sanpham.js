@@ -108,7 +108,7 @@ function applyFilters() {
     renderProducts(filtered);
 }
 
-// 6. HÀM RENDER SẢN PHẨM (ĐÃ CẬP NHẬT: THÊM VƯƠNG MIỆN)
+// 6. HÀM RENDER SẢN PHẨM (ĐÃ CẬP NHẬT: THÊM ĐƠN VỊ TÍNH)
 function renderProducts(products) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
@@ -141,13 +141,19 @@ function renderProducts(products) {
         }
 
         let priceDisplay = '';
+        
+        // --- LOGIC HIỂN THỊ ĐƠN VỊ ---
+        const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';
+
         if (p.price === 1) {
             priceDisplay = '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>';
         } else if (p.price === 2) {
              priceDisplay = '<span class="text-sm text-orange-600 font-bold">Sắp ra mắt</span>';
         } else {
-             priceDisplay = p.price.toLocaleString() + 'đ';
+             // Thêm unitHtml
+             priceDisplay = `${p.price.toLocaleString()}đ${unitHtml}`;
         }
+        // ------------------------------
 
         // --- ĐOẠN CODE MỚI: TẠO ICON VƯƠNG MIỆN ---
         // Kiểm tra xem sản phẩm có thuộc nhóm 'cao-cap' không
@@ -176,7 +182,7 @@ function renderProducts(products) {
                         ${p.name}
                     </h3>
                     <div class="mt-auto flex justify-between items-end border-t border-dashed border-gray-200 pt-3">
-                        <span class="text-red-900 font-black text-lg">
+                        <span class="text-red-900 font-black text-lg flex items-baseline">
                             ${priceDisplay}
                         </span>
                         <button onclick="window.location.href='product-detail.html?id=${p.id}'" class="text-gray-400 hover:text-red-900 text-sm" title="Xem chi tiết">
