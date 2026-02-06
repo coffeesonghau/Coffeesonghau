@@ -7,7 +7,7 @@ window.dbProducts = [
         id: 1, 
         name: "Sông Hậu Premium", 
         price: 2, 
-        unit: "Gói", // Thêm đơn vị
+        unit: "", // Thêm đơn vị
         category: ["cao-cap", "rang-xay"], 
         img: "img/SHpremium1.webp",
         gallery: [
@@ -75,25 +75,57 @@ window.dbProducts = [
         }
     },
 
-
-    { 
+    {
         id: 4, 
-        name: "SH Gu Mạnh Mẽ 2", 
-        price: 180000,
-        unit: "Kg", // Thêm đơn vị
-        category: ["rang-xay", "best-seller"],
-        img: "img/cafemm21.jpg",
+        name: "SH Mạnh Mẽ 1 - 2026", 
+        price: 2, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/chuacosanpham.png",
         gallery: [
-            "img/cafemm21.jpg", 
-            "img/cafemm22.jpg", 
+            "img/chuacosanpham.png",  
         ],
         info: {
-            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica, Robusta, Culi. (vị nguyên bản từ cafe hạt)",
+            description: "SH Mạnh Mẽ 1 phiên bản 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
-                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
-                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+            `
+        }
+    },
+
+    {
+        id: 5, 
+        name: "SH Mạnh Mẽ 2 - 2026", 
+        price: 2, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/chuacosanpham.png",
+        gallery: [
+            "img/chuacosanpham.png",  
+        ],
+        info: {
+            description: "SH Mạnh Mẽ 2 phiên bản 2026.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+            `
+        }
+    },
+
+    {
+        id: 6, 
+        name: "SH Cận Đại - 2026", 
+        price: 2, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHcandai2026.webp",
+        gallery: [
+            "img/SHcandai2026MT.webp",
+            "img/SHcandai2026MS.webp",  
+        ],
+        info: {
+            description: "Dòng sản phẩm Gu Cận Đại phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
+            details: `
+                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
             `
         }
     },
@@ -115,42 +147,6 @@ window.dbProducts = [
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
-            `
-        }
-    },
-
-    {
-        id: 6, 
-        name: "Gu Cận Đại - 2026", 
-        price: 2, 
-        unit: "Gói",
-        category: "rang-xay",
-        img: "img/chuacosanpham.png",
-        gallery: [
-            "img/chuacosanpham.png",  
-        ],
-        info: {
-            description: "Dòng sản phẩm Gu Cận Đại phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
-            details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
-            `
-        }
-    },
-
-    {
-        id: 7, 
-        name: "Gu Mạnh Mẽ - 2026", 
-        price: 2, 
-        unit: "Gói",
-        category: "rang-xay",
-        img: "img/chuacosanpham.png",
-        gallery: [
-            "img/chuacosanpham.png",  
-        ],
-        info: {
-            description: "Dòng sản phẩm Gu Mạnh Mẽ phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
-            details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
             `
         }
     },
