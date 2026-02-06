@@ -34,7 +34,7 @@ window.dbProducts = [
         price: 60000, 
         unit: "Gói", // Thêm đơn vị
         category: "rang-xay",
-        img: "img/SHtruyenthong2026.webp",
+        img: "img/SHTruyenthong2026.webp",
         gallery: [
             "img/SHtruyenthong2026MT.webp",
             "img/SHtruyenthong2026MS.webp"  
