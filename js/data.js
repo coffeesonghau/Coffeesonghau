@@ -30,7 +30,7 @@ window.dbProducts = [
 
     {
         id: 2, 
-        name: "Cà Phê Truyền Thống 1 (250g)", 
+        name: "Cà Phê Truyền Thống 2 (250g)", 
         price: 60000, 
         unit: "Gói", // Thêm đơn vị
         category: "rang-xay",
