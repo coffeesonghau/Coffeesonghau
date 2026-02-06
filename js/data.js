@@ -15,12 +15,12 @@ window.dbProducts = [
             "img/SHpremiumMS.webp", 
         ],
         info: {
-            description: "Dòng sản phẩm Cao Cấp đánh dấu sự trở lại với diện mạo và tầm vóc mới, Sông Hậu Premium giữ trọn hương vị mộc nguyên bản, tinh tuyển từ những gì tự nhiên nhất và định hướng hoàn toàn mới phân khúc cao cấp nhất – Sông Hậu Premium.",
+            description: "Dòng sản phẩm Cao Cấp đánh dấu sự trở lại của Sông Hậu với diện mạo và tầm vóc hoàn toàn mới. Sông Hậu Premium giữ trọn hương vị mộc nguyên bản, được tinh tuyển khắt khe từ những tinh hoa tự nhiên nhất, đồng thời mở ra định hướng mới cho phân khúc cao cấp bậc nhất. SH Premium là tuyệt phẩm của sự chọn lọc và chế tác công phu, nơi từng nguyên liệu được nâng niu để đạt đến độ tinh tế và chiều sâu phức hợp trong từng tầng hương, mang đến trải nghiệm đẳng cấp và khác biệt.",
             highlights: [
                 "100% Nguyên chất thượng hạng",
-                "Rang xay thủ công",
+                "100% hạt chín mọng, rang xay thủ công tỉ mỉ",
                 "Đóng gói hộp quà sang trọng",
-                "Hương vị mộc bản tự nhiên"
+                "Giữ trọn vị Mộc nguyên bản và tầng hương tinh tế."
             ],
             details: `
                 <p class="mb-2">- <strong>Thông tin:</strong> Đang Cập Nhật...</p>
@@ -40,11 +40,12 @@ window.dbProducts = [
             "img/SHtruyenthong2026MS.webp"  
         ],
         info: {
-            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
+            description: "Dòng sản phẩm Sông Hậu Truyền thống 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta culi, chúng tôi tạo ra một hương vị đậm đà, mạnh mẽ, đúng chất 'gu' phin Việt Nam. Đây là dòng sản phẩm tiêu chuẩn (Standard) dành cho nhu cầu thưởng thức hàng ngày. Nếu như SH Premium là tuyệt phẩm được tinh tuyển khắt khe để đạt đến độ tinh tế và phức tạp trong từng tầng hương, thì Truyền thống 2 mang nét mộc mạc, giản dị và gần gũi hơn. Một lựa chọn kinh tế, ít cầu kỳ, nhưng vẫn đủ 'đậm' và 'chất' để đánh thức sự tỉnh táo trong bạn mỗi sáng.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Nâng cấp điều chỉnh từ Truyền Thống 1 2026</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
