@@ -6,7 +6,7 @@ window.dbProducts = [
     {
         id: 1, 
         name: "Sông Hậu Premium", 
-        price: 2, 
+        price: 400000, 
         unit: "", // Thêm đơn vị
         category: ["cao-cap", "rang-xay"], 
         img: "img/SHpremium1.webp",
@@ -31,7 +31,7 @@ window.dbProducts = [
     {
         id: 2, 
         name: "SH Truyền Thống 1 (250g)", 
-        price: 60000, 
+        price: 75000, 
         unit: "Gói", // Thêm đơn vị
         category: "rang-xay", 
         img: "img/SHTruyenthong2026.webp",
@@ -45,8 +45,8 @@ window.dbProducts = [
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
-                <p class="mb-2">- <strong>Phiên bản:</strong> Nâng cấp điều chỉnh từ Truyền Thống 2 2010</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên thuỷ</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Truyền Thống 2 2026 nâng cấp</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
@@ -68,8 +68,8 @@ window.dbProducts = [
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
-                <p class="mb-2">- <strong>Phiên bản:</strong> Nâng cấp điều chỉnh từ Truyền Thống 1 2026</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Truyền Thống 2 2026 nâng cấp</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
@@ -77,18 +77,24 @@ window.dbProducts = [
 
     {
         id: 4, 
-        name: "SH Mạnh Mẽ 1 - 2026", 
-        price: 2, 
+        name: "SH Mạnh Mẽ 1 2026 (250g)", 
+        price: 55000, 
         unit: "Gói",
         category: "rang-xay",
-        img: "img/chuacosanpham.png",
+        img: "img/SHmanhme2026.webp",
         gallery: [
-            "img/chuacosanpham.png",  
+            "img/SHmanhme12026MT.webp",
+            "img/SHmanhme2026MSp.webp",
+            "img/SHmanhme2026MS.webp",  
         ],
         info: {
             description: "SH Mạnh Mẽ 1 phiên bản 2026.",
             details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Mạnh Mẽ 1 2026 nâng cấp</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
@@ -96,25 +102,31 @@ window.dbProducts = [
     {
         id: 5, 
         name: "SH Mạnh Mẽ 2 - 2026", 
-        price: 2, 
+        price: 45000, 
         unit: "Gói",
         category: "rang-xay",
-        img: "img/chuacosanpham.png",
+        img: "img/SHmanhme2026.webp",
         gallery: [
-            "img/chuacosanpham.png",  
+            "img/SHmanhme22026MT.webp",
+            "img/SHmanhme2026MSp.webp",
+            "img/SHmanhme2026MS.webp",  
         ],
         info: {
             description: "SH Mạnh Mẽ 2 phiên bản 2026.",
             details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Mạnh Mẽ 2 2026 nâng cấp</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
 
     {
         id: 6, 
-        name: "SH Cận Đại - 2026", 
-        price: 2, 
+        name: "SH Cận Đại 2026", 
+        price: 35000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHcandai2026.webp",
@@ -125,7 +137,11 @@ window.dbProducts = [
         info: {
             description: "Dòng sản phẩm Gu Cận Đại phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
             details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Chưa có thông tin sản phẩm</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Vị nhẹ nhàng, dễ uống</p>
+                <p class="mb-2">- <strong>Phiên bản:</strong> Mạnh Mẽ 2 2026 nâng cấp điều chỉnh hợp gu</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
@@ -145,8 +161,8 @@ window.dbProducts = [
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất vị đậm</p>
-                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất Rang thủ công</p>
+                <p>- <strong>Hạn sử dụng:</strong> 3 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
