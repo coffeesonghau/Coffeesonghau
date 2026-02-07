@@ -41,7 +41,7 @@ window.dbProducts = [
               
         ],
         info: {
-            description: "Sông Hậu Truyền Thống 1 2026 mang đến sự cân bằng tinh tế trong từng giọt cà phê. Với công thức phối trộn bí mật giữa Arabica thơm dịu và Robusta Culi đậm đà, sản phẩm giữ trọn vị mạnh mẽ đúng gu phin Việt nhưng hậu vị êm ái hơn. dòng sản phẩm Tiêu chuẩn (Standard), Truyền Thống 1 đề cao sự mộc mạc, giản dị và tính thực tế. Đây là giải pháp tối ưu cho nhu cầu thưởng thức hàng ngày tại gia đình hay văn phòng: ít cầu kỳ về hình thức, tập trung toàn bộ vào chất lượng hạt để đánh thức sự tỉnh táo trong bạn với mức chi phí hợp lý nhất.",
+            description: "Sông Hậu Truyền Thống 1 (250G) 2026.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
@@ -63,7 +63,7 @@ window.dbProducts = [
             "img/SHtruyenthong2026MS.webp"  
         ],
         info: {
-            description: "Sông Hậu Truyền Thống 2 2026 là dòng cà phê mang hương vị thơm nồng, đậm mạnh, phối trộn giữa Arabica và Robusta Culi theo công thức riêng. So với Truyền Thống 1 thiên về vị mộc nguyên bản, Truyền Thống 2 nổi bật hơn ở mùi cà phê rõ, gu phin Việt đậm đà, dễ uống mỗi ngày. Đây là dòng Standard, lựa chọn kinh tế, không cầu kỳ nhưng đủ “đậm” để đánh thức tỉnh táo mỗi sáng.",
+            description: "Sông Hậu Truyền Thống 2 (250g) 2026.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
@@ -86,7 +86,7 @@ window.dbProducts = [
             "img/SHmanhme2026MS.webp",  
         ],
         info: {
-            description: "Sông Hậu Mạnh Mẽ 1 2026 là dòng cà phê mang hương vị thơm nồng, đậm mạnh kèm vị béo rõ, được phối trộn theo công thức riêng nhằm tạo cảm giác dày vị và tròn miệng. So với Truyền Thống 2 thiên về gu phin thuần đậm, Mạnh Mẽ 1 nổi bật hơn ở độ béo và hậu vị kéo dài, cho trải nghiệm mạnh mẽ, dễ gây “ghiền”. Phù hợp với người thích cà phê đậm, uống sữa hoặc cần tỉnh táo nhanh mỗi sáng.",
+            description: "Sông Hậu Mạnh Mẽ 1 (250g) 2026.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
@@ -109,7 +109,7 @@ window.dbProducts = [
             "img/SHmanhme2026MS.webp",  
         ],
         info: {
-            description: "SH Mạnh Mẽ 2 2026 chinh phục người uống bằng vị cà phê đậm đà, sánh ngậy, hương thơm sâu và rõ, cho cảm giác dày vị, hậu vị kéo dài. Đây là lựa chọn dành cho những ai yêu thích cà phê thật mạnh, uống là “đã”, tỉnh táo nhanh và dư vị còn đọng lại lâu sau mỗi ngụm.",
+            description: "SH Mạnh Mẽ 2 (250g) 2026.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
@@ -121,8 +121,8 @@ window.dbProducts = [
 
     {
         id: 6, 
-        name: "SH Cận Đại 2026", 
-        price: 35000, 
+        name: "SH Cận Đại (250g)", 
+        price: 40000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHcandai2026.webp",
@@ -131,7 +131,7 @@ window.dbProducts = [
             "img/SHcandai2026MS.webp",  
         ],
         info: {
-            description: "Dòng sản phẩm Gu Cận Đại phiên bản 2026 đánh dấu sự trở lại với diện mạo và định hướng hoàn toàn mới của công ty.",
+            description: "Sông Hậu Cận Đại (250g) 2026.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
@@ -144,9 +144,9 @@ window.dbProducts = [
     {
         id: 7, 
         name: "SH Truyền Thống 1 (500g)", 
-        price: 150000, 
+        price: 120000, 
         unit: "Gói",
-        category: "rang-xay",
+        category: ["best-seller", "rang-xay"],
         img: "img/SHtruyenthong1.webp",
         gallery: [
             "img/SHtruyenthong1MT.webp",
@@ -158,6 +158,28 @@ window.dbProducts = [
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên bản</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 8, 
+        name: "SH Truyền Thống 2 (500g)", 
+        price: 150000, 
+        unit: "Gói",
+        category: ["best-seller", "rang-xay"],
+        img: "img/SHtruyenthong2.webp",
+        gallery: [
+            "img/SHtruyenthong2MT.webp",
+            "img/SHtruyenthong1MS.webp",  
+        ],
+        info: {
+            description: "Sông Hậu Truyền Thống 2 (500g)",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
@@ -176,25 +198,18 @@ window.dbProducts = [
         info: {
             description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Moka.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất Rang thủ công</p>
-                <p>- <strong>Hạn sử dụng:</strong> 3 tháng kể từ ngày sản xuất.</p>
+                <p>- <strong>Hạn sử dụng:</strong> 1 tháng kể từ ngày sản xuất.</p>
             `
         }
-    },
-    
-    { id: 8, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 9, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 10, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 11, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 12, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },
-    { id: 13, name: "Đang cập nhật sản phẩm", price: 0, category: "rang-xay", img: "img/chuacosanpham.png" },   
+    },   
 
     // --- CODE MẪU ---
 
     { 
-        id: 97, 
+        id: 98, 
         name: "Máy Pha Cà Phê Công Nghiệp", 
         price: 0, // Ví dụ giá 15 triệu
         unit: "Cái", // Thêm đơn vị
