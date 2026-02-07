@@ -144,7 +144,7 @@ window.dbProducts = [
     {
         id: 7, 
         name: "SH Truyền Thống 1 (500g)", 
-        price: 120000, 
+        price: 150000, 
         unit: "Gói",
         category: ["best-seller", "rang-xay"],
         img: "img/SHtruyenthong1.webp",
@@ -166,7 +166,7 @@ window.dbProducts = [
     {
         id: 8, 
         name: "SH Truyền Thống 2 (500g)", 
-        price: 150000, 
+        price: 120000, 
         unit: "Gói",
         category: ["best-seller", "rang-xay"],
         img: "img/SHtruyenthong2.webp",
