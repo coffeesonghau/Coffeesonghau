@@ -196,7 +196,7 @@ window.dbProducts = [
             "img/hatcaphe2.webp",  
         ],
         info: {
-            description: "Dòng sản phẩm Mạnh Mẽ 2 là biểu tượng của sự cân bằng hoàn hảo. Với tỷ lệ phối trộn bí mật giữa Arabica và Robusta.",
+            description: "cà phê hạt Sông Hậu Rang Mộc giữa Robusta - Moka.",
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Moka.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
