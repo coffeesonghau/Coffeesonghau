@@ -189,6 +189,28 @@ window.dbProducts = [
     },
 
     {
+        id: 9, 
+        name: "SH Mạnh Mẽ 1 (500g)", 
+        price: 110000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHmanhme1.webp",
+        gallery: [
+            "img/SHmanhme1MT.webp",
+            "img/SHmanhme1MS.webp",  
+        ],
+        info: {
+            description: "Sông Hậu Mạnh Mẽ 1 (500g).",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Ngũ Cốc, Hương liệu caramel .</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
         id: 99, 
         name: "Cà Phê Hạt", 
         price: 300000, 
