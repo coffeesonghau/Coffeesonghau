@@ -23,7 +23,10 @@ window.dbProducts = [
                 "Giữ trọn vị Mộc nguyên bản và tầng hương tinh tế."
             ],
             details: `
-                <p class="mb-2">- <strong>Thông tin:</strong> Đang Cập Nhật...</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Culi - Moka.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên bản</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
@@ -43,9 +46,9 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Truyền Thống 1 (250G) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên bản</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Hạt tuyển chọn 100% xay Mộc giử vị đậm chất cà phê nguyên bản</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
@@ -65,7 +68,7 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Truyền Thống 2 (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Hương liệu caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -88,7 +91,7 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Mạnh Mẽ 1 (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Ngũ Cốc, Hương liệu caramel .</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -111,7 +114,7 @@ window.dbProducts = [
         info: {
             description: "SH Mạnh Mẽ 2 (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -133,7 +136,7 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Cận Đại (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Vị nhẹ nhàng, dễ uống</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -155,9 +158,9 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Truyền Thống 1 (500g)",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên bản</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Hạt tuyển chọn 100% xay Mộc giử vị đậm chất cà phê nguyên bản</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
@@ -177,7 +180,7 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Truyền Thống 2 (500g)",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica - Culi.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Hương liệu caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
