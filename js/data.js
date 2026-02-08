@@ -255,6 +255,25 @@ window.dbProducts = [
     },
 
     {
+        id: 97, 
+        name: "Phin Cà Phê Cao Cấp", 
+        price: 79000, 
+        unit: "Cái",
+        category: "dung-cu",
+        img: "img/phincaocap.webp",
+        gallery: [
+            "img/phincaocap.webp", 
+        ],
+        info: {
+            description: "Phin cà phê nhôm cao cấp không phải ngẫu nhiên chúng tôi chọn nhôm. phin nhôm truyền nhiệt nhanh, đều – giúp bột cà phê nở chuẩn, chiết xuất ổn định. Hương thơm rõ hơn, vị đậm hơn, ít chua gắt, không ám mùi kim loại. Chúng tôi tin rằng: Phin nhôm cho ra ly cà phê đúng vị nhất – sạch, dày và tròn hậu.",
+            details: `
+                <p class="mb-2">- <strong>Chất liệu:</strong> Nhôm cao cấp.</p>
+                <p class="mb-2">- <strong>Lưu Ý:</strong> Sản phẩm chỉ bán kèm khi mua gói cà phê bất kỳ Cà Phê Sông Hậu</p>
+            `
+        }
+    },
+
+    {
         id: 99, 
         name: "Cà Phê Hạt", 
         price: 300000, 
