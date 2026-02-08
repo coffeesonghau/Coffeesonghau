@@ -23,7 +23,7 @@ window.dbProducts = [
                 "Giữ trọn vị Mộc nguyên bản và tầng hương tinh tế."
             ],
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Culi - Moka.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Culi - Arabica.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên bản</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -265,9 +265,9 @@ window.dbProducts = [
             "img/hatcaphe2.webp",  
         ],
         info: {
-            description: "cà phê hạt Sông Hậu Rang Mộc giữa Robusta - Moka.",
+            description: "Cà Phê Hạt Sông Hậu Rang Mộc giữa Robusta - Arabica.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Moka.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất Rang thủ công</p>
                 <p>- <strong>Hạn sử dụng:</strong> 1 tháng kể từ ngày sản xuất.</p>
