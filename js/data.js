@@ -211,6 +211,50 @@ window.dbProducts = [
     },
 
     {
+        id: 10, 
+        name: "SH Mạnh Mẽ 2 (500g)", 
+        price: 90000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHmanhme2.webp",
+        gallery: [
+            "img/SHmanhme2MT.webp",
+            "img/SHmanhme2MS.webp",  
+        ],
+        info: {
+            description: "SH Mạnh Mẽ 2 (500g).",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 11, 
+        name: "SH Cận Đại (500g)", 
+        price: 80000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHcandai.webp",
+        gallery: [
+            "img/SHcandaiMT.webp",
+            "img/SHcandaiMS.webp",  
+        ],
+        info: {
+            description: "Sông Hậu Cận Đại (500g).",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Vị nhẹ nhàng, dễ uống</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
         id: 99, 
         name: "Cà Phê Hạt", 
         price: 300000, 
