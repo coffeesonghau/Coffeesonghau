@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Render các khu vực sản phẩm
         renderSection('cao-cap', 'grid-cao-cap'); // Cà phê Cao cấp
         renderSection('cafe-hat', 'grid-cafe-hat'); // Cà phê Hạt
-        renderSection('rang-xay', 'grid-rang-xay', 10); // Cà phê Rang Xay (Lấy 10 sp)
+        renderRangXayPagination();
         renderSection('best-seller', 'grid-best-seller'); // Sản phẩm bán chạy
     }
 
@@ -433,3 +433,108 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProductDetail();
     }
 });
+// ======================================================
+// 9. LOGIC PHÂN TRANG CHO RANG XAY
+// ======================================================
+let currentRangXayPage = 1;
+const rangXayPerPage = 10; // Số sản phẩm trên 1 trang (bạn có thể sửa số này)
+
+function renderRangXayPagination() {
+    const grid = document.getElementById('grid-rang-xay');
+    const paginationContainer = document.getElementById('pagination-rang-xay');
+    
+    if (!grid || !paginationContainer) return;
+
+    // 1. Lọc lấy tất cả sản phẩm Rang Xay
+    const allProducts = window.dbProducts || [];
+    const filtered = allProducts.filter(p => {
+        if (p.price <= 0) return false;
+        if (Array.isArray(p.category)) return p.category.includes('rang-xay');
+        return p.category === 'rang-xay';
+    });
+
+    // 2. Tính toán trang
+    const totalPages = Math.ceil(filtered.length / rangXayPerPage);
+    
+    // Đảm bảo trang hiện tại hợp lệ
+    if (currentRangXayPage < 1) currentRangXayPage = 1;
+    if (currentRangXayPage > totalPages) currentRangXayPage = totalPages;
+
+    // 3. Cắt mảng sản phẩm theo trang
+    const startIndex = (currentRangXayPage - 1) * rangXayPerPage;
+    const itemsToRender = filtered.slice(startIndex, startIndex + rangXayPerPage);
+
+    // 4. Render Sản phẩm (Copy logic từ renderSection để giữ nguyên giao diện)
+    if (itemsToRender.length === 0) {
+        grid.innerHTML = '<p class="text-gray-400 text-sm col-span-full text-center">Đang cập nhật sản phẩm...</p>';
+    } else {
+        grid.innerHTML = itemsToRender.map(p => {
+            let priceDisplay = '';
+            const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';
+
+            if (p.price === 1) priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ báo giá</span>';
+            else if (p.price === 2) priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
+            else priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>${unitHtml}`;
+            
+            const isPremium = (Array.isArray(p.category) && p.category.includes('cao-cap')) || p.category === 'cao-cap';
+            const crownBadge = isPremium 
+                ? `<div class="absolute top-0 right-0 bg-yellow-500 text-white w-10 h-10 flex items-center justify-center rounded-bl-xl shadow-md z-20"><i class="fas fa-crown text-xl"></i></div>` : '';
+
+            return `
+            <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer relative" onclick="window.location.href='product-detail.html?id=${p.id}'">
+                <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50 relative">
+                    <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    ${crownBadge}
+                </div>
+                <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
+                <div class="flex justify-between items-center border-t pt-3 mt-3">
+                    <div class="flex items-center">${priceDisplay}</div>
+                    <button class="text-gray-400 hover:text-red-900"><i class="fa-solid fa-cart-plus"></i></button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // 5. Render Nút Phân Trang
+    let paginationHTML = '';
+    if (totalPages > 1) {
+        // Nút Previous
+        paginationHTML += `
+            <button onclick="changePageRangXay(${currentRangXayPage - 1})" 
+                class="w-8 h-8 flex items-center justify-center rounded border ${currentRangXayPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-gray-600 border-gray-300 hover:bg-red-900 hover:text-white hover:border-red-900 transition'}" 
+                ${currentRangXayPage === 1 ? 'disabled' : ''}>
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+        `;
+
+        // Các nút số
+        for (let i = 1; i <= totalPages; i++) {
+            const isActive = i === currentRangXayPage;
+            paginationHTML += `
+                <button onclick="changePageRangXay(${i})" 
+                    class="w-8 h-8 flex items-center justify-center rounded border text-sm font-bold transition
+                    ${isActive ? 'bg-red-900 text-white border-red-900' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-100'}">
+                    ${i}
+                </button>
+            `;
+        }
+
+        // Nút Next
+        paginationHTML += `
+            <button onclick="changePageRangXay(${currentRangXayPage + 1})" 
+                class="w-8 h-8 flex items-center justify-center rounded border ${currentRangXayPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-gray-600 border-gray-300 hover:bg-red-900 hover:text-white hover:border-red-900 transition'}" 
+                ${currentRangXayPage === totalPages ? 'disabled' : ''}>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        `;
+    }
+    paginationContainer.innerHTML = paginationHTML;
+}
+
+// Hàm được gọi khi click vào nút trang
+function changePageRangXay(newPage) {
+    currentRangXayPage = newPage;
+    renderRangXayPagination();
+    // Tự động cuộn lên đầu danh sách sản phẩm khi chuyển trang
+    document.getElementById('grid-rang-xay').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
