@@ -255,6 +255,25 @@ window.dbProducts = [
     },
 
     {
+        id: 90, 
+        name: "Đá Viên", 
+        price: 14000, 
+        unit: "Bao",
+        category: "best-seller",
+        img: "img/davien.webp",
+        gallery: [
+            "img/davien.webp", 
+        ],
+        info: {
+            description: "Nước đá sạch – tinh khiết không phải ngẫu nhiên chúng tôi lựa chọn. Nước đá được làm từ nguồn nước tinh khiết, cấp đông chuẩn – giúp đá tan chậm, lạnh sâu, không mùi lạ. Ly cà phê giữ trọn hương thơm, vị đậm rõ hơn. Chúng tôi tin rằng: Nước đá sạch cho ra ly cà phê đúng vị và sạch nhất.",
+            details: `
+                <p class="mb-2">- <strong>Trọng Lượng kg:</strong> 16KG.</p>
+                <p class="mb-2">- <strong>Lưu Ý:</strong> Vận chuyển có thể gây hao hụt khối lượng do tính chất dễ tan của đá."</p>
+            `
+        }
+    },
+
+    {
         id: 97, 
         name: "Phin Cà Phê Cao Cấp", 
         price: 79000, 
