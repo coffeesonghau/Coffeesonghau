@@ -33,7 +33,7 @@ window.dbProducts = [
     
     {
         id: 2, 
-        name: "SH Truyền Thống 1 (250g)", 
+        name: "SH Truyền Thống 1 (250g) ", 
         price: 75000, 
         unit: "Gói", // Thêm đơn vị
         category: "rang-xay", 
@@ -56,7 +56,7 @@ window.dbProducts = [
 
     {
         id: 3, 
-        name: "SH Truyền Thống 2 (250g)", 
+        name: "SH Truyền Thống 2 (250g) ", 
         price: 60000, 
         unit: "Gói", // Thêm đơn vị
         category: "rang-xay",
