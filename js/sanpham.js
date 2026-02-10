@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCounts(); // Cập nhật số lượng trên menu bên trái
     applyFilters(); // Chạy bộ lọc lần đầu để render
     setupEventListeners(); // Cài đặt sự kiện click
+    initSearch(); // <--- KÍCH HOẠT TÌM KIẾM HEADER
 
     // Mobile menu toggle chính (Mở/Đóng nguyên menu mobile)
     const menuBtn = document.getElementById('menu-btn');
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mobileMenu.classList.toggle('hidden');
         });
     }
-    
+
     // Đóng menu khi click ra ngoài
     document.addEventListener('click', (e) => {
         if (mobileMenu && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
@@ -46,12 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkCategory(product, filterName) {
     // Nếu chọn tất cả thì luôn đúng
     if (filterName === 'all') return true;
-    
+
     // Nếu sản phẩm có nhiều danh mục (dạng Mảng)
     if (Array.isArray(product.category)) {
         return product.category.includes(filterName);
     }
-    
+
     // Nếu sản phẩm chỉ có 1 danh mục (dạng Chuỗi)
     return product.category === filterName;
 }
@@ -89,7 +90,11 @@ function applyFilters() {
 
     // b. Lọc theo tìm kiếm
     if (currentSearch) {
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(currentSearch));
+        const query = removeVietnameseTones(currentSearch);
+        filtered = filtered.filter(p => {
+            const pName = removeVietnameseTones(p.name);
+            return pName.includes(query);
+        });
     }
 
     // c. Sắp xếp giá
@@ -101,7 +106,7 @@ function applyFilters() {
 
     // d. Cập nhật label "Hiển thị X sản phẩm"
     const showCountEl = document.getElementById('show-count');
-    if(showCountEl) showCountEl.innerText = filtered.length;
+    if (showCountEl) showCountEl.innerText = filtered.length;
 
     // e. Render
     renderPagination(filtered);
@@ -125,12 +130,12 @@ function renderProducts(products) {
 
     pageItems.forEach((p, index) => {
         const delay = index * 50;
-        
+
         // Xác định nhãn danh mục
         let catSlug = Array.isArray(p.category) ? p.category[0] : p.category;
-        
+
         let categoryName = 'Sản phẩm';
-        switch(catSlug) {
+        switch (catSlug) {
             case 'cafe-hat': categoryName = 'Cà Phê Hạt'; break;
             case 'rang-xay': categoryName = 'Rang Xay'; break;
             case 'cao-cap': categoryName = 'Cao Cấp'; break;
@@ -141,29 +146,29 @@ function renderProducts(products) {
         }
 
         let priceDisplay = '';
-        
+
         // --- LOGIC HIỂN THỊ ĐƠN VỊ ---
         const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';
 
         if (p.price === 1) {
             priceDisplay = '<span class="text-sm text-blue-700 font-bold">Liên hệ</span>';
         } else if (p.price === 2) {
-             priceDisplay = '<span class="text-sm text-orange-600 font-bold">Sắp ra mắt</span>';
+            priceDisplay = '<span class="text-sm text-orange-600 font-bold">Sắp ra mắt</span>';
         } else {
-             // Thêm unitHtml
-             priceDisplay = `${p.price.toLocaleString()}đ${unitHtml}`;
+            // Thêm unitHtml
+            priceDisplay = `${p.price.toLocaleString()}đ${unitHtml}`;
         }
         // ------------------------------
 
         // --- ĐOẠN CODE MỚI: TẠO ICON VƯƠNG MIỆN ---
         // Kiểm tra xem sản phẩm có thuộc nhóm 'cao-cap' không
         const isPremium = checkCategory(p, 'cao-cap');
-        
+
         // Tạo HTML Vương miện (Góc phải, giống trang chủ)
-        const crownBadge = isPremium 
+        const crownBadge = isPremium
             ? `<div class="absolute top-0 right-0 bg-yellow-500 text-white w-10 h-10 flex items-center justify-center rounded-bl-xl shadow-md z-20" title="Sản phẩm Cao Cấp">
                  <i class="fas fa-crown text-xl"></i>
-               </div>` 
+               </div>`
             : '';
         // -------------------------------------------
 
@@ -199,7 +204,7 @@ function renderProducts(products) {
 // 7. HÀM TẠO NÚT PHÂN TRANG
 function renderPagination(filteredList) {
     const paginationContainer = document.getElementById('pagination');
-    if(!paginationContainer) return;
+    if (!paginationContainer) return;
     paginationContainer.innerHTML = '';
 
     const totalPages = Math.ceil(filteredList.length / itemsPerPage);
@@ -286,10 +291,10 @@ function updateCounts() {
         '.count-rx': allProducts.filter(p => checkCategory(p, 'rang-xay')).length,
         '.count-pre': allProducts.filter(p => checkCategory(p, 'cao-cap')).length,
         '.count-ht': allProducts.filter(p => checkCategory(p, 'best-seller')).length,
-        
+
         // Lưu ý: Trong HTML bạn để data-filter="dung-cu" và class="count-pm"
         // Nên ở đây ta đếm 'dung-cu' và gán vào class .count-pm
-        '.count-pm': allProducts.filter(p => checkCategory(p, 'dung-cu')).length 
+        '.count-pm': allProducts.filter(p => checkCategory(p, 'dung-cu')).length
     };
 
     for (let selector in counts) {
@@ -312,7 +317,7 @@ function setupEventListeners() {
     });
 
     const searchInput = document.getElementById('filter-search');
-    if(searchInput) {
+    if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             currentSearch = e.target.value.toLowerCase();
             currentPage = 1;
@@ -321,10 +326,169 @@ function setupEventListeners() {
     }
 
     const sortSelect = document.getElementById('price-sort');
-    if(sortSelect) {
+    if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
             applyFilters();
         });
     }
+}
+// ======================================================
+// 10. TÍNH NĂNG TÌM KIẾM THÔNG MINH (GIỐNG INDEX.HTML)
+// ======================================================
+
+// 10.1 Hàm loại bỏ dấu Tiếng Việt (Hỗ trợ tìm kiếm thông minh)
+function removeVietnameseTones(str) {
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, "");
+    str = str.replace(/\u02C6|\u0306|\u031B/g, "");
+    return str.trim();
+}
+
+// 10.2 Khởi tạo thanh tìm kiếm trên Header
+function initSearch() {
+    const searchBtn = document.getElementById('search-toggle-btn');
+    const searchBox = document.getElementById('search-box');
+    const searchInput = document.getElementById('search-input');
+
+    if (!searchBtn || !searchBox) return;
+
+    // Toggle đóng mở hộp tìm kiếm
+    searchBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        searchBox.classList.toggle('hidden');
+        if (!searchBox.classList.contains('hidden')) searchInput.focus();
+    });
+
+    // Đóng khi click ra ngoài
+    document.addEventListener('click', (e) => {
+        if (!searchBox.contains(e.target) && e.target !== searchBtn) {
+            searchBox.classList.add('hidden');
+        }
+    });
+
+    // Xử lý khi nhấn Enter ở Header
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const rawQuery = searchInput.value;
+            if (rawQuery.trim() === "") return;
+            doHeaderSearch(rawQuery); // Gọi hàm tìm kiếm Overlay
+            searchBox.classList.add('hidden');
+        }
+    });
+}
+
+// 10.3 Hàm xử lý tìm kiếm Overlay (Header)
+function doHeaderSearch(keyword) {
+    const query = removeVietnameseTones(keyword);
+
+    // Lọc sản phẩm
+    const results = allProducts.filter(p => {
+        const pName = removeVietnameseTones(p.name);
+        const pDesc = p.info && p.info.description ? removeVietnameseTones(p.info.description) : "";
+        return (pName.includes(query) || pDesc.includes(query)) && p.price > 0;
+    });
+
+    showSearchResultsUI(results, keyword);
+}
+
+// 10.4 Hiển thị giao diện kết quả tìm kiếm (Overlay che màn hình)
+function showSearchResultsUI(results, keyword) {
+    // Ẩn nội dung chính của trang sản phẩm
+    const mainContainer = document.querySelector('.container.flex');
+    const banner = document.querySelector('section.relative'); // Banner "Thế giới cà phê"
+
+    if (mainContainer) mainContainer.classList.add('hidden');
+    if (banner) banner.classList.add('hidden');
+
+    // Tạo hoặc lấy vùng hiển thị kết quả
+    let resultContainer = document.getElementById('search-results-overlay');
+    if (!resultContainer) {
+        resultContainer = document.createElement('div');
+        resultContainer.id = 'search-results-overlay';
+        resultContainer.className = 'container mx-auto px-4 py-8 animate-popup';
+        const header = document.querySelector('header');
+        header.parentNode.insertBefore(resultContainer, header.nextSibling);
+    }
+
+    resultContainer.classList.remove('hidden');
+
+    // HTML Header kết quả
+    let htmlContent = `
+        <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+            <div>
+                <h2 class="text-2xl font-black text-red-950 uppercase">Kết quả tìm kiếm</h2>
+                <p class="text-sm text-gray-500">Từ khóa: "<span class="font-bold text-red-900">${keyword}</span>"</p>
+            </div>
+            <button onclick="closeSearch()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold text-xs uppercase transition flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
+            </button>
+        </div>
+    `;
+
+    // Logic hiển thị sản phẩm hoặc gợi ý (Giống Index)
+    if (results.length === 0) {
+        // Gợi ý Best Seller nếu không tìm thấy
+        const suggestions = allProducts.filter(p => checkCategory(p, 'best-seller')).slice(0, 5);
+        htmlContent += `
+            <div class="text-center py-8">
+                <i class="fa-solid fa-magnifying-glass text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 mb-8">Rất tiếc, không tìm thấy sản phẩm nào phù hợp.</p>
+                <div class="border-t border-gray-100 pt-8 mt-8">
+                    <h3 class="text-lg font-bold text-red-900 uppercase mb-6 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-star text-yellow-500"></i> Có thể bạn sẽ thích
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
+                        ${suggestions.map(p => createSearchCardHTML(p)).join('')}
+                    </div>
+                </div>
+            </div>`;
+    } else {
+        htmlContent += `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">`;
+        htmlContent += results.map(p => createSearchCardHTML(p)).join('');
+        htmlContent += `</div>`;
+    }
+
+    resultContainer.innerHTML = htmlContent;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 10.5 Hàm tạo thẻ HTML cho popup tìm kiếm (Tái sử dụng code)
+function createSearchCardHTML(p) {
+    // Copy logic hiển thị giá/unit từ hàm renderProducts để đồng bộ
+    let priceDisplay = '';
+    const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';
+    if (p.price === 1) priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>';
+    else if (p.price === 2) priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
+    else priceDisplay = `<span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>${unitHtml}`;
+
+    return `
+    <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
+        <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50">
+            <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+        </div>
+        <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
+        <div class="flex justify-between items-center border-t pt-3 mt-3">
+            <div class="flex items-center">${priceDisplay}</div>
+        </div>
+    </div>`;
+}
+
+// 10.6 Hàm đóng tìm kiếm
+window.closeSearch = function () {
+    const resultContainer = document.getElementById('search-results-overlay');
+    if (resultContainer) resultContainer.classList.add('hidden');
+
+    // Hiện lại trang sản phẩm
+    const mainContainer = document.querySelector('.container.flex');
+    const banner = document.querySelector('section.relative');
+    if (mainContainer) mainContainer.classList.remove('hidden');
+    if (banner) banner.classList.remove('hidden');
 }

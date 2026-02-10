@@ -114,7 +114,7 @@ const systemData = [
         searchTags: "nhuong quyen song hau phuoc long bac lieu",
         name: "Sông Hậu Phước Long",
         address: "TT. Phước Long, Huyện Phước Long, BL",
-        image: "chuoihethong/SHphuoclongNQ.webp",
+        image: "chuoihethong/SHNQplanhlinh.webp",
         mapLink: "https://maps.app.goo.gl/s12ovPaD52eF9mwy7"
     },
     {
@@ -124,7 +124,7 @@ const systemData = [
         searchTags: "nhuong quyen song hau qk cầu sập huy liệu xã hoà bình",
         name: "Sông Hậu QK",
         address: "Long Thạnh, Vĩnh Lợi, Bạc Liêu,", // Lưu ý: Địa chỉ gốc trong HTML cũ ghi Phường 7 Bạc Liêu nhưng tag là Cà Mau, tôi giữ nguyên data gốc.
-        image: "chuoihethong/SHQK.webp",
+        image: "chuoihethong/SHNQqk.webp",
         mapLink: "https://maps.app.goo.gl/55qa3L2RqXHgJvGr9"
     },
 ];
