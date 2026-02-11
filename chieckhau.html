@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiết Khấu Sông Hậu Coffee | Chính Sách Hợp Tác</title>
+    <link rel="icon" type="image/png" href="img/logosh.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="./style.css" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        .custom-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%237a0b0b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .close-modal {
+            position: sticky;
+            top: 1rem;
+            left: calc(100% - 3.5rem);
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #eee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(69, 10, 10, 0.8), rgba(122, 11, 11, 0.9)), 
+                        url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body class="bg-[#fcfcfc] text-gray-900 font-sans">
+
+    <header class="bg-white shadow-sm border-b">
+        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+            <span>Coffee Sông Hậu</span>
+            <span>Hotline: 0852.494.694</span>
+        </div>
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-black text-red-950 italic uppercase">
+                COFFEE <span class="text-yellow-600 ml-1">Sông Hậu</span>
+            </div>
+            <a href="index.html" class="text-[10px] font-bold uppercase border border-gray-200 px-4 py-2 rounded-xl">Trang Chủ</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-gradient py-20 md:py-32 text-center text-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-7xl font-black uppercase italic mb-4 tracking-tighter">Chiết Khấu Sông Hậu Coffee</h1>
+                <p class="text-yellow-500 font-bold uppercase tracking-[0.3em] text-xs md:text-sm">Hợp tác bền vững - Lợi nhuận tối ưu</p>
+            </div>
+        </section>
+
+        <div class="container mx-auto px-4 -mt-10 relative z-10">
+            <div class="max-w-md mx-auto mb-16">
+                <label class="block text-[10px] font-black uppercase text-white md:text-gray-400 mb-3 text-center tracking-widest">Cần tìm mục nào? Chọn nhanh tại đây</label>
+                <select onchange="if(this.value) document.querySelector(this.value).scrollIntoView({behavior: 'smooth'})" 
+                    class="custom-select w-full border-2 border-white md:border-gray-100 rounded-2xl py-5 px-8 font-black uppercase text-xs tracking-widest bg-white shadow-2xl outline-none cursor-pointer">
+                    <option value="" disabled selected italic>--- Click để chọn nhanh mục cần xem ---</option>
+                    <option value="#khach-le">1. Khách lẻ mua nhiều (CK 5% - 10%)</option>
+                    <option value="#ctv">2. Cộng tác viên (CK 15% - 20%)</option>
+                    <option value="#tap-hoa">3. Tạp hóa / Quán Cafe (CK 25% - 30%)</option>
+                    <option value="#npp">4. Nhà phân phối (NPP) (CK 45%++)</option>
+                </select>
+            </div>
+
+            <div class="max-w-5xl mx-auto space-y-16 pb-20">
+
+                <div id="khach-le" class="bg-white rounded-[2.5rem] shadow-sm overflow-hidden flex flex-col md:flex-row border border-gray-100">
+                    <div class="md:w-1/3 h-48 md:h-auto">
+                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-2/3 p-8 md:p-12 border-l-8 border-red-900">
+                        <div class="text-4xl font-black text-red-900/10 mb-2 italic uppercase">01</div>
+                        <h2 class="text-2xl font-black text-red-950 uppercase italic mb-6">Khách Lẻ Mua Nhiều</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic text-gray-600 mb-8 font-medium">
+                            <p>• Mua từ 5kg - 20kg hàng tháng.</p>
+                            <p>• Chiết khấu 5% - 10% đơn hàng.</p>
+                            <p>• Hỗ trợ xay nguyên chất miễn phí.</p>
+                            <p>• Giao hàng hỏa tốc Bạc Liêu.</p>
+                        </div>
+                        <button onclick="openModal('modal-le')" class="text-red-900 font-bold uppercase text-[10px] tracking-widest underline decoration-2">Xem chi tiết & Điều kiện</button>
+                    </div>
+                </div>
+
+                <div id="ctv" class="bg-white rounded-[2.5rem] shadow-sm overflow-hidden flex flex-col md:flex-row border border-gray-100">
+                    <div class="md:w-1/3 h-48 md:h-auto order-first md:order-last">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-2/3 p-8 md:p-12 border-r-8 border-green-700 text-right md:text-left">
+                        <div class="text-4xl font-black text-green-700/10 mb-2 italic uppercase">02</div>
+                        <h2 class="text-2xl font-black text-red-950 uppercase italic mb-6">Cộng Tác Viên (CTV)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic text-gray-600 mb-8 font-medium">
+                            <p>• Vốn 0 đồng, không nhập hàng.</p>
+                            <p>• Hoa hồng 15% - 20% đơn thành công.</p>
+                            <p>• Hỗ trợ bài đăng và ảnh mẫu.</p>
+                            <p>• Đối soát thanh toán mùng 5 hàng tháng.</p>
+                        </div>
+                        <button onclick="openModal('modal-ctv')" class="text-green-700 font-bold uppercase text-[10px] tracking-widest underline decoration-2">Cách thức tham gia</button>
+                    </div>
+                </div>
+
+                <div id="tap-hoa" class="bg-white rounded-[2.5rem] shadow-sm overflow-hidden flex flex-col md:flex-row border border-gray-100">
+                    <div class="md:w-1/3 h-48 md:h-auto">
+                        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-2/3 p-8 md:p-12 border-l-8 border-orange-600">
+                        <div class="text-4xl font-black text-orange-600/10 mb-2 italic uppercase">03</div>
+                        <h2 class="text-2xl font-black text-red-950 uppercase italic mb-6">Tạp Hóa / Quán Cafe</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic text-gray-600 mb-8 font-medium">
+                            <p>• Giá sỉ tốt nhất cho đơn từ 10kg.</p>
+                            <p>• Chiết khấu sỉ từ 25% - 30%.</p>
+                            <p>• Hỗ trợ kệ gỗ và bảng hiệu.</p>
+                            <p>• Đào tạo pha chế chuyên sâu.</p>
+                        </div>
+                        <button onclick="openModal('modal-tap-hoa')" class="text-orange-600 font-bold uppercase text-[10px] tracking-widest underline decoration-2">Chính sách điểm bán</button>
+                    </div>
+                </div>
+
+                <div id="npp" class="bg-red-950 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row text-white border border-white/5">
+                    <div class="md:w-1/3 h-48 md:h-auto order-first md:order-last">
+                        <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-2/3 p-8 md:p-12 border-r-8 border-yellow-600">
+                        <div class="text-4xl font-black text-white/10 mb-2 italic uppercase">04</div>
+                        <h2 class="text-2xl font-black text-yellow-500 uppercase italic mb-6">Nhà Phân Phối (NPP)</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic text-gray-300 mb-8 font-medium">
+                            <p>• Độc quyền bảo hộ khu vực.</p>
+                            <p>• Chiết khấu tối đa 45%++.</p>
+                            <p>• Hỗ trợ nhân sự đi thị trường.</p>
+                            <p>• Thưởng doanh số quý, năm lớn.</p>
+                        </div>
+                        <button onclick="openModal('modal-npp')" class="text-yellow-500 font-bold uppercase text-[10px] tracking-widest underline decoration-2">Chế độ NPP Độc Quyền</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-le" class="modal-overlay" onclick="handleOutsideClick(event, 'modal-le')">
+        <div class="modal-content p-8">
+            <div class="close-modal" onclick="closeModal('modal-le')"><i class="fa-solid fa-xmark"></i></div>
+            <h3 class="text-2xl font-black text-red-950 uppercase italic mb-6">Chi tiết Khách Lẻ</h3>
+            <div class="text-sm text-gray-600 space-y-4 italic leading-relaxed">
+                <p>• <strong>Bảng giá sỉ:</strong> Mua từ 5-10kg giảm 5%, từ 11kg trở lên giảm 10% đơn giá.</p>
+                <p>• <strong>Vận chuyển:</strong> Miễn phí ship nội thành Bạc Liêu. Các tỉnh khác hỗ trợ 50% phí gửi xe/bưu điện.</p>
+                <p>• <strong>Đóng gói:</strong> Hỗ trợ chia túi nhỏ 250g hoặc 500g để khách dễ bảo quản hoặc làm quà tặng.</p>
+                <p>• <strong>Cam kết:</strong> Cà phê rang mộc sạch 100%, không pha trộn, đạt chuẩn VSATTP.</p>
+                <a href="https://m.me/1003418946177388" target="_blank" class="block w-full bg-blue-600 text-white text-center py-4 rounded-xl font-black uppercase text-xs mt-6">Đặt hàng qua Messenger</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ctv" class="modal-overlay" onclick="handleOutsideClick(event, 'modal-ctv')">
+        <div class="modal-content p-8">
+            <div class="close-modal" onclick="closeModal('modal-ctv')"><i class="fa-solid fa-xmark"></i></div>
+            <h3 class="text-2xl font-black text-green-800 uppercase italic mb-6">Quy trình Cộng Tác Viên</h3>
+            <div class="text-sm text-gray-600 space-y-4 italic leading-relaxed">
+                <p>• <strong>Cách làm:</strong> CTV lấy bài đăng, hình ảnh từ kho dữ liệu công ty để quảng bá. Khi có khách, công ty giao và thu tiền.</p>
+                <p>• <strong>Thu nhập:</strong> Hoa hồng được cộng dồn theo doanh số tháng, thanh toán sòng phẳng vào mùng 5 hàng tháng.</p>
+                <p>• <strong>Quyền lợi:</strong> Được mua cà phê sử dụng cá nhân với giá gốc. Không cần bỏ vốn, không lo tồn kho.</p>
+                <p>• <strong>Hỗ trợ:</strong> Nhóm Zalo riêng cập nhật thông tin sản phẩm và tư vấn kỹ thuật bán hàng online liên tục.</p>
+                <a href="https://m.me/1003418946177388" target="_blank" class="block w-full bg-green-700 text-white text-center py-4 rounded-xl font-black uppercase text-xs mt-6">Đăng ký làm CTV ngay</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-tap-hoa" class="modal-overlay" onclick="handleOutsideClick(event, 'modal-tap-hoa')">
+        <div class="modal-content p-8">
+            <div class="close-modal" onclick="closeModal('modal-tap-hoa')"><i class="fa-solid fa-xmark"></i></div>
+            <h3 class="text-2xl font-black text-orange-700 uppercase italic mb-6">Hợp tác Điểm Bán</h3>
+            <div class="text-sm text-gray-600 space-y-4 italic leading-relaxed">
+                <p>• <strong>Trưng bày:</strong> Hỗ trợ thiết kế kệ gỗ tầng trưng bày chuyên nghiệp và trang trí bảng hiệu cafe đẹp mắt.</p>
+                <p>• <strong>Định mức:</strong> Đơn hàng từ 10kg được tính giá sỉ quán. Đơn từ 30kg hưởng mức chiết khấu tối đa 30%.</p>
+                <p>• <strong>Hỗ trợ:</strong> Tặng mẫu thử (sampling) cho quán tổ chức ngày khai trương dùng thử miễn phí cho khách hàng.</p>
+                <p>• <strong>Dịch vụ:</strong> Định kỳ có nhân viên đến kiểm tra máy pha, dụng cụ và tư vấn điều chỉnh độ mịn cà phê chuẩn vị.</p>
+                <a href="https://m.me/1003418946177388" target="_blank" class="block w-full bg-orange-600 text-white text-center py-4 rounded-xl font-black uppercase text-xs mt-6">Liên hệ hỗ trợ đại lý</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-npp" class="modal-overlay" onclick="handleOutsideClick(event, 'modal-npp')">
+        <div class="modal-content p-8 border-t-8 border-yellow-600">
+            <div class="close-modal" onclick="closeModal('modal-npp')"><i class="fa-solid fa-xmark"></i></div>
+            <h3 class="text-2xl font-black text-red-950 uppercase italic mb-6">Chính sách NPP Độc Quyền</h3>
+            <div class="text-sm text-gray-600 space-y-4 italic leading-relaxed">
+                <p>• <strong>Độc quyền:</strong> Bảo hộ khu vực huyện/tỉnh. Công ty cam kết không cung cấp hàng cho bất kỳ đơn vị nào khác trong vùng của NPP.</p>
+                <p>• <strong>Cơ cấu giá:</strong> NPP nhập giá gốc sản xuất, biên lợi nhuận cao để NPP tự phát triển hệ thống đại lý cấp 2, cấp 3 bên dưới.</p>
+                <p>• <strong>Quảng bá:</strong> Công ty hỗ trợ 100% ngân sách quảng cáo trực tuyến tại khu vực của NPP để tìm kiếm khách hàng tiềm năng.</p>
+                <p>• <strong>Hậu mãi:</strong> NPP được tham gia các chuyến tham quan vùng nguyên liệu và du lịch cùng Ban lãnh đạo công ty hàng năm.</p>
+                <a href="tel:0852494694" class="block w-full bg-yellow-600 text-red-950 text-center py-4 rounded-xl font-black uppercase text-xs mt-6 tracking-widest shadow-lg">GỌI GIÁM ĐỐC: 0852.494.694</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function handleOutsideClick(e, id) {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeModal(id);
+            }
+        }
+    </script>
+    <script src="js/data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
