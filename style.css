@@ -1,0 +1,301 @@
+/* 1. Hiệu ứng cuộn mượt (Cho các nút Slider) */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 2. Cố định Sidebar khi cuộn trang */
+@media (min-width: 1024px) {
+    aside {
+        position: sticky;
+        top: 110px;
+    }
+}
+
+/* 4. Hiệu ứng danh mục */
+aside ul li {
+    transition: all 0.3s ease;
+}
+
+aside ul li:hover {
+    padding-left: 8px;
+    border-left: 4px solid #7a0b0b; 
+}
+
+/* 5. Màu sắc chủ đạo thương hiệu */
+.bg-red-900 {
+    background-color: #7a0b0b !important;
+}
+
+.text-red-950 {
+    color: #450a0a;
+}
+
+/* 6. Hiệu ứng Slider */
+#slider {
+    will-change: transform;
+    display: flex;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider-dot {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* 7. Menu Mobile */
+#mobile-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+/* 8. Tối ưu ảnh sản phẩm */
+.product-item img {
+    mix-blend-mode: multiply;
+}
+
+/* Khoảng cách cuộn để không bị che bởi Header */
+.scroll-mt-24 {
+    scroll-margin-top: 100px;
+}
+
+/* Tùy chỉnh ô tìm kiếm */
+#search-box {
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* ========================================= */
+/* CODE CHỨC NĂNG XEM THÊM / THU GỌN MENU   */
+/* ========================================= */
+
+/* 1. Ẩn nút checkbox đi (chỉ dùng để bắt sự kiện click) */
+#toggle-input {
+    display: none;
+}
+
+/* 2. Mặc định ẩn 2 mục cuối */
+.item-hidden {
+    display: none;
+}
+
+/* 3. Khi checkbox được check -> Tìm các mục ẩn nằm cùng cấp và hiện lên */
+#toggle-input:checked ~ .item-hidden {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out; /* Hiệu ứng hiện dần nhẹ nhàng */
+}
+
+/* 4. Xử lý đổi chữ Xem thêm/Thu gọn */
+.text-collapse {
+    display: none; /* Mặc định ẩn chữ Thu gọn */
+}
+
+/* Khi đã mở (checked): Ẩn chữ "Xem thêm" */
+#toggle-input:checked ~ li label .text-expand {
+    display: none;
+}
+
+/* Khi đã mở (checked): Hiện chữ "Thu gọn" */
+#toggle-input:checked ~ li label .text-collapse {
+    display: inline;
+}
+
+/* ========================================= */
+/* CODE THANH THÔNG BÁO CHẠY (BẢN SỬA LỖI)  */
+/* ========================================= */
+
+/* 1. Khung bao ngoài (Cắt phần thừa) */
+.ticker-container {
+    width: 100%;
+    overflow: hidden; /* Ẩn chữ tràn ra ngoài */
+    background-color: #eab308; /* Màu vàng thương hiệu */
+    border-bottom: 1px solid #ca8a04;
+    position: relative;
+    z-index: 60;
+    line-height: 1.5; /* Căn chỉnh dòng */
+}
+
+/* 2. Trục chạy (Chứa 2 bản sao nội dung) */
+.ticker-wrapper {
+    display: flex; /* Xếp ngang hàng */
+    width: fit-content; /* Ôm sát nội dung */
+    /* Chạy từ 0 đến -50% (độ dài của 1 bản sao) */
+    animation: ticker-scroll 25s linear infinite; 
+}
+
+/* Tạm dừng khi rê chuột vào */
+.ticker-container:hover .ticker-wrapper {
+    animation-play-state: paused;
+}
+
+/* 3. Khối nội dung (Gom nhóm các tin) */
+.ticker-content {
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Không xuống dòng */
+}
+
+/* 4. Định dạng từng mục tin */
+.ticker-item {
+    padding: 0 2rem; /* Khoảng cách giữa các tin */
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #450a0a; /* Màu đỏ đậm */
+    display: inline-flex;
+    align-items: center;
+}
+
+/* 5. Logic chuyển động (KEYFRAME QUAN TRỌNG) */
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Dịch chuyển sang trái đúng 50% (tức là hết 1 bản sao) 
+           rồi lập tức quay về 0 để tạo vòng lặp vô tận */
+        transform: translateX(-50%); 
+    }
+}
+
+/* ========================================= */
+/* CSS CHO POPUP (ĐÃ TỐI ƯU & SỬA LỖI)       */
+/* ========================================= */
+
+/* 1. Hiệu ứng trồi lên và phóng to nhẹ */
+@keyframes popupIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-popup {
+    animation: popupIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 2. Ẩn/Hiện Popup */
+#promo-popup.hidden {
+    display: none !important;
+}
+
+#promo-popup:not(.hidden) {
+    display: flex !important;
+}
+
+/* 3. Tối ưu cuộn trên điện thoại nhỏ */
+#promo-popup .max-w-4xl {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* 4. Hiệu ứng Lấp Lánh (Shine) cho nút "Sản phẩm mới" */
+.btn-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-shine::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(30deg);
+    transition: none;
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { left: -60%; }
+    20% { left: 120%; }
+    100% { left: 120%; }
+}
+
+/* ========================================= */
+/* NÚT LIÊN HỆ (ZALO/PHONE)                  */
+/* ========================================= */
+.fixed-contact-group {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+    align-items: flex-end;
+}
+
+.floating-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 5px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    width: 50px;
+    white-space: nowrap;
+}
+
+.floating-btn:hover {
+    width: 180px;
+    padding-right: 20px;
+}
+
+.floating-btn .icon-holder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    font-size: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.phone-btn .icon-holder {
+    background-color: #dc2626;
+    animation: phone-shake 1.5s infinite;
+}
+
+.messenger-btn .icon-holder {
+    background-color: #0084FF;
+}
+
+.floating-btn .text-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
+}
+
+.floating-btn:hover .text-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@keyframes phone-shake {
+    0% { transform: rotate(0) scale(1); }
+    10% { transform: rotate(-25deg); }
+    20% { transform: rotate(25deg); }
+    30% { transform: rotate(-25deg); }
+    40% { transform: rotate(25deg); }
+    50% { transform: rotate(0); }
+    100% { transform: rotate(0); }
+}
