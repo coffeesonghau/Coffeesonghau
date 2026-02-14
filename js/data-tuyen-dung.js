@@ -26,7 +26,7 @@ const jobData = {
     },
     'sales': {
         title: 'Nhân viên Kinh Doanh (Sales thị trường)',
-        salary: 'Lương cứng + Hoa hồng (Thu nhập 5-15tr)',
+        salary: 'Lương cứng + lương theo quý + Hoa hồng (Thu nhập cao)',
         location: 'Bạc Liêu, Cà Mau, Sóc Trăng',
         desc: [
             'Tìm kiếm khách hàng mới (Đại lý tạp hóa, Quán cà phê, Nhà hàng).',
@@ -42,14 +42,12 @@ const jobData = {
         ],
         benefit: [
             'Thu nhập không giới hạn theo năng lực.',
-            'Chế độ xăng xe, điện thoại.',
-            'Được hỗ trợ data khách hàng tiềm năng.',
             'Cơ hội trở thành Giám sát kinh doanh khu vực.'
         ]
     },
     'phucvu': {
         title: 'Nhân viên Phục vụ (Part-time)',
-        salary: 'Khởi điểm: 15.000đ/giờ',
+        salary: 'Khởi điểm: 16.000đ/giờ',
         location: 'TP. Bạc Liêu (Làm tại quán)',
         desc: [
             'Chào đón khách hàng, order món tại bàn.',

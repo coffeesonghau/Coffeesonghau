@@ -109,3 +109,19 @@
     background: #7a0b0b;
     color: #fff;
 }
+/* --- TÍNH NĂNG ẨN THÔNG TIN CHI TIẾT KHI THU GỌN --- */
+/* Khi khối content đang có class 'collapsed', thì khối 'detail-block-hidden' sẽ bị ẩn hoàn toàn */
+.desc-content.collapsed .detail-block-hidden {
+    display: none;
+}
+
+/* Khi mở rộng thì hiện lại */
+.desc-content.expanded .detail-block-hidden {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

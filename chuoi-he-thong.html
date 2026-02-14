@@ -11,20 +11,50 @@
     <link href="./style.css" rel="stylesheet">
 
     <style>
-        /* Hiệu ứng hiện dần khi lọc */
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        /* Hiệu ứng hiện dần */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .store-item { animation: fadeInScale 0.4s ease-out; }
-        .store-hidden { display: none !important; }
+        .store-item { animation: fadeIn 0.4s ease-out; }
+        
+        /* Style cho nút phân trang */
+        .pagination-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+        }
+        .pagination-btn:hover {
+            border-color: #7a0b0b;
+            color: #7a0b0b;
+        }
+        .pagination-btn.active {
+            background-color: #7a0b0b;
+            color: white;
+            border-color: #7a0b0b;
+        }
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
         .filter-btn.active {
             background-color: #7a0b0b;
             color: white;
             border-color: #7a0b0b;
         }
         
-        /* --- CSS CHO PHÂN CÁCH --- */
         .section-divider {
             position: relative;
             text-align: center;
@@ -53,8 +83,7 @@
 <body class="bg-[#fcfcfc] text-gray-900 flex flex-col min-h-screen">
 
     <header class="bg-white sticky top-0 z-50 shadow-sm">
-        <div
-            class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
+        <div class="bg-red-950 text-white text-[10px] py-2 px-8 flex justify-between uppercase font-bold tracking-widest">
             <span>Coffee Sông Hậu</span>
             <span>Hotline: 0852.494.694</span>
         </div>
@@ -66,130 +95,76 @@
                 <span class="text-yellow-600 ml-2">Sông Hậu</span>
             </div>
 
-            <div
-                class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
-
+            <div class="hidden lg:flex space-x-8 text-[11px] font-bold uppercase tracking-wider text-gray-600 items-center h-full">
                 <a href="index.html" class="hover:text-red-900 py-4">Trang Chủ</a>
-
                 <div class="relative group h-full flex items-center">
                     <a href="sanpham.html" class="hover:text-red-900 cursor-pointer flex items-center gap-1 py-4">
                         Sản phẩm <i class="fa-solid fa-chevron-down text-[9px] mt-0.5"></i>
                     </a>
-                    <div
-                        class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
-                        <a href="index.html#grid-cafe-hat"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê Hạt </a>
-                        <a href="#"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê Bột</a>
-                        <a href="nuoc-da.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Nước
-                            Đá Viên</a>
-                        <a href="sanpham.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tất
-                            Cả Sản Phẩm</a>
+                    <div class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
+                        <a href="index.html#grid-cafe-hat" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà Phê Hạt </a>
+                        <a href="index.html#grid-rang-xay" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà Phê Rang Xay</a>
+                        <a href="nuoc-da.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Nước Đá Viên</a>
+                        <a href="sanpham.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tất Cả Sản Phẩm</a>
                     </div>
                 </div>
-
                 <div class="relative group h-full flex items-center">
                     <a href="#" class="hover:text-red-900 cursor-pointer flex items-center gap-1 py-4">
                         Dịch vụ <i class="fa-solid fa-chevron-down text-[9px] mt-0.5"></i>
                     </a>
-                    <div
-                        class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
-                        <a href="chuoi-he-thong.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Chuỗi
-                            Cà Phê</a>
-                        <a href="gia-cong.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Gia
-                            Công</a>
-                        <a href="gift.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Khuyến
-                            Mãi</a>
-                        <a href="tuyen-dung.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tuyển
-                            Dụng</a>
+                    <div class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-b-lg border-t-2 border-red-900 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
+                        <a href="chuoi-he-thong.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Chuỗi Cà Phê</a>
+                        <a href="gia-cong.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Gia Công</a>
+                        <a href="gift.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Khuyến Mãi</a>
+                        <a href="tuyen-dung.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tuyển Dụng</a>
+                        <a href="tintuc.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tin Tức</a>
                     </div>
                 </div>
-
                 <a href="gift.html" class="hover:text-red-900 py-4">Quà tặng</a>
-
                 <a href="nhuong-quyen.html" class="hover:text-red-900 py-4">Nhượng quyền</a>
             </div>
 
             <div class="flex items-center space-x-4">
-                <div id="search-box"
-                    class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
-                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..."
-                        class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
+                <div id="search-box" class="hidden absolute top-full right-4 bg-white border border-gray-200 p-2 shadow-xl rounded-lg z-[60] mt-2 w-64">
+                    <input type="text" id="search-input" placeholder="Tìm sản phẩm..." class="w-full px-3 py-2 text-sm border-none focus:ring-0 outline-none">
                 </div>
-
-                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2">
-                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
-                </button>
-
-                <button id="menu-btn" class="lg:hidden text-red-950 p-2">
-                    <i class="fa-solid fa-bars text-2xl"></i>
-                </button>
+                <button id="search-toggle-btn" class="text-gray-600 hover:text-red-900 p-2"><i class="fa-solid fa-magnifying-glass text-lg"></i></button>
+                <button id="menu-btn" class="lg:hidden text-red-950 p-2"><i class="fa-solid fa-bars text-2xl"></i></button>
             </div>
         </div>
-
-        <div id="mobile-menu"
-            class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6 max-h-[80vh] overflow-y-auto">
+        
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 py-6 max-h-[80vh] overflow-y-auto">
             <div class="flex flex-col space-y-2 text-[11px] font-bold uppercase tracking-wider text-gray-600">
-
-                <a href="index.html" class="py-2 border-b border-gray-50 hover:text-red-900">Trang Chủ</a>
-
-                <div class="group-menu">
-                    <button
-                        class="w-full flex justify-between items-center py-2 border-b border-gray-50 hover:text-red-900 focus:outline-none uppercase"
-                        onclick="toggleSubMenu(this)">
-                        <span>Sản Phẩm</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
-                    </button>
-                    <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
-                        <a href="index.html#grid-cafe-hat"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê Hạt</a>
-                        <a href="#"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà
-                            Phê Bột</a>
-                        <a href="nuoc-da.html"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Nước
-                            Đá Viên</a>
-                        <a href="index.html#grid-best-seller"
-                            class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 normal-case font-medium text-sm text-gray-600">Tất
-                            Cả Sản Phẩm</a>
-                    </div>
-                </div>
-
-                <div class="group-menu">
-                    <button
-                        class="w-full flex justify-between items-center py-2 border-b border-gray-50 hover:text-red-900 focus:outline-none uppercase"
-                        onclick="toggleSubMenu(this)">
-                        <span>Dịch vụ</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
-                    </button>
-                    <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
-                        <a href="chuoi-he-thong.html"
-                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Chuỗi
-                            Cà Phê</a>
-                        <a href="gia-cong.html"
-                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Gia
-                            Công</a>
-                        <a href="gift.html"
-                            class="block py-3 border-b border-gray-100 text-gray-500 hover:text-red-900 normal-case">Khuyến
-                            Mãi</a>
-                        <a href="tuyen-dung.html" class="block py-3 text-gray-500 hover:text-red-900 normal-case">Tuyển
-                            Dụng</a>
-                    </div>
-                </div>
-
-                <a href="gift.html" class="py-2 border-b border-gray-50 hover:text-red-900">Quà tặng</a>
-                <a href="nhuong-quyen.html" class="py-2 hover:text-red-900">Nhượng quyền</a>
-            </div>
-        </div>
+               <a href="index.html" class="py-2 border-b border-gray-50 hover:text-red-900">Trang Chủ</a>
+               <div class="group-menu">
+                   <button class="w-full flex justify-between items-center py-2 border-b border-gray-50 hover:text-red-900 focus:outline-none uppercase" onclick="toggleSubMenu(this)">
+                       <span>Sản Phẩm</span>
+                       <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                   </button>
+                   <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
+                       <a href="index.html#grid-cafe-hat" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà Phê Hạt</a>
+                       <a href="index.html#grid-rang-xay" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Cà Phê Rang Xay</a>
+                       <a href="nuoc-da.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Nước Đá Viên</a>
+                       <a href="index.html#grid-best-seller" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 normal-case font-medium text-sm text-gray-600">Tất Cả Sản Phẩm</a>
+                   </div>
+               </div>
+               <div class="group-menu">
+                   <button class="w-full flex justify-between items-center py-2 border-b border-gray-50 hover:text-red-900 focus:outline-none uppercase" onclick="toggleSubMenu(this)">
+                       <span>Dịch vụ</span>
+                       <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                   </button>
+                   <div class="sub-menu hidden pl-4 bg-gray-50 rounded-lg mt-1 overflow-hidden transition-all">
+                       <a href="chuoi-he-thong.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Chuỗi Cà Phê</a>
+                       <a href="gia-cong.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Gia Công</a>
+                       <a href="gift.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Khuyến Mãi</a>
+                       <a href="tuyen-dung.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tuyển Dụng</a>
+                       <a href="tintuc.html" class="block px-4 py-3 hover:bg-red-50 hover:text-red-900 border-b border-gray-100 normal-case font-medium text-sm text-gray-600">Tin Tức</a>
+                   </div>
+               </div>
+               <a href="gift.html" class="py-2 border-b border-gray-50 hover:text-red-900">Quà tặng</a>
+               <a href="nhuong-quyen.html" class="py-2 hover:text-red-900">Nhượng quyền</a>
+           </div>
+       </div>
     </header>
 
     <div class="relative w-full h-72 bg-gray-900 overflow-hidden">
@@ -213,16 +188,16 @@
                 </div>
 
                 <div class="w-full md:w-2/3 flex flex-wrap gap-2 justify-center md:justify-end" id="filter-container">
-                    <button class="filter-btn active px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-transparent bg-gray-100 text-gray-600 hover:bg-gray-200" onclick="filterStores('all', this)">
+                    <button class="filter-btn active px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-transparent bg-gray-100 text-gray-600 hover:bg-gray-200" onclick="applyFilter('all', this)">
                         Tất cả
                     </button>
-                    <button class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900" onclick="filterStores('bac-lieu', this)">
+                    <button class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900" onclick="applyFilter('bac-lieu', this)">
                         Bạc Liêu
                     </button>
-                    <button class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900" onclick="filterStores('ca-mau', this)">
+                    <button class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900" onclick="applyFilter('ca-mau', this)">
                         Cà Mau
                     </button>
-                    <button class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900" onclick="filterStores('soc-trang', this)">
+                    <button class="filter-btn px-5 py-2.5 rounded-lg text-xs font-bold uppercase transition border border-gray-200 text-gray-600 hover:border-red-900 hover:text-red-900" onclick="applyFilter('soc-trang', this)">
                         Sóc Trăng
                     </button>
                 </div>
@@ -230,13 +205,13 @@
 
             <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-500">
                 <span>Dữ liệu được cập nhật liên tục.</span>
-                <span id="result-count" class="font-bold text-red-900">Đang hiển thị tất cả địa điểm</span>
+                <span id="result-count" class="font-bold text-red-900">Đang hiển thị...</span>
             </div>
         </div>
     </section>
 
     <section class="container mx-auto px-4 py-12 max-w-6xl min-h-[400px]">
-        <div id="store-list">
+        <div id="store-main-container">
             
             <div class="mb-12">
                 <div class="flex items-center gap-4 mb-8">
@@ -244,193 +219,11 @@
                     <h2 class="text-2xl md:text-3xl font-black text-red-950 uppercase tracking-tight">Hệ Thống Trực Thuộc</h2>
                 </div>
 
-                <div class="store-item relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 mb-8 flex flex-col md:flex-row group"
-                    data-city="bac-lieu" data-search="cong ty nam duong tru so chinh bac lieu">
-                    
-                    <div class="absolute top-0 right-0 bg-red-900 text-white text-[10px] font-bold px-4 py-1.5 rounded-bl-xl uppercase z-10 tracking-wider">
-                        <i class="fa-solid fa-star text-yellow-400 mr-1"></i> Trụ sở chính
-                    </div>
+                <div id="hq-container"></div>
 
-                    <div class="w-full md:w-5/12 h-64 md:h-auto overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent md:bg-none"></div>
-                    </div>
-
-                    <div class="flex-1 p-6 md:p-10 flex flex-col justify-center bg-gradient-to-br from-white to-red-50">
-                        <h4 class="text-xs font-bold text-red-600 uppercase tracking-[0.2em] mb-2">Công Ty TNHH MTV SX TM DV</h4>
-                        <h2 class="text-3xl font-black text-gray-900 uppercase mb-4 leading-none group-hover:text-red-900 transition">Nam Dương</h2>
-
-                        <div class="space-y-3 mb-8">
-                            <p class="text-gray-600 text-sm flex items-start gap-3">
-                                <i class="fa-solid fa-map-location-dot mt-1 text-red-900"></i>
-                                <span>188+181, Đường 23/8, Khóm Cầu Sập, Phường 8, TP. Bạc Liêu, Tỉnh Cà Mau</span>
-                            </p>
-                            <p class="text-gray-600 text-sm flex items-center gap-3">
-                                <i class="fa-solid fa-phone text-red-900"></i>
-                                <span class="font-bold text-lg text-gray-800">0852.494.694</span>
-                            </p>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <a href="https://maps.app.goo.gl/sWArB5r16oyuGpzUA" target="_blank"
-                                class="px-6 py-3 bg-red-900 text-white text-center rounded-lg text-xs font-bold uppercase hover:bg-black transition shadow-lg shadow-red-900/20">
-                                <i class="fa-solid fa-location-arrow mr-2"></i> Chỉ đường
-                            </a>
-                            <a href="nhuong-quyen.html"
-                                class="px-6 py-3 bg-white border border-red-900 text-red-900 text-center rounded-lg text-xs font-bold uppercase hover:bg-red-50 transition">
-                                <i class="fa-solid fa-handshake mr-2"></i> Liên hệ hợp tác
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="song hau 12 cau sap phuong 8 bac lieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhau12.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu 12 - Cầu Sập</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>188+181, Đ.23/8, P.8, TP. Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/z11znAq7eE6X5mtP7" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                         data-city="bac-lieu" data-search="song hau hoang phat kdc hoang phat nguyen van linh">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/Songhauhoangphat.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu Hoàng Phát</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Nguyễn Văn Linh, P.1, TP. Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/HX8h9LM5ZSu3RrAE7" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="song hau special song hau phuong 2 duong ninh binh">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhaup2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu Special</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Đường Ninh Bình, P.2, TP. Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/2UypPNgP3ZjJsWZCA" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="song hau 2 ton duc thang duong cach mang duong ba trieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhau2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu 2</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Đường Cách Mạng, P.1, TP. Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/jZYdeBkgCuJzW98LA" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="song hau cau so 2 vinh my b hoa binh bac lieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhaucauso2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu Cầu Số 2</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Xã Vĩnh Mỹ B, Hòa Bình, Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/EzeSKWa5pLxG2gdr8" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="song hau 10 chau van dang phuong 1 bac lieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhau10.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu 10</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Châu Văn Đặng, P.1, TP. Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/RKSbmoLqhDKKPfLm6" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                     <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                     data-city="bac-lieu" data-search="song hau 11 tran huynh phuong 1 bac lieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhau11.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu 11</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Trần Huỳnh, Phường 1, Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/pAUcUc4CjLTSYzbu9" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="song hau phuong 3 ba trieu phuong 3 bac lieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/songhaup3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu P.3</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Bà Triệu, Phường 3, TP. Bạc Liêu</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/DHt4iLCEiSGepEQz6" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="am thuc song hau vong xoay ton duc thang vo van kiet">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/amthucsonghau.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Nhà hàng</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Ẩm Thực Sông Hậu</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Vòng xoay Tôn Đức Thắng, P.7, BL</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/gcN9vA2XzsJdc4GW9" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <div id="system-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                
+                <div id="system-pagination" class="flex justify-center gap-2 mt-8"></div>
             </div>
 
             <div class="section-divider">
@@ -443,47 +236,15 @@
                     <h2 class="text-2xl md:text-3xl font-black text-gray-800 uppercase tracking-tight">Hệ Thống Nhượng Quyền</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="bac-lieu" data-search="nhuong quyen song hau phuoc long bac lieu">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="img/SHphuoclongNQ.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-yellow-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Nhượng quyền</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Sông Hậu Phước Long</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>TT. Phước Long, Huyện Phước Long, BL</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>
-                                <a href="https://maps.app.goo.gl/s12ovPaD52eF9mwy7" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                        data-city="ca-mau" data-search="nhuong quyen song hau nam can ca mau">
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            <div class="absolute top-2 left-2 bg-yellow-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Nhượng quyền</div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">Đang cập nhật</h3>
-                            <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>Đang cập nhật</span></p>
-                            <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> non </span>
-                                <a href="https://maps.app.goo.gl/z11znAq7eE6X5mtP71" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <div id="franchise-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                
+                <div id="franchise-pagination" class="flex justify-center gap-2 mt-8"></div>
             </div>
 
             <div id="no-result" class="hidden text-center py-12">
                 <i class="fa-solid fa-map-location-dot text-6xl text-gray-200 mb-4"></i>
                 <p class="text-gray-500 font-bold">Không tìm thấy địa điểm nào phù hợp.</p>
-                <button onclick="filterStores('all', document.querySelector('.filter-btn'))" class="mt-4 text-red-900 underline text-sm hover:text-red-700">Xem tất cả cửa hàng</button>
+                <button onclick="applyFilter('all', document.querySelector('.filter-btn'))" class="mt-4 text-red-900 underline text-sm hover:text-red-700">Xem tất cả cửa hàng</button>
             </div>
 
         </div>
@@ -497,133 +258,78 @@
                     Công Ty TNHH TM-DV SX Nam Dương<br>
                     MST: 1900669356<br>
                     Đơn vị hoạt động lĩnh vực sản xuất, phân phối và nhượng quyền cà phê Sông Hậu.</p>
-
                 <div class="flex justify-start items-center gap-6 my-4">
-
-                    <a href="#" target="_blank">
-                        <img src="logo/2.png" alt="Logo 1" class="h-10 w-auto object-contain">
-                    </a>
-
-                    <a href="#" target="_blank">
-                        <img src="logo/3.png" alt="Logo 2" class="h-10 w-auto object-contain">
-                    </a>
-
+                    <a href="#" target="_blank"><img src="logo/2.png" alt="Logo 1" class="h-10 w-auto object-contain"></a>
+                    <a href="#" target="_blank"><img src="logo/3.png" alt="Logo 2" class="h-10 w-auto object-contain"></a>
                 </div>
             </div>
-
             <div>
-                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Chính sách hỗ
-                    trợ</h4>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Chính sách hỗ trợ</h4>
                 <ul class="text-sm text-gray-400 space-y-3">
-                    <li><a href="chinh-sach-bao-mat.html" class="hover:text-yellow-600 transition">Chính sách bảo
-                            mật</a></li>
-                    <li><a href="chinh-sach-doi-tra.html" class="hover:text-yellow-600 transition">Chính sách đổi
-                            trả</a></li>
-                    <li><a href="chinh-sach-thanh-toan-van-chuyen.html" class="hover:text-yellow-600 transition">Thanh
-                            toán & Vận chuyển</a></li>
-                    <li><a href="dieu-khoan-su-dung.html" class="hover:text-yellow-600 transition">Điều khoản sử
-                            dụng</a></li>
-                    <li><a href="huong-dan-mua-hang.html" class="hover:text-yellow-600 transition">Hướng dẫn mua
-                            hàng</a>
-                    </li>
+                    <li><a href="chinh-sach-bao-mat.html" class="hover:text-yellow-600 transition">Chính sách bảo mật</a></li>
+                    <li><a href="chinh-sach-doi-tra.html" class="hover:text-yellow-600 transition">Chính sách đổi trả</a></li>
+                    <li><a href="chinh-sach-thanh-toan-van-chuyen.html" class="hover:text-yellow-600 transition">Thanh toán & Vận chuyển</a></li>
+                    <li><a href="dieu-khoan-su-dung.html" class="hover:text-yellow-600 transition">Điều khoản sử dụng</a></li>
+                    <li><a href="huong-dan-mua-hang.html" class="hover:text-yellow-600 transition">Hướng dẫn mua hàng</a></li>
                 </ul>
             </div>
-
             <div>
-                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee
-                    Sông Hậu</h4>
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Về Coffee Sông Hậu</h4>
                 <ul class="text-sm text-gray-400 space-y-3">
                     <li><a href="story.html" class="hover:text-yellow-600 transition">Câu chuyện thương hiệu</a></li>
                     <li><a href="about.html" class="hover:text-yellow-600 transition">Về chúng tôi</a></li>
                     <li><a href="contact.html" class="hover:text-yellow-600 transition">Liên hệ</a></li>
                 </ul>
             </div>
-
             <div>
-                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ
-                </h4>
-
+                <h4 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Liên hệ</h4>
                 <div class="text-sm text-gray-400 space-y-4">
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
-                        <span>Trụ sở chính: 188+181, Đường 23/8, <br> Khóm Trà Kha, Phường Bạc Liêu, Tỉnh Cà Mau</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-phone text-yellow-600"></i>
-                        <span>0852.494.694</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-envelope text-yellow-600"></i>
-                        <span>congtynamduongbl@gmail.com</span>
-                    </div>
+                    <div class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1 text-yellow-600"></i><span>Trụ sở chính: 188+181, Đường 23/8, <br> Khóm Trà Kha, Phường Bạc Liêu, Tỉnh Cà Mau</span></div>
+                    <div class="flex items-center gap-3"><i class="fas fa-phone text-yellow-600"></i><span>0852.494.694</span></div>
+                    <div class="flex items-center gap-3"><i class="fas fa-envelope text-yellow-600"></i><span>congtynamduongbl@gmail.com</span></div>
                 </div>
-
                 <div class="flex gap-3 mt-6">
-                    <a href="https://www.facebook.com/profile.php?id=61585402033689" target="_blank"
-                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-all duration-300 border border-white/10 group">
-                        <i class="fa-brands fa-facebook-f group-hover:scale-110 transition-transform"></i>
-                    </a>
-
-                    <a href="mailto:congtynamduongbl@gmail.com"
-                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-yellow-600 hover:text-white transition-all duration-300 border border-white/10 group">
-                        <i class="fa-solid fa-envelope group-hover:scale-110 transition-transform"></i>
-                    </a>
-
-                    <a href="tel:0852494694"
-                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white transition-all duration-300 border border-white/10 group">
-                        <i class="fa-solid fa-phone group-hover:scale-110 transition-transform"></i>
-                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61585402033689" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-all duration-300 border border-white/10 group"><i class="fa-brands fa-facebook-f group-hover:scale-110 transition-transform"></i></a>
+                    <a href="mailto:congtynamduongbl@gmail.com" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-yellow-600 hover:text-white transition-all duration-300 border border-white/10 group"><i class="fa-solid fa-envelope group-hover:scale-110 transition-transform"></i></a>
+                    <a href="tel:0852494694" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white transition-all duration-300 border border-white/10 group"><i class="fa-solid fa-phone group-hover:scale-110 transition-transform"></i></a>
                 </div>
             </div>
         </div>
-        </div>
-
         <div class="container mx-auto px-4 mt-6 pt-6 border-t border-white/50 text-center">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col items-center text-center gap-6">
                     <div class="w-full space-y-3 text-xs text-gray-400">
-                        <h4 class="text-sm font-bold text-white uppercase mb-2 tracking-wider">
-                            CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ SẢN XUẤT NAM DƯƠNG
-                        </h4>
-
-                        <p class="flex justify-center gap-2">
-                            <i class="fa-solid fa-location-dot mt-0.5 text-yellow-600"></i>
-                            <span>
-                                <span class="font-bold text-gray-300">Địa chỉ:</span>
-                                Số 180+181, đường 23/8, Khóm Trà Kha, Phường Bạc Liêu, Tỉnh Cà Mau, Việt Nam
-                            </span>
-                        </p>
-
-                        <div class="flex flex-col md:flex-row justify-center gap-1 md:gap-8">
-                            <p><span class="font-bold text-gray-300">Mã số thuế:</span> 1900669356</p>
-                            <p><span class="font-bold text-gray-300">Hotline:</span> 0852 494 694</p>
-                            <p><span class="font-bold text-gray-300">Email:</span> congtynamduongbl@gmail.com</p>
-                        </div>
-
-                        <p>
-                            <span class="font-bold text-gray-300">Giấy chứng nhận ĐKKD số:</span> 1900669356 do SỞ TÀI
-                            CHÍNH TỈNH CÀ MAU PHÒNG ĐĂNG KÝ KINH DOANH cấp đăng ký thay đổi lần thứ 2 ngày 29/09/2025.
-                        </p>
-
-                        <div class="flex flex-col md:flex-row justify-center gap-1 md:gap-8 pt-1 mt-2">
-                            <p><span class="font-bold text-gray-300">Người đại diện:</span> Giám Đốc LÊ NAM DƯƠNG</p>
-                            <p><span class="font-bold text-gray-300">Chịu trách nhiệm nội dung:</span> Ban Giám Đốc</p>
-                        </div>
+                        <h4 class="text-sm font-bold text-white uppercase mb-2 tracking-wider">CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ SẢN XUẤT NAM DƯƠNG</h4>
+                        <p class="flex justify-center gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-yellow-600"></i><span><span class="font-bold text-gray-300">Địa chỉ:</span> Số 180+181, đường 23/8, Khóm Trà Kha, Phường Bạc Liêu, Tỉnh Cà Mau, Việt Nam</span></p>
+                        <div class="flex flex-col md:flex-row justify-center gap-1 md:gap-8"><p><span class="font-bold text-gray-300">Mã số thuế:</span> 1900669356</p><p><span class="font-bold text-gray-300">Hotline:</span> 0852 494 694</p><p><span class="font-bold text-gray-300">Email:</span> congtynamduongbl@gmail.com</p></div>
+                        <p><span class="font-bold text-gray-300">Giấy chứng nhận ĐKKD số:</span> 1900669356 do SỞ TÀI CHÍNH TỈNH CÀ MAU PHÒNG ĐĂNG KÝ KINH DOANH cấp đăng ký thay đổi lần thứ 2 ngày 29/09/2025.</p>
+                        <div class="flex flex-col md:flex-row justify-center gap-1 md:gap-8 pt-1 mt-2"><p><span class="font-bold text-gray-300">Người đại diện:</span> Giám Đốc LÊ NAM DƯƠNG</p><p><span class="font-bold text-gray-300">Chịu trách nhiệm nội dung:</span> Ban Giám Đốc</p></div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container mx-auto px-4 mt-4 pt-8 border-t border-white/50 text-center">
-            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]"> © 2025 COFFEE Sông Hậu. All rights
-                reserved.
-            </p>
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]"> © 2025 COFFEE Sông Hậu. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="js/data.js"></script>
+    <script src="js/datachuoihethong.js"></script> 
     <script src="script.js"></script>
 
     <script>
+        // ===========================================
+        // QUẢN LÝ TRẠNG THÁI (STATE MANAGEMENT)
+        // ===========================================
+        const appState = {
+            filterCity: 'all',
+            searchQuery: '',
+            systemPage: 1,
+            franchisePage: 1,
+            itemsPerPage: 6 // 3 ngang x 2 cao = 6 items
+        };
+
+        // Hàm tiện ích: Bỏ dấu tiếng Việt
         function removeVietnameseTones(str) {
             str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
             str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -645,119 +351,284 @@
             return str.toLowerCase();
         }
 
-        function filterStores(city, btnElement) {
-            const items = document.querySelectorAll('.store-item');
-            const buttons = document.querySelectorAll('.filter-btn');
-            const searchInput = document.getElementById('store-search');
-            let count = 0;
+        // Hàm tiện ích: Trạng thái Giờ mở cửa
+        function getOpenStatus() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            // 5:30 -> 330 phút
+            const openMinutes = 5 * 60 + 30;
+            // 21:30 -> 1290 phút
+            const closeMinutes = 21 * 60 + 30;
 
-            buttons.forEach(btn => {
+            const isOpen = currentMinutes >= openMinutes && currentMinutes < closeMinutes;
+            
+            if (isOpen) {
+                return `<span class="text-[10px] font-bold text-green-600 uppercase"><i class="fa-regular fa-clock mr-1"></i> Đang mở cửa</span>`;
+            } else {
+                return `<span class="text-[10px] font-bold text-gray-400 uppercase"><i class="fa-solid fa-store-slash mr-1"></i> Đã đóng cửa</span>`;
+            }
+        }
+
+        // ===========================================
+        // LOGIC LỌC & TÌM KIẾM DỮ LIỆU
+        // ===========================================
+        
+        // 1. Lọc Trụ sở chính (Luôn hiện nếu đúng Filter, không phân trang)
+        function getHeadquarters() {
+            return systemData.filter(store => {
+                if (store.type !== 'headquarters') return false;
+                
+                // Check Khu vực
+                if (appState.filterCity !== 'all' && store.city !== appState.filterCity) return false;
+                
+                // Check Tìm kiếm
+                if (appState.searchQuery) {
+                    const fullText = removeVietnameseTones(store.name + " " + store.address + " " + (store.searchTags || ""));
+                    if (!fullText.includes(appState.searchQuery)) return false;
+                }
+                return true;
+            });
+        }
+
+        // 2. Lấy danh sách Hệ thống hoặc Nhượng quyền (Có lọc)
+        function getFilteredItems(typeGroup) {
+            // typeGroup = 'system' (gồm system + restaurant) HOẶC 'franchise'
+            return systemData.filter(store => {
+                // Phân loại nhóm
+                if (typeGroup === 'franchise') {
+                    if (store.type !== 'franchise') return false;
+                } else {
+                    // Nhóm hệ thống gồm: system và restaurant
+                    if (store.type !== 'system' && store.type !== 'restaurant') return false;
+                }
+
+                // Lọc Khu vực
+                if (appState.filterCity !== 'all' && store.city !== appState.filterCity) return false;
+
+                // Lọc Tìm kiếm
+                if (appState.searchQuery) {
+                    const fullText = removeVietnameseTones(store.name + " " + store.address + " " + (store.searchTags || ""));
+                    if (!fullText.includes(appState.searchQuery)) return false;
+                }
+
+                return true;
+            });
+        }
+
+        // ===========================================
+        // RENDER GIAO DIỆN
+        // ===========================================
+
+        function renderApp() {
+            const hqItems = getHeadquarters();
+            const systemItems = getFilteredItems('system');
+            const franchiseItems = getFilteredItems('franchise');
+
+            const totalCount = hqItems.length + systemItems.length + franchiseItems.length;
+
+            // 1. Cập nhật số lượng
+            const countLabel = document.getElementById('result-count');
+            const noResult = document.getElementById('no-result');
+            const mainContainer = document.getElementById('store-main-container');
+
+            if (countLabel) countLabel.innerText = `Đang hiển thị ${totalCount} địa điểm`;
+
+            if (totalCount === 0) {
+                noResult.classList.remove('hidden');
+                mainContainer.classList.add('hidden');
+            } else {
+                noResult.classList.add('hidden');
+                mainContainer.classList.remove('hidden');
+            }
+
+            // 2. Render Trụ Sở (Không phân trang)
+            renderHeadquarters(hqItems);
+
+            // 3. Render Hệ thống (Có phân trang)
+            renderGridWithPagination(
+                systemItems, 
+                'system-grid', 
+                'system-pagination', 
+                appState.systemPage, 
+                (newPage) => { appState.systemPage = newPage; renderApp(); }
+            );
+
+            // 4. Render Nhượng quyền (Có phân trang)
+            renderGridWithPagination(
+                franchiseItems, 
+                'franchise-grid', 
+                'franchise-pagination', 
+                appState.franchisePage, 
+                (newPage) => { appState.franchisePage = newPage; renderApp(); }
+            );
+        }
+
+        function renderHeadquarters(items) {
+            const container = document.getElementById('hq-container');
+            if (items.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = items.map(store => `
+                <div class="store-item relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 mb-8 flex flex-col md:flex-row group">
+                    <div class="absolute top-0 right-0 bg-red-900 text-white text-[10px] font-bold px-4 py-1.5 rounded-bl-xl uppercase z-10 tracking-wider">
+                        <i class="fa-solid fa-star text-yellow-400 mr-1"></i> Trụ sở chính
+                    </div>
+                    <div class="w-full md:w-5/12 h-64 md:h-auto overflow-hidden relative">
+                        <img src="${store.image}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent md:bg-none"></div>
+                    </div>
+                    <div class="flex-1 p-6 md:p-10 flex flex-col justify-center bg-gradient-to-br from-white to-red-50">
+                        <h4 class="text-xs font-bold text-red-600 uppercase tracking-[0.2em] mb-2">${store.subTitle || 'Trụ sở'}</h4>
+                        <h2 class="text-3xl font-black text-gray-900 uppercase mb-4 leading-none group-hover:text-red-900 transition">${store.name}</h2>
+                        <div class="space-y-3 mb-8">
+                            <p class="text-gray-600 text-sm flex items-start gap-3"><i class="fa-solid fa-map-location-dot mt-1 text-red-900"></i><span>${store.address}</span></p>
+                            <p class="text-gray-600 text-sm flex items-center gap-3"><i class="fa-solid fa-phone text-red-900"></i><span class="font-bold text-lg text-gray-800">${store.phone || ''}</span></p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="${store.mapLink}" target="_blank" class="px-6 py-3 bg-red-900 text-white text-center rounded-lg text-xs font-bold uppercase hover:bg-black transition shadow-lg shadow-red-900/20"><i class="fa-solid fa-location-arrow mr-2"></i> Chỉ đường</a>
+                            <a href="${store.contactLink || '#'}" class="px-6 py-3 bg-white border border-red-900 text-red-900 text-center rounded-lg text-xs font-bold uppercase hover:bg-red-50 transition"><i class="fa-solid fa-handshake mr-2"></i> Liên hệ hợp tác</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGridWithPagination(items, gridId, paginationId, currentPage, onPageChange) {
+            const gridEl = document.getElementById(gridId);
+            const paginationEl = document.getElementById(paginationId);
+            const statusHTML = getOpenStatus();
+
+            // Nếu không có item nào
+            if (items.length === 0) {
+                gridEl.innerHTML = '<p class="text-gray-400 text-sm col-span-full text-center italic">Không tìm thấy địa điểm trong mục này.</p>';
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            // Tính toán phân trang
+            const totalPages = Math.ceil(items.length / appState.itemsPerPage);
+            
+            // Đảm bảo currentPage hợp lệ
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * appState.itemsPerPage;
+            const endIndex = startIndex + appState.itemsPerPage;
+            const itemsToShow = items.slice(startIndex, endIndex);
+
+            // Render Item (Grid)
+            gridEl.innerHTML = itemsToShow.map(store => {
+                let badge = '';
+                if (store.type === 'system') badge = '<div class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Hệ thống</div>';
+                else if (store.type === 'restaurant') badge = '<div class="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Nhà hàng</div>';
+                else if (store.type === 'franchise') badge = '<div class="absolute top-2 left-2 bg-yellow-600 text-white text-[9px] font-bold px-2 py-1 rounded shadow uppercase">Nhượng quyền</div>';
+
+                return `
+                <div class="store-item bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${store.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        ${badge}
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-gray-800 uppercase mb-2 group-hover:text-red-900 transition">${store.name}</h3>
+                        <p class="text-xs text-gray-500 mb-2 flex items-start gap-2"><i class="fa-solid fa-location-dot mt-0.5 text-red-900"></i><span>${store.address}</span></p>
+                        <div class="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
+                            ${statusHTML}
+                            <a href="${store.mapLink}" target="_blank" class="text-red-900 hover:text-black text-lg"><i class="fa-solid fa-diamond-turn-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // Render Nút Phân Trang (Chỉ hiện nếu > 1 trang)
+            if (totalPages > 1) {
+                let paginationHTML = '';
+
+                // Nút Prev
+                paginationHTML += `<button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" onclick="window.changePage('${gridId}', ${currentPage - 1})"><i class="fa-solid fa-chevron-left"></i></button>`;
+
+                // Các nút số trang
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHTML += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="window.changePage('${gridId}', ${i})">${i}</button>`;
+                }
+
+                // Nút Next
+                paginationHTML += `<button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" onclick="window.changePage('${gridId}', ${currentPage + 1})"><i class="fa-solid fa-chevron-right"></i></button>`;
+
+                paginationEl.innerHTML = paginationHTML;
+            } else {
+                paginationEl.innerHTML = '';
+            }
+        }
+
+        // ===========================================
+        // SỰ KIỆN TƯƠNG TÁC (Global Functions)
+        // ===========================================
+
+        // 1. Xử lý đổi trang (Gắn vào window để HTML gọi được)
+        window.changePage = function(gridId, newPage) {
+            if (gridId === 'system-grid') {
+                appState.systemPage = newPage;
+            } else if (gridId === 'franchise-grid') {
+                appState.franchisePage = newPage;
+            }
+            renderApp();
+            // Cuộn nhẹ lên đầu danh sách cho người dùng dễ nhìn
+            const container = document.getElementById(gridId);
+            if (container) {
+                const offset = 150; 
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = container.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        };
+
+        // 2. Xử lý Lọc theo Tỉnh
+        window.applyFilter = function(city, btnElement) {
+            appState.filterCity = city;
+            appState.systemPage = 1;     // Reset về trang 1
+            appState.franchisePage = 1;  // Reset về trang 1
+            
+            // Update UI Nút bấm
+            document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active', 'bg-red-900', 'text-white', 'border-transparent');
                 btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
             });
-
             if (btnElement) {
                 btnElement.classList.add('active', 'bg-red-900', 'text-white', 'border-transparent');
                 btnElement.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
             }
 
-            if (searchInput) searchInput.value = '';
+            renderApp();
+        };
 
-            items.forEach(item => {
-                const itemCity = item.getAttribute('data-city');
-                if (city === 'all' || itemCity === city) {
-                    item.classList.remove('store-hidden');
-                    // Khi hiện lại, đảm bảo giữ grid layout của cha
-                    item.parentElement.classList.remove('hidden');
-                    count++;
-                } else {
-                    item.classList.add('store-hidden');
-                }
-            });
-
-            updateCount(count);
-        }
-
+        // 3. Xử lý Tìm kiếm
         const searchInput = document.getElementById('store-search');
         if (searchInput) {
             searchInput.addEventListener('keyup', (e) => {
-                const query = removeVietnameseTones(e.target.value);
-                const items = document.querySelectorAll('.store-item');
-                const buttons = document.querySelectorAll('.filter-btn');
-                let count = 0;
-
-                buttons.forEach(btn => btn.classList.remove('active', 'bg-red-900', 'text-white'));
-                if (buttons.length > 0) buttons[0].classList.add('bg-white', 'text-gray-600');
-
-                items.forEach(item => {
-                    const rawSearchData = item.getAttribute('data-search') || '';
-                    const visibleText = item.innerText;
-                    const fullData = rawSearchData + " " + visibleText;
-                    const dataNormalized = removeVietnameseTones(fullData);
-
-                    if (dataNormalized.includes(query)) {
-                        item.classList.remove('store-hidden');
-                        count++;
-                    } else {
-                        item.classList.add('store-hidden');
-                    }
-                });
-
-                updateCount(count);
+                appState.searchQuery = removeVietnameseTones(e.target.value);
+                appState.systemPage = 1; 
+                appState.franchisePage = 1;
+                renderApp();
             });
         }
 
-        function updateCount(count) {
-            const countLabel = document.getElementById('result-count');
-            const noResult = document.getElementById('no-result');
-
-            if (countLabel) countLabel.innerText = `Đang hiển thị ${count} địa điểm`;
-
-            if (count === 0) {
-                if (noResult) noResult.classList.remove('hidden');
-            } else {
-                if (noResult) noResult.classList.add('hidden');
-            }
-        }
-    </script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // CẤU HÌNH GIỜ MỞ CỬA (Thay đổi số ở đây nếu cần)
-        const OPEN_HOUR = 5;   // 5 giờ sáng
-        const OPEN_MINUTE = 30; // 30 phút
-        const CLOSE_HOUR = 21;  // 21 giờ tối (9h tối)
-        const CLOSE_MINUTE = 30; // 30 phút
-
-        // Logic tính toán
-        const now = new Date();
-        const currentMinutes = now.getHours() * 60 + now.getMinutes();
-        const openThreshold = OPEN_HOUR * 60 + OPEN_MINUTE;
-        const closeThreshold = CLOSE_HOUR * 60 + CLOSE_MINUTE;
-        
-        const isOpen = currentMinutes >= openThreshold && currentMinutes < closeThreshold;
-
-        // Tìm tất cả các thẻ hiển thị trạng thái trong danh sách cửa hàng
-        // (Dựa vào cấu trúc HTML ở trên: nó nằm trong thẻ span đầu tiên của div cuối cùng trong .store-item)
-        const storeItems = document.querySelectorAll('.store-item');
-
-        storeItems.forEach(item => {
-            // Tìm thẻ span chứa chữ "Đang mở cửa"
-            // Cách tìm: Vào store-item -> tìm div border-t (phần footer của card) -> lấy span đầu tiên
-            const statusSpan = item.querySelector('.border-t span'); 
-
-            if (statusSpan) {
-                if (isOpen) {
-                    // TRẠNG THÁI MỞ CỬA
-                    statusSpan.className = 'text-[10px] font-bold text-green-600 uppercase transition-colors duration-300';
-                    statusSpan.innerHTML = '<i class="fa-regular fa-clock mr-1"></i> Đang mở cửa';
-                } else {
-                    // TRẠNG THÁI ĐÓNG CỬA
-                    statusSpan.className = 'text-[10px] font-bold text-gray-400 uppercase transition-colors duration-300';
-                    statusSpan.innerHTML = '<i class="fa-solid fa-store-slash mr-1"></i> Đã đóng cửa';
-                }
-            }
+        // ===========================================
+        // KHỞI CHẠY
+        // ===========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApp();
         });
-    });
-</script>
+
+    </script>
 </body>
 </html>

@@ -12,7 +12,7 @@ function getProductImages(product) {
 }
 
 /**
- * 2.1 HÀM MỞ MENU CON TRÊN MOBILE (BỔ SUNG ĐỂ SỬA LỖI)
+ * 2.1 HÀM MỞ MENU CON TRÊN MOBILE
  */
 function toggleSubMenu(button) {
     const subMenu = button.nextElementSibling;
@@ -21,7 +21,7 @@ function toggleSubMenu(button) {
     if (subMenu) {
         const isHidden = subMenu.classList.contains('hidden');
         
-        // Đóng các sub-menu khác để tránh chồng chéo
+        // Đóng các sub-menu khác
         document.querySelectorAll('.sub-menu').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.group-menu i').forEach(el => el.style.transform = 'rotate(0deg)');
 
@@ -55,6 +55,7 @@ function renderProductDetail() {
 
   const galleryImages = getProductImages(product);
 
+  // Xử lý mô tả
   let descriptionText = `<strong>${product.name}</strong> là sự kết hợp hoàn hảo giữa hương vị truyền thống và công nghệ rang xay hiện đại.`;
   if (product.info && product.info.description) {
     descriptionText = product.info.description;
@@ -64,6 +65,20 @@ function renderProductDetail() {
   if (product.info && product.info.details) {
     detailsText = product.info.details;
   }
+
+  // --- XỬ LÝ PHẦN ĐẶC ĐIỂM NỔI BẬT (HIGHLIGHTS) TỰ ĐỘNG ---
+  let highlightsHTML = "";
+  if (product.info && product.info.highlights && product.info.highlights.length > 0) {
+      const listItems = product.info.highlights.map(text => `
+        <li class="flex items-start text-gray-600">
+            <i class="fas fa-check text-green-500 mr-3 w-4 mt-1 shrink-0"></i> 
+            <span>${text}</span>
+        </li>
+      `).join("");
+      
+      highlightsHTML = `<ul class="space-y-2 mb-3">${listItems}</ul>`;
+  }
+  // ----------------------------------------------------------------
 
   const galleryHTML = `
         <div class="gallery-container">
@@ -80,16 +95,30 @@ function renderProductDetail() {
         </div>
     `;
 
-  const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id && p.price !== 0)
-    .slice(0, 4);
+  // --- LOGIC RANDOM & LỌC ĐA DẠNG ---
+  const currentCategories = Array.isArray(product.category) ? product.category : [product.category];
 
+  let candidates = products.filter((p) => {
+      if (p.id === product.id) return false;
+      if (p.price === 0) return false;
+      const pCategories = Array.isArray(p.category) ? p.category : [p.category];
+      const hasCommonCategory = currentCategories.some(cate => pCategories.includes(cate));
+      return hasCommonCategory;
+  });
+  
+  candidates.sort(() => 0.5 - Math.random());
+  const relatedProducts = candidates.slice(0, 4);
+  // ----------------------------------
+
+  // --- RENDER SẢN PHẨM LIÊN QUAN (ĐÃ CẬP NHẬT UNIT) ---
   const relatedHTML = relatedProducts.map((p) => {
-        // --- SỬA LOGIC GIÁ (RELATED) ---
         let priceDisplay = '';
+        // Unit cho sản phẩm liên quan
+        const smallUnit = p.unit ? `<span class="text-xs font-normal text-gray-500">/${p.unit}</span>` : '';
+
         if (p.price === 1) priceDisplay = '<span class="text-blue-700 font-bold text-sm">Liên hệ</span>';
         else if (p.price === 2) priceDisplay = '<span class="text-orange-600 font-bold text-sm">Sắp ra mắt</span>';
-        else priceDisplay = p.price.toLocaleString() + "đ";
+        else priceDisplay = `${p.price.toLocaleString()}đ ${smallUnit}`;
 
         return `
         <div class="bg-white border border-gray-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer" onclick="window.location.href='product-detail.html?id=${p.id}'">
@@ -103,16 +132,24 @@ function renderProductDetail() {
         </div>
     `}).join("");
 
-    // --- SỬA LOGIC GIÁ (DETAIL MAIN) ---
+    const breadcrumbText = Array.isArray(product.category) 
+        ? (product.category.includes("may-pha") ? "Máy Pha Cà Phê" : "Sản Phẩm")
+        : (product.category === "rang-xay" ? "Cà phê Rang Xay" : 
+           product.category === "cafe-hat" ? "Cà phê Hạt" : "Sản Phẩm");
+
+    // --- RENDER GIÁ CHÍNH (ĐÃ CẬP NHẬT UNIT) ---
     let mainPriceHTML = '';
     let warningNote = '';
+
+    // Unit cho sản phẩm chính (to hơn chút)
+    const bigUnit = product.unit ? `<span class="text-xl font-bold text-gray-500 ml-1">/${product.unit}</span>` : '';
 
     if (product.price === 1) {
         mainPriceHTML = "Liên hệ";
     } else if (product.price === 2) {
         mainPriceHTML = "Sắp ra mắt";
     } else {
-        mainPriceHTML = product.price.toLocaleString() + " VNĐ";
+        mainPriceHTML = `${product.price.toLocaleString()} VNĐ ${bigUnit}`;
         warningNote = `
              <span class="text-[11px] font-bold text-yellow-600 italic">
                  !  giá có thể thay đổi tùy thời điểm
@@ -131,14 +168,7 @@ function renderProductDetail() {
                 <nav class="text-[10px] uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
                     <a href="index.html" class="hover:text-red-900 transition"><i class="fa-solid fa-house"></i></a> / 
                     <span class="text-red-900 font-bold border-b border-red-900 pb-0.5">
-                        ${(() => {
-                          if (product.category === "rang-xay") return "Cà phê Rang Xay";
-                          if (product.category === "cafe-hat") return "Cà phê Hạt";
-                          if (product.category === "best-seller") return "Cà phê Hòa Tan";
-                          if (product.category === "may-pha") return "Máy Pha Cà Phê";
-                          if (product.category === "dung-cu") return "Dụng Cụ";
-                          return "Sản phẩm";
-                        })()}
+                        ${breadcrumbText}
                     </span>
                 </nav>
                 
@@ -156,11 +186,10 @@ function renderProductDetail() {
                 <div class="bg-red-50 p-5 rounded-lg mb-8 border border-red-100 product-description-container">
                     <div id="desc-content" class="desc-content ${product.price <= 2 ? "" : "collapsed"} text-gray-700 text-sm leading-relaxed">
                         <div class="mb-4">${descriptionText}</div>
-                        <ul class="space-y-2 mb-3">
-                            <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i> 100% Nguyên chất</li>
-                            <li class="flex items-center text-gray-600"><i class="fas fa-box-open text-yellow-600 mr-3 w-4"></i> Đóng gói tiêu chuẩn</li>
-                        </ul>
-                        <div class="mt-4 pt-4 border-t border-red-200">
+                        
+                        ${highlightsHTML}
+                        
+                        <div class="detail-block-hidden mt-4 pt-4 border-t border-red-200">
                             <h4 class="font-bold text-red-900 mb-2">THÔNG TIN CHI TIẾT:</h4>
                             ${detailsText}
                         </div>
@@ -189,14 +218,16 @@ function renderProductDetail() {
                 <h3 class="text-xl font-black text-red-950 uppercase border-l-4 border-yellow-500 pl-4">Có thể bạn sẽ thích</h3>
                 <a href="sanpham.html" class="text-xs font-bold text-gray-500 hover:text-red-900 uppercase">Xem tất cả <i class="fa-solid fa-arrow-right ml-1"></i></a>
             </div>
+            ${relatedProducts.length > 0 ? `
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 ${relatedHTML}
             </div>
+            ` : `<p class="text-gray-500 text-sm italic">Không có sản phẩm tương tự.</p>`}
         </div>
     `;
 }
 
-// 4. HÀM XỬ LÝ SỰ KIỆN
+// 4. HÀM XỬ LÝ SỰ KIỆN (Không đổi)
 function changeMainImage(src, element) {
   const mainImg = document.getElementById("main-product-img");
   const thumbnails = document.querySelectorAll(".thumbnail-item");
@@ -230,7 +261,6 @@ function toggleDescription() {
 
 // 5. KHỞI CHẠY
 document.addEventListener("DOMContentLoaded", () => {
-  // Logic Menu Mobile chính
   const menuBtn = document.getElementById("menu-btn");
   const mobileMenu = document.getElementById("mobile-menu");
 
@@ -249,7 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderProductDetail();
 
-  // Logic Search Box
   const searchBtn = document.getElementById("search-toggle-btn");
   const searchBox = document.getElementById("search-box");
   if (searchBtn && searchBox) {
