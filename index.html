@@ -220,6 +220,9 @@
                         <a href="index.html#grid-best-seller" class="block px-4 py-3 text-sm">Cà Phê Best Seller</a>
                     </li>
                     <li class="border-b hover:bg-red-50 item-hidden bg-gray-50">
+                        <a href="index.html#grid-trial-samples" class="block px-4 py-3 text-sm">Mẫu Dùng Thử</a>
+                    </li>
+                    <li class="border-b hover:bg-red-50 item-hidden bg-gray-50">
                         <a href="sanpham.html" class="block px-4 py-3 text-sm">Xem tất cả sản phẩm</a>
                     </li>
 
@@ -338,6 +341,23 @@
             </h3>
         </div>
         <div id="grid-best-seller" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 scroll-mt-24"></div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8 bg-orange-50/50 rounded-2xl my-10">
+        <div class="flex items-center mb-6 border-b-2 border-orange-400">
+            <h3
+                class="bg-orange-400 text-white px-6 py-2 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-mug-hot"></i> Mẫu dùng thử (100G)
+            </h3>
+        </div>
+
+        <div id="grid-trial-samples" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        </div>
+
+        <div
+            class="mt-4 p-3 bg-white/80 rounded-lg border border-orange-100 text-[11px] text-orange-800 italic text-center">
+            * Chương trình dành cho khách hàng muốn trải nghiệm hương vị trước khi mua gói lớn.
+        </div>
     </section>
 
     <section class="container mx-auto px-4 mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -491,65 +511,74 @@
     </footer>
 
     <div id="promo-popup" class="fixed inset-0 z-[100] hidden items-center justify-center p-2 sm:p-4">
-    <div id="popup-overlay" class="absolute inset-0 bg-black/95 backdrop-blur-md transition-opacity"></div>
+        <div id="popup-overlay" class="absolute inset-0 bg-black/95 backdrop-blur-md transition-opacity"></div>
 
-    <div class="bg-red-950 rounded-2xl shadow-[0_0_50px_rgba(234,179,8,0.2)] w-full max-w-4xl overflow-hidden relative z-10 flex flex-col md:flex-row animate-popup border border-yellow-600/30 max-h-[95vh]">
+        <div
+            class="bg-red-950 rounded-2xl shadow-[0_0_50px_rgba(234,179,8,0.2)] w-full max-w-4xl overflow-hidden relative z-10 flex flex-col md:flex-row animate-popup border border-yellow-600/30 max-h-[95vh]">
 
-        <button id="close-popup-btn" class="absolute top-3 right-3 z-[70] bg-black/50 text-white shadow-lg rounded-full w-9 h-9 flex items-center justify-center hover:bg-yellow-600 transition-all border border-white/20">
-            <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
+            <button id="close-popup-btn"
+                class="absolute top-3 right-3 z-[70] bg-black/50 text-white shadow-lg rounded-full w-9 h-9 flex items-center justify-center hover:bg-yellow-600 transition-all border border-white/20">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
 
-        <div class="w-full md:w-5/12 relative h-40 md:h-auto shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-yellow-600/20">
-            <img src="img/pupopkm.webp" class="absolute inset-0 w-full h-full object-cover" alt="Premium Coffee">
-            <div class="absolute inset-0 bg-gradient-to-t from-red-950 via-transparent to-transparent md:hidden"></div>
-            
-            <div class="absolute top-4 left-0 bg-gradient-to-r from-yellow-600 to-yellow-400 text-red-950 font-black text-[10px] px-4 py-1.5 uppercase tracking-wider z-10 rounded-r-full shadow-lg">
-                <i class="fa-solid fa-crown mr-1"></i> Tuyệt Phẩm 2026
+            <div
+                class="w-full md:w-5/12 relative h-40 md:h-auto shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-yellow-600/20">
+                <img src="img/pupopkm.webp" class="absolute inset-0 w-full h-full object-cover" alt="Premium Coffee">
+                <div class="absolute inset-0 bg-gradient-to-t from-red-950 via-transparent to-transparent md:hidden">
+                </div>
+
+                <div
+                    class="absolute top-4 left-0 bg-gradient-to-r from-yellow-600 to-yellow-400 text-red-950 font-black text-[10px] px-4 py-1.5 uppercase tracking-wider z-10 rounded-r-full shadow-lg">
+                    <i class="fa-solid fa-crown mr-1"></i> Tuyệt Phẩm 2026
+                </div>
             </div>
-        </div>
 
-        <div class="w-full md:w-7/12 relative bg-red-950 p-5 md:p-10 flex flex-col overflow-y-auto">
-            
-            <div class="mb-4">
-                <span class="text-yellow-500 text-[9px] font-bold uppercase tracking-[0.2em] block mb-1">
-                    Sông Hậu Premium Line
-                </span>
-                <h2 class="text-2xl md:text-4xl font-black uppercase leading-tight italic">
-                    <span class="text-white">Dòng Cà Phê</span><br>
-                    <span class="bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 bg-clip-text text-transparent">
-                        Cao Cấp Nhất
+            <div class="w-full md:w-7/12 relative bg-red-950 p-5 md:p-10 flex flex-col overflow-y-auto">
+
+                <div class="mb-4">
+                    <span class="text-yellow-500 text-[9px] font-bold uppercase tracking-[0.2em] block mb-1">
+                        Sông Hậu Premium Line
                     </span>
-                </h2>
-            </div>
-
-            <p class="text-gray-300 text-xs md:text-sm mb-6 leading-relaxed">
-                Khám phá hương vị đỉnh cao từ những hạt cà phê thượng hạng, được chế tác thủ công dành riêng cho giới sành thưởng thức.
-            </p>
-
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <div class="border-l border-yellow-600/50 pl-3">
-                    <div class="text-yellow-500 font-bold text-[10px] uppercase mb-0.5">Công nghệ</div>
-                    <div class="text-white text-[11px]">Rang mộc chuẩn Âu</div>
+                    <h2 class="text-2xl md:text-4xl font-black uppercase leading-tight italic">
+                        <span class="text-white">Dòng Cà Phê</span><br>
+                        <span
+                            class="bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 bg-clip-text text-transparent">
+                            Cao Cấp Nhất
+                        </span>
+                    </h2>
                 </div>
-                <div class="border-l border-yellow-600/50 pl-3">
-                    <div class="text-yellow-500 font-bold text-[10px] uppercase mb-0.5">Hương vị</div>
-                    <div class="text-white text-[11px]">Đậm đà, hậu vị bền</div>
+
+                <p class="text-gray-300 text-xs md:text-sm mb-6 leading-relaxed">
+                    Khám phá hương vị đỉnh cao từ những hạt cà phê thượng hạng, được chế tác thủ công dành riêng cho
+                    giới sành thưởng thức.
+                </p>
+
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="border-l border-yellow-600/50 pl-3">
+                        <div class="text-yellow-500 font-bold text-[10px] uppercase mb-0.5">Công nghệ</div>
+                        <div class="text-white text-[11px]">Rang mộc chuẩn Âu</div>
+                    </div>
+                    <div class="border-l border-yellow-600/50 pl-3">
+                        <div class="text-yellow-500 font-bold text-[10px] uppercase mb-0.5">Hương vị</div>
+                        <div class="text-white text-[11px]">Đậm đà, hậu vị bền</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mt-auto space-y-3">
-                <a href="product-detail.html?id=1" class="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 text-red-950 py-3 rounded-lg font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg">
-                    <span>Khám phá ngay</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
+                <div class="mt-auto space-y-3">
+                    <a href="product-detail.html?id=1"
+                        class="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 text-red-950 py-3 rounded-lg font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg">
+                        <span>Khám phá ngay</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
 
-                <button id="dismiss-popup-btn" class="w-full py-2 text-[10px] text-gray-400 font-bold hover:text-white transition-colors uppercase tracking-widest">
-                    Đóng thông báo
-                </button>
+                    <button id="dismiss-popup-btn"
+                        class="w-full py-2 text-[10px] text-gray-400 font-bold hover:text-white transition-colors uppercase tracking-widest">
+                        Đóng thông báo
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <div class="fixed-contact-group">
 

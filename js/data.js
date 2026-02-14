@@ -7,7 +7,7 @@ window.dbProducts = [
         id: 1, 
         name: "Sông Hậu Premium", 
         price: 400000, 
-        unit: "", // Thêm đơn vị
+        unit: "4 Gói", // Thêm đơn vị
         category: ["cao-cap", "rang-xay"], 
         img: "img/SHpremium1.webp",
         gallery: [
@@ -68,7 +68,7 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Truyền Thống 2 (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Hương liệu caramel.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Hương liệu caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -180,7 +180,7 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Truyền Thống 2 (500g)",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Hương liệu caramel.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Hương liệu caramel.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
@@ -249,6 +249,48 @@ window.dbProducts = [
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Vị nhẹ nhàng, dễ uống</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 12, 
+        name: "SH Truyền Thống 1 (100g)", 
+        price: 40000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHtruyenthong1sample.webp",
+        gallery: [
+            "img/SHtruyenthong1sample1.webp", 
+        ],
+        info: {
+            description: "Sông Hậu Truyền Thống 1 (mẫu dùng thử)",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Hạt tuyển chọn 100% xay Mộc giử vị đậm chất cà phê nguyên bản</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 13, 
+        name: "SH Truyền Thống 2 (100g)", 
+        price: 34000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHtruyenthong2sample.webp",
+        gallery: [
+            "img/SHtruyenthong2sample1.webp",  
+        ],
+        info: {
+            description: "Sông Hậu Truyền Thống 2 (mẫu dùng thử)",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Hương liệu caramel.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng vị Cà Phê rõ</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }

@@ -564,14 +564,37 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('slider')) {
         initSlider();
         
-        // Render các khu vực sản phẩm
-        renderSection('cao-cap', 'grid-cao-cap'); // Cà phê Cao cấp
-        renderSection('cafe-hat', 'grid-cafe-hat'); // Cà phê Hạt
+        // Render các khu vực sản phẩm hiện có
+        renderSection('cao-cap', 'grid-cao-cap');
+        renderSection('cafe-hat', 'grid-cafe-hat');
         renderRangXayPagination();
-        renderSection('best-seller', 'grid-best-seller'); // Sản phẩm bán chạy
+        renderSection('best-seller', 'grid-best-seller');
+
+        // --- THÊM MỚI: RENDER MẪU DÙNG THỬ (ID 12, 13) ---
+        const trialGrid = document.getElementById('grid-trial-samples');
+        if (trialGrid) {
+            // Lọc đúng 2 mã sản phẩm dùng thử từ database
+            const trialProducts = products.filter(p => [12, 13].includes(p.id));
+            
+            trialGrid.innerHTML = trialProducts.map(p => {
+                const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';
+                return `
+                <div class="bg-white border border-orange-100 p-4 rounded-lg hover:shadow-xl transition-all group cursor-pointer relative" onclick="window.location.href='product-detail.html?id=${p.id}'">
+                    <div class="absolute top-2 left-2 bg-orange-500 text-white text-[9px] font-bold px-2 py-0.5 rounded z-10">DÙNG THỬ</div>
+                    <div class="aspect-square overflow-hidden rounded-md mb-4 bg-gray-50">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    </div>
+                    <h4 class="text-[11px] font-bold text-gray-800 line-clamp-2 h-9 mb-2 uppercase group-hover:text-red-900 transition">${p.name}</h4>
+                    <div class="flex justify-between items-center border-t border-orange-50 pt-3 mt-3">
+                        <span class="text-red-900 font-black text-sm">${p.price.toLocaleString()}đ</span>${unitHtml}
+                        <button class="text-orange-400 hover:text-red-900"><i class="fa-solid fa-cart-plus"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
     }
 
-    // Trang Chi Tiết (Nếu trang này dùng script.js thay vì product-detail.js)
+    // Trang Chi Tiết
     if (document.getElementById('product-detail-container')) {
         renderProductDetail();
     }
