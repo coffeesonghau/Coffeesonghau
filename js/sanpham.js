@@ -90,10 +90,21 @@ function applyFilters() {
 
     // b. Lọc theo tìm kiếm
     if (currentSearch) {
-        const query = removeVietnameseTones(currentSearch);
+        // 1. Chuẩn hóa từ khóa tìm kiếm (Bỏ dấu, chữ thường)
+        const query = removeVietnameseTones(currentSearch); 
+        // 2. Tạo phiên bản không khoảng trắng (VD: "truyenthong")
+        const queryNoSpace = query.replace(/\s+/g, '');
+
         filtered = filtered.filter(p => {
+            // 3. Chuẩn hóa tên sản phẩm
             const pName = removeVietnameseTones(p.name);
-            return pName.includes(query);
+            // 4. Tạo phiên bản tên sản phẩm không khoảng trắng (VD: "shtruyenthong")
+            const pNameNoSpace = pName.replace(/\s+/g, '');
+
+            // 5. Kiểm tra: 
+            // - pName.includes(query): Hỗ trợ tìm "truyen thong"
+            // - pNameNoSpace.includes(queryNoSpace): Hỗ trợ tìm "truyenthong"
+            return pName.includes(query) || pNameNoSpace.includes(queryNoSpace);
         });
     }
 
