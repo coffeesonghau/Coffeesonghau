@@ -297,6 +297,27 @@ window.dbProducts = [
     },
 
     {
+        id: 16, 
+        name: "SH Cận Đại (100g)", 
+        price: 26000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHcandaisample.webp",
+        gallery: [
+            "img/SHcandaisample1.webp", 
+        ],
+        info: {
+            description: "Sông Hậu Cận Đại (mẫu dùng thử).",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Vị nhẹ nhàng, dễ uống</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
         id: 90, 
         name: "Đá Viên", 
         price: 14000, 
