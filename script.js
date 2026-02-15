@@ -574,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const trialGrid = document.getElementById('grid-trial-samples');
         if (trialGrid) {
             // Lọc đúng 2 mã sản phẩm dùng thử từ database
-            const trialProducts = products.filter(p => [12, 13].includes(p.id));
+            const trialProducts = products.filter(p => [12, 13, 14, 15, 16,].includes(p.id));
             
             trialGrid.innerHTML = trialProducts.map(p => {
                 const unitHtml = p.unit ? `<span class="text-xs text-gray-500 font-normal ml-1">/${p.unit}</span>` : '';

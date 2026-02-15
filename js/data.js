@@ -297,6 +297,48 @@ window.dbProducts = [
     },
 
     {
+        id: 14, 
+        name: "SH Mạnh Mẽ 1 (100g)", 
+        price: 32000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/1.png",
+        gallery: [
+            "img/2.jpg",
+        ],
+        info: {
+            description: "Sông Hậu Mạnh Mẽ 1 (mẫu dùng thử).",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Ngũ Cốc, Hương liệu caramel .</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 15, 
+        name: "SH Mạnh Mẽ 2 (100g)", 
+        price: 28000, 
+        unit: "Gói",
+        category: "rang-xay",
+        img: "img/SHmanhme2sample.webp",
+        gallery: [
+            "img/SHmanhme2sample1.webp",
+        ],
+        info: {
+            description: "SH Mạnh Mẽ 2 (mẫu dùng thử).",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
+                <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
         id: 16, 
         name: "SH Cận Đại (100g)", 
         price: 26000, 
