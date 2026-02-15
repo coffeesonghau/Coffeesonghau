@@ -73,7 +73,7 @@ const systemData = [
         searchTags: "song hau 10 chau van dang phuong 1 bac lieu",
         name: "Sông Hậu 10",
         address: "Châu Văn Đặng, P.1, TP. Bạc Liêu",
-        image: "img/songhau10.jpg",
+        image: "img/SH10.webp",
         mapLink: "https://maps.app.goo.gl/RKSbmoLqhDKKPfLm6"
     },
     {
