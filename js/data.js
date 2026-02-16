@@ -302,9 +302,9 @@ window.dbProducts = [
         price: 32000, 
         unit: "Gói",
         category: "rang-xay",
-        img: "img/1.png",
+        img: "img/SHmanhme1sample.webp",
         gallery: [
-            "img/2.jpg",
+            "img/SHmanhme1sample1.webp",
         ],
         info: {
             description: "Sông Hậu Mạnh Mẽ 1 (mẫu dùng thử).",
