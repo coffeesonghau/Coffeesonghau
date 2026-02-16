@@ -511,74 +511,67 @@
     </footer>
 
     <div id="promo-popup" class="fixed inset-0 z-[100] hidden items-center justify-center p-2 sm:p-4">
-        <div id="popup-overlay" class="absolute inset-0 bg-black/95 backdrop-blur-md transition-opacity"></div>
+    <div id="popup-overlay" class="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity"></div>
 
-        <div
-            class="bg-red-950 rounded-2xl shadow-[0_0_50px_rgba(234,179,8,0.2)] w-full max-w-4xl overflow-hidden relative z-10 flex flex-col md:flex-row animate-popup border border-yellow-600/30 max-h-[95vh]">
+    <div class="bg-[#450a0a] rounded-2xl shadow-[0_0_50px_rgba(234,179,8,0.3)] w-full max-w-4xl overflow-hidden relative z-10 flex flex-col md:flex-row animate-popup border border-yellow-600/40 max-h-[95vh]">
 
-            <button id="close-popup-btn"
-                class="absolute top-3 right-3 z-[70] bg-black/50 text-white shadow-lg rounded-full w-9 h-9 flex items-center justify-center hover:bg-yellow-600 transition-all border border-white/20">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
+        <button id="close-popup-btn"
+            class="absolute top-3 right-3 z-[70] bg-black/50 text-white shadow-lg rounded-full w-9 h-9 flex items-center justify-center hover:bg-yellow-600 transition-all border border-white/20">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
 
-            <div
-                class="w-full md:w-5/12 relative h-40 md:h-auto shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-yellow-600/20">
-                <img src="img/pupopkm.webp" class="absolute inset-0 w-full h-full object-cover" alt="Premium Coffee">
-                <div class="absolute inset-0 bg-gradient-to-t from-red-950 via-transparent to-transparent md:hidden">
+        <div class="w-full md:w-5/12 relative h-48 md:h-auto shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-yellow-600/20">
+            <img src="img/pupopkm.webp" class="absolute inset-0 w-full h-full object-cover" alt="Chúc Mừng Năm Mới 2026">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#450a0a] via-transparent to-transparent md:hidden"></div>
+            
+            <div class="absolute top-4 left-0 bg-gradient-to-r from-red-600 to-yellow-500 text-white font-black text-[10px] px-4 py-1.5 uppercase tracking-wider z-10 rounded-r-full shadow-lg">
+                <i class="fa-solid fa-star-and-crescent mr-1"></i> Xuân Ất Tỵ 2026
+            </div>
+        </div>
+
+        <div class="w-full md:w-7/12 relative bg-[#450a0a] p-6 md:p-10 flex flex-col overflow-y-auto">
+            <div class="mb-6">
+                <span class="text-yellow-500 text-[10px] font-bold uppercase tracking-[0.3em] block mb-2">
+                    Cà Phê Sông Hậu Kính Chúc
+                </span>
+                <h2 class="text-3xl md:text-5xl font-black uppercase leading-tight italic">
+                    <span class="text-white">Chúc Mừng</span><br>
+                    <span class="bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-100 bg-clip-text text-transparent drop-shadow-sm">
+                        Năm Mới 2026
+                    </span>
+                </h2>
+            </div>
+
+            <p class="text-gray-200 text-sm md:text-base mb-8 leading-relaxed font-medium">
+                Kính chúc quý <span class="text-yellow-500 font-bold">Khách hàng</span> và <span class="text-yellow-500 font-bold">Đối tác Nhượng quyền</span> một năm mới vạn sự hanh thông, triệu điều như ý, cùng Coffee Sông Hậu vươn tầm cao mới.
+            </p>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-white/5 border-l-2 border-yellow-500 p-3 rounded-r-lg">
+                    <div class="text-yellow-500 font-bold text-[10px] uppercase mb-1">Gắn kết</div>
+                    <div class="text-white text-[12px] font-semibold">Hợp tác bền vững</div>
                 </div>
-
-                <div
-                    class="absolute top-4 left-0 bg-gradient-to-r from-yellow-600 to-yellow-400 text-red-950 font-black text-[10px] px-4 py-1.5 uppercase tracking-wider z-10 rounded-r-full shadow-lg">
-                    <i class="fa-solid fa-crown mr-1"></i> Tuyệt Phẩm 2026
+                <div class="bg-white/5 border-l-2 border-yellow-500 p-3 rounded-r-lg">
+                    <div class="text-yellow-500 font-bold text-[10px] uppercase mb-1">Thịnh vượng</div>
+                    <div class="text-white text-[12px] font-semibold">Kinh doanh phát đạt</div>
                 </div>
             </div>
 
-            <div class="w-full md:w-7/12 relative bg-red-950 p-5 md:p-10 flex flex-col overflow-y-auto">
+            <div class="mt-auto flex flex-col gap-3">
+                <a href="nhuong-quyen.html"
+                    class="w-full bg-gradient-to-r from-red-600 to-red-800 text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all shadow-[0_4px_20px_rgba(220,38,38,0.3)] border border-yellow-600/30">
+                    <span>Hợp tác Nhượng quyền</span>
+                    <i class="fa-solid fa-handshake-angle text-lg"></i>
+                </a>
 
-                <div class="mb-4">
-                    <span class="text-yellow-500 text-[9px] font-bold uppercase tracking-[0.2em] block mb-1">
-                        Sông Hậu Premium Line
-                    </span>
-                    <h2 class="text-2xl md:text-4xl font-black uppercase leading-tight italic">
-                        <span class="text-white">Dòng Cà Phê</span><br>
-                        <span
-                            class="bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 bg-clip-text text-transparent">
-                            Cao Cấp Nhất
-                        </span>
-                    </h2>
-                </div>
-
-                <p class="text-gray-300 text-xs md:text-sm mb-6 leading-relaxed">
-                    Khám phá hương vị đỉnh cao từ những hạt cà phê thượng hạng, được chế tác thủ công dành riêng cho
-                    giới sành thưởng thức.
-                </p>
-
-                <div class="grid grid-cols-2 gap-3 mb-6">
-                    <div class="border-l border-yellow-600/50 pl-3">
-                        <div class="text-yellow-500 font-bold text-[10px] uppercase mb-0.5">Công nghệ</div>
-                        <div class="text-white text-[11px]">Rang mộc chuẩn Âu</div>
-                    </div>
-                    <div class="border-l border-yellow-600/50 pl-3">
-                        <div class="text-yellow-500 font-bold text-[10px] uppercase mb-0.5">Hương vị</div>
-                        <div class="text-white text-[11px]">Đậm đà, hậu vị bền</div>
-                    </div>
-                </div>
-
-                <div class="mt-auto space-y-3">
-                    <a href="product-detail.html?id=1"
-                        class="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 text-red-950 py-3 rounded-lg font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg">
-                        <span>Khám phá ngay</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                    <button id="dismiss-popup-btn"
-                        class="w-full py-2 text-[10px] text-gray-400 font-bold hover:text-white transition-colors uppercase tracking-widest">
-                        Đóng thông báo
-                    </button>
-                </div>
+                <button id="dismiss-popup-btn"
+                    class="w-full py-2 text-[11px] text-gray-400 font-bold hover:text-white transition-colors uppercase tracking-[0.2em]">
+                    Khép lại thông báo
+                </button>
             </div>
         </div>
     </div>
+</div>
 
     <div class="fixed-contact-group">
 
@@ -601,6 +594,7 @@
 
     </div>
 
+    <script src="js/tet-popup.js"></script>
     <script src="js/data.js"></script>
     <script src="script.js"></script>
 </body>
