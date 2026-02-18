@@ -1,6 +1,6 @@
 // --- CẤU HÌNH ---
-const OFFICE_LAT = 10.762622; 
-const OFFICE_LNG = 106.660172; 
+const OFFICE_LAT = 9.288933426099419; 
+const OFFICE_LNG = 105.67547137936793;  
 const RADIUS = 20; 
 const COOLDOWN_MINS = 30;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPn6kmi0oqvb5aSzuzraz_HUuATS6Nn24vs7PIOzDwlO4Y-gtTTn-fRf9X_wSjUSSI/exec"; 
