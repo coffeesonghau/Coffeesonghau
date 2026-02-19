@@ -1,13 +1,15 @@
-// --- CẤU HÌNH ---
+// --- CẤU HÌNH HỆ THỐNG ---
 const OFFICE_LAT = 9.288933426099419; 
 const OFFICE_LNG = 105.67547137936793; 
-const RADIUS = 30; 
-const COOLDOWN_MINS = 40;
+const RADIUS = 30; // Bán kính cho phép chấm công (mét)
+const COOLDOWN_MINS = 40; // Thời gian chờ giữa 2 lần chấm công (phút)
+
+// THAY ĐƯỜNG LINK WEB APP CỦA BẠN VÀO ĐÂY (Nhớ dùng link phiên bản mới nhất nhé)
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCJ5dV9T5rDMK_95iPKPATIrbZK05NfxKIQq0kLVWXNqTE3mtCgcdlJFqSXMhdMkiW/exec"; 
 
 // --- CƠ SỞ DỮ LIỆU TÀI KHOẢN ---
-// Mã hóa SHA-256 cho mật khẩu. Mặc định mật khẩu của cả 3 người đang là: 123456
-// Để tạo mã hóa cho mật khẩu mới, bạn vào trang: https://emn178.github.io/online-tools/sha256.html
+// Mật khẩu mặc định đang là: 123456 (đã mã hóa SHA-256)
+// (Bạn có thể tự tạo mã hóa mật khẩu mới tại trang: https://emn178.github.io/online-tools/sha256.html)
 const USER_DB = {
     "Nguyễn Văn A": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c", 
     "Nguyễn Minh Thuận": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92", 
@@ -18,48 +20,51 @@ let currentUser = localStorage.getItem("saved_user") || "";
 let isNear = false;
 let watchId = null;
 
-// Hàm mã hóa mật khẩu
+// 1. Khởi tạo khi tải trang
+window.onload = () => {
+    setupSidebarMenu();
+    if (currentUser) {
+        showMainScreen(); // Tự động vào thẳng hệ thống nếu đã đăng nhập trước đó
+    }
+};
+
+// 2. Hàm mã hóa Mật khẩu
 async function sha256(str) {
     const buf = new TextEncoder().encode(str);
     const hash = await crypto.subtle.digest('SHA-256', buf);
     return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Tự động vào hệ thống nếu đã đăng nhập trước đó
-window.onload = () => {
-    setupSidebarMenu();
-    if (currentUser) {
-        showMainScreen();
-    }
-};
-
-// Đăng nhập có kiểm tra riêng từng tài khoản
+// 3. Xử lý Đăng nhập
 async function login() {
     const user = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value;
     const hashed = await sha256(pass);
 
-    // Kiểm tra xem tên có trong hệ thống và mật khẩu có khớp không
     if (USER_DB[user] && USER_DB[user] === hashed) {
         currentUser = user;
-        localStorage.setItem("saved_user", user); // Lưu phiên đăng nhập
+        localStorage.setItem("saved_user", user); // Ghi nhớ phiên đăng nhập
         showMainScreen();
     } else {
         alert("Tên đăng nhập hoặc mật khẩu không chính xác!");
     }
 }
 
-// Chuyển sang màn hình chính
+// 4. Chuyển sang màn hình chính (App)
 function showMainScreen() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('main-screen').classList.remove('hidden');
     document.getElementById('display-name').innerText = currentUser;
+    
+    // Hiển thị ngày tháng hôm nay
+    document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
+    
     startGPS();
     renderHistory();
     updateButtonUI();
 }
 
-// Tính khoảng cách
+// 5. Tính khoảng cách GPS
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -68,7 +73,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// Theo dõi GPS
+// 6. Theo dõi GPS
 function startGPS() {
     watchId = navigator.geolocation.watchPosition(pos => {
         const dist = getDistance(pos.coords.latitude, pos.coords.longitude, OFFICE_LAT, OFFICE_LNG);
@@ -78,7 +83,7 @@ function startGPS() {
     }, null, { enableHighAccuracy: true });
 }
 
-// Cập nhật giao diện nút
+// 7. Cập nhật trạng thái Nút bấm (Tách biệt theo người dùng)
 function updateButtonUI() {
     const btn = document.getElementById('check-btn');
     const label = document.getElementById('btn-label');
@@ -107,7 +112,7 @@ function updateButtonUI() {
     }
 }
 
-// Xử lý gửi chấm công
+// 8. Xử lý khi bấm nút Chấm công
 function handleAction() {
     const today = new Date().toLocaleDateString('vi-VN');
     let logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
@@ -122,14 +127,19 @@ function handleAction() {
     label.innerText = "ĐANG GỬI...";
     btn.disabled = true;
 
+    // Gửi dữ liệu (Có thêm text/plain để chống lỗi chặn truy cập)
     fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
         body: JSON.stringify({ name: currentUser })
     })
     .then(async (response) => {
         let text = await response.text();
+        
         if (text.includes("LỖI")) {
-            alert(text); // Báo lỗi nếu trên sheets không có tên
+            alert("Hệ thống báo: " + text); 
             updateButtonUI();
             return;
         }
@@ -148,11 +158,13 @@ function handleAction() {
         updateButtonUI();
     })
     .catch(error => {
-        alert("Lỗi kết nối đến máy chủ Google!");
+        alert("Lỗi mạng: Không thể kết nối đến máy chủ Google. Vui lòng kiểm tra lại đường truyền!");
+        console.error(error);
         updateButtonUI();
     });
 }
 
+// 9. Hiển thị lịch sử trong ngày
 function renderHistory() {
     const today = new Date().toLocaleDateString('vi-VN');
     const logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
@@ -163,20 +175,20 @@ function renderHistory() {
     `).join('');
 }
 
-document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
-
+// 10. Đóng/Mở Menu Sidebar
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
-// Xóa tài khoản lưu trữ và thoát
+// 11. Đăng xuất
 function logout() {
     currentUser = "";
-    localStorage.removeItem("saved_user");
+    localStorage.removeItem("saved_user"); // Xóa nhớ đăng nhập
     window.location.reload(); 
 }
 
+// 12. Xóa dữ liệu Test (Để bấm liên tục không cần chờ)
 function resetTest() {
     const today = new Date().toLocaleDateString('vi-VN');
     localStorage.removeItem('logs_' + currentUser + '_' + today);
@@ -185,6 +197,7 @@ function resetTest() {
     window.location.reload();
 }
 
+// 13. Tự động chèn nút Reset vào Menu
 function setupSidebarMenu() {
     const sidebar = document.querySelector('.sidebar-menu');
     if (sidebar && !document.getElementById('btn-reset-test')) {
