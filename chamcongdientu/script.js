@@ -1,6 +1,6 @@
 // --- CẤU HÌNH ---
 const OFFICE_LAT = 9.288933426099419; 
-const OFFICE_LNG = 105.67547137936793;  
+const OFFICE_LNG = 105.67547137936793; 
 const RADIUS = 20; 
 const COOLDOWN_MINS = 30;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPn6kmi0oqvb5aSzuzraz_HUuATS6Nn24vs7PIOzDwlO4Y-gtTTn-fRf9X_wSjUSSI/exec"; 
@@ -8,6 +8,7 @@ const HASHED_PW = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6
 
 let currentUser = "";
 let isNear = false;
+let watchId = null; // Biến lưu ID của trình theo dõi GPS để có thể tắt khi đăng xuất
 
 // 1. Mã hóa SHA-256
 async function sha256(str) {
@@ -45,7 +46,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 // 4. Theo dõi GPS
 function startGPS() {
-    navigator.geolocation.watchPosition(pos => {
+    watchId = navigator.geolocation.watchPosition(pos => {
         const dist = getDistance(pos.coords.latitude, pos.coords.longitude, OFFICE_LAT, OFFICE_LNG);
         isNear = dist <= RADIUS;
         document.getElementById('dist-val').innerText = Math.round(dist);
@@ -82,29 +83,39 @@ function updateButtonUI() {
     }
 }
 
-// 6. Xử lý Chấm công
+// 6. Xử lý Chấm công (Đã cập nhật gửi dữ liệu mỗi lần bấm)
 function handleAction() {
     const today = new Date().toLocaleDateString('vi-VN');
     let logs = JSON.parse(localStorage.getItem('logs_' + today) || "[]");
 
     if (logs.length < 4) {
+        // Lưu thời gian chấm công vào LocalStorage
         logs.push(new Date().toLocaleTimeString('vi-VN'));
         localStorage.setItem('logs_' + today, JSON.stringify(logs));
         localStorage.setItem('last_time', Date.now());
 
+        // BẮT BUỘC: Gửi dữ liệu lên Google Sheets MỖI LẦN bấm nút
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({ name: currentUser })
+        });
+
+        // Hiển thị thông báo tương ứng
         if (logs.length === 4) {
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                body: JSON.stringify({ name: currentUser })
-            });
-            alert("Đã đủ 4 lần! Dữ liệu đã gửi lên Google Sheets.");
+            alert("Đã đủ 4 lần! Hoàn thành 1 ngày công.");
+        } else {
+            alert("Ghi nhận chấm công lần " + logs.length + ". (Được " + (logs.length * 0.25) + " công)");
         }
+    } else {
+        alert("Bạn đã chấm công đủ 4 lần hôm nay!");
     }
+    
     renderHistory();
     updateButtonUI();
 }
 
+// 7. Cập nhật giao diện lịch sử
 function renderHistory() {
     const today = new Date().toLocaleDateString('vi-VN');
     const logs = JSON.parse(localStorage.getItem('logs_' + today) || "[]");
@@ -115,4 +126,17 @@ function renderHistory() {
     `).join('');
 }
 
+// Hiển thị ngày tháng trên giao diện
 document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
+
+// 8. Đóng/mở thanh Menu (Sidebar)
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('sidebar-overlay').classList.toggle('active');
+}
+
+// 9. Chức năng Đăng xuất
+function logout() {
+    // Tải lại trang hoàn toàn để reset tất cả biến, trạng thái GPS và UI
+    window.location.reload(); 
+}
