@@ -4,39 +4,62 @@ const OFFICE_LNG = 105.67547137936793;
 const RADIUS = 30; 
 const COOLDOWN_MINS = 40;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCJ5dV9T5rDMK_95iPKPATIrbZK05NfxKIQq0kLVWXNqTE3mtCgcdlJFqSXMhdMkiW/exec"; 
-const HASHED_PW = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"; // Mặc định: 123456
 
-let currentUser = "";
+// --- CƠ SỞ DỮ LIỆU TÀI KHOẢN ---
+// Mã hóa SHA-256 cho mật khẩu. Mặc định mật khẩu của cả 3 người đang là: 123456
+// Để tạo mã hóa cho mật khẩu mới, bạn vào trang: https://emn178.github.io/online-tools/sha256.html
+const USER_DB = {
+    "Nguyễn Văn A": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c", 
+    "Nguyễn Minh Thuận": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92", 
+    "ABC": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92" 
+};
+
+let currentUser = localStorage.getItem("saved_user") || "";
 let isNear = false;
 let watchId = null;
 
-// 1. Mã hóa SHA-256
+// Hàm mã hóa mật khẩu
 async function sha256(str) {
     const buf = new TextEncoder().encode(str);
     const hash = await crypto.subtle.digest('SHA-256', buf);
     return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// 2. Đăng nhập
+// Tự động vào hệ thống nếu đã đăng nhập trước đó
+window.onload = () => {
+    setupSidebarMenu();
+    if (currentUser) {
+        showMainScreen();
+    }
+};
+
+// Đăng nhập có kiểm tra riêng từng tài khoản
 async function login() {
     const user = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value;
     const hashed = await sha256(pass);
 
-    if (user && hashed === HASHED_PW) {
+    // Kiểm tra xem tên có trong hệ thống và mật khẩu có khớp không
+    if (USER_DB[user] && USER_DB[user] === hashed) {
         currentUser = user;
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-screen').classList.remove('hidden');
-        document.getElementById('display-name').innerText = user;
-        startGPS();
-        renderHistory();
-        updateButtonUI(); // Cập nhật lại nút cho đúng user
+        localStorage.setItem("saved_user", user); // Lưu phiên đăng nhập
+        showMainScreen();
     } else {
-        alert("Thông tin không chính xác!");
+        alert("Tên đăng nhập hoặc mật khẩu không chính xác!");
     }
 }
 
-// 3. Tính khoảng cách GPS
+// Chuyển sang màn hình chính
+function showMainScreen() {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-screen').classList.remove('hidden');
+    document.getElementById('display-name').innerText = currentUser;
+    startGPS();
+    renderHistory();
+    updateButtonUI();
+}
+
+// Tính khoảng cách
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -45,7 +68,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// 4. Theo dõi GPS
+// Theo dõi GPS
 function startGPS() {
     watchId = navigator.geolocation.watchPosition(pos => {
         const dist = getDistance(pos.coords.latitude, pos.coords.longitude, OFFICE_LAT, OFFICE_LNG);
@@ -55,14 +78,13 @@ function startGPS() {
     }, null, { enableHighAccuracy: true });
 }
 
-// 5. Cập nhật giao diện nút (Tách biệt LocalStorage theo từng User)
+// Cập nhật giao diện nút
 function updateButtonUI() {
     const btn = document.getElementById('check-btn');
     const label = document.getElementById('btn-label');
     const timer = document.getElementById('btn-timer');
     const status = document.getElementById('status-text');
 
-    // Lấy thời gian chờ của RIÊNG user hiện tại
     const last = localStorage.getItem('last_time_' + currentUser);
     const now = Date.now();
     const wait = COOLDOWN_MINS * 60 * 1000;
@@ -85,10 +107,9 @@ function updateButtonUI() {
     }
 }
 
-// 6. Xử lý Chấm công (Gắn tên user vào bộ nhớ)
+// Xử lý gửi chấm công
 function handleAction() {
     const today = new Date().toLocaleDateString('vi-VN');
-    // Lấy lịch sử của RIÊNG user hiện tại
     let logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
 
     if (logs.length >= 4) {
@@ -105,29 +126,33 @@ function handleAction() {
         method: "POST",
         body: JSON.stringify({ name: currentUser })
     })
-    .then(response => {
+    .then(async (response) => {
+        let text = await response.text();
+        if (text.includes("LỖI")) {
+            alert(text); // Báo lỗi nếu trên sheets không có tên
+            updateButtonUI();
+            return;
+        }
+
         logs.push(new Date().toLocaleTimeString('vi-VN'));
-        // Lưu lịch sử theo TÊN USER
         localStorage.setItem('logs_' + currentUser + '_' + today, JSON.stringify(logs));
         localStorage.setItem('last_time_' + currentUser, Date.now());
 
         if (logs.length === 4) {
             alert("Đã đủ 4 lần! Hoàn thành 1 ngày công.");
         } else {
-            alert("Thành công! Ghi nhận công cho " + currentUser);
+            alert("Thành công! Đã ghi nhận công cho " + currentUser);
         }
         
         renderHistory();
         updateButtonUI();
     })
     .catch(error => {
-        alert("Lỗi mạng: Không thể gửi dữ liệu lên máy chủ!");
-        console.error(error);
+        alert("Lỗi kết nối đến máy chủ Google!");
         updateButtonUI();
     });
 }
 
-// 7. Cập nhật giao diện lịch sử
 function renderHistory() {
     const today = new Date().toLocaleDateString('vi-VN');
     const logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
@@ -140,19 +165,18 @@ function renderHistory() {
 
 document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
 
-// 8. Đóng/mở Menu
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
-// 9. Đăng xuất
+// Xóa tài khoản lưu trữ và thoát
 function logout() {
     currentUser = "";
+    localStorage.removeItem("saved_user");
     window.location.reload(); 
 }
 
-// 10. TÍNH NĂNG RESET CHỈ CHO USER HIỆN TẠI
 function resetTest() {
     const today = new Date().toLocaleDateString('vi-VN');
     localStorage.removeItem('logs_' + currentUser + '_' + today);
@@ -161,14 +185,13 @@ function resetTest() {
     window.location.reload();
 }
 
-// Tự động thêm nút Reset vào Sidebar
-window.onload = () => {
+function setupSidebarMenu() {
     const sidebar = document.querySelector('.sidebar-menu');
-    if (sidebar) {
+    if (sidebar && !document.getElementById('btn-reset-test')) {
         sidebar.innerHTML += `
         <hr style="border: 0.5px solid #eee; margin: 10px 0;">
-        <li onclick="resetTest()" style="color: #ff9800;">
-            <span class="material-icons-round" style="color: #ff9800;">cleaning_services</span> Xóa dữ liệu Test của tôi
+        <li id="btn-reset-test" onclick="resetTest()" style="color: #ff9800;">
+            <span class="material-icons-round" style="color: #ff9800;">cleaning_services</span> Xóa dữ liệu Test
         </li>`;
     }
-};
+}
