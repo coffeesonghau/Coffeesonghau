@@ -30,6 +30,7 @@ async function login() {
         document.getElementById('display-name').innerText = user;
         startGPS();
         renderHistory();
+        updateButtonUI(); // Cập nhật lại nút cho đúng user
     } else {
         alert("Thông tin không chính xác!");
     }
@@ -54,14 +55,15 @@ function startGPS() {
     }, null, { enableHighAccuracy: true });
 }
 
-// 5. Cập nhật giao diện nút
+// 5. Cập nhật giao diện nút (Tách biệt LocalStorage theo từng User)
 function updateButtonUI() {
     const btn = document.getElementById('check-btn');
     const label = document.getElementById('btn-label');
     const timer = document.getElementById('btn-timer');
     const status = document.getElementById('status-text');
 
-    const last = localStorage.getItem('last_time');
+    // Lấy thời gian chờ của RIÊNG user hiện tại
+    const last = localStorage.getItem('last_time_' + currentUser);
     const now = Date.now();
     const wait = COOLDOWN_MINS * 60 * 1000;
 
@@ -83,37 +85,36 @@ function updateButtonUI() {
     }
 }
 
-// 6. Xử lý Chấm công (Cải tiến có trạng thái ĐANG GỬI)
+// 6. Xử lý Chấm công (Gắn tên user vào bộ nhớ)
 function handleAction() {
     const today = new Date().toLocaleDateString('vi-VN');
-    let logs = JSON.parse(localStorage.getItem('logs_' + today) || "[]");
+    // Lấy lịch sử của RIÊNG user hiện tại
+    let logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
 
     if (logs.length >= 4) {
         alert("Bạn đã chấm công đủ 4 lần hôm nay!");
         return;
     }
 
-    // Đổi giao diện sang trạng thái đang tải
     const btn = document.getElementById('check-btn');
     const label = document.getElementById('btn-label');
     label.innerText = "ĐANG GỬI...";
     btn.disabled = true;
 
-    // Gửi dữ liệu lên Google Sheets (Bỏ qua cấu hình phức tạp để tránh lỗi CORS)
     fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({ name: currentUser })
     })
     .then(response => {
-        // Chỉ lưu LocalStorage và báo thành công khi đã gửi đi xong
         logs.push(new Date().toLocaleTimeString('vi-VN'));
-        localStorage.setItem('logs_' + today, JSON.stringify(logs));
-        localStorage.setItem('last_time', Date.now()); // Kích hoạt đếm ngược 40 phút
+        // Lưu lịch sử theo TÊN USER
+        localStorage.setItem('logs_' + currentUser + '_' + today, JSON.stringify(logs));
+        localStorage.setItem('last_time_' + currentUser, Date.now());
 
         if (logs.length === 4) {
             alert("Đã đủ 4 lần! Hoàn thành 1 ngày công.");
         } else {
-            alert("Thành công! Ghi nhận chấm công lần " + logs.length);
+            alert("Thành công! Ghi nhận công cho " + currentUser);
         }
         
         renderHistory();
@@ -122,14 +123,14 @@ function handleAction() {
     .catch(error => {
         alert("Lỗi mạng: Không thể gửi dữ liệu lên máy chủ!");
         console.error(error);
-        updateButtonUI(); // Khôi phục nút nếu gửi lỗi
+        updateButtonUI();
     });
 }
 
 // 7. Cập nhật giao diện lịch sử
 function renderHistory() {
     const today = new Date().toLocaleDateString('vi-VN');
-    const logs = JSON.parse(localStorage.getItem('logs_' + today) || "[]");
+    const logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
     document.getElementById('progress-bar-fill').style.width = (logs.length / 4 * 100) + "%";
     document.getElementById('progress-text').innerText = logs.length + "/4 lần";
     document.getElementById('history-list').innerHTML = logs.map((t, i) => `
@@ -139,34 +140,35 @@ function renderHistory() {
 
 document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
 
-// 8. Đóng/mở thanh Menu (Sidebar)
+// 8. Đóng/mở Menu
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
-// 9. Chức năng Đăng xuất
+// 9. Đăng xuất
 function logout() {
     currentUser = "";
-    localStorage.removeItem('last_time'); // Tùy chọn: Xóa thời gian chờ khi đăng xuất
     window.location.reload(); 
 }
 
-// 10. TÍNH NĂNG MỚI: Reset để Test (Tự động chèn vào Menu)
+// 10. TÍNH NĂNG RESET CHỈ CHO USER HIỆN TẠI
 function resetTest() {
-    localStorage.clear();
-    alert("Đã xóa thời gian chờ 40 phút và lịch sử số lần bấm! Bạn có thể test liên tục.");
+    const today = new Date().toLocaleDateString('vi-VN');
+    localStorage.removeItem('logs_' + currentUser + '_' + today);
+    localStorage.removeItem('last_time_' + currentUser);
+    alert("Đã xóa dữ liệu test của tài khoản: " + currentUser);
     window.location.reload();
 }
 
-// Tự động thêm nút Reset vào Sidebar khi trang tải xong
+// Tự động thêm nút Reset vào Sidebar
 window.onload = () => {
     const sidebar = document.querySelector('.sidebar-menu');
     if (sidebar) {
         sidebar.innerHTML += `
         <hr style="border: 0.5px solid #eee; margin: 10px 0;">
         <li onclick="resetTest()" style="color: #ff9800;">
-            <span class="material-icons-round" style="color: #ff9800;">cleaning_services</span> Xóa dữ liệu Test
+            <span class="material-icons-round" style="color: #ff9800;">cleaning_services</span> Xóa dữ liệu Test của tôi
         </li>`;
     }
 };
