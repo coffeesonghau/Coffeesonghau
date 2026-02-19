@@ -8,7 +8,7 @@ const HASHED_PW = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6
 
 let currentUser = "";
 let isNear = false;
-let watchId = null; // Biến lưu ID của trình theo dõi GPS để có thể tắt khi đăng xuất
+let watchId = null;
 
 // 1. Mã hóa SHA-256
 async function sha256(str) {
@@ -35,7 +35,7 @@ async function login() {
     }
 }
 
-// 3. Tính khoảng cách
+// 3. Tính khoảng cách GPS
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -79,40 +79,51 @@ function updateButtonUI() {
     } else {
         label.innerText = "NGOÀI VÙNG";
         btn.disabled = true;
-        status.innerText = "Ngoài bán kính 20m";
+        status.innerText = "Ngoài bán kính " + RADIUS + "m";
     }
 }
 
-// 6. Xử lý Chấm công (Đã cập nhật gửi dữ liệu mỗi lần bấm)
+// 6. Xử lý Chấm công (Cải tiến có trạng thái ĐANG GỬI)
 function handleAction() {
     const today = new Date().toLocaleDateString('vi-VN');
     let logs = JSON.parse(localStorage.getItem('logs_' + today) || "[]");
 
-    if (logs.length < 4) {
-        // Lưu thời gian chấm công vào LocalStorage
+    if (logs.length >= 4) {
+        alert("Bạn đã chấm công đủ 4 lần hôm nay!");
+        return;
+    }
+
+    // Đổi giao diện sang trạng thái đang tải
+    const btn = document.getElementById('check-btn');
+    const label = document.getElementById('btn-label');
+    label.innerText = "ĐANG GỬI...";
+    btn.disabled = true;
+
+    // Gửi dữ liệu lên Google Sheets (Bỏ qua cấu hình phức tạp để tránh lỗi CORS)
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ name: currentUser })
+    })
+    .then(response => {
+        // Chỉ lưu LocalStorage và báo thành công khi đã gửi đi xong
         logs.push(new Date().toLocaleTimeString('vi-VN'));
         localStorage.setItem('logs_' + today, JSON.stringify(logs));
-        localStorage.setItem('last_time', Date.now());
+        localStorage.setItem('last_time', Date.now()); // Kích hoạt đếm ngược 40 phút
 
-        // BẮT BUỘC: Gửi dữ liệu lên Google Sheets MỖI LẦN bấm nút
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify({ name: currentUser })
-        });
-
-        // Hiển thị thông báo tương ứng
         if (logs.length === 4) {
             alert("Đã đủ 4 lần! Hoàn thành 1 ngày công.");
         } else {
-            alert("Ghi nhận chấm công lần " + logs.length + ". (Được " + (logs.length * 0.25) + " công)");
+            alert("Thành công! Ghi nhận chấm công lần " + logs.length);
         }
-    } else {
-        alert("Bạn đã chấm công đủ 4 lần hôm nay!");
-    }
-    
-    renderHistory();
-    updateButtonUI();
+        
+        renderHistory();
+        updateButtonUI();
+    })
+    .catch(error => {
+        alert("Lỗi mạng: Không thể gửi dữ liệu lên máy chủ!");
+        console.error(error);
+        updateButtonUI(); // Khôi phục nút nếu gửi lỗi
+    });
 }
 
 // 7. Cập nhật giao diện lịch sử
@@ -126,7 +137,6 @@ function renderHistory() {
     `).join('');
 }
 
-// Hiển thị ngày tháng trên giao diện
 document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
 
 // 8. Đóng/mở thanh Menu (Sidebar)
@@ -137,6 +147,26 @@ function toggleMenu() {
 
 // 9. Chức năng Đăng xuất
 function logout() {
-    // Tải lại trang hoàn toàn để reset tất cả biến, trạng thái GPS và UI
+    currentUser = "";
+    localStorage.removeItem('last_time'); // Tùy chọn: Xóa thời gian chờ khi đăng xuất
     window.location.reload(); 
 }
+
+// 10. TÍNH NĂNG MỚI: Reset để Test (Tự động chèn vào Menu)
+function resetTest() {
+    localStorage.clear();
+    alert("Đã xóa thời gian chờ 40 phút và lịch sử số lần bấm! Bạn có thể test liên tục.");
+    window.location.reload();
+}
+
+// Tự động thêm nút Reset vào Sidebar khi trang tải xong
+window.onload = () => {
+    const sidebar = document.querySelector('.sidebar-menu');
+    if (sidebar) {
+        sidebar.innerHTML += `
+        <hr style="border: 0.5px solid #eee; margin: 10px 0;">
+        <li onclick="resetTest()" style="color: #ff9800;">
+            <span class="material-icons-round" style="color: #ff9800;">cleaning_services</span> Xóa dữ liệu Test
+        </li>`;
+    }
+};
