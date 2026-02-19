@@ -11,7 +11,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCJ5dV9T5rDM
 // Mật khẩu riêng cho từng người (Mã hóa SHA-256)
 const USER_DB = {
     "Nguyễn Văn A": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c", // Pass: 123456
-    "Nguyễn Minh Thuận": "13b96ba713ec367ba4fdf243e8ba2eb2e3de03b22cfd86fb35092a8385e0de59", // Pass: thuan123
+    "Nguyễn Minh Thuận": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c", // Pass: thuan123
     "ABC": "1290fd398fbfd8fbcc03cd711f181fcdfb6eddf333ab5a94ee8999ff391d4e0d" // Pass: abc123
 };
 
