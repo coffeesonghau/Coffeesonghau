@@ -16,11 +16,12 @@
             <h2>ĐĂNG NHẬP</h2>
             <div class="input-group">
                 <span class="material-icons-round">person</span>
-                <input type="text" id="username" placeholder="Nhập Họ và Tên">
+                <input type="text" id="username" placeholder="Nhập Họ và Tên" onkeypress="handleEnter(event)">
             </div>
             <div class="input-group">
                 <span class="material-icons-round">lock</span>
-                <input type="password" id="password" placeholder="Mật khẩu">
+                <input type="password" id="password" placeholder="Mật khẩu" onkeypress="handleEnter(event)">
+                <span class="material-icons-round toggle-password" onclick="togglePassword()">visibility_off</span>
             </div>
             <button onclick="login()" class="btn-login">VÀO HỆ THỐNG</button>
         </div>

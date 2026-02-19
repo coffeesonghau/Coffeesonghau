@@ -17,6 +17,16 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); co
 .input-group input { border: none; background: transparent; outline: none; margin-left: 10px; width: 100%; font-size: 1rem; }
 .btn-login { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
+/* Nút ẩn hiện mật khẩu */
+.toggle-password { 
+    cursor: pointer; 
+    color: #7d8597; 
+    margin-left: 10px; 
+    user-select: none; 
+    transition: 0.2s;
+}
+.toggle-password:hover { color: var(--primary); }
+
 /* Main App */
 .app-container { background: var(--card); width: 100%; max-width: 400px; border-radius: 28px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); z-index: 10; }
 .user-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
