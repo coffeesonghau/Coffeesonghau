@@ -127,4 +127,14 @@ const systemData = [
         image: "chuoihethong/SHNQqk.webp",
         mapLink: "https://maps.app.goo.gl/55qa3L2RqXHgJvGr9"
     },
+    {
+        id: "fran-03",
+        type: "franchise",
+        city: "bac-lieu",
+        searchTags: "sh22 song hau 22 nhuong quyen song hau 22 vo thi sau, phuong 8, bac lieu",
+        name: "Sông Hậu 22",
+        address: "45 Võ Thị Sáu, Phường 8, Bạc Liêu", // Lưu ý: Địa chỉ gốc trong HTML cũ ghi Phường 7 Bạc Liêu nhưng tag là Cà Mau, tôi giữ nguyên data gốc.
+        image: "chuoihethong/SH22.webp",
+        mapLink: "https://maps.app.goo.gl/ohEPJhJ4NupZ2eEy7"
+    },
 ];
