@@ -1,6 +1,6 @@
 /**
- * NMT VIP BO - JAVASCRIPT CORE (VERSION 4.0 - CLOUD SYNC)
- * Hỗ trợ đồng bộ đa thiết bị & AI Smart Manipulation
+ * NMT VIP BO - JAVASCRIPT CORE (VERSION 4.1 - FIXED DEPOSIT & ENHANCED)
+ * Đã sửa lỗi nạp tiền và tối ưu logic đồng bộ
  */
 
 // --- 1. STATE & BIẾN TOÀN CỤC ---
@@ -32,14 +32,12 @@ const fakeNames = ["Nguyễn Hải", "Trần Tuấn", "Lê Nam", "Phạm Quân",
 // --- 2. ĐỒNG BỘ DỮ LIỆU (LOCAL STORAGE & CLOUD) ---
 
 async function loadData() {
-    // 1. Lấy dữ liệu tạm từ trình duyệt máy
     const saved = localStorage.getItem('nmt_vip_bo_lite');
     if (saved) {
         state = Object.assign(state, JSON.parse(saved));
         updateUI();
     }
 
-    // 2. Đồng bộ số dư thực tế từ Google Sheets (Nếu chuyển điện thoại)
     try {
         console.log("🔄 Đang đồng bộ số dư từ Google Sheets...");
         const response = await fetch(GOOGLE_SHEET_URL);
@@ -60,7 +58,6 @@ function saveData() {
     localStorage.setItem('nmt_vip_bo_lite', JSON.stringify(state)); 
 }
 
-// Hàm gửi dữ liệu (Cược/Nạp) lên Sheets
 function sendToGoogleSheets(action, amount, result, profit_loss, balance, note) {
     const data = {
         api_key: API_KEY, 
@@ -75,7 +72,7 @@ function sendToGoogleSheets(action, amount, result, profit_loss, balance, note) 
 
     fetch(GOOGLE_SHEET_URL, {
         method: "POST",
-        mode: "no-cors", // Vượt rào cản CORS
+        mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(data)
     }).catch(err => console.error("Network Error:", err));
@@ -86,7 +83,6 @@ function sendToGoogleSheets(action, amount, result, profit_loss, balance, note) 
 function simulateMarket() {
     let volatility = (Math.random() * 2 - 1) / 100;
     
-    // Thuật toán bẻ lái giá theo dự đoán của AI (Win 95%)
     if (isBoRunning && activeAIPrediction) {
         const isAIHit = Math.random() <= 0.95; 
         if (activeAIPrediction === 'UP') {
@@ -103,11 +99,14 @@ function simulateMarket() {
 
 function updateOrderBook() {
     const hp = document.getElementById('header-price');
+    if (!hp) return;
     hp.innerText = currentPrice.toFixed(2);
     
     const obPriceEl = document.getElementById('ob-price');
-    obPriceEl.innerText = currentPrice.toFixed(2);
-    obPriceEl.className = hp.classList.contains('price-up') ? 'ob-current-price price-up' : 'ob-current-price price-down';
+    if (obPriceEl) {
+        obPriceEl.innerText = currentPrice.toFixed(2);
+        obPriceEl.className = (volatility > 0) ? 'ob-current-price price-up' : 'ob-current-price price-down';
+    }
 }
 
 // --- 4. NGƯỜI CHƠI ẢO & AI ---
@@ -117,6 +116,7 @@ function generateFakeBet() {
     const name = fakeNames[Math.floor(Math.random() * fakeNames.length)] + "***";
     const amount = (Math.random() * 800 + 50).toFixed(0);
     const feed = document.getElementById('live-feed');
+    if (!feed) return;
     const item = document.createElement('div');
     item.className = 'feed-item';
     item.innerHTML = `<strong>${name}</strong> cược <span style="color:var(--accent)">$${amount}</span> 💸`;
@@ -161,21 +161,29 @@ function placeBO(direction) {
 
     document.querySelectorAll('.btn-huge, #btn-predict').forEach(b => b.disabled = true);
     const progressBar = document.getElementById('countdown-bar');
-    progressBar.style.transition = 'none'; progressBar.style.width = '100%';
-    setTimeout(() => { progressBar.style.transition = 'width 5s linear'; progressBar.style.width = '0%'; }, 50);
+    progressBar.style.transition = 'none'; 
+    progressBar.style.width = '100%';
+    
+    setTimeout(() => { 
+        progressBar.style.transition = 'width 5s linear'; 
+        progressBar.style.width = '0%'; 
+    }, 50);
 
     let timeLeft = 5;
     const countdown = setInterval(() => {
         timeLeft--;
         document.getElementById('bo-status').innerHTML = `Kết quả sau: ${timeLeft}s<br>Vào lệnh: ${betEntryPrice.toFixed(2)}`;
-        if (timeLeft <= 0) { clearInterval(countdown); resolveBO(direction, betAmount, betEntryPrice); }
+        if (timeLeft <= 0) { 
+            clearInterval(countdown); 
+            resolveBO(direction, betAmount, betEntryPrice); 
+        }
     }, 1000);
     updateUI();
 }
 
 function resolveBO(direction, betAmount, entryPrice) {
     const exitPrice = currentPrice;
-    let isWin = false, isTie = false, resultText = 'TIE', profit = 0;
+    let isWin = false, isTie = false, resultText = 'HÒA', profit = 0;
 
     if (exitPrice > entryPrice) {
         state.dotHistory.push('up');
@@ -192,7 +200,7 @@ function resolveBO(direction, betAmount, entryPrice) {
     let note = activeAIPrediction ? "Dùng Bot AI " + activeAIPrediction : "Cược tay";
 
     if (isWin) {
-        winSound.play();
+        winSound.play().catch(e => console.log("Sound block"));
         profit = betAmount * 0.95;
         state.usdBalance += (betAmount + profit);
         state.realizedPnL += profit;
@@ -202,7 +210,7 @@ function resolveBO(direction, betAmount, entryPrice) {
         state.usdBalance += betAmount;
         resultText = "HÒA";
     } else {
-        loseSound.play();
+        loseSound.play().catch(e => console.log("Sound block"));
         profit = -betAmount;
         state.realizedPnL -= betAmount;
         resultText = "THUA";
@@ -212,12 +220,13 @@ function resolveBO(direction, betAmount, entryPrice) {
     state.history.unshift({ action: direction, amount: profit, price: entryPrice, result: resultText, time: new Date().toLocaleTimeString() });
     state.totalVolume += betAmount;
 
-    // Gửi lên Sheets
     sendToGoogleSheets(`Cược ${direction}`, betAmount, resultText, profit.toFixed(2), state.usdBalance.toFixed(2), note);
 
-    isBoRunning = false; activeAIPrediction = null;
+    isBoRunning = false; 
+    activeAIPrediction = null;
     document.querySelectorAll('.btn-huge, #btn-predict').forEach(b => b.disabled = false);
-    saveData(); updateUI();
+    saveData(); 
+    updateUI();
 }
 
 // --- 6. CẬP NHẬT GIAO DIỆN ---
@@ -232,7 +241,6 @@ function updateUI() {
     pnlEl.innerText = fmt(state.realizedPnL);
     pnlEl.style.color = state.realizedPnL >= 0 ? 'var(--green)' : 'var(--red)';
 
-    // VIP Level
     let vip = "VIP 0", color = "var(--text-muted)";
     if(state.totalVolume >= 50000) { vip = "VIP 4 (Kim Cương)"; color = "#00ffff"; }
     else if(state.totalVolume >= 20000) { vip = "VIP 3 (Vàng)"; color = "var(--accent)"; }
@@ -240,7 +248,6 @@ function updateUI() {
     else if(state.totalVolume >= 1000) { vip = "VIP 1 (Đồng)"; color = "#cd7f32"; }
     document.querySelector('.logo').innerHTML = `💎 NMT BO - <span style="color:${color}; font-size:12px;">${vip}</span>`;
 
-    // Giọt nước & Lịch sử
     document.getElementById('dot-history').innerHTML = state.dotHistory.map(d => `<div class="dot ${d}"></div>`).join('');
     document.getElementById('history-body').innerHTML = state.history.slice(0, 15).map(h => `
         <div class="hist-item ${h.result === 'THẮNG' ? 'win' : (h.result === 'THUA' ? 'loss' : '')}">
@@ -258,27 +265,110 @@ function showFloatingText(text, color) {
     setTimeout(() => el.remove(), 2000);
 }
 
-// --- 7. NẠP TIỀN & KHỞI CHẠY ---
+// --- 7. NẠP TIỀN (FIXED LOGIC) ---
 
-function openDepositModal() { document.getElementById('deposit-modal').style.display = 'flex'; }
-function closeDepositModal() { document.getElementById('deposit-modal').style.display = 'none'; }
+function openDepositModal() { 
+    document.getElementById('deposit-modal').style.display = 'flex'; 
+    backToStep1(); // Luôn bắt đầu từ bước 1
+}
+
+function closeDepositModal() { 
+    document.getElementById('deposit-modal').style.display = 'none'; 
+}
+
+function calculateVND() {
+    const usd = document.getElementById('deposit-amount').value;
+    const vnd = usd * EXCHANGE_RATE;
+    document.getElementById('vnd-preview').innerText = vnd.toLocaleString() + " ₫";
+}
+
+function goToDepositStep2() {
+    const usd = parseFloat(document.getElementById('deposit-amount').value);
+    if (isNaN(usd) || usd < 10) return alert("Vui lòng nạp tối thiểu $10");
+
+    const vndAmount = usd * EXCHANGE_RATE;
+    const memo = "NAPUSD" + Math.floor(1000 + Math.random() * 9000);
+
+    // Cập nhật thông tin QR
+    document.getElementById('qr-vnd-amount').innerText = vndAmount.toLocaleString() + " ₫";
+    document.getElementById('qr-memo').innerText = memo;
+    
+    // Sử dụng API tạo QR động (Ví dụ VietQR giả lập)
+    document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=STK:123456789|Amount:${vndAmount}|Memo:${memo}`;
+
+    document.getElementById('deposit-step-1').style.display = 'none';
+    document.getElementById('deposit-step-2').style.display = 'block';
+}
+
+function backToStep1() {
+    document.getElementById('deposit-step-1').style.display = 'block';
+    document.getElementById('deposit-step-2').style.display = 'none';
+    document.getElementById('deposit-loader').style.display = 'none';
+}
+
 function processDeposit() {
     const usd = parseFloat(document.getElementById('deposit-amount').value);
-    if (isNaN(usd) || usd < 10) return alert("Tối thiểu $10");
-    state.usdBalance += usd;
-    state.history.unshift({ action: 'NẠP', amount: usd, price: '-', result: 'WIN', time: new Date().toLocaleTimeString() });
-    sendToGoogleSheets('NẠP TIỀN', usd, 'THÀNH CÔNG', `+${usd}`, state.usdBalance.toFixed(2), "Nạp qua QR");
-    saveData(); updateUI(); closeDepositModal();
-    showFloatingText(`+$${usd}`, 'var(--green)');
+    const btnConfirm = document.getElementById('btn-confirm-deposit');
+    const loader = document.getElementById('deposit-loader');
+
+    btnConfirm.disabled = true;
+    loader.style.display = 'block';
+
+    // Giả lập quét giao dịch trong 2 giây
+    setTimeout(() => {
+        state.usdBalance += usd;
+        state.history.unshift({ 
+            action: 'NẠP', 
+            amount: usd, 
+            price: '-', 
+            result: 'THẮNG', 
+            time: new Date().toLocaleTimeString() 
+        });
+
+        sendToGoogleSheets('NẠP TIỀN', usd, 'THÀNH CÔNG', `+${usd}`, state.usdBalance.toFixed(2), "Nạp qua QR");
+        
+        saveData(); 
+        updateUI(); 
+        closeDepositModal();
+        showFloatingText(`+$${usd}`, 'var(--green)');
+        
+        btnConfirm.disabled = false;
+        loader.style.display = 'none';
+        document.getElementById('deposit-amount').value = '';
+    }, 2000);
+}
+
+function resetAccount() {
+    if(confirm("Bạn có chắc chắn muốn xóa toàn bộ dữ liệu và khôi phục về $10,000?")) {
+        state = {
+            usdBalance: 10000.00,
+            realizedPnL: 0,
+            history: [],
+            dotHistory: [],
+            winStreak: 0,
+            currentStreakType: null,
+            totalVolume: 0
+        };
+        saveData();
+        updateUI();
+        alert("Đã khôi phục dữ liệu gốc.");
+    }
 }
 
 function setQuickBet(amt) {
-    document.getElementById('bo-amount').value = amt === 'ALL' ? Math.floor(state.usdBalance) : amt;
+    document.getElementById('bo-amount').value = (amt === 'ALL') ? Math.floor(state.usdBalance) : amt;
+    updateExpectedProfit();
+}
+
+function updateExpectedProfit() {
+    const amt = parseFloat(document.getElementById('bo-amount').value) || 0;
+    const profit = amt * 1.95;
+    document.getElementById('expected-profit-text').innerText = "$" + profit.toLocaleString(undefined, {minimumFractionDigits: 2});
 }
 
 function switchSidebarTab(tabId) {
     document.querySelectorAll('.tab-btn, .tab-content').forEach(el => el.classList.remove('active'));
-    event.target.classList.add('active');
+    event.currentTarget.classList.add('active');
     document.getElementById(`tab-${tabId}`).classList.add('active');
 }
 
