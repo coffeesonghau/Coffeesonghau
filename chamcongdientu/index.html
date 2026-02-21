@@ -101,12 +101,39 @@
                 <span class="material-icons-round close-btn" onclick="toggleMenu()">close</span>
             </div>
             <ul class="sidebar-menu">
+                <li onclick="openChangePassModal()">
+                    <span class="material-icons-round">vpn_key</span> Đổi mật khẩu
+                </li>
                 <li class="logout-item" onclick="logout()">
                     <span class="material-icons-round">logout</span> Đăng xuất
                 </li>
             </ul>
         </div>
     </div>
+
+    <div id="change-pass-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px;">
+            <div style="background: #fff; padding: 25px; border-radius: 20px; width: 100%; max-width: 350px;">
+                <h3 style="margin-top:0; color:#4361ee; text-align:center;">Đổi Mật Khẩu</h3>
+                
+                <div class="input-group">
+                    <span class="material-icons-round">lock_outline</span>
+                    <input type="password" id="old-pass" placeholder="Mật khẩu hiện tại">
+                </div>
+                <div class="input-group">
+                    <span class="material-icons-round">lock</span>
+                    <input type="password" id="new-pass" placeholder="Mật khẩu mới">
+                </div>
+                <div class="input-group">
+                    <span class="material-icons-round">check_circle</span>
+                    <input type="password" id="confirm-pass" placeholder="Nhập lại mật khẩu mới">
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button onclick="closeChangePassModal()" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: #7d8597; color: white; cursor: pointer;">Hủy</button>
+                    <button onclick="submitChangePassword()" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: #4361ee; color: white; cursor: pointer; font-weight: bold;">Cập nhật</button>
+                </div>
+            </div>
+        </div>
 
     <script src="script.js"></script>
 </body>

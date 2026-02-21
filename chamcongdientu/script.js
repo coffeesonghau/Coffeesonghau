@@ -49,6 +49,10 @@ async function login() {
     const hashBuffer = await crypto.subtle.digest('SHA-256', buf);
     const hashed = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
+    // --- MỚI THÊM: TẠM DỪNG ĐỂ COPY MÃ BĂM ---
+    prompt("MÃ BĂM CỦA MẬT KHẨU VỪA NHẬP:\n(Bấm Ctrl+C để copy, sau đó dán vào Cột E trên Google Sheets, rồi bấm OK để tiếp tục hoặc Cancel)", hashed);
+    // ------------------------------------------
+
     // Gọi API lên Google Apps Script
     const payload = {
         action: "login",
@@ -242,21 +246,90 @@ function submitData(photoBase64) {
     });
 }
 
+// --- ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET VỀ WEB ---
 function fetchHistoryFromServer() {
-    // Lý tưởng nhất là Fetch GET từ Google Script để đồng bộ, hiện tại gọi từ LocalStorage
-    const today = new Date().toLocaleDateString('vi-VN');
-    const logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
-    renderHistory(logs);
+    setGlobalLoading(true, "Đang đồng bộ dữ liệu...");
+
+    const payload = {
+        action: "get_status",
+        username: currentUser
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            renderRealHistory(data.times, data.totalWork);
+        } else {
+            console.log("Lỗi đồng bộ:", data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Lỗi mạng khi đồng bộ:", error);
+    })
+    .finally(() => {
+        setGlobalLoading(false);
+    });
 }
 
-function renderHistory(logs) {
-    document.getElementById('progress-bar-fill').style.width = (logs.length / 4 * 100) + "%";
-    document.getElementById('progress-text').innerText = logs.length + "/4 lần";
-    document.getElementById('history-list').innerHTML = logs.map((t, i) => `
-        <div class="history-item"><span>Lần ${i+1}</span><b>${t}</b></div>
-    `).join('');
+function renderRealHistory(times, totalWork) {
+    const maxTimes = 4;
+    let displayTimes = times;
+    if (displayTimes > maxTimes) displayTimes = maxTimes; // Giới hạn thanh tiến độ ở 100%
+
+    // Cập nhật thanh tiến độ
+    document.getElementById('progress-bar-fill').style.width = (displayTimes / maxTimes * 100) + "%";
+    
+    const progressText = document.getElementById('progress-text');
+    const historyList = document.getElementById('history-list');
+    
+    // NẾU ĐÃ ĐỦ 1 CÔNG (Hoặc IT sửa thành 1, 1.25...)
+    if (totalWork >= 1) {
+        progressText.innerText = "HOÀN THÀNH 1 CÔNG!";
+        progressText.style.color = "var(--success)"; // Đổi màu chữ xanh lá
+        
+        // Hiển thị lời chúc thiệp xanh lá + Icon pháo hoa
+        historyList.innerHTML = `
+            <div style="background: #e6f9f5; border: 1px dashed var(--success); border-radius: 12px; padding: 20px; text-align: center; color: var(--success);">
+                <span class="material-icons-round" style="font-size: 3rem; margin-bottom: 10px;">celebration</span>
+                <h3 style="margin: 0 0 5px 0;">Tuyệt vời!</h3>
+                <p style="margin: 0; font-size: 0.95rem;">Bạn đã hoàn thành xuất sắc ngày làm việc hôm nay. Hãy nghỉ ngơi thật tốt nhé!</p>
+            </div>
+        `;
+
+        // Khoá nút chấm công lại và đổi chữ trên nút
+        const btn = document.getElementById('check-btn');
+        if (btn) {
+            btn.disabled = true;
+            document.getElementById('btn-label').innerText = "ĐÃ ĐỦ CÔNG";
+            document.getElementById('btn-timer').innerText = "Hẹn gặp lại ngày mai!";
+        }
+    } 
+    // NẾU CHƯA ĐỦ 1 CÔNG (Ví dụ IT sửa thành 0.75, thì app hiểu là 3 lần)
+    else {
+        progressText.innerText = `${displayTimes}/4 lần`;
+        progressText.style.color = ""; // Đưa về màu mặc định
+        
+        let html = "";
+        if (displayTimes === 0) {
+            html = `<div class="history-item" style="justify-content:center; color: #7d8597;">Chưa có dữ liệu chấm công hôm nay.</div>`;
+        } else {
+            for(let i = 1; i <= displayTimes; i++) {
+                html += `<div class="history-item">
+                            <span>Lần ${i}</span>
+                            <b style="color: var(--success);">Đã ghi nhận trên hệ thống</b>
+                         </div>`;
+            }
+        }
+        historyList.innerHTML = html;
+    }
 }
 
+// --- MENU VÀ ĐĂNG XUẤT ---
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('sidebar-overlay').classList.toggle('active');
@@ -266,4 +339,79 @@ function logout() {
     currentUser = "";
     localStorage.removeItem("saved_user"); 
     window.location.reload(); 
+}
+
+// --- CHỨC NĂNG ĐỔI MẬT KHẨU ---
+function openChangePassModal() {
+    toggleMenu(); // Đóng sidebar đi
+    document.getElementById('change-pass-modal').classList.remove('hidden');
+    // Xóa trắng các ô nhập liệu cũ nếu có
+    document.getElementById('old-pass').value = "";
+    document.getElementById('new-pass').value = "";
+    document.getElementById('confirm-pass').value = "";
+}
+
+function closeChangePassModal() {
+    document.getElementById('change-pass-modal').classList.add('hidden');
+}
+
+// Hàm hỗ trợ băm mật khẩu ra mã SHA-256 (tái sử dụng)
+async function hashString(text) {
+    const buf = new TextEncoder().encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function submitChangePassword() {
+    const oldPass = document.getElementById('old-pass').value;
+    const newPass = document.getElementById('new-pass').value;
+    const confirmPass = document.getElementById('confirm-pass').value;
+
+    if (!oldPass || !newPass || !confirmPass) {
+        return alert("Vui lòng điền đầy đủ thông tin!");
+    }
+
+    if (newPass !== confirmPass) {
+        return alert("Mật khẩu mới không khớp nhau!");
+    }
+
+    if (newPass.length < 6) {
+        return alert("Mật khẩu mới phải có ít nhất 6 ký tự!");
+    }
+
+    setGlobalLoading(true, "Đang cập nhật mật khẩu...");
+
+    // Mã hóa cả mật khẩu cũ và mật khẩu mới trước khi gửi
+    const hashedOld = await hashString(oldPass);
+    const hashedNew = await hashString(newPass);
+
+    const payload = {
+        action: "change_password",
+        username: currentUser, // Tên tài khoản đang đăng nhập
+        oldPassword: hashedOld,
+        newPassword: hashedNew
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại bằng mật khẩu mới.");
+            closeChangePassModal();
+            logout(); // Ép văng ra ngoài bắt đăng nhập lại
+        } else {
+            alert("Lỗi: " + data.message); // Báo lỗi sai mật khẩu cũ
+        }
+    })
+    .catch(error => {
+        alert("Lỗi kết nối mạng! Vui lòng thử lại.");
+        console.error(error);
+    })
+    .finally(() => {
+        setGlobalLoading(false);
+    });
 }
