@@ -98,3 +98,39 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); co
 .sidebar-menu li.logout-item { color: var(--danger); border-bottom: none; margin-top: auto; }
 .sidebar-menu li.logout-item span { color: var(--danger); }
 .sidebar-menu li.logout-item:hover { background: #ffe3e6; color: var(--danger); }
+/* --- TRẠNG THÁI LOADING TOÀN CỤC --- */
+#global-loading {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(255, 255, 255, 0.9); z-index: 9999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.spinner {
+    width: 50px; height: 50px; border: 5px solid #f0f4ff;
+    border-top: 5px solid var(--primary); border-radius: 50%;
+    animation: spin 1s linear infinite; margin-bottom: 15px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+#loading-text { font-weight: bold; color: var(--primary); font-size: 1.1rem; }
+
+/* --- TRẠNG THÁI LỖI GPS --- */
+.gps-error { color: var(--danger); }
+.gps-error-icon { color: var(--danger) !important; }
+
+/* --- CAMERA MODAL --- */
+#camera-modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.8); z-index: 1000;
+    display: flex; justify-content: center; align-items: center; padding: 20px;
+}
+.camera-container {
+    background: #fff; padding: 20px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center;
+}
+#camera-stream {
+    width: 100%; border-radius: 12px; background: #000; margin: 15px 0; max-height: 400px; object-fit: cover;
+}
+.camera-actions { display: flex; gap: 10px; }
+.camera-actions button {
+    flex: 1; padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; color: white;
+}
+.btn-cancel { background: #7d8597; }
+.btn-capture { background: var(--success); }

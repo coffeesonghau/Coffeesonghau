@@ -1,108 +1,105 @@
 // --- CẤU HÌNH HỆ THỐNG ---
-const OFFICE_LAT = 9.288933426099419; 
-const OFFICE_LNG = 105.67547137936793; 
-const RADIUS = 30; // Bán kính cho phép chấm công (mét)
-const COOLDOWN_MINS = 40; // Thời gian chờ giữa 2 lần chấm công (phút)
-
-// THAY ĐƯỜNG LINK WEB APP CỦA BẠN VÀO ĐÂY (Nhớ dùng link phiên bản mới nhất nhé)
+const OFFICE_LAT = 9.297882062370338; 
+const OFFICE_LNG = 105.68558983928828; 
+const RADIUS = 30; 
+const COOLDOWN_MINS = 40; 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCJ5dV9T5rDMK_95iPKPATIrbZK05NfxKIQq0kLVWXNqTE3mtCgcdlJFqSXMhdMkiW/exec"; 
-
-// --- CƠ SỞ DỮ LIỆU TÀI KHOẢN ---
-// Mật khẩu riêng cho từng người (Mã hóa SHA-256)
-const USER_DB = {
-    "Nguyễn Văn A": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c", // Pass: 123456
-    "Nguyễn Minh Thuận": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c", // Pass: thuan123
-    "ABC": "1290fd398fbfd8fbcc03cd711f181fcdfb6eddf333ab5a94ee8999ff391d4e0d" // Pass: abc123
-};
 
 let currentUser = localStorage.getItem("saved_user") || "";
 let isNear = false;
 let watchId = null;
+let currentStream = null;
 
-// 1. Khởi tạo khi tải trang
+// Khởi tạo
 window.onload = () => {
-    setupSidebarMenu();
+    registerServiceWorker(); // Kích hoạt PWA
     if (currentUser) {
-        showMainScreen(); // Tự động vào thẳng hệ thống nếu đã đăng nhập trước đó
+        showMainScreen();
     }
 };
 
-// 2. Hàm mã hóa Mật khẩu
-async function sha256(str) {
-    const buf = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+// PWA Service Worker
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log('PWA Service Worker Đã Đăng Ký'))
+        .catch(err => console.log('Lỗi PWA:', err));
+    }
 }
 
-// 3. Xử lý Đăng nhập (Đã cải tiến)
+// UI Trạng thái Tải
+function setGlobalLoading(isLoading, text = "Đang xử lý...") {
+    const loader = document.getElementById('global-loading');
+    document.getElementById('loading-text').innerText = text;
+    if (isLoading) loader.classList.remove('hidden');
+    else loader.classList.add('hidden');
+}
+
+// Đăng nhập kết nối với Google Sheets
 async function login() {
-    // Chuẩn hóa chuỗi: xóa khoảng trắng thừa 2 đầu và giữa các chữ
     const rawUser = document.getElementById('username').value.trim().replace(/\s+/g, ' ');
     const pass = document.getElementById('password').value;
 
-    // Cảnh báo nếu để trống
-    if (!rawUser || !pass) {
-        alert("Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!");
-        return;
-    }
+    if (!rawUser || !pass) return alert("Vui lòng nhập đầy đủ!");
 
-    const hashed = await sha256(pass);
-    const btnLogin = document.querySelector('.btn-login');
-    btnLogin.innerText = "ĐANG KIỂM TRA...";
-    btnLogin.disabled = true;
+    setGlobalLoading(true, "Đang xác thực với hệ thống...");
 
-    setTimeout(() => {
-        // Tìm tên trong DB không phân biệt chữ hoa/thường
-        const validUserKey = Object.keys(USER_DB).find(k => k.toLowerCase() === rawUser.toLowerCase());
+    // Mã hóa mật khẩu sang SHA-256 trước khi gửi đi
+    const buf = new TextEncoder().encode(pass);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buf);
+    const hashed = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
-        if (validUserKey && USER_DB[validUserKey] === hashed) {
-            currentUser = validUserKey; // Lấy tên chuẩn (có viết hoa) từ DB
+    // Gọi API lên Google Apps Script
+    const payload = {
+        action: "login",
+        username: rawUser,
+        password: hashed // Gửi mã băm lên thay vì mật khẩu gốc
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // Chuẩn hóa tên viết hoa chữ cái đầu nếu muốn, hoặc dùng tên user nhập
+            currentUser = rawUser;
             localStorage.setItem("saved_user", currentUser); 
             showMainScreen();
         } else {
-            alert("Tên đăng nhập hoặc mật khẩu không chính xác!");
+            alert(data.message); // Hiển thị lỗi từ server ("Sai mật khẩu", "Không tìm thấy"...)
         }
-        
-        btnLogin.innerText = "VÀO HỆ THỐNG";
-        btnLogin.disabled = false;
-    }, 300); // Thêm độ trễ 0.3s để UI hiển thị mượt mà hơn
+    })
+    .catch(error => {
+        alert("Lỗi kết nối mạng! Vui lòng thử lại.");
+        console.error(error);
+    })
+    .finally(() => {
+        setGlobalLoading(false);
+    });
 }
 
-// TÍNH NĂNG MỚI: Nhấn Enter để đăng nhập
-function handleEnter(e) {
-    if (e.key === 'Enter') {
-        login();
-    }
-}
+function handleEnter(e) { if (e.key === 'Enter') login(); }
 
-// TÍNH NĂNG MỚI: Ẩn/Hiện mật khẩu
 function togglePassword() {
     const passInput = document.getElementById('password');
     const toggleIcon = document.querySelector('.toggle-password');
-    if (passInput.type === 'password') {
-        passInput.type = 'text';
-        toggleIcon.innerText = 'visibility';
-    } else {
-        passInput.type = 'password';
-        toggleIcon.innerText = 'visibility_off';
-    }
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    toggleIcon.innerText = passInput.type === 'password' ? 'visibility_off' : 'visibility';
 }
 
-// 4. Chuyển sang màn hình chính (App)
 function showMainScreen() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('main-screen').classList.remove('hidden');
     document.getElementById('display-name').innerText = currentUser;
-    
-    // Hiển thị ngày tháng hôm nay
     document.getElementById('date-display').innerText = new Date().getDate() + " Tháng " + (new Date().getMonth()+1);
     
     startGPS();
-    renderHistory();
-    updateButtonUI();
+    fetchHistoryFromServer(); // Lấy lịch sử thật từ Server (Mô phỏng)
 }
 
-// 5. Tính khoảng cách GPS
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -111,22 +108,38 @@ function getDistance(lat1, lon1, lat2, lon2) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// 6. Theo dõi GPS
+// Xử lý GPS nâng cao
 function startGPS() {
+    const status = document.getElementById('status-text');
+    const icon = document.getElementById('gps-icon');
+
     watchId = navigator.geolocation.watchPosition(pos => {
         const dist = getDistance(pos.coords.latitude, pos.coords.longitude, OFFICE_LAT, OFFICE_LNG);
         isNear = dist <= RADIUS;
         document.getElementById('dist-val').innerText = Math.round(dist);
+        
+        status.innerText = isNear ? "Vị trí hợp lệ" : `Ngoài bán kính (${Math.round(dist)}m)`;
+        status.classList.remove('gps-error');
+        icon.classList.remove('gps-error-icon');
+        icon.innerText = "my_location";
+        
         updateButtonUI();
-    }, null, { enableHighAccuracy: true });
+    }, err => {
+        status.classList.add('gps-error');
+        icon.classList.add('gps-error-icon');
+        icon.innerText = "location_off";
+        document.getElementById('check-btn').disabled = true;
+
+        if (err.code === 1) status.innerText = "Lỗi: Bị từ chối quyền vị trí!";
+        else if (err.code === 2) status.innerText = "Lỗi: Mất tín hiệu GPS!";
+        else if (err.code === 3) status.innerText = "Lỗi: Quá thời gian lấy tọa độ!";
+    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
 }
 
-// 7. Cập nhật trạng thái Nút bấm (Tách biệt theo người dùng)
 function updateButtonUI() {
     const btn = document.getElementById('check-btn');
     const label = document.getElementById('btn-label');
     const timer = document.getElementById('btn-timer');
-    const status = document.getElementById('status-text');
 
     const last = localStorage.getItem('last_time_' + currentUser);
     const now = Date.now();
@@ -142,70 +155,101 @@ function updateButtonUI() {
         label.innerText = "CHẤM CÔNG";
         timer.innerText = "";
         btn.disabled = false;
-        status.innerText = "Vị trí hợp lệ";
     } else {
         label.innerText = "NGOÀI VÙNG";
         btn.disabled = true;
-        status.innerText = "Ngoài bán kính " + RADIUS + "m";
     }
 }
 
-// 8. Xử lý khi bấm nút Chấm công
-function handleAction() {
-    const today = new Date().toLocaleDateString('vi-VN');
-    let logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
+// MỞ CAMERA CHỐNG GIAN LẬN
+async function openCameraModal() {
+    const modal = document.getElementById('camera-modal');
+    const video = document.getElementById('camera-stream');
+    modal.classList.remove('hidden');
 
-    if (logs.length >= 4) {
-        alert("Bạn đã chấm công đủ 4 lần hôm nay!");
-        return;
+    try {
+        currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+        video.srcObject = currentStream;
+    } catch (err) {
+        alert("Không thể mở camera. Vui lòng cấp quyền camera để chấm công!");
+        closeCameraModal();
     }
+}
 
-    const btn = document.getElementById('check-btn');
-    const label = document.getElementById('btn-label');
-    label.innerText = "ĐANG GỬI...";
-    btn.disabled = true;
+function closeCameraModal() {
+    document.getElementById('camera-modal').classList.add('hidden');
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+    }
+}
 
-    // Gửi dữ liệu (Có thêm text/plain để chống lỗi chặn truy cập)
+// CHỤP VÀ GỬI LÊN SERVER
+function captureAndSubmit() {
+    const video = document.getElementById('camera-stream');
+    const canvas = document.getElementById('camera-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Đặt kích thước ảnh nhỏ lại để gửi nhanh hơn
+    canvas.width = 480;
+    canvas.height = 640;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Lấy ảnh dạng base64 (chất lượng 0.7 để nén ảnh)
+    const base64Image = canvas.toDataURL('image/jpeg', 0.7);
+    
+    closeCameraModal();
+    submitData(base64Image);
+}
+
+function submitData(photoBase64) {
+    setGlobalLoading(true, "Đang đồng bộ dữ liệu...");
+
+    const payload = {
+        name: currentUser,
+        action: "checkin",
+        photo: photoBase64, // Gửi ảnh đính kèm
+        timestamp: Date.now()
+    };
+
     fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-        headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify({ name: currentUser })
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
     })
     .then(async (response) => {
         let text = await response.text();
-        
         if (text.includes("LỖI")) {
             alert("Hệ thống báo: " + text); 
-            updateButtonUI();
-            return;
-        }
-
-        logs.push(new Date().toLocaleTimeString('vi-VN'));
-        localStorage.setItem('logs_' + currentUser + '_' + today, JSON.stringify(logs));
-        localStorage.setItem('last_time_' + currentUser, Date.now());
-
-        if (logs.length === 4) {
-            alert("Đã đủ 4 lần! Hoàn thành 1 ngày công.");
         } else {
-            alert("Thành công! Đã ghi nhận công cho " + currentUser);
+            // Lưu local tạm
+            const today = new Date().toLocaleDateString('vi-VN');
+            let logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
+            logs.push(new Date().toLocaleTimeString('vi-VN'));
+            localStorage.setItem('logs_' + currentUser + '_' + today, JSON.stringify(logs));
+            localStorage.setItem('last_time_' + currentUser, Date.now());
+            
+            alert("Điểm danh thành công!");
+            renderHistory(logs);
         }
-        
-        renderHistory();
-        updateButtonUI();
     })
     .catch(error => {
-        alert("Lỗi mạng: Không thể kết nối đến máy chủ Google. Vui lòng kiểm tra lại đường truyền!");
+        alert("Lỗi mạng! Vui lòng thử lại.");
         console.error(error);
+    })
+    .finally(() => {
+        setGlobalLoading(false);
         updateButtonUI();
     });
 }
 
-// 9. Hiển thị lịch sử trong ngày
-function renderHistory() {
+function fetchHistoryFromServer() {
+    // Lý tưởng nhất là Fetch GET từ Google Script để đồng bộ, hiện tại gọi từ LocalStorage
     const today = new Date().toLocaleDateString('vi-VN');
     const logs = JSON.parse(localStorage.getItem('logs_' + currentUser + '_' + today) || "[]");
+    renderHistory(logs);
+}
+
+function renderHistory(logs) {
     document.getElementById('progress-bar-fill').style.width = (logs.length / 4 * 100) + "%";
     document.getElementById('progress-text').innerText = logs.length + "/4 lần";
     document.getElementById('history-list').innerHTML = logs.map((t, i) => `
@@ -213,36 +257,13 @@ function renderHistory() {
     `).join('');
 }
 
-// 10. Đóng/Mở Menu Sidebar
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
-// 11. Đăng xuất
 function logout() {
     currentUser = "";
-    localStorage.removeItem("saved_user"); // Xóa nhớ đăng nhập
+    localStorage.removeItem("saved_user"); 
     window.location.reload(); 
-}
-
-// 12. Xóa dữ liệu Test (Để bấm liên tục không cần chờ)
-function resetTest() {
-    const today = new Date().toLocaleDateString('vi-VN');
-    localStorage.removeItem('logs_' + currentUser + '_' + today);
-    localStorage.removeItem('last_time_' + currentUser);
-    alert("Đã xóa dữ liệu test của tài khoản: " + currentUser);
-    window.location.reload();
-}
-
-// 13. Tự động chèn nút Reset vào Menu
-function setupSidebarMenu() {
-    const sidebar = document.querySelector('.sidebar-menu');
-    if (sidebar && !document.getElementById('btn-reset-test')) {
-        sidebar.innerHTML += `
-        <hr style="border: 0.5px solid #eee; margin: 10px 0;">
-        <li id="btn-reset-test" onclick="resetTest()" style="color: #ff9800;">
-            <span class="material-icons-round" style="color: #ff9800;">cleaning_services</span> Xóa dữ liệu Test
-        </li>`;
-    }
 }

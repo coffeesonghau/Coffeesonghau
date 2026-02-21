@@ -2,12 +2,20 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4361ee">
     <title>Hệ Thống Chấm Công Thông Minh</title>
+    
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 </head>
 <body>
+    <div id="global-loading" class="hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Đang xử lý...</p>
+    </div>
+
     <div id="login-screen" class="screen">
         <div class="login-card">
             <div class="logo-area">
@@ -42,7 +50,7 @@
 
             <div class="status-card">
                 <div class="gps-info">
-                    <span class="material-icons-round">my_location</span>
+                    <span class="material-icons-round" id="gps-icon">my_location</span>
                     <span id="status-text">Đang định vị...</span>
                 </div>
                 <div class="dist-badge"><span id="dist-val">--</span>m</div>
@@ -50,7 +58,7 @@
 
             <div class="action-area">
                 <div class="button-wrapper">
-                    <button id="check-btn" class="btn-main" onclick="handleAction()" disabled>
+                    <button id="check-btn" class="btn-main" onclick="openCameraModal()" disabled>
                         <span class="material-icons-round" id="btn-icon">fingerprint</span>
                         <span id="btn-label">KIỂM TRA GPS</span>
                         <small id="btn-timer"></small>
@@ -74,6 +82,18 @@
             </div>
         </div>
 
+        <div id="camera-modal" class="hidden">
+            <div class="camera-container">
+                <h3>Xác thực khuôn mặt</h3>
+                <video id="camera-stream" autoplay playsinline></video>
+                <canvas id="camera-canvas" class="hidden"></canvas>
+                <div class="camera-actions">
+                    <button class="btn-cancel" onclick="closeCameraModal()">Hủy</button>
+                    <button class="btn-capture" onclick="captureAndSubmit()">📸 Chụp & Gửi</button>
+                </div>
+            </div>
+        </div>
+
         <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleMenu()"></div>
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
@@ -81,15 +101,6 @@
                 <span class="material-icons-round close-btn" onclick="toggleMenu()">close</span>
             </div>
             <ul class="sidebar-menu">
-                <li onclick="alert('Tính năng: Yêu cầu sửa lịch chấm công đang phát triển!')">
-                    <span class="material-icons-round">edit_calendar</span> Sửa lịch chấm công
-                </li>
-                <li onclick="alert('Tính năng: Yêu cầu xin nghỉ phép đang phát triển!')">
-                    <span class="material-icons-round">event_busy</span> Yêu cầu xin nghỉ
-                </li>
-                <li onclick="alert('Tính năng: Các yêu cầu khác đang phát triển!')">
-                    <span class="material-icons-round">more_horiz</span> Yêu cầu khác
-                </li>
                 <li class="logout-item" onclick="logout()">
                     <span class="material-icons-round">logout</span> Đăng xuất
                 </li>
