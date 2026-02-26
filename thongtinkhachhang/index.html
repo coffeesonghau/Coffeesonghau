@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sông Hậu Coffee - Sales Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">SÔNG HẬU COFFEE</div>
+            <div class="progress-bar">
+                <div class="step active" id="step1-dot">1</div>
+                <div class="step" id="step2-dot">2</div>
+                <div class="step" id="step3-dot">3</div>
+            </div>
+        </header>
+
+        <form id="saleForm">
+            <section class="form-step active" id="step1">
+                <h3><i class="fas fa-user-tie"></i> Thông tin cơ bản</h3>
+                <div class="input-group">
+                    <label>Tên quán [cite: 3]</label>
+                    <input type="text" name="ten_quan" required>
+                </div>
+                <div class="input-group">
+                    <label>Địa chỉ [cite: 4]</label>
+                    <input type="text" name="dia_chi" id="dia_chi" required>
+                    <button type="button" class="btn-gps" onclick="app.getLocation()"><i class="fas fa-location-arrow"></i> Lấy vị trí</button>
+                </div>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Chủ quán [cite: 5]</label>
+                        <input type="text" name="chu_quan">
+                    </div>
+                    <div class="input-group">
+                        <label>SĐT/Zalo </label>
+                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}">
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-next" onclick="app.nextStep(2)">Tiếp theo <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <section class="form-step" id="step2">
+                <h3><i class="fas fa-coffee"></i> Thông tin cà phê</h3>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Gu hiện tại [cite: 8]</label>
+                        <input type="text" name="gu_hien_tai" placeholder="Đậm, đắng, chua...">
+                    </div>
+                    <div class="input-group">
+                        <label>Loại bán [cite: 8]</label>
+                        <input type="text" name="loai_ban" placeholder="Pha máy/Pha phin">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Đang dùng hãng nào? [cite: 10]</label>
+                    <input type="text" name="hang_dang_dung">
+                </div>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Giá đối thủ (1kg) </label>
+                        <input type="number" name="gia_hien_tai" id="gia_doi_thu">
+                    </div>
+                    <div class="input-group">
+                        <label>Lượng dùng/tháng [cite: 12]</label>
+                        <input type="number" name="luong_dung">
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-prev" onclick="app.nextStep(1)">Quay lại</button>
+                    <button type="button" class="btn-next" onclick="app.nextStep(3)">Tiếp theo</button>
+                </div>
+            </section>
+
+            <section class="form-step" id="step3">
+                <h3><i class="fas fa-check-circle"></i> Trạng thái chăm sóc</h3>
+                <div class="input-group">
+                    <label>Đã gửi mẫu chưa? [cite: 14]</label>
+                    <select name="da_gui_mau">
+                        <option value="no">Chưa gửi</option>
+                        <option value="yes">Đã gửi</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Ngày cần gọi lại [cite: 15]</label>
+                    <input type="date" name="ngay_goi_lai">
+                </div>
+                <div class="input-group">
+                    <label>Phản hồi sau khi thử [cite: 16]</label>
+                    <textarea name="phan_hoi" rows="4"></textarea>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-prev" onclick="app.nextStep(2)">Quay lại</button>
+                    <button type="submit" class="btn-submit">HOÀN TẤT & GỬI </button>
+                </div>
+            </section>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
