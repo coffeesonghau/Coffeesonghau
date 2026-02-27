@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sông Hậu Coffee - Sales Pro</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -10,93 +10,127 @@
 <body>
     <div class="app-container">
         <header>
-            <div class="logo">SÔNG HẬU COFFEE</div>
-            <div class="progress-bar">
-                <div class="step active" id="step1-dot">1</div>
-                <div class="step" id="step2-dot">2</div>
-                <div class="step" id="step3-dot">3</div>
-            </div>
-        </header>
+    <div style="display: flex; justify-content: space-between; align-items: center; color: white; padding: 5px 15px; background: rgba(0,0,0,0.1); border-radius: 10px; margin-bottom: 10px;">
+        <div style="font-size: 0.8rem;">
+            <i class="fas fa-user"></i> <span id="currentUserName">Đang tải...</span>
+        </div>
+        <div onclick="app.logout()" style="font-size: 0.8rem; cursor: pointer; color: #ffeb3b;">
+            Thoát <i class="fas fa-sign-out-alt"></i>
+        </div>
+    </div>
+    <div class="logo">SÔNG HẬU COFFEE</div>
+    <div class="progress-container">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+</header>
 
         <form id="saleForm">
             <section class="form-step active" id="step1">
-                <h3><i class="fas fa-user-tie"></i> Thông tin cơ bản</h3>
+                <h3><i class="fas fa-id-card"></i> Khách hàng mới</h3>
                 <div class="input-group">
-                    <label>Tên quán [cite: 3]</label>
-                    <input type="text" name="ten_quan" required>
+                    <label>Tên cửa hàng *</label>
+                    <input type="text" name="ten_quan" placeholder="Nhập tên quán..." required oninput="app.capitalizeFirstLetter(this)">
                 </div>
                 <div class="input-group">
-                    <label>Địa chỉ [cite: 4]</label>
-                    <input type="text" name="dia_chi" id="dia_chi" required>
-                    <button type="button" class="btn-gps" onclick="app.getLocation()"><i class="fas fa-location-arrow"></i> Lấy vị trí</button>
+                    <label>Địa chỉ *</label>
+                    <div class="gps-wrapper">
+                        <input type="text" name="dia_chi" id="dia_chi" placeholder="Số nhà, tên đường..." required>
+                        <button type="button" class="btn-gps" onclick="app.getLocation()"><i class="fas fa-location-arrow"></i></button>
+                    </div>
                 </div>
                 <div class="grid">
                     <div class="input-group">
-                        <label>Chủ quán [cite: 5]</label>
-                        <input type="text" name="chu_quan">
+                        <label>Chủ quán/Người mua *</label>
+                        <input type="text" name="chu_quan" required placeholder="Tên khách hàng">
                     </div>
                     <div class="input-group">
-                        <label>SĐT/Zalo </label>
-                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}">
+                        <label>SĐT/Zalo *</label>
+                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx">
                     </div>
                 </div>
                 <div class="actions">
-                    <button type="button" class="btn-next" onclick="app.nextStep(2)">Tiếp theo <i class="fas fa-arrow-right"></i></button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo <i class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
 
             <section class="form-step" id="step2">
-                <h3><i class="fas fa-coffee"></i> Thông tin cà phê</h3>
-                <div class="grid">
-                    <div class="input-group">
-                        <label>Gu hiện tại [cite: 8]</label>
-                        <input type="text" name="gu_hien_tai" placeholder="Đậm, đắng, chua...">
-                    </div>
-                    <div class="input-group">
-                        <label>Loại bán [cite: 8]</label>
-                        <input type="text" name="loai_ban" placeholder="Pha máy/Pha phin">
-                    </div>
+                <h3><i class="fas fa-coffee"></i> Nhu cầu sử dụng</h3>
+                <div class="input-group">
+                    <label>Cách pha *</label>
+                    <select name="loai_ban" required>
+                        <option value="">-- Chọn cách pha --</option>
+                        <option value="Pha máy">Pha máy</option>
+                        <option value="Pha phin">Pha phin</option>
+                        <option value="Cả hai">Cả hai</option>
+                        <option value="Nhiều nhu cầu khác">Nhiều nhu cầu khác nhau</option>
+                    </select>
                 </div>
                 <div class="input-group">
-                    <label>Đang dùng hãng nào? [cite: 10]</label>
-                    <input type="text" name="hang_dang_dung">
+                    <label>Lượng dùng/tháng (kg) *</label>
+                    <input type="number" name="luong_dung" required placeholder="Ví dụ: 1">
                 </div>
-                <div class="grid">
-                    <div class="input-group">
-                        <label>Giá đối thủ (1kg) </label>
-                        <input type="number" name="gia_hien_tai" id="gia_doi_thu">
-                    </div>
-                    <div class="input-group">
-                        <label>Lượng dùng/tháng [cite: 12]</label>
-                        <input type="number" name="luong_dung">
-                    </div>
+                <div class="input-group">
+                    <label>Gu hiện tại khách thích</label>
+                    <input type="text" name="gu_hien_tai" placeholder="Đậm, đắng, chua thanh...">
                 </div>
                 <div class="actions">
                     <button type="button" class="btn-prev" onclick="app.nextStep(1)">Quay lại</button>
-                    <button type="button" class="btn-next" onclick="app.nextStep(3)">Tiếp theo</button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(2, 3)">Tiếp theo <i class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
 
             <section class="form-step" id="step3">
-                <h3><i class="fas fa-check-circle"></i> Trạng thái chăm sóc</h3>
+                <h3><i class="fas fa-eye"></i> Sales quan sát</h3>
                 <div class="input-group">
-                    <label>Đã gửi mẫu chưa? [cite: 14]</label>
-                    <select name="da_gui_mau">
-                        <option value="no">Chưa gửi</option>
-                        <option value="yes">Đã gửi</option>
-                    </select>
+                    <label>Hãng đang kinh doanh </label>
+                    <input type="text" name="hang_dang_dung" placeholder="Đối thủ đang cấp hàng">
                 </div>
-                <div class="input-group">
-                    <label>Ngày cần gọi lại [cite: 15]</label>
-                    <input type="date" name="ngay_goi_lai">
-                </div>
-                <div class="input-group">
-                    <label>Phản hồi sau khi thử [cite: 16]</label>
-                    <textarea name="phan_hoi" rows="4"></textarea>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Giá họ đang mua </label>
+                        <input type="text" name="gia_hien_tai" placeholder="Giá/kg" oninput="app.formatCurrency(this)">
+                    </div>
+                    <div class="input-group">
+                        <label>Tiềm năng quán *</label>
+                        <select name="tiem_nang" required>
+                            <option value="">-- Đánh giá --</option>
+                            <option value="1">⭐ (Quán nhỏ)</option>
+                            <option value="2">⭐⭐ (Ổn định)</option>
+                            <option value="3">⭐⭐⭐ (Rất lớn)</option>
+                            <option value="4">⭐⭐⭐⭐ (Quán Café nhỏ)</option>
+                            <option value="5">⭐⭐⭐⭐⭐ (Quán café lớn)</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="actions">
                     <button type="button" class="btn-prev" onclick="app.nextStep(2)">Quay lại</button>
-                    <button type="submit" class="btn-submit">HOÀN TẤT & GỬI </button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(3, 4)">Tiếp theo <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <section class="form-step" id="step4">
+                <h3><i class="fas fa-calendar-check"></i> Chốt & Hẹn</h3>
+                <div class="input-group">
+                    <label>Trạng thái gửi mẫu *</label>
+                    <select name="da_gui_mau" required>
+                        <option value="">-- Chọn trạng thái --</option>
+                        <option value="Chưa gửi">Chưa gửi</option>
+                        <option value="Đã gửi mẫu dùng thử">Đã gửi mẫu dùng thử</option>
+                        <option value="Đã test tại quán">Đã test tại quán</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Ngày Ghé thăm *</label>
+                    <input type="date" name="ngay_goi_lai" id="ngay_goi_lai" required>
+                </div>
+                <div class="input-group">
+                    <label>Ghi chú quan trọng</label>
+                    <textarea name="phan_hoi" rows="3" placeholder="Ghi chú thêm về khách..."></textarea>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-prev" onclick="app.nextStep(3)">Quay lại</button>
+                    <button type="submit" class="btn-submit" id="submitBtn">HOÀN TẤT & LƯU</button>
                 </div>
             </section>
         </form>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Sông Hậu - Đăng Nhập</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+    <div class="auth-container animate__animated animate__fadeIn">
+        <div class="auth-card">
+            <div class="banner-side">
+                <div class="banner-content">
+                    <div class="icon-box">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h1>Chào Mừng!</h1>
+                    <p>Hệ thống quản lý nội bộ Sông Hậu & ND Admin.</p>
+                    <div class="status-badge">Hệ thống bảo mật</div>
+                </div>
+            </div>
+
+            <div class="form-side">
+                <div class="header-title">
+                    <h2 id="welcome-text">Đăng Nhập</h2>
+                    <p class="subtitle" id="user-display">Hệ thống Sông Hậu Coffee</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="input-box">
+                        <label>ID Nhân viên (6 số)</label>
+                        <div class="input-field">
+                            <i class="fas fa-id-badge prefix-icon"></i>
+                            <input type="text" id="login-user" maxlength="6" placeholder="Nhập 6 số ID..." required>
+                        </div>
+                    </div>
+
+                    <div id="password-area">
+                        <div class="input-box">
+                            <label>Mật khẩu</label>
+                            <div class="input-field">
+                                <i class="fas fa-key prefix-icon"></i>
+                                <input type="password" id="login-pass" placeholder="••••••••" required>
+                                <i class="fas fa-eye toggle-password" onclick="togglePass('login-pass', this)"></i>
+                            </div>
+                        </div>
+                        <button type="button" id="btnLogin">ĐĂNG NHẬP</button>
+                    </div>
+
+                    <div class="form-footer">
+                        <a href="#" onclick="showChangePassForm()" style="font-size: 0.8rem;">Đổi mật khẩu?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+
+</html>
