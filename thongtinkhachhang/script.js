@@ -21,6 +21,11 @@ const app = {
         const dateInput = document.getElementById('ngay_goi_lai');
         if (dateInput) dateInput.value = today;
         
+        // --- BƯỚC 3: CẢNH BÁO MẤT MẠNG ---
+        window.addEventListener('online', () => this.updateNetworkStatus(true));
+        window.addEventListener('offline', () => this.updateNetworkStatus(false));
+        this.updateNetworkStatus(navigator.onLine);
+
         this.loadDraft();
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('change', () => this.saveDraft());
@@ -31,6 +36,28 @@ const app = {
         if(confirm("Bạn muốn đăng xuất?")) {
             localStorage.clear();
             window.location.href = 'login.html';
+        }
+    },
+
+    updateNetworkStatus: function(isOnline) {
+        const header = document.querySelector('header');
+        const logo = document.querySelector('.logo');
+        if (!isOnline) {
+            header.style.backgroundColor = '#e74c3c'; // Màu đỏ cảnh báo
+            logo.innerHTML = '<i class="fas fa-wifi-slash"></i> MẤT KẾT NỐI';
+        } else {
+            header.style.backgroundColor = 'var(--primary-color)';
+            logo.innerText = 'SÔNG HẬU COFFEE';
+        }
+    },
+
+    clearDraft: function() {
+        if (confirm("⚠️ Bạn có chắc muốn xóa sạch bản nháp hiện tại để nhập khách mới?")) {
+            localStorage.removeItem(this.storageKey);
+            document.getElementById('saleForm').reset();
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('ngay_goi_lai');
+            if (dateInput) dateInput.value = today;
         }
     },
 
@@ -125,29 +152,31 @@ const app = {
 
 app.init();
 
-// --- XỬ LÝ GỬI FORM (Đã fix lỗi gửi dữ liệu) ---
+// --- XỬ LÝ GỬI FORM ---
 document.getElementById('saleForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    // Chặn gửi nếu đang mất mạng
+    if (!navigator.onLine) {
+        alert("⚠️ Bạn đang mất kết nối mạng. Vui lòng kiểm tra lại 3G/Wi-Fi trước khi gửi!");
+        return;
+    }
 
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
 
-    // Thay URL của bạn vào đây
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec'; 
     
-    // Đóng gói dữ liệu thành Object
     const formData = new FormData(this);
     const dataObj = Object.fromEntries(formData.entries());
     
-    // Thêm các key cần thiết cho Backend xử lý
     dataObj.action = "saveData";
     dataObj.nguoi_gui = localStorage.getItem('sh_user_name');
     dataObj.id_sales = localStorage.getItem('sh_user_id');
 
     fetch(scriptURL, { 
         method: 'POST', 
-        // Bắt buộc gửi dạng stringify và Header text/plain để tránh lỗi CORS
         body: JSON.stringify(dataObj),
         headers: { "Content-Type": "text/plain;charset=utf-8" }
     })

@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginUserInput = document.getElementById('login-user');
     const userDisplayName = document.getElementById('user-display');
     const btnLogin = document.getElementById('btnLogin');
-    const btnForgot = document.getElementById('btnForgot'); // Lấy nút quên MK
+    const btnForgot = document.getElementById('btnForgot'); 
 
     // 1️⃣ TỰ ĐỘNG HIỆN TÊN
     if (loginUserInput && userDisplayName) {
@@ -131,19 +131,80 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU (file forgot-password.html)
+    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU
+    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU (Cho phép đổi trực tiếp)
     if (btnForgot) {
-        btnForgot.addEventListener('click', function() {
+        btnForgot.addEventListener('click', async function() {
             const userInput = document.getElementById('forgot-user').value.trim();
             if(!userInput) {
-                alert("Vui lòng nhập SĐT hoặc ID nhân viên!");
+                alert("Vui lòng nhập ID nhân viên để khôi phục!");
                 return;
             }
-            // Vì chỉ là gửi yêu cầu cho Admin, tạm thời làm alert UI
-            this.innerHTML = '<i class="fas fa-check"></i> ĐÃ GỬI YÊU CẦU';
-            this.style.backgroundColor = "#718096";
-            this.disabled = true;
-            alert(`Yêu cầu khôi phục tài khoản [${userInput}] đã được gửi đến Admin. Vui lòng chờ xử lý!`);
+
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> ĐANG TÌM ID...';
+            btn.disabled = true;
+
+            try {
+                // Bước 1: Gọi lên Google Sheets kiểm tra ID có đúng không
+                const resCheck = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "checkID", user: userInput }),
+                    headers: { "Content-Type": "text/plain;charset=utf-8" }
+                });
+                const checkResult = await resCheck.json();
+
+                if (checkResult.success) {
+                    // Bước 2: Nếu có ID, hiển thị Popup yêu cầu nhập mật khẩu mới
+                    const newPass = prompt(`Xin chào ${checkResult.name}\n\nVui lòng nhập MẬT KHẨU MỚI cho tài khoản của bạn:`);
+                    
+                    if (!newPass) { // Nếu bấm Hủy
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        return;
+                    }
+
+                    // Bước 3: Mã hóa SHA256 mật khẩu mới và gửi yêu cầu lưu đè
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
+                    const hashedNew = await sha256(newPass);
+
+                    const resReset = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "resetPass", user: userInput, newPass: hashedNew }),
+                        headers: { "Content-Type": "text/plain;charset=utf-8" }
+                    });
+                    const resetResult = await resReset.json();
+
+                    if (resetResult.success) {
+                        alert("✅ Đổi mật khẩu thành công! Hãy đăng nhập lại bằng mật khẩu mới.");
+                        window.location.href = "login.html";
+                    } else {
+                        alert("❌ Có lỗi xảy ra: " + resetResult.msg);
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                } else {
+                    alert("❌ Không tìm thấy ID Nhân viên này trong hệ thống!");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                alert("Lỗi kết nối máy chủ! Vui lòng kiểm tra lại mạng.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    }
+
+    // 4️⃣ HỖ TRỢ PHÍM ENTER KHI ĐĂNG NHẬP
+    const loginPassInput = document.getElementById('login-pass');
+    if (loginPassInput && btnLogin) {
+        loginPassInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                btnLogin.click();
+            }
         });
     }
 });
