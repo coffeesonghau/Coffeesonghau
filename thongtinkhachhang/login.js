@@ -1,4 +1,5 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec"; 
+// LƯU Ý: Nếu bạn vừa tạo thẻ Deploy mới bên Google Apps Script, hãy dán cái Web App URL mới vào biến SCRIPT_URL ở trên nhé!
 
 async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
@@ -18,7 +19,7 @@ function togglePass(inputId, icon) {
     }
 }
 
-// Hàm đổi mật khẩu (Dùng cho nút "Đổi mật khẩu?" ở trang login.html)
+// Hàm đổi mật khẩu (Dùng cho nút "Đổi mật khẩu?" bên trong app nếu có)
 async function showChangePassForm() {
     const userId = localStorage.getItem('sh_user_id') || prompt("Nhập ID nhân viên của bạn:");
     if (!userId) return;
@@ -56,6 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginUserInput = document.getElementById('login-user');
     const userDisplayName = document.getElementById('user-display');
     const btnLogin = document.getElementById('btnLogin');
+    
+    const forgotUserInput = document.getElementById('forgot-user');
+    const forgotUserDisplay = document.getElementById('forgot-user-display');
     const btnForgot = document.getElementById('btnForgot'); 
 
     // 1️⃣ TỰ ĐỘNG HIỆN TÊN (Trang Login)
@@ -90,7 +94,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2️⃣ XỬ LÝ ĐĂNG NHẬP (Trang Login)
+    // 2️⃣ TỰ ĐỘNG HIỆN TÊN (Trang Forgot Password)
+    if (forgotUserInput && forgotUserDisplay) {
+        forgotUserInput.addEventListener('input', async function(e) {
+            const userId = e.target.value.trim();
+            if (userId.length === 6) {
+                forgotUserDisplay.innerText = "⏳ Đang kiểm tra...";
+                forgotUserDisplay.style.color = "#636e72";
+                try {
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "checkID", user: userId }),
+                        headers: { "Content-Type": "text/plain;charset=utf-8" }
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        forgotUserDisplay.innerText = "Tài khoản: " + result.name;
+                        forgotUserDisplay.style.color = "#27ae60"; 
+                    } else {
+                        forgotUserDisplay.innerText = "ID không tồn tại!";
+                        forgotUserDisplay.style.color = "#e74c3c"; 
+                    }
+                } catch (err) {
+                    forgotUserDisplay.innerText = "Lỗi kết nối máy chủ";
+                    forgotUserDisplay.style.color = "#e74c3c";
+                }
+            } else {
+                forgotUserDisplay.innerText = "Thiết lập lại mật khẩu mới";
+                forgotUserDisplay.style.color = ""; 
+            }
+        });
+    }
+
+    // 3️⃣ XỬ LÝ ĐĂNG NHẬP (Trang Login)
     if (btnLogin) {
         btnLogin.addEventListener('click', async function() {
             const user = document.getElementById('login-user').value.trim();
@@ -114,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const result = await response.json();
 
                 if (result.success) {
+                    // GIỮ NGUYÊN LOCALSTORAGE THEO YÊU CẦU
                     localStorage.setItem('sh_is_logged_in', 'true');
                     localStorage.setItem('sh_user_id', user);
                     localStorage.setItem('sh_user_name', result.name);
@@ -131,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU (Trang Forgot Password)
+    // 4️⃣ XỬ LÝ QUÊN MẬT KHẨU (Trang Forgot Password)
     if (btnForgot) {
         btnForgot.addEventListener('click', async function() {
             const userInput = document.getElementById('forgot-user').value.trim();
@@ -207,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 4️⃣ HỖ TRỢ PHÍM ENTER KHI ĐĂNG NHẬP (Trang Login)
+    // 5️⃣ HỖ TRỢ PHÍM ENTER KHI ĐĂNG NHẬP (Trang Login)
     const loginPassInput = document.getElementById('login-pass');
     if (loginPassInput && btnLogin) {
         loginPassInput.addEventListener('keypress', function(e) {
