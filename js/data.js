@@ -48,7 +48,7 @@ window.dbProducts = [
             details: `
                 <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
-                <p class="mb-2">- <strong>Hương vị:</strong> Hạt tuyển chọn 100% xay Mộc giử vị đậm chất cà phê nguyên bản</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Hạt tuyển chọn 100% xay Mộc giữ vị đậm chất cà phê nguyên bản</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
