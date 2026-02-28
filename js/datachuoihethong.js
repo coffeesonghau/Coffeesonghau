@@ -141,6 +141,16 @@ const systemData = [
         id: "fran-04",
         type: "franchise",
         city: "bac-lieu",
+        searchTags: "shphuoclong nhuong quyen song hau phuoc long",
+        name: "Sông Hậu Phước Long (TB)",
+        address: "ấp long thành thị trấn phước long tỉnh bạc liêu", 
+        image: "chuoihethong/SHphuoclongTB.webp",
+        mapLink: "https://maps.app.goo.gl/PgCZ1BSXswTqPbAh8"
+    },
+    {
+        id: "fran-31",
+        type: "franchise",
+        city: "bac-lieu",
         searchTags: "sh168 song hau 168 nhuong quyen",
         name: "Sông Hậu 168",
         address: "Đang cập nhật...", 
