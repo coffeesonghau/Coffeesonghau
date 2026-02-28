@@ -18,7 +18,7 @@ function togglePass(inputId, icon) {
     }
 }
 
-// Hàm đổi mật khẩu (Hiển thị popup bằng JS)
+// Hàm đổi mật khẩu (Dùng cho nút "Đổi mật khẩu?" ở trang login.html)
 async function showChangePassForm() {
     const userId = localStorage.getItem('sh_user_id') || prompt("Nhập ID nhân viên của bạn:");
     if (!userId) return;
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnLogin = document.getElementById('btnLogin');
     const btnForgot = document.getElementById('btnForgot'); 
 
-    // 1️⃣ TỰ ĐỘNG HIỆN TÊN
+    // 1️⃣ TỰ ĐỘNG HIỆN TÊN (Trang Login)
     if (loginUserInput && userDisplayName) {
         loginUserInput.addEventListener('input', async function(e) {
             const userId = e.target.value.trim();
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2️⃣ XỬ LÝ ĐĂNG NHẬP
+    // 2️⃣ XỬ LÝ ĐĂNG NHẬP (Trang Login)
     if (btnLogin) {
         btnLogin.addEventListener('click', async function() {
             const user = document.getElementById('login-user').value.trim();
@@ -131,23 +131,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU
-    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU (Cho phép đổi trực tiếp)
+    // 3️⃣ XỬ LÝ QUÊN MẬT KHẨU (Trang Forgot Password)
     if (btnForgot) {
         btnForgot.addEventListener('click', async function() {
             const userInput = document.getElementById('forgot-user').value.trim();
-            if(!userInput) {
-                alert("Vui lòng nhập ID nhân viên để khôi phục!");
+            const passInput = document.getElementById('forgot-pass');
+            const newPass = passInput ? passInput.value : '';
+
+            if(!userInput || !newPass) {
+                alert("Vui lòng nhập đầy đủ ID nhân viên và Mật khẩu mới!");
+                return;
+            }
+
+            if(userInput.length !== 6) {
+                alert("ID nhân viên không hợp lệ (Phải đủ 6 số)!");
                 return;
             }
 
             const btn = this;
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> ĐANG TÌM ID...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> ĐANG XÁC THỰC...';
             btn.disabled = true;
 
             try {
-                // Bước 1: Gọi lên Google Sheets kiểm tra ID có đúng không
+                // Check xem ID có tồn tại trên Google Sheets không
                 const resCheck = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action: "checkID", user: userInput }),
@@ -156,19 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const checkResult = await resCheck.json();
 
                 if (checkResult.success) {
-                    // Bước 2: Nếu có ID, hiển thị Popup yêu cầu nhập mật khẩu mới
-                    const newPass = prompt(`Xin chào ${checkResult.name}\n\nVui lòng nhập MẬT KHẨU MỚI cho tài khoản của bạn:`);
-                    
-                    if (!newPass) { // Nếu bấm Hủy
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                        return;
-                    }
-
-                    // Bước 3: Mã hóa SHA256 mật khẩu mới và gửi yêu cầu lưu đè
+                    // Mã hóa SHA256 mật khẩu mới
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
                     const hashedNew = await sha256(newPass);
 
+                    // Gửi lệnh đổi mật khẩu xuống Server (mã.gs)
                     const resReset = await fetch(SCRIPT_URL, {
                         method: 'POST',
                         body: JSON.stringify({ action: "resetPass", user: userInput, newPass: hashedNew }),
@@ -177,10 +176,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     const resetResult = await resReset.json();
 
                     if (resetResult.success) {
-                        alert("✅ Đổi mật khẩu thành công! Hãy đăng nhập lại bằng mật khẩu mới.");
-                        window.location.href = "login.html";
+                        alert(`✅ Thành công! Đã đổi mật khẩu cho tài khoản: ${checkResult.name}\n\nHãy đăng nhập lại bằng mật khẩu mới.`);
+                        window.location.href = "login.html"; // Chuyển về trang đăng nhập
                     } else {
-                        alert("❌ Có lỗi xảy ra: " + resetResult.msg);
+                        alert("❌ Có lỗi xảy ra khi lưu: " + resetResult.msg);
                         btn.innerHTML = originalText;
                         btn.disabled = false;
                     }
@@ -190,14 +189,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     btn.disabled = false;
                 }
             } catch (e) {
-                alert("Lỗi kết nối máy chủ! Vui lòng kiểm tra lại mạng.");
+                alert("Lỗi kết nối máy chủ! Vui lòng kiểm tra lại mạng 3G/Wi-Fi.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         });
+
+        // HỖ TRỢ PHÍM ENTER KHI ĐỔI MẬT KHẨU
+        const forgotPassInput = document.getElementById('forgot-pass');
+        if (forgotPassInput) {
+            forgotPassInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnForgot.click();
+                }
+            });
+        }
     }
 
-    // 4️⃣ HỖ TRỢ PHÍM ENTER KHI ĐĂNG NHẬP
+    // 4️⃣ HỖ TRỢ PHÍM ENTER KHI ĐĂNG NHẬP (Trang Login)
     const loginPassInput = document.getElementById('login-pass');
     if (loginPassInput && btnLogin) {
         loginPassInput.addEventListener('keypress', function(e) {
