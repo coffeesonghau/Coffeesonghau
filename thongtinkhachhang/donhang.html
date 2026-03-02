@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sông Hậu - Quản Lý Đơn</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="data.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-top">
+                <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+                <div style="font-size: 0.85rem; font-weight: bold;">ĐƠN HÀNG CỦA TÔI</div>
+            </div>
+            <div class="logo">SÔNG HẬU COFFEE</div>
+        </header>
+
+        <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+        <div class="side-menu" id="sideMenu">
+            
+            <div class="user-profile-section">
+                <div class="avatar-container" onclick="document.getElementById('avatarUpload').click()">
+                    <img id="userAvatar" src="https://ui-avatars.com/api/?name=NV&background=4e54c8&color=fff&size=100" alt="Avatar">
+                    <div class="avatar-overlay"><i class="fas fa-camera"></i></div>
+                </div>
+                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                <div class="user-info">
+                    <div class="user-name" id="menuUserName">Đang tải...</div>
+                    <div class="user-role"><i class="fas fa-briefcase"></i> Nhân viên Sales</div>
+                </div>
+            </div>
+            <div class="side-menu-header">MENU CÔNG VIỆC</div>
+
+        <div id="orderListView" style="padding: 20px;">
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-history"></i> Đơn hàng gần đây</h3>
+            <div id="loadingText" style="text-align: center; padding: 20px; color: var(--text-sub);">
+                <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+            </div>
+            <div id="orderListContainer"></div>
+        </div>
+
+        <div id="editOrderView" style="display: none; padding: 20px;">
+            <h3><i class="fas fa-edit"></i> Chỉnh sửa đơn: <span id="editOrderId" style="color: #e74c3c;"></span></h3>
+            <p style="font-weight: bold; margin-bottom: 15px;">Quán: <span id="editShopName" style="color: var(--primary-color);"></span></p>
+            
+            <div class="order-section">
+                <div class="search-product-box">
+                    <input type="text" id="search-product" placeholder="🔍 Tìm kiếm để thêm món..." oninput="filterEditProducts()">
+                    <div class="quick-filters" style="margin-bottom: 10px;">
+                        <button class="tag-btn cart-tag" onclick="showEditSelectedOnly()">🛒 Đang chọn</button>
+                        <button class="tag-btn" onclick="setEditFilter('500g')">500g</button>
+                        <button class="tag-btn" onclick="setEditFilter('250g')">250g</button>
+                        <button class="tag-btn" onclick="setEditFilter('')">Tất cả</button>
+                    </div>
+                </div>
+
+                <div class="product-list" id="edit-product-list"></div>
+                <div class="total-box">Tổng đơn mới: <span id="edit-total-price">0 đ</span></div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-prev" onclick="closeEditView()">HỦY BỎ</button>
+                <button class="btn-submit" onclick="saveUpdatedOrder()" id="btnUpdateOrder">LƯU THAY ĐỔI</button>
+            </div>
+        </div>
+    </div>
+    <script src="donhang.js"></script>
+</body>
+</html>

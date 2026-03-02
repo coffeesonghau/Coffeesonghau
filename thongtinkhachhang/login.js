@@ -1,4 +1,14 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec"; 
+
+// KIỂM TRA ĐĂNG NHẬP BỘ NHỚ
+if (localStorage.getItem('sh_is_logged_in') === 'true') {
+    // Chỉ tự động nhảy vào hệ thống nếu người dùng đang ở trang Đăng nhập (login.html)
+    // Nếu họ đang ở trang Đổi mật khẩu (forgot-password.html), KHÔNG tự động nhảy, bắt buộc phải làm việc với Google Sheet
+    const currentUrl = window.location.href.toLowerCase();
+    if (currentUrl.includes('login.html') || currentUrl.endsWith('/')) {
+        window.location.replace("index.html");
+    }
+}
 // LƯU Ý: Nếu bạn vừa tạo thẻ Deploy mới bên Google Apps Script, hãy dán cái Web App URL mới vào biến SCRIPT_URL ở trên nhé!
 
 async function sha256(message) {

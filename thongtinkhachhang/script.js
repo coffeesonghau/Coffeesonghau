@@ -1,3 +1,39 @@
+// ==========================================
+// DB QUẢN LÝ ẢNH AVATAR (INDEXEDDB)
+// ==========================================
+const dbHelper = {
+    dbName: 'SongHauDB',
+    storeName: 'userProfile',
+    initDB: function() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, 1);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    db.createObjectStore(this.storeName, { keyPath: 'id' });
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(e.target.error);
+        });
+    },
+    saveAvatar: async function(base64Data) {
+        const db = await this.initDB();
+        const tx = db.transaction(this.storeName, 'readwrite');
+        const store = tx.objectStore(this.storeName);
+        store.put({ id: 'avatar', image: base64Data });
+    },
+    getAvatar: async function() {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(this.storeName, 'readonly');
+            const store = tx.objectStore(this.storeName);
+            const request = store.get('avatar');
+            request.onsuccess = () => resolve(request.result ? request.result.image : null);
+            request.onerror = () => reject(request.error);
+        });
+    }
+};
 const app = {
     totalSteps: 3, // Đã giảm từ 4 xuống 3
     storageKey: 'songhau_coffee_draft',
@@ -10,16 +46,54 @@ const app = {
             return;
         }
 
-        // --- BƯỚC 2: HIỂN THỊ TÊN NGƯỜI DÙNG ---
-        const userName = localStorage.getItem('sh_user_name');
+        // --- BƯỚC 2: HIỂN THỊ TÊN NGƯỜI DÙNG TỪ GOOGLE SHEET VÀ AVATAR ---
+        const userName = localStorage.getItem('sh_user_name'); // Tên lấy từ lúc đăng nhập
+        
+        // Hiển thị ở Header góc trên
         const displayEl = document.getElementById('currentUserName');
-        if (displayEl) {
-            displayEl.innerText = userName || "Thành viên";
+        if (displayEl) displayEl.innerText = userName || "Thành viên";
+
+        // Hiển thị tên ở Menu 3 Gạch
+        const menuUserNameEl = document.getElementById('menuUserName');
+        if (menuUserNameEl) {
+            menuUserNameEl.innerText = userName || "Thành viên";
+            
+            // Đổi avatar mặc định thành chữ cái đầu của tên
+            if(userName) {
+                 document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=4e54c8&color=fff&size=100`;
+            }
         }
 
-        const today = new Date().toISOString().split('T')[0];
-        const dateInput = document.getElementById('ngay_goi_lai');
-        if (dateInput) dateInput.value = today;
+        // Tải ảnh đại diện từ IndexedDB (nếu user đã tự upload trước đó)
+        dbHelper.getAvatar().then(imgBase64 => {
+            const avatarImg = document.getElementById('userAvatar');
+            if(imgBase64 && avatarImg) {
+                avatarImg.src = imgBase64;
+            }
+        }).catch(err => console.log("Chưa có avatar trong DB"));
+
+        // Xử lý sự kiện khi người dùng chọn ảnh mới
+        const avatarUpload = document.getElementById('avatarUpload');
+        if (avatarUpload) {
+            avatarUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Giới hạn ảnh dưới 3MB để IndexedDB không bị quá tải
+                    if(file.size > 3 * 1024 * 1024) {
+                        alert("Vui lòng chọn ảnh dung lượng nhỏ hơn 3MB!");
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const base64Data = evt.target.result;
+                        document.getElementById('userAvatar').src = base64Data; // Đổi ảnh trên giao diện
+                        dbHelper.saveAvatar(base64Data); // Lưu vào IndexedDB
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
         
         // --- BƯỚC 3: CẢNH BÁO MẤT MẠNG ---
         window.addEventListener('online', () => this.updateNetworkStatus(true));
@@ -172,6 +246,9 @@ document.getElementById('saleForm').addEventListener('submit', function(e) {
 
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec'; 
     
+    // ==========================================
+    // ĐOẠN MÃ BẠN VỪA HỎI ĐƯỢC ĐẶT Ở ĐÂY:
+    // ==========================================
     const formData = new FormData(this);
     const dataObj = Object.fromEntries(formData.entries());
     
@@ -179,6 +256,17 @@ document.getElementById('saleForm').addEventListener('submit', function(e) {
     dataObj.nguoi_gui = localStorage.getItem('sh_user_name');
     dataObj.id_sales = localStorage.getItem('sh_user_id');
 
+    // TÍNH LẠI TỔNG TIỀN SỐ VÀ LẤY GIỎ HÀNG JSON TRƯỚC KHI GỬI
+    let tong_tien_so = 0;
+    productData.products.forEach(prod => {
+        const qty = orderState.items[prod.id] || 0;
+        if (qty > 0) tong_tien_so += (prod.prices[orderState.channel] * qty);
+    });
+    dataObj.tong_tien_so = tong_tien_so;
+    dataObj.cart_json = JSON.stringify(orderState.items); // Lưu trạng thái giỏ hàng
+    // ==========================================
+
+    // Phần fetch giữ nguyên như cũ
     fetch(scriptURL, { 
         method: 'POST', 
         body: JSON.stringify(dataObj),
@@ -367,3 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderProducts();
     }, 200);
 });
+function toggleMenu() {
+    document.getElementById('sideMenu').classList.toggle('open');
+    document.getElementById('menuOverlay').classList.toggle('open');
+}

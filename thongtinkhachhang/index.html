@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,21 +9,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="data.js"></script>
 </head>
+
 <body>
     <div class="app-container">
         <header>
-            <div style="display: flex; justify-content: space-between; align-items: center; color: white; padding: 5px 15px; background: rgba(0,0,0,0.1); border-radius: 10px; margin-bottom: 10px;">
-                <div style="font-size: 0.8rem;">
-                    <i class="fas fa-user"></i> <span id="currentUserName">Đang tải...</span>
+            <div class="header-top">
+                <div class="menu-btn" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
                 </div>
-                <div onclick="app.logout()" style="font-size: 0.8rem; cursor: pointer; color: #ffeb3b;">
-                    Thoát <i class="fas fa-sign-out-alt"></i>
+                <div style="font-size: 0.85rem; font-weight: bold;">
+                    <i class="fas fa-user"></i> <span id="currentUserName">Đang tải...</span>
                 </div>
             </div>
             <div class="logo">SÔNG HẬU COFFEE</div>
-            <div class="progress-container">
-                <div class="progress-fill" id="progressFill"></div>
+        </header>
+
+        <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+        <div class="side-menu" id="sideMenu">
+            
+            <div class="user-profile-section">
+                <div class="avatar-container" onclick="document.getElementById('avatarUpload').click()">
+                    <img id="userAvatar" src="https://ui-avatars.com/api/?name=NV&background=4e54c8&color=fff&size=100" alt="Avatar">
+                    <div class="avatar-overlay"><i class="fas fa-camera"></i></div>
+                </div>
+                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                <div class="user-info">
+                    <div class="user-name" id="menuUserName">Đang tải...</div>
+                    <div class="user-role"><i class="fas fa-briefcase"></i> Nhân viên Sales</div>
+                </div>
             </div>
+            <div class="side-menu-header">MENU CÔNG VIỆC</div>
+            <a href="index.html"><i class="fas fa-plus-circle"></i> Tạo Khách & Lên Đơn</a>
+            <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
+            
+            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
+        </div>
         </header>
 
         <form id="saleForm">
@@ -30,13 +51,15 @@
                 <h3><i class="fas fa-id-card"></i> Khách hàng mới</h3>
                 <div class="input-group">
                     <label>Tên cửa hàng *</label>
-                    <input type="text" name="ten_quan" placeholder="Nhập tên quán..." required oninput="app.capitalizeFirstLetter(this)">
+                    <input type="text" name="ten_quan" placeholder="Nhập tên quán..." required
+                        oninput="app.capitalizeFirstLetter(this)">
                 </div>
                 <div class="input-group">
                     <label>Địa chỉ *</label>
                     <div class="gps-wrapper">
                         <input type="text" name="dia_chi" id="dia_chi" placeholder="Số nhà, tên đường..." required>
-                        <button type="button" class="btn-gps" onclick="app.getLocation()"><i class="fas fa-location-arrow"></i></button>
+                        <button type="button" class="btn-gps" onclick="app.getLocation()"><i
+                                class="fas fa-location-arrow"></i></button>
                     </div>
                 </div>
                 <div class="grid">
@@ -46,12 +69,15 @@
                     </div>
                     <div class="input-group">
                         <label>SĐT/Zalo *</label>
-                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                     </div>
                 </div>
                 <div class="actions">
-                    <button type="button" class="btn-prev" onclick="app.clearDraft()" style="background: #ffeaa7; color: #d63031;"><i class="fas fa-trash-alt"></i> Xóa nháp</button>
-                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo <i class="fas fa-chevron-right"></i></button>
+                    <button type="button" class="btn-prev" onclick="app.clearDraft()"
+                        style="background: #ffeaa7; color: #d63031;"><i class="fas fa-trash-alt"></i> Xóa nháp</button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo <i
+                            class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
 
@@ -67,7 +93,7 @@
                         <option value="Nhiều nhu cầu khác">Nhiều nhu cầu khác nhau</option>
                     </select>
                 </div>
-                
+
                 <div class="grid">
                     <div class="input-group">
                         <label>Lượng dùng/tháng (kg) *</label>
@@ -91,14 +117,17 @@
                     </div>
 
                     <div class="search-product-box">
-                        <input type="text" id="search-product" placeholder="🔍 Tìm tên, trọng lượng..." oninput="filterProducts()">
+                        <input type="text" id="search-product" placeholder="🔍 Tìm tên, trọng lượng..."
+                            oninput="filterProducts()">
                         <div class="quick-filters">
-                            <button type="button" class="tag-btn cart-tag" onclick="showSelectedOnly()">🛒 Đã chọn</button>
-                            
+                            <button type="button" class="tag-btn cart-tag" onclick="showSelectedOnly()">🛒 Đã
+                                chọn</button>
+
                             <button type="button" class="tag-btn" onclick="setFilter('500g')">500g</button>
                             <button type="button" class="tag-btn" onclick="setFilter('250g')">250g</button>
                             <button type="button" class="tag-btn" onclick="setFilter('100g')">100g</button>
-                            <button type="button" class="tag-btn" onclick="setFilter('Truyền Thống')">Truyền Thống</button>
+                            <button type="button" class="tag-btn" onclick="setFilter('Truyền Thống')">Truyền
+                                Thống</button>
                             <button type="button" class="tag-btn" onclick="setFilter('Mạnh Mẽ')">Mạnh Mẽ</button>
                             <button type="button" class="tag-btn" onclick="setFilter('')">Tất cả</button>
                         </div>
@@ -106,7 +135,7 @@
 
                     <label style="margin-top: 5px;">Chọn sản phẩm cấp cho khách</label>
                     <div class="product-list" id="product-list">
-                        </div>
+                    </div>
 
                     <div class="total-box">
                         Tổng cộng: <span id="total-price">0 đ</span>
@@ -117,7 +146,8 @@
 
                 <div class="actions">
                     <button type="button" class="btn-prev" onclick="app.nextStep(1)">Quay lại</button>
-                    <button type="button" class="btn-next" onclick="app.validateAndNext(2, 3)">Tiếp theo <i class="fas fa-chevron-right"></i></button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(2, 3)">Tiếp theo <i
+                            class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
 
@@ -133,7 +163,7 @@
                         <input type="text" name="gia_hien_tai" placeholder="Giá/kg" oninput="app.formatCurrency(this)">
                     </div>
                 </div>
-                
+
                 <div class="grid">
                     <div class="input-group">
                         <label>Tiềm năng *</label>
@@ -174,4 +204,5 @@
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
