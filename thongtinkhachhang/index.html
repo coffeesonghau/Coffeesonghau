@@ -26,7 +26,6 @@
 
         <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
         <div class="side-menu" id="sideMenu">
-            
             <div class="user-profile-section">
                 <div class="avatar-container" onclick="document.getElementById('avatarUpload').click()">
                     <img id="userAvatar" src="https://ui-avatars.com/api/?name=NV&background=4e54c8&color=fff&size=100" alt="Avatar">
@@ -42,9 +41,12 @@
             <a href="index.html"><i class="fas fa-plus-circle"></i> Tạo Khách & Lên Đơn</a>
             <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
             
-            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
-        </div>5
-        </header>
+            <a href="#" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
 
         <form id="saleForm">
             <section class="form-step active" id="step1">

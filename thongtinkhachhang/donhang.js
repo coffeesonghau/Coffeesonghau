@@ -1,12 +1,56 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec"; // Thay đúng link script giống bên login.js
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec"; 
 const userId = localStorage.getItem('sh_user_id');
+const userName = localStorage.getItem('sh_user_name'); // Lấy tên người dùng
 
 let currentEditingOrder = null;
 const orderState = { channel: "ban_le", items: {} };
 window.currentSearchTerm = '';
 
+// DB QUẢN LÝ AVATAR (Đồng bộ với file index.html)
+const dbHelper = {
+    dbName: 'SongHauDB',
+    storeName: 'userProfile',
+    initDB: function() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, 1);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    db.createObjectStore(this.storeName, { keyPath: 'id' });
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(request.error);
+        });
+    },
+    getAvatar: async function() {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(this.storeName, 'readonly');
+            const store = tx.objectStore(this.storeName);
+            const request = store.get('avatar');
+            request.onsuccess = () => resolve(request.result ? request.result.image : null);
+            request.onerror = () => reject(request.error);
+        });
+    }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     if (!userId) { window.location.href = 'login.html'; return; }
+
+    // ĐỒNG BỘ TÊN VÀ AVATAR
+    const menuUserNameEl = document.getElementById('menuUserName');
+    if (menuUserNameEl) {
+        menuUserNameEl.innerText = userName || "Thành viên";
+        if(userName) {
+            document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=4e54c8&color=fff&size=100`;
+        }
+    }
+    dbHelper.getAvatar().then(imgBase64 => {
+        const avatarImg = document.getElementById('userAvatar');
+        if(imgBase64 && avatarImg) avatarImg.src = imgBase64;
+    }).catch(err => console.log("Chưa có avatar trong DB"));
+
     fetchOrders();
 });
 
@@ -47,7 +91,7 @@ function renderOrderList(orders) {
     const container = document.getElementById('orderListContainer');
     container.innerHTML = '';
     orders.forEach(o => {
-        // Parse ngày cho đẹp
+        // Parse ngày
         const dateObj = new Date(o.thoi_gian);
         const dateStr = `${dateObj.getDate()}/${dateObj.getMonth()+1} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
         
@@ -81,12 +125,11 @@ window.openEditView = function(orderObj) {
     
     orderState.channel = orderObj.kenh_ban || "ban_le";
     
-    // Phục hồi giỏ hàng từ JSON lưu trên Google Sheet
     try {
         orderState.items = JSON.parse(orderObj.cart_json || "{}");
     } catch(e) { orderState.items = {}; }
     
-    window.currentSearchTerm = 'VIEW_CART_ONLY'; // Hiển thị sẵn các món đã chọn
+    window.currentSearchTerm = 'VIEW_CART_ONLY'; 
     renderEditProducts();
 }
 
@@ -96,7 +139,7 @@ function closeEditView() {
     currentEditingOrder = null;
 }
 
-// 3. LOGIC HIỂN THỊ VÀ TÍNH TOÁN SẢN PHẨM (Tương tự trang index)
+// 3. LOGIC HIỂN THỊ VÀ TÍNH TOÁN SẢN PHẨM
 window.filterEditProducts = function() {
     window.currentSearchTerm = document.getElementById('search-product').value.toLowerCase();
     renderEditProducts();
@@ -215,7 +258,7 @@ window.saveUpdatedOrder = async function() {
             alert("✅ Đã cập nhật đơn hàng thành công!");
             closeEditView();
             document.getElementById('loadingText').style.display = 'block';
-            fetchOrders(); // Tải lại danh sách
+            fetchOrders(); 
         } else {
             alert("❌ Lỗi: " + data.msg);
         }
