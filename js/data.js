@@ -1,13 +1,9 @@
-// js/data.js
-
-// Khai báo biến toàn cục để các file khác đều gọi được
 window.dbProducts = [
-    // --- CÀ PHÊ RANG XAY ---
     {
         id: 1, 
         name: "Sông Hậu Premium", 
         price: 400000, 
-        unit: "4 Gói", // Thêm đơn vị
+        unit: "#",
         category: ["cao-cap", "rang-xay"], 
         img: "img/SHpremium1.webp",
         gallery: [
@@ -18,24 +14,23 @@ window.dbProducts = [
             description: "Dòng sản phẩm Cao Cấp đánh dấu sự trở lại của Sông Hậu với diện mạo và tầm vóc hoàn toàn mới. Sông Hậu Premium giữ trọn hương vị mộc nguyên bản, được tinh tuyển khắt khe từ những tinh hoa tự nhiên nhất, đồng thời mở ra định hướng mới cho phân khúc cao cấp bậc nhất. SH Premium là tuyệt phẩm của sự chọn lọc và chế tác công phu, nơi từng nguyên liệu được nâng niu để đạt đến độ tinh tế và chiều sâu phức hợp trong từng tầng hương, mang đến trải nghiệm đẳng cấp và khác biệt.",
             highlights: [
                 "100% Nguyên chất thượng hạng",
-                "100% hạt chín mọng, rang xay thủ công tỉ mỉ",
+                "100% rang xay thủ công tỉ mỉ",
                 "Đóng gói hộp quà sang trọng",
                 "Giữ trọn vị Mộc nguyên bản và tầng hương tinh tế."
             ],
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Culi - Arabica.</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta - Arabica.</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Rang xay Mộc giử vị đậm chất cà phê nguyên bản</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-    
     {
         id: 2, 
         name: "SH Truyền Thống 1 (250g) ", 
         price: 75000, 
-        unit: "Gói", // Thêm đơn vị
+        unit: "Gói",
         category: "rang-xay", 
         img: "img/SHTruyenthong2026.webp",
         gallery: [
@@ -53,12 +48,11 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 3, 
         name: "SH Truyền Thống 2 (250g) ", 
         price: 60000, 
-        unit: "Gói", // Thêm đơn vị
+        unit: "Gói",
         category: "rang-xay",
         img: "img/SHTruyenthong2026.webp",
         gallery: [
@@ -75,7 +69,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 4, 
         name: "SH Mạnh Mẽ 1 (250g)", 
@@ -91,14 +84,13 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Mạnh Mẽ 1 (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Ngũ Cốc, Hương liệu caramel .</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Ngũ Cốc, Hương liệu caramel .</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-
     {
         id: 5, 
         name: "SH Mạnh Mẽ 2 (250g)", 
@@ -114,14 +106,13 @@ window.dbProducts = [
         info: {
             description: "SH Mạnh Mẽ 2 (250g) 2026.",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-
     {
         id: 6, 
         name: "SH Cận Đại (250g)", 
@@ -143,7 +134,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 7, 
         name: "SH Truyền Thống 1 (500g)", 
@@ -165,7 +155,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 8, 
         name: "SH Truyền Thống 2 (500g)", 
@@ -187,7 +176,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 9, 
         name: "SH Mạnh Mẽ 1 (500g)", 
@@ -202,14 +190,13 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Mạnh Mẽ 1 (500g).",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Ngũ Cốc, Hương liệu caramel .</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Ngũ Cốc, Hương liệu caramel .</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-
     {
         id: 10, 
         name: "SH Mạnh Mẽ 2 (500g)", 
@@ -224,14 +211,13 @@ window.dbProducts = [
         info: {
             description: "SH Mạnh Mẽ 2 (500g).",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-
     {
         id: 11, 
         name: "SH Cận Đại (500g)", 
@@ -253,7 +239,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 12, 
         name: "SH Truyền Thống 1 (100g)", 
@@ -274,7 +259,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 13, 
         name: "SH Truyền Thống 2 (100g)", 
@@ -295,7 +279,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 14, 
         name: "SH Mạnh Mẽ 1 (100g)", 
@@ -309,14 +292,13 @@ window.dbProducts = [
         info: {
             description: "Sông Hậu Mạnh Mẽ 1 (mẫu dùng thử).",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Ngũ Cốc, Hương liệu caramel .</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Ngũ Cốc, Hương liệu caramel .</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Thơm nồng có vị béo</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-
     {
         id: 15, 
         name: "SH Mạnh Mẽ 2 (100g)", 
@@ -330,14 +312,13 @@ window.dbProducts = [
         info: {
             description: "SH Mạnh Mẽ 2 (mẫu dùng thử).",
             details: `
-                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Arabica, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
+                <p class="mb-2">- <strong>Thành phần:</strong> Robusta, Đậu, bơ, hương thực phẩm caramel (vị béo).</p>
                 <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
                 <p class="mb-2">- <strong>Hương vị:</strong> Đậm đà - Sánh - Ngậy, Gu mạnh</p>
                 <p>- <strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất.</p>
             `
         }
     },
-
     {
         id: 16, 
         name: "SH Cận Đại (100g)", 
@@ -358,7 +339,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 90, 
         name: "Đá Viên", 
@@ -377,7 +357,6 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 97, 
         name: "Phin Cà Phê Cao Cấp", 
@@ -396,12 +375,11 @@ window.dbProducts = [
             `
         }
     },
-
     {
         id: 99, 
         name: "Cà Phê Hạt", 
         price: 300000, 
-        unit: "Kg", // Thêm đơn vị
+        unit: "Kg",
         category: "cafe-hat", 
         img: "img/hatcaphe2.webp",
         gallery: [
