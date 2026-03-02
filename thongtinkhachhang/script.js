@@ -1,5 +1,5 @@
 const app = {
-    totalSteps: 4,
+    totalSteps: 3, // Đã giảm từ 4 xuống 3
     storageKey: 'songhau_coffee_draft',
 
     init: function() {
@@ -58,6 +58,10 @@ const app = {
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('ngay_goi_lai');
             if (dateInput) dateInput.value = today;
+            
+            // Xoá giỏ hàng hiện tại
+            orderState.items = {};
+            renderProducts();
         }
     },
 
@@ -195,4 +199,171 @@ document.getElementById('saleForm').addEventListener('submit', function(e) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'HOÀN TẤT & LƯU';
     });
+});
+
+// ==========================================
+// LOGIC XỬ LÝ ĐƠN HÀNG SẢN PHẨM & TÍNH GIÁ
+// ==========================================
+const orderState = {
+    channel: "ban_le", // Mặc định kênh
+    items: {}          // Lưu số lượng: { "tt1_500": 2 }
+};
+
+function formatCurrencyVND(num) {
+    return num.toLocaleString('vi-VN') + ' đ';
+}
+
+// --- LOGIC TÌM KIẾM & LỌC SẢN PHẨM ---
+window.currentSearchTerm = '';
+
+window.filterProducts = function() {
+    window.currentSearchTerm = document.getElementById('search-product').value.toLowerCase();
+    renderProducts();
+};
+
+window.setFilter = function(term) {
+    document.getElementById('search-product').value = term;
+    window.currentSearchTerm = term.toLowerCase();
+    renderProducts();
+};
+
+// --- MỚI: LỌC CHỈ NHỮNG MÓN ĐÃ CHỌN ---
+window.showSelectedOnly = function() {
+    document.getElementById('search-product').value = "";
+    window.currentSearchTerm = 'VIEW_CART_ONLY'; 
+    renderProducts();
+};
+
+// --- MỚI: XỬ LÝ KHI GÕ SỐ TRỰC TIẾP ---
+window.manualUpdateQty = function(id, value) {
+    let val = parseInt(value);
+    if (isNaN(val) || val < 0) val = 0; // Chống nhập bậy chữ cái hoặc số âm
+    orderState.items[id] = val;
+    renderProducts();
+    app.saveDraft();
+};
+
+function renderProducts() {
+    const listEl = document.getElementById('product-list');
+    if (!listEl || typeof productData === 'undefined') return;
+
+    listEl.innerHTML = '';
+    
+    // --- CẢI TIẾN LOGIC LỌC ---
+    let filteredProducts = [];
+    if (window.currentSearchTerm === 'VIEW_CART_ONLY') {
+        // Chỉ lấy những món có số lượng > 0
+        filteredProducts = productData.products.filter(prod => (orderState.items[prod.id] || 0) > 0);
+    } else {
+        // Lọc bình thường theo text
+        filteredProducts = productData.products.filter(prod => {
+            const searchStr = `${prod.name} ${prod.weight} ${prod.id}`.toLowerCase();
+            return searchStr.includes(window.currentSearchTerm);
+        });
+    }
+
+    // Hiển thị thông báo nếu giỏ hàng trống khi bấm "Đã chọn"
+    if (filteredProducts.length === 0 && window.currentSearchTerm === 'VIEW_CART_ONLY') {
+        listEl.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-sub); font-size: 0.9rem;">Chưa chọn sản phẩm nào</div>';
+    }
+
+    filteredProducts.forEach(prod => {
+        const currentPrice = prod.prices[orderState.channel];
+        const qty = orderState.items[prod.id] || 0;
+
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'product-item';
+        
+        // Highlight món đã chọn
+        if(qty > 0) itemDiv.style.background = "#fff3cd"; 
+        
+        // --- CẢI TIẾN Ô INPUT: Bỏ readonly, thêm inputmode="numeric" và onfocus="this.select()" ---
+        itemDiv.innerHTML = `
+            <div class="product-info">
+                <div>
+                    <span class="product-name">${prod.name}</span>
+                    <span class="product-weight">${prod.weight}</span>
+                </div>
+                <span class="product-price">${formatCurrencyVND(currentPrice)} / gói</span>
+            </div>
+            <div class="qty-controls">
+                <button type="button" class="qty-btn" onclick="updateOrderQty('${prod.id}', -1)">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <input type="number" inputmode="numeric" class="qty-input" value="${qty}" 
+                       onfocus="this.select()" 
+                       onchange="manualUpdateQty('${prod.id}', this.value)">
+                <button type="button" class="qty-btn" onclick="updateOrderQty('${prod.id}', 1)">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        `;
+        listEl.appendChild(itemDiv);
+    });
+
+    calculateTotal();
+}
+
+// Cập nhật số lượng khi bấm + / -
+window.updateOrderQty = function(id, change) {
+    if (!orderState.items[id]) orderState.items[id] = 0;
+    orderState.items[id] += change;
+    
+    if (orderState.items[id] < 0) orderState.items[id] = 0;
+    
+    renderProducts();
+    app.saveDraft(); // Tự động lưu nháp
+};
+
+// Tính tổng tiền & cập nhật string chi tiết đơn hàng
+function calculateTotal() {
+    const totalEl = document.getElementById('total-price');
+    const hiddenInput = document.getElementById('chi_tiet_don');
+    if (!totalEl) return;
+
+    let total = 0;
+    let orderDetailsList = [];
+    
+    // Phải lặp qua toàn bộ mảng gốc (productData.products) để cộng tiền cả những món đang bị ẩn bởi bộ lọc
+    productData.products.forEach(prod => {
+        const qty = orderState.items[prod.id] || 0;
+        if (qty > 0) {
+            const price = prod.prices[orderState.channel];
+            total += (price * qty);
+            orderDetailsList.push(`${prod.name} (${prod.weight}) x${qty}`);
+        }
+    });
+
+    totalEl.innerText = formatCurrencyVND(total);
+    
+    // Lưu vào input ẩn để gửi lên Google Sheet
+    if(hiddenInput) {
+        if(orderDetailsList.length > 0) {
+            hiddenInput.value = orderDetailsList.join(', ') + ` => Tổng tiền: ${formatCurrencyVND(total)}`;
+        } else {
+            hiddenInput.value = "";
+        }
+        // Gọi sự kiện để kích hoạt saveDraft
+        hiddenInput.dispatchEvent(new Event('change'));
+    }
+}
+
+// Khởi tạo Event Listener cho thay đổi Kênh Bán
+document.addEventListener("DOMContentLoaded", () => {
+    const channelSelect = document.getElementById('channel-select');
+    if (channelSelect) {
+        channelSelect.addEventListener('change', (e) => {
+            orderState.channel = e.target.value;
+            renderProducts();
+            app.saveDraft();
+        });
+    }
+    
+    // Đợi 1 chút để app.loadDraft() kịp fill dữ liệu rồi mới render
+    setTimeout(() => {
+        if (channelSelect && channelSelect.value) {
+            orderState.channel = channelSelect.value;
+        }
+        renderProducts();
+    }, 200);
 });
