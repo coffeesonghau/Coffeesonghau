@@ -88,41 +88,14 @@ async function fetchOrders() {
     }
 }
 
-// BIẾN LƯU TRẠNG THÁI LỌC
-window.currentStatusFilter = '';
-
 // 1.1 HÀM TÌM KIẾM VÀ LỌC ĐƠN HÀNG KẾT HỢP
-window.setStatusFilter = function(status) {
-    window.currentStatusFilter = status;
-    
-    // Đổi màu nút active
-    const btns = document.querySelectorAll('.filter-btn');
-    btns.forEach(btn => {
-        btn.style.background = 'white';
-        btn.style.color = '#64748b';
-        btn.style.borderColor = '#e2e8f0';
-    });
-    const clickedBtn = event.target;
-    clickedBtn.style.background = 'var(--primary-color)';
-    clickedBtn.style.color = 'white';
-    clickedBtn.style.borderColor = 'var(--primary-color)';
-
-    window.filterOrders();
-}
-
 window.filterOrders = function() {
     const term = document.getElementById('searchOrder').value.toLowerCase();
     
     const filtered = window.allOrdersList.filter(o => {
         // Lọc theo Text (Quán, SĐT, Địa chỉ, Mã đơn)
         const searchStr = `${o.ten_quan || ''} ${o.ma_don || ''} ${o.sdt || ''} ${o.dia_chi || ''}`.toLowerCase();
-        const matchText = searchStr.includes(term);
-        
-        // Lọc theo Trạng thái (Tabs)
-        const statusStr = (o.trang_thai || '').toLowerCase();
-        const matchStatus = window.currentStatusFilter === '' ? true : statusStr.includes(window.currentStatusFilter);
-        
-        return matchText && matchStatus;
+        return searchStr.includes(term);
     });
     
     renderOrderList(filtered);
@@ -240,7 +213,7 @@ function renderOrderList(orders) {
     });
 }
 
-// 2. MỞ GIAO DIỆN SỬA ĐƠN
+// 2. MỞ GIAO DIỆN SỬA ĐƠN VÀ ĐỔ DỮ LIỆU SĐT/ĐỊA CHỈ
 window.openEditView = function(orderObj) {
     currentEditingOrder = orderObj;
     document.getElementById('orderListView').style.display = 'none';
@@ -248,6 +221,10 @@ window.openEditView = function(orderObj) {
     
     document.getElementById('editOrderId').innerText = orderObj.ma_don;
     document.getElementById('editShopName').innerText = orderObj.ten_quan;
+    
+    // Gán dữ liệu SĐT, địa chỉ cũ vào input
+    document.getElementById('editPhone').value = orderObj.sdt ? orderObj.sdt.replace(/'/g, '') : '';
+    document.getElementById('editAddress').value = orderObj.dia_chi || '';
     
     orderState.channel = orderObj.kenh_ban || "ban_le";
     
@@ -354,7 +331,7 @@ function calculateEditTotal() {
     document.getElementById('edit-total-price').innerText = total.toLocaleString('vi-VN') + ' đ';
 }
 
-// 4. LƯU THAY ĐỔI LÊN SERVER
+// 4. LƯU THAY ĐỔI LÊN SERVER (GỬI THÊM SDT VÀ ĐỊA CHỈ)
 window.saveUpdatedOrder = async function() {
     if (currentEditingOrder.new_tong_tien_so === 0) {
         alert("Đơn hàng không thể trống!"); return;
@@ -364,9 +341,15 @@ window.saveUpdatedOrder = async function() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
 
+    // Lấy giá trị SĐT và Địa chỉ mới
+    const newPhone = document.getElementById('editPhone').value.trim();
+    const newAddress = document.getElementById('editAddress').value.trim();
+
     const payload = {
         action: "updateOrder",
         ma_don: currentEditingOrder.ma_don,
+        sdt: newPhone,          // Gửi SĐT cập nhật
+        dia_chi: newAddress,    // Gửi Địa chỉ cập nhật
         chi_tiet_don: currentEditingOrder.new_chi_tiet_str,
         tong_tien_so: currentEditingOrder.new_tong_tien_so,
         cart_json: JSON.stringify(orderState.items)
@@ -392,9 +375,10 @@ window.saveUpdatedOrder = async function() {
         alert("❌ Lỗi kết nối máy chủ!");
     } finally {
         btn.disabled = false;
-        btn.innerHTML = 'LƯU THAY ĐỔI';
+        btn.innerHTML = '<i class="fas fa-save"></i> LƯU THAY ĐỔI';
     }
 }
+
 // ==========================================
 // 5. GỬI YÊU CẦU SỬA/XOÁ ĐƠN CHO IT
 // ==========================================

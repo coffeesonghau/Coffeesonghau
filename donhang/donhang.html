@@ -22,7 +22,6 @@
         .filter-item input, .filter-item select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; outline: none; box-sizing: border-box; }
         
         .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .btn-export { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
         
         /* Floating Action Button */
         .fab-btn { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #4e54c8, #8f94fb); width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(78, 84, 200, 0.4); text-decoration: none; z-index: 99; transition: transform 0.2s; }
@@ -68,10 +67,6 @@
         <div id="orderListView" style="padding: 15px;">
             <div class="action-bar">
                 <h3 style="margin: 0; color: #2c3e50;"><i class="fas fa-chart-pie"></i> Tổng Quan</h3>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-export" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Xuất</button>
-                    <button onclick="fetchOrders()" style="background: #e2e8f0; border: none; color: #475569; padding: 8px 12px; border-radius: 8px; cursor: pointer;"><i class="fas fa-sync-alt"></i></button>
-                </div>
             </div>
 
             <div class="stats-grid">
@@ -127,12 +122,6 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;" class="status-filters">
-                <button onclick="setStatusFilter('')" class="filter-btn active" style="padding: 6px 15px; border-radius: 20px; border: 1px solid var(--primary-color); background: var(--primary-color); color: white; font-size: 0.85rem; white-space: nowrap; cursor: pointer;">Tất cả</button>
-                <button onclick="setStatusFilter('chưa')" class="filter-btn" style="padding: 6px 15px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; font-size: 0.85rem; white-space: nowrap; cursor: pointer;">⏳ Đang chờ</button>
-                <button onclick="setStatusFilter('đã')" class="filter-btn" style="padding: 6px 15px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; font-size: 0.85rem; white-space: nowrap; cursor: pointer;">✅ Thành công</button>
-            </div>
-
             <div id="loadingText" style="text-align: center; padding: 20px; color: var(--text-sub);">
                 <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
             </div>
@@ -147,7 +136,16 @@
             <div style="background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
                 <h3 style="font-size: 1.1rem; margin-top: 0; color: #2c3e50;"><i class="fas fa-edit"></i> Chỉnh sửa đơn</h3>
                 <p style="margin-bottom: 5px; font-size: 0.9rem;">Mã: <span id="editOrderId" style="color: #e74c3c; font-weight: bold;"></span></p>
-                <p style="margin: 0; font-size: 0.9rem;">Quán: <span id="editShopName" style="color: var(--primary-color); font-weight: bold;"></span></p>
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Quán: <span id="editShopName" style="color: var(--primary-color); font-weight: bold;"></span></p>
+                
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 0.8rem; font-weight: bold; color: #64748b; display: block; margin-bottom: 4px;">SĐT / Zalo</label>
+                    <input type="text" id="editPhone" placeholder="Nhập SĐT..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem;">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: bold; color: #64748b; display: block; margin-bottom: 4px;">Địa chỉ</label>
+                    <input type="text" id="editAddress" placeholder="Nhập địa chỉ..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem;">
+                </div>
             </div>
             
             <div class="order-section">
