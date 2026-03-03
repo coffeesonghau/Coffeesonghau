@@ -7,6 +7,32 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="data.js"></script>
+    <style>
+        /* CSS bổ sung trực tiếp cho các tính năng mới để không làm vỡ giao diện cũ */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); color: white; position: relative; overflow: hidden; }
+        .stat-card i.bg-icon { position: absolute; right: -10px; bottom: -15px; font-size: 4rem; opacity: 0.15; }
+        .stat-title { font-size: 0.75rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
+        
+        .advanced-filters { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .filter-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .filter-item { flex: 1; }
+        .filter-item label { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 4px; font-weight: bold; }
+        .filter-item input, .filter-item select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; outline: none; box-sizing: border-box; }
+        
+        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-export { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
+        
+        /* Floating Action Button */
+        .fab-btn { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #4e54c8, #8f94fb); width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(78, 84, 200, 0.4); text-decoration: none; z-index: 99; transition: transform 0.2s; }
+        .fab-btn:active { transform: scale(0.9); }
+
+        /* Sticky Footer cho trang Edit */
+        .sticky-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); display: flex; gap: 10px; z-index: 100; border-top: 1px solid #e2e8f0; }
+        .sticky-actions button { flex: 1; margin: 0; }
+        #editOrderView { padding-bottom: 80px !important; } /* Chừa chỗ cho sticky footer */
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -34,28 +60,95 @@
             <div class="side-menu-header">MENU CÔNG VIỆC</div>
             <a href="index.html"><i class="fas fa-plus-circle"></i> Tạo Khách & Lên Đơn</a>
             <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
-            
             <a href="#" onclick="sendITRequest('Yêu cầu SỬA đơn')"><i class="fas fa-tools"></i> Yêu cầu Sửa Đơn</a>
             <a href="#" onclick="sendITRequest('Yêu cầu XOÁ đơn')"><i class="fas fa-trash-alt"></i> Yêu cầu Xoá Đơn</a>
             <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
-        </div> <div id="orderListView" style="padding: 20px;">
-            <h3 style="margin-bottom: 15px;"><i class="fas fa-history"></i> Đơn hàng gần đây</h3>
-            
-            <div class="search-order-box" style="margin-bottom: 15px;">
-                <div style="position: relative;">
-                    <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #4e54c8;"></i>
-                    <input type="text" id="searchOrder" placeholder="🔍 Tìm tên quán, SĐT, địa chỉ, mã đơn..." oninput="filterOrders()" style="width: 100%; padding: 12px 12px 12px 40px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; box-sizing: border-box; background: #fff;">
+        </div> 
+
+        <div id="orderListView" style="padding: 15px;">
+            <div class="action-bar">
+                <h3 style="margin: 0; color: #2c3e50;"><i class="fas fa-chart-pie"></i> Tổng Quan</h3>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-export" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Xuất</button>
+                    <button onclick="fetchOrders()" style="background: #e2e8f0; border: none; color: #475569; padding: 8px 12px; border-radius: 8px; cursor: pointer;"><i class="fas fa-sync-alt"></i></button>
                 </div>
             </div>
+
+            <div class="stats-grid">
+                <div class="stat-card" style="background: linear-gradient(135deg, #4e54c8, #8f94fb);">
+                    <i class="fas fa-box bg-icon"></i>
+                    <div class="stat-title">Tổng số đơn</div>
+                    <div id="statCount" class="stat-value">0</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #0984e3, #74b9ff);">
+                    <i class="fas fa-wallet bg-icon"></i>
+                    <div class="stat-title">Doanh thu</div>
+                    <div id="statTotal" class="stat-value" style="font-size: 1.05rem;">0 đ</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #00b894, #55efc4);">
+                    <i class="fas fa-check-circle bg-icon"></i>
+                    <div class="stat-title">Thành công</div>
+                    <div id="statSuccess" class="stat-value">0</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #e17055, #fab1a0);">
+                    <i class="fas fa-clock bg-icon"></i>
+                    <div class="stat-title">Đang chờ</div>
+                    <div id="statPending" class="stat-value">0</div>
+                </div>
+            </div>
+            
+            <div class="advanced-filters">
+                <div style="position: relative; margin-bottom: 15px;">
+                    <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #4e54c8;"></i>
+                    <input type="text" id="searchOrder" placeholder="🔍 Tìm tên quán, SĐT, mã đơn..." oninput="filterOrders()" style="width: 100%; padding: 10px 10px 10px 40px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background: #f8fafc;">
+                </div>
+
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <label>Từ ngày</label>
+                        <input type="date" id="filterStartDate" onchange="filterOrders()">
+                    </div>
+                    <div class="filter-item">
+                        <label>Đến ngày</label>
+                        <input type="date" id="filterEndDate" onchange="filterOrders()">
+                    </div>
+                </div>
+                
+                <div class="filter-row" style="margin-bottom: 0;">
+                    <div class="filter-item">
+                        <label>Sắp xếp theo</label>
+                        <select id="sortOrder" onchange="filterOrders()">
+                            <option value="newest">Mới nhất</option>
+                            <option value="oldest">Cũ nhất</option>
+                            <option value="high_price">Giá trị cao - thấp</option>
+                            <option value="low_price">Giá trị thấp - cao</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;" class="status-filters">
+                <button onclick="setStatusFilter('')" class="filter-btn active" style="padding: 6px 15px; border-radius: 20px; border: 1px solid var(--primary-color); background: var(--primary-color); color: white; font-size: 0.85rem; white-space: nowrap; cursor: pointer;">Tất cả</button>
+                <button onclick="setStatusFilter('chưa')" class="filter-btn" style="padding: 6px 15px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; font-size: 0.85rem; white-space: nowrap; cursor: pointer;">⏳ Đang chờ</button>
+                <button onclick="setStatusFilter('đã')" class="filter-btn" style="padding: 6px 15px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; color: #64748b; font-size: 0.85rem; white-space: nowrap; cursor: pointer;">✅ Thành công</button>
+            </div>
+
             <div id="loadingText" style="text-align: center; padding: 20px; color: var(--text-sub);">
                 <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
             </div>
             <div id="orderListContainer"></div>
         </div>
 
+        <a href="index.html" class="fab-btn" id="fabAddOrder">
+            <i class="fas fa-plus"></i>
+        </a>
+
         <div id="editOrderView" style="display: none; padding: 20px;">
-            <h3 style="font-size: 1rem;"><i class="fas fa-edit"></i> Chỉnh sửa: <span id="editOrderId" style="color: #e74c3c; font-size: 0.85rem;"></span></h3>
-            <p style="font-weight: bold; margin-bottom: 15px;">Quán: <span id="editShopName" style="color: var(--primary-color);"></span></p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 1.1rem; margin-top: 0; color: #2c3e50;"><i class="fas fa-edit"></i> Chỉnh sửa đơn</h3>
+                <p style="margin-bottom: 5px; font-size: 0.9rem;">Mã: <span id="editOrderId" style="color: #e74c3c; font-weight: bold;"></span></p>
+                <p style="margin: 0; font-size: 0.9rem;">Quán: <span id="editShopName" style="color: var(--primary-color); font-weight: bold;"></span></p>
+            </div>
             
             <div class="order-section">
                 <div class="search-product-box">
@@ -69,12 +162,12 @@
                 </div>
 
                 <div class="product-list" id="edit-product-list"></div>
-                <div class="total-box">Tổng đơn mới: <span id="edit-total-price">0 đ</span></div>
+                <div class="total-box" style="margin-bottom: 20px;">Tổng đơn mới: <span id="edit-total-price">0 đ</span></div>
             </div>
 
-            <div class="actions">
-                <button class="btn-prev" onclick="closeEditView()">HỦY BỎ</button>
-                <button class="btn-submit" onclick="saveUpdatedOrder()" id="btnUpdateOrder">LƯU THAY ĐỔI</button>
+            <div class="sticky-actions">
+                <button class="btn-prev" onclick="closeEditView()"><i class="fas fa-times"></i> HỦY BỎ</button>
+                <button class="btn-submit" onclick="saveUpdatedOrder()" id="btnUpdateOrder"><i class="fas fa-save"></i> LƯU THAY ĐỔI</button>
             </div>
         </div>
     </div>

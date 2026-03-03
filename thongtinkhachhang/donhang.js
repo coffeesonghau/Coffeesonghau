@@ -88,46 +88,112 @@ async function fetchOrders() {
     }
 }
 
-// 1.1 HÀM TÌM KIẾM ĐƠN HÀNG
+// BIẾN LƯU TRẠNG THÁI LỌC
+window.currentStatusFilter = '';
+
+// 1.1 HÀM TÌM KIẾM VÀ LỌC ĐƠN HÀNG KẾT HỢP
+window.setStatusFilter = function(status) {
+    window.currentStatusFilter = status;
+    
+    // Đổi màu nút active
+    const btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(btn => {
+        btn.style.background = 'white';
+        btn.style.color = '#64748b';
+        btn.style.borderColor = '#e2e8f0';
+    });
+    const clickedBtn = event.target;
+    clickedBtn.style.background = 'var(--primary-color)';
+    clickedBtn.style.color = 'white';
+    clickedBtn.style.borderColor = 'var(--primary-color)';
+
+    window.filterOrders();
+}
+
 window.filterOrders = function() {
     const term = document.getElementById('searchOrder').value.toLowerCase();
+    
     const filtered = window.allOrdersList.filter(o => {
-        // Cập nhật: Gom Tên quán, Mã đơn, SĐT và Địa chỉ vào chung một chuỗi để quét
+        // Lọc theo Text (Quán, SĐT, Địa chỉ, Mã đơn)
         const searchStr = `${o.ten_quan || ''} ${o.ma_don || ''} ${o.sdt || ''} ${o.dia_chi || ''}`.toLowerCase();
-        return searchStr.includes(term);
+        const matchText = searchStr.includes(term);
+        
+        // Lọc theo Trạng thái (Tabs)
+        const statusStr = (o.trang_thai || '').toLowerCase();
+        const matchStatus = window.currentStatusFilter === '' ? true : statusStr.includes(window.currentStatusFilter);
+        
+        return matchText && matchStatus;
     });
+    
     renderOrderList(filtered);
 };
 
-// 1.2 HÀM HIỂN THỊ DANH SÁCH
+// TÍNH NĂNG 3: HÀM COPY ĐƠN HÀNG GỬI ZALO
+window.copyOrderToZalo = function(ma_don) {
+    const order = window.allOrdersList.find(o => o.ma_don === ma_don);
+    if (!order) return;
+
+    const cleanPhone = order.sdt ? order.sdt.replace(/'/g, '') : 'Chưa có SĐT';
+    const total = parseInt(order.tong_tien || 0).toLocaleString('vi-VN');
+
+    const textToCopy = `📦 MÃ ĐƠN: ${order.ma_don}\n🏠 Quán: ${order.ten_quan}\n📞 SĐT: ${cleanPhone}\n📍 Địa chỉ: ${order.dia_chi}\n📝 Chi tiết giao:\n${order.chi_tiet}\n💰 Tiền thu: ${total} đ`;
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert("✅ Đã copy thông tin giao hàng! Mở Zalo dán cho shipper ngay nhé.");
+        });
+    } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert("✅ Đã copy thông tin giao hàng! Mở Zalo dán cho shipper ngay nhé.");
+        } catch (err) {
+            alert("❌ Trình duyệt không hỗ trợ copy tự động.");
+        }
+        document.body.removeChild(textArea);
+    }
+}
+
+// 1.2 HÀM HIỂN THỊ DANH SÁCH VÀ THỐNG KÊ
 function renderOrderList(orders) {
     const container = document.getElementById('orderListContainer');
     container.innerHTML = '';
+    
+    // Cập nhật thống kê
+    let totalRevenue = 0;
+    orders.forEach(o => totalRevenue += parseInt(o.tong_tien || 0));
+    document.getElementById('statCount').innerText = orders.length;
+    document.getElementById('statTotal').innerText = totalRevenue.toLocaleString('vi-VN') + ' đ';
 
     if (orders.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color: #7f8c8d; margin-top: 20px;'>Không tìm thấy đơn hàng nào!</p>";
+        container.innerHTML = `
+            <div style="text-align:center; padding: 40px 20px;">
+                <i class="fas fa-box-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                <p style="color: #64748b; margin: 0;">Không tìm thấy đơn hàng nào!</p>
+            </div>`;
         return;
     }
 
     orders.forEach(o => {
-        // Parse ngày
         const dateObj = new Date(o.thoi_gian);
         const dateStr = `${dateObj.getDate()}/${dateObj.getMonth()+1} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
         
-        // Tạo màu cho Trạng thái
-        let statusBg = "#f39c12"; // Mặc định Cam (Đang xử lý)
+        let statusBg = "#f39c12"; 
         let statusText = o.trang_thai.toLowerCase();
-        if (statusText.includes("chưa")) statusBg = "#e74c3c"; // Đỏ
-        if (statusText.includes("đã") || statusText.includes("thành công")) statusBg = "#27ae60"; // Xanh
+        if (statusText.includes("chưa")) statusBg = "#e74c3c";
+        if (statusText.includes("đã") || statusText.includes("thành công")) statusBg = "#27ae60";
 
-        // Xử lý dữ liệu liên hệ
         const cleanPhone = o.sdt ? o.sdt.replace(/'/g, '') : 'Chưa có SĐT';
         const addressStr = o.dia_chi ? o.dia_chi : 'Chưa có địa chỉ';
 
         const card = document.createElement('div');
         card.className = 'order-card';
         card.innerHTML = `
-            <div class="order-header" style="margin-bottom: 10px;">
+            <div class="order-header" style="margin-bottom: 10px; display: flex; justify-content: space-between;">
                 <span class="order-id" style="font-weight: bold; color: var(--primary-color);"><i class="fas fa-hashtag"></i> ${o.ma_don}</span>
                 <span style="background: ${statusBg}; color: white; padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: bold;">${o.trang_thai}</span>
             </div>
@@ -142,11 +208,12 @@ function renderOrderList(orders) {
                     ${cleanPhone}
                 </a>
                 
-                <a href="https://maps.google.com/?q=${encodeURIComponent(addressStr)}" target="_blank" style="display: flex; align-items: flex-start; gap: 10px; color: #2980b9; text-decoration: none; font-size: 0.9rem; line-height: 1.4;">
+                <a href="http://maps.google.com/maps?q=${encodeURIComponent(addressStr)}" target="_blank" style="display: flex; align-items: flex-start; gap: 10px; color: #2980b9; text-decoration: none; font-size: 0.9rem; line-height: 1.4;">
                     <div style="background:#ebf5fb; padding:6px; border-radius:50%; width:26px; height:26px; display:flex; justify-content:center; align-items:center; flex-shrink:0; margin-top: -2px;"><i class="fas fa-map-marker-alt"></i></div>
                     ${addressStr}
                 </a>
             </div>
+
             <div style="font-size:0.8rem; color:#64748b; margin-bottom:10px; display: flex; gap: 15px;">
                 <span><i class="far fa-clock"></i> ${dateStr}</span>
                 <span><i class="fas fa-box"></i> ${o.kenh_ban.replace(/_/g, ' ')}</span>
@@ -158,9 +225,15 @@ function renderOrderList(orders) {
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
                 <div class="order-total" style="font-size: 1.1rem; color: #e74c3c; font-weight: bold;">${parseInt(o.tong_tien || 0).toLocaleString('vi-VN')} đ</div>
-                <button onclick='openEditView(${JSON.stringify(o)})' style="background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 6px 15px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: 0.2s;">
-                    <i class="fas fa-pencil-alt"></i> Sửa
-                </button>
+                
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="copyOrderToZalo('${o.ma_don}')" style="background: #e8f4fd; border: 1px solid #3498db; color: #3498db; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
+                        <i class="far fa-copy"></i> Copy
+                    </button>
+                    <button onclick='openEditView(${JSON.stringify(o)})' style="background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
+                        <i class="fas fa-pencil-alt"></i> Sửa
+                    </button>
+                </div>
             </div>
         `;
         container.appendChild(card);
