@@ -34,9 +34,19 @@
             <div class="side-menu-header">MENU CÔNG VIỆC</div>
             <a href="index.html"><i class="fas fa-plus-circle"></i> Tạo Khách & Lên Đơn</a>
             <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
+            
+            <a href="#" onclick="sendITRequest('Yêu cầu SỬA đơn')"><i class="fas fa-tools"></i> Yêu cầu Sửa Đơn</a>
+            <a href="#" onclick="sendITRequest('Yêu cầu XOÁ đơn')"><i class="fas fa-trash-alt"></i> Yêu cầu Xoá Đơn</a>
             <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
         </div> <div id="orderListView" style="padding: 20px;">
             <h3 style="margin-bottom: 15px;"><i class="fas fa-history"></i> Đơn hàng gần đây</h3>
+            
+            <div class="search-order-box" style="margin-bottom: 15px;">
+                <div style="position: relative;">
+                    <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #4e54c8;"></i>
+                    <input type="text" id="searchOrder" placeholder="🔍 Tìm tên quán, SĐT, địa chỉ, mã đơn..." oninput="filterOrders()" style="width: 100%; padding: 12px 12px 12px 40px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; box-sizing: border-box; background: #fff;">
+                </div>
+            </div>
             <div id="loadingText" style="text-align: center; padding: 20px; color: var(--text-sub);">
                 <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
             </div>

@@ -4,7 +4,7 @@
 const dbHelper = {
     dbName: 'SongHauDB',
     storeName: 'userProfile',
-    initDB: function() {
+    initDB: function () {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, 1);
             request.onupgradeneeded = (e) => {
@@ -17,13 +17,13 @@ const dbHelper = {
             request.onerror = (e) => reject(e.target.error);
         });
     },
-    saveAvatar: async function(base64Data) {
+    saveAvatar: async function (base64Data) {
         const db = await this.initDB();
         const tx = db.transaction(this.storeName, 'readwrite');
         const store = tx.objectStore(this.storeName);
         store.put({ id: 'avatar', image: base64Data });
     },
-    getAvatar: async function() {
+    getAvatar: async function () {
         const db = await this.initDB();
         return new Promise((resolve, reject) => {
             const tx = db.transaction(this.storeName, 'readonly');
@@ -38,7 +38,7 @@ const app = {
     totalSteps: 3, // Đã giảm từ 4 xuống 3
     storageKey: 'songhau_coffee_draft',
 
-    init: function() {
+    init: function () {
         // --- BƯỚC 1: CHỐNG VÀO LẬU ---
         const isLoggedIn = localStorage.getItem('sh_is_logged_in');
         if (isLoggedIn !== 'true') {
@@ -48,7 +48,7 @@ const app = {
 
         // --- BƯỚC 2: HIỂN THỊ TÊN NGƯỜI DÙNG TỪ GOOGLE SHEET VÀ AVATAR ---
         const userName = localStorage.getItem('sh_user_name'); // Tên lấy từ lúc đăng nhập
-        
+
         // Hiển thị ở Header góc trên
         const displayEl = document.getElementById('currentUserName');
         if (displayEl) displayEl.innerText = userName || "Thành viên";
@@ -57,17 +57,17 @@ const app = {
         const menuUserNameEl = document.getElementById('menuUserName');
         if (menuUserNameEl) {
             menuUserNameEl.innerText = userName || "Thành viên";
-            
+
             // Đổi avatar mặc định thành chữ cái đầu của tên
-            if(userName) {
-                 document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=4e54c8&color=fff&size=100`;
+            if (userName) {
+                document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=4e54c8&color=fff&size=100`;
             }
         }
 
         // Tải ảnh đại diện từ IndexedDB (nếu user đã tự upload trước đó)
         dbHelper.getAvatar().then(imgBase64 => {
             const avatarImg = document.getElementById('userAvatar');
-            if(imgBase64 && avatarImg) {
+            if (imgBase64 && avatarImg) {
                 avatarImg.src = imgBase64;
             }
         }).catch(err => console.log("Chưa có avatar trong DB"));
@@ -75,17 +75,17 @@ const app = {
         // Xử lý sự kiện khi người dùng chọn ảnh mới
         const avatarUpload = document.getElementById('avatarUpload');
         if (avatarUpload) {
-            avatarUpload.addEventListener('change', function(e) {
+            avatarUpload.addEventListener('change', function (e) {
                 const file = e.target.files[0];
                 if (file) {
                     // Giới hạn ảnh dưới 3MB để IndexedDB không bị quá tải
-                    if(file.size > 3 * 1024 * 1024) {
+                    if (file.size > 3 * 1024 * 1024) {
                         alert("Vui lòng chọn ảnh dung lượng nhỏ hơn 3MB!");
                         return;
                     }
-                    
+
                     const reader = new FileReader();
-                    reader.onload = function(evt) {
+                    reader.onload = function (evt) {
                         const base64Data = evt.target.result;
                         document.getElementById('userAvatar').src = base64Data; // Đổi ảnh trên giao diện
                         dbHelper.saveAvatar(base64Data); // Lưu vào IndexedDB
@@ -94,7 +94,7 @@ const app = {
                 }
             });
         }
-        
+
         // --- BƯỚC 3: CẢNH BÁO MẤT MẠNG ---
         window.addEventListener('online', () => this.updateNetworkStatus(true));
         window.addEventListener('offline', () => this.updateNetworkStatus(false));
@@ -106,14 +106,14 @@ const app = {
         });
     },
 
-    logout: function() {
-        if(confirm("Bạn muốn đăng xuất?")) {
+    logout: function () {
+        if (confirm("Bạn muốn đăng xuất?")) {
             localStorage.clear();
             window.location.href = 'login.html';
         }
     },
 
-    updateNetworkStatus: function(isOnline) {
+    updateNetworkStatus: function (isOnline) {
         const header = document.querySelector('header');
         const logo = document.querySelector('.logo');
         if (!isOnline) {
@@ -125,32 +125,32 @@ const app = {
         }
     },
 
-    clearDraft: function() {
+    clearDraft: function () {
         if (confirm("⚠️ Bạn có chắc muốn xóa sạch bản nháp hiện tại để nhập khách mới?")) {
             localStorage.removeItem(this.storageKey);
             document.getElementById('saleForm').reset();
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('ngay_goi_lai');
             if (dateInput) dateInput.value = today;
-            
+
             // Xoá giỏ hàng hiện tại
             orderState.items = {};
             renderProducts();
         }
     },
 
-    capitalizeFirstLetter: function(el) {
+    capitalizeFirstLetter: function (el) {
         el.value = el.value.replace(/\b\w/g, l => l.toUpperCase());
     },
 
-    formatCurrency: function(el) {
+    formatCurrency: function (el) {
         let val = el.value.replace(/\D/g, "");
         if (val) {
             el.value = parseInt(val).toLocaleString('vi-VN');
         }
     },
 
-    saveDraft: function() {
+    saveDraft: function () {
         const form = document.getElementById('saleForm');
         if (form) {
             const formData = new FormData(form);
@@ -159,7 +159,7 @@ const app = {
         }
     },
 
-    loadDraft: function() {
+    loadDraft: function () {
         const draft = localStorage.getItem(this.storageKey);
         if (draft) {
             const data = JSON.parse(draft);
@@ -170,7 +170,7 @@ const app = {
         }
     },
 
-    nextStep: function(step) {
+    nextStep: function (step) {
         document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
         const targetStep = document.getElementById(`step${step}`);
         if (targetStep) targetStep.classList.add('active');
@@ -180,7 +180,7 @@ const app = {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    validateAndNext: function(currentStep, nextStepNum) {
+    validateAndNext: function (currentStep, nextStepNum) {
         const currentSection = document.getElementById(`step${currentStep}`);
         const requiredElements = currentSection.querySelectorAll('input[required], select[required]');
         let isValid = true;
@@ -205,7 +205,7 @@ const app = {
         }
     },
 
-    getLocation: function() {
+    getLocation: function () {
         const addressInput = document.getElementById('dia_chi');
         const gpsBtn = document.querySelector('.btn-gps i');
         if (!navigator.geolocation) return alert("Trình duyệt không hỗ trợ GPS");
@@ -225,13 +225,45 @@ const app = {
             },
             { enableHighAccuracy: true, timeout: 10000 }
         );
+    },
+    copyBaoGia: function () {
+        const chiTiet = document.getElementById('chi_tiet_don').value;
+        const inputKenh = document.getElementById('channel-select');
+        const tenKenh = inputKenh.options[inputKenh.selectedIndex].text;
+
+        if (!chiTiet) {
+            alert("⚠️ Bạn chưa chọn sản phẩm nào để báo giá!");
+            return;
+        }
+
+        const textToCopy = `BÁO GIÁ SÔNG HẬU COFFEE\nKênh áp dụng: ${tenKenh}\n----------------------\n${chiTiet.replace(/ => /g, '\n\n')}\n----------------------\nCảm ơn Anh/Chị đã quan tâm!`;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("✅ Đã copy báo giá! Bạn có thể dán trực tiếp vào tin nhắn Zalo/Messenger cho khách.");
+            });
+        } else {
+            // Fallback cho các trình duyệt cũ hoặc không có HTTPS
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("✅ Đã copy báo giá! Bạn có thể dán trực tiếp vào tin nhắn Zalo/Messenger cho khách.");
+            } catch (err) {
+                alert("❌ Trình duyệt không hỗ trợ copy tự động.");
+            }
+            document.body.removeChild(textArea);
+        }
     }
 };
 
 app.init();
 
 // --- XỬ LÝ GỬI FORM ---
-document.getElementById('saleForm').addEventListener('submit', function(e) {
+document.getElementById('saleForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     // Chặn gửi nếu đang mất mạng
@@ -244,14 +276,14 @@ document.getElementById('saleForm').addEventListener('submit', function(e) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec'; 
-    
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec';
+
     // ==========================================
     // ĐOẠN MÃ BẠN VỪA HỎI ĐƯỢC ĐẶT Ở ĐÂY:
     // ==========================================
     const formData = new FormData(this);
     const dataObj = Object.fromEntries(formData.entries());
-    
+
     dataObj.action = "saveData";
     dataObj.nguoi_gui = localStorage.getItem('sh_user_name');
     dataObj.id_sales = localStorage.getItem('sh_user_id');
@@ -267,26 +299,26 @@ document.getElementById('saleForm').addEventListener('submit', function(e) {
     // ==========================================
 
     // Phần fetch giữ nguyên như cũ
-    fetch(scriptURL, { 
-        method: 'POST', 
+    fetch(scriptURL, {
+        method: 'POST',
         body: JSON.stringify(dataObj),
         headers: { "Content-Type": "text/plain;charset=utf-8" }
     })
-    .then(response => response.json())
-    .then(result => {
-        if(result.success) {
-            alert('✅ THÀNH CÔNG! Dữ liệu đã được lưu.');
-            localStorage.removeItem(app.storageKey); 
-            location.reload();
-        } else {
-            throw new Error("Lỗi từ máy chủ");
-        }
-    })
-    .catch(error => {
-        alert('❌ LỖI GỬI DỮ LIỆU! Kiểm tra lại kết nối mạng.');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'HOÀN TẤT & LƯU';
-    });
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('✅ THÀNH CÔNG! Dữ liệu đã được lưu.');
+                localStorage.removeItem(app.storageKey);
+                location.reload();
+            } else {
+                throw new Error("Lỗi từ máy chủ");
+            }
+        })
+        .catch(error => {
+            alert('❌ LỖI GỬI DỮ LIỆU! Kiểm tra lại kết nối mạng.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'HOÀN TẤT & LƯU';
+        });
 });
 
 // ==========================================
@@ -304,26 +336,26 @@ function formatCurrencyVND(num) {
 // --- LOGIC TÌM KIẾM & LỌC SẢN PHẨM ---
 window.currentSearchTerm = '';
 
-window.filterProducts = function() {
+window.filterProducts = function () {
     window.currentSearchTerm = document.getElementById('search-product').value.toLowerCase();
     renderProducts();
 };
 
-window.setFilter = function(term) {
+window.setFilter = function (term) {
     document.getElementById('search-product').value = term;
     window.currentSearchTerm = term.toLowerCase();
     renderProducts();
 };
 
 // --- MỚI: LỌC CHỈ NHỮNG MÓN ĐÃ CHỌN ---
-window.showSelectedOnly = function() {
+window.showSelectedOnly = function () {
     document.getElementById('search-product').value = "";
-    window.currentSearchTerm = 'VIEW_CART_ONLY'; 
+    window.currentSearchTerm = 'VIEW_CART_ONLY';
     renderProducts();
 };
 
 // --- MỚI: XỬ LÝ KHI GÕ SỐ TRỰC TIẾP ---
-window.manualUpdateQty = function(id, value) {
+window.manualUpdateQty = function (id, value) {
     let val = parseInt(value);
     if (isNaN(val) || val < 0) val = 0; // Chống nhập bậy chữ cái hoặc số âm
     orderState.items[id] = val;
@@ -336,7 +368,7 @@ function renderProducts() {
     if (!listEl || typeof productData === 'undefined') return;
 
     listEl.innerHTML = '';
-    
+
     // --- CẢI TIẾN LOGIC LỌC ---
     let filteredProducts = [];
     if (window.currentSearchTerm === 'VIEW_CART_ONLY') {
@@ -361,10 +393,10 @@ function renderProducts() {
 
         const itemDiv = document.createElement('div');
         itemDiv.className = 'product-item';
-        
+
         // Highlight món đã chọn
-        if(qty > 0) itemDiv.style.background = "#fff3cd"; 
-        
+        if (qty > 0) itemDiv.style.background = "#fff3cd";
+
         // --- CẢI TIẾN Ô INPUT: Bỏ readonly, thêm inputmode="numeric" và onfocus="this.select()" ---
         itemDiv.innerHTML = `
             <div class="product-info">
@@ -393,12 +425,12 @@ function renderProducts() {
 }
 
 // Cập nhật số lượng khi bấm + / -
-window.updateOrderQty = function(id, change) {
+window.updateOrderQty = function (id, change) {
     if (!orderState.items[id]) orderState.items[id] = 0;
     orderState.items[id] += change;
-    
+
     if (orderState.items[id] < 0) orderState.items[id] = 0;
-    
+
     renderProducts();
     app.saveDraft(); // Tự động lưu nháp
 };
@@ -411,7 +443,7 @@ function calculateTotal() {
 
     let total = 0;
     let orderDetailsList = [];
-    
+
     // Phải lặp qua toàn bộ mảng gốc (productData.products) để cộng tiền cả những món đang bị ẩn bởi bộ lọc
     productData.products.forEach(prod => {
         const qty = orderState.items[prod.id] || 0;
@@ -423,10 +455,10 @@ function calculateTotal() {
     });
 
     totalEl.innerText = formatCurrencyVND(total);
-    
+
     // Lưu vào input ẩn để gửi lên Google Sheet
-    if(hiddenInput) {
-        if(orderDetailsList.length > 0) {
+    if (hiddenInput) {
+        if (orderDetailsList.length > 0) {
             hiddenInput.value = orderDetailsList.join(', ') + ` => Tổng tiền: ${formatCurrencyVND(total)}`;
         } else {
             hiddenInput.value = "";
@@ -446,7 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
             app.saveDraft();
         });
     }
-    
+
     // Đợi 1 chút để app.loadDraft() kịp fill dữ liệu rồi mới render
     setTimeout(() => {
         if (channelSelect && channelSelect.value) {

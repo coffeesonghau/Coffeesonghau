@@ -92,7 +92,8 @@ function doPost(e) {
         try { parsedItems = JSON.parse(data.cart_json); } catch(e) {}
       }
 
-      let fixedHeadersDH = ["Mã Đơn", "Thời gian", "ID Sales", "Tên quán", "Kênh Bán", "Trạng thái", "Chi Tiết Đơn", "TỔNG TIỀN", "Cart JSON"];
+      // ĐÃ CẬP NHẬT: Thêm SĐT và Địa chỉ vào Header
+      let fixedHeadersDH = ["Mã Đơn", "Thời gian", "ID Sales", "Tên quán", "SĐT", "Địa chỉ", "Kênh Bán", "Trạng thái", "Chi Tiết Đơn", "TỔNG TIỀN", "Cart JSON"];
       let lastColDH = sheetDH.getLastColumn();
       let headerDH = lastColDH > 0 ? sheetDH.getRange(1, 1, 1, lastColDH).getValues()[0] : fixedHeadersDH;
 
@@ -125,6 +126,11 @@ function doPost(e) {
       fillColDH("Thời gian", timeVN);
       fillColDH("ID Sales", data.id_sales);
       fillColDH("Tên quán", data.ten_quan);
+      
+      // ĐÃ CẬP NHẬT: Lưu thêm SĐT và Địa chỉ
+      fillColDH("SĐT", "'" + (data.sdt_zalo || "")); // Thêm dấu ' để giữ số 0
+      fillColDH("Địa chỉ", data.dia_chi || "");
+      
       fillColDH("Kênh Bán", data.kenh_ban);
       fillColDH("Trạng thái", data.da_gui_mau);
       fillColDH("Chi Tiết Đơn", data.chi_tiet_don);
@@ -158,6 +164,11 @@ function doPost(e) {
       let idxThoiGian = headers.indexOf("Thời gian");
       let idxIdSales = headers.indexOf("ID Sales");
       let idxTenQuan = headers.indexOf("Tên quán");
+      
+      // ĐÃ CẬP NHẬT: Lấy Index của cột SĐT và Địa chỉ
+      let idxSdt = headers.indexOf("SĐT");
+      let idxDiaChi = headers.indexOf("Địa chỉ");
+      
       let idxKenh = headers.indexOf("Kênh Bán");
       let idxChiTiet = headers.indexOf("Chi Tiết Đơn");
       let idxTongTien = headers.indexOf("TỔNG TIỀN");
@@ -172,6 +183,11 @@ function doPost(e) {
             ma_don: idxMaDon > -1 && row[idxMaDon] ? row[idxMaDon] : "DH_Cũ_" + i,
             thoi_gian: idxThoiGian > -1 ? row[idxThoiGian] : new Date(),
             ten_quan: idxTenQuan > -1 ? row[idxTenQuan] : "",
+            
+            // ĐÃ CẬP NHẬT: Trả thêm dữ liệu SĐT và Địa chỉ
+            sdt: idxSdt > -1 ? row[idxSdt] : "",
+            dia_chi: idxDiaChi > -1 ? row[idxDiaChi] : "",
+            
             kenh_ban: idxKenh > -1 ? row[idxKenh] : "ban_le",
             chi_tiet: idxChiTiet > -1 ? row[idxChiTiet] : "",
             tong_tien: idxTongTien > -1 ? row[idxTongTien] : 0,
@@ -227,6 +243,41 @@ function doPost(e) {
       } else {
           return createResponse({success: false, msg: "Không tìm thấy mã đơn cần sửa"});
       }
+    }
+
+    // ==========================================
+    // 8. GỬI YÊU CẦU IT (XOÁ / SỬA ĐƠN)
+    // ==========================================
+    if (data.action === "sendITRequest") {
+      let sheetYC = ss.getSheetByName("YeuCauIT");
+      
+      // Cải tiến: Bọc try-catch để chống lỗi khi tạo Sheet
+      if (!sheetYC) {
+        try {
+          sheetYC = ss.insertSheet("YeuCauIT");
+          let headerYC = ["Thời gian", "ID Sales", "Người yêu cầu", "Loại yêu cầu", "Mã Đơn", "Lý do", "Trạng thái"];
+          sheetYC.appendRow(headerYC);
+          sheetYC.getRange(1, 1, 1, headerYC.length).setFontWeight("bold").setBackground("#fce5cd");
+          sheetYC.setFrozenRows(1);
+        } catch(e) {
+          // Nếu không tạo được sheet mới, lấy tạm sheet KhachHang làm nơi lưu để tránh mất data
+          sheetYC = ss.getSheetByName(SHEET_KHACHHANG); 
+        }
+      }
+
+      let timeVN = Utilities.formatDate(new Date(), "GMT+7", "yyyy-MM-dd'T'HH:mm:ss");
+      
+      sheetYC.appendRow([
+        timeVN,
+        data.id_sales,
+        data.nguoi_gui,
+        data.loai_yeu_cau,
+        data.ma_don,
+        data.ly_do,
+        "Chờ xử lý"
+      ]);
+
+      return createResponse({success: true});
     }
 
     return createResponse({success: false, msg: "Action không hợp lệ"});

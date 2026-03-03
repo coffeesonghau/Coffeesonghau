@@ -50,18 +50,60 @@
 
         <form id="saleForm">
             <section class="form-step active" id="step1">
-                <h3><i class="fas fa-id-card"></i> Khách hàng mới</h3>
+                <h3><i class="fas fa-calculator"></i> Báo Giá & Lên Đơn</h3>
+                
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Kênh giá áp dụng</label>
+                    <select id="channel-select" name="kenh_ban">
+                        <option value="ban_le">Bán lẻ</option>
+                        <option value="dai_ly_quan">Đại Lý / Quán</option>
+                        <option value="he_thong_npp">Hệ Thống / NPP</option>
+                    </select>
+                </div>
+
+                <div class="search-product-box">
+                    <input type="text" id="search-product" placeholder="🔍 Tìm tên, trọng lượng..." oninput="filterProducts()">
+                    <div class="quick-filters">
+                        <button type="button" class="tag-btn cart-tag" onclick="showSelectedOnly()">🛒 Đã chọn</button>
+                        <button type="button" class="tag-btn" onclick="setFilter('500g')">500g</button>
+                        <button type="button" class="tag-btn" onclick="setFilter('250g')">250g</button>
+                        <button type="button" class="tag-btn" onclick="setFilter('100g')">100g</button>
+                        <button type="button" class="tag-btn" onclick="setFilter('')">Tất cả</button>
+                    </div>
+                </div>
+
+                <div class="product-list" id="product-list" style="margin-top: 10px;">
+                    </div>
+
+                <div class="total-box" style="margin-bottom: 15px;">
+                    Tổng cộng: <span id="total-price">0 đ</span>
+                </div>
+                
+                <input type="hidden" name="chi_tiet_don" id="chi_tiet_don" value="">
+
+                <button type="button" class="btn-prev" onclick="app.copyBaoGia()" style="background: #e8f4fd; color: #3498db; width: 100%; margin-bottom: 15px; border: 1px dashed #3498db;">
+                    <i class="fas fa-copy"></i> Copy Báo Giá Nhanh (Gửi Zalo)
+                </button>
+
+                <div class="actions">
+                    <button type="button" class="btn-prev" onclick="app.clearDraft()" style="background: #ffeaa7; color: #d63031;">
+                        <i class="fas fa-trash-alt"></i> Xóa Giỏ
+                    </button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo (Thông tin) <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <section class="form-step" id="step2">
+                <h3><i class="fas fa-id-card"></i> Thông Tin Khách Hàng</h3>
                 <div class="input-group">
                     <label>Tên cửa hàng *</label>
-                    <input type="text" name="ten_quan" placeholder="Nhập tên quán..." required
-                        oninput="app.capitalizeFirstLetter(this)">
+                    <input type="text" name="ten_quan" placeholder="Nhập tên quán..." required oninput="app.capitalizeFirstLetter(this)">
                 </div>
                 <div class="input-group">
                     <label>Địa chỉ *</label>
                     <div class="gps-wrapper">
                         <input type="text" name="dia_chi" id="dia_chi" placeholder="Số nhà, tên đường..." required>
-                        <button type="button" class="btn-gps" onclick="app.getLocation()"><i
-                                class="fas fa-location-arrow"></i></button>
+                        <button type="button" class="btn-gps" onclick="app.getLocation()"><i class="fas fa-location-arrow"></i></button>
                     </div>
                 </div>
                 <div class="grid">
@@ -71,98 +113,41 @@
                     </div>
                     <div class="input-group">
                         <label>SĐT/Zalo *</label>
-                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                     </div>
                 </div>
                 <div class="actions">
-                    <button type="button" class="btn-prev" onclick="app.clearDraft()"
-                        style="background: #ffeaa7; color: #d63031;"><i class="fas fa-trash-alt"></i> Xóa nháp</button>
-                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo <i
-                            class="fas fa-chevron-right"></i></button>
-                </div>
-            </section>
-
-            <section class="form-step" id="step2">
-                <h3><i class="fas fa-coffee"></i> Nhu cầu sử dụng</h3>
-                <div class="input-group">
-                    <label>Cách pha *</label>
-                    <select name="loai_ban" required>
-                        <option value="">-- Chọn cách pha --</option>
-                        <option value="Pha máy">Pha máy</option>
-                        <option value="Pha phin">Pha phin</option>
-                        <option value="Cả hai">Cả hai</option>
-                        <option value="Nhiều nhu cầu khác">Nhiều nhu cầu khác nhau</option>
-                    </select>
-                </div>
-
-                <div class="grid">
-                    <div class="input-group">
-                        <label>Lượng dùng/tháng (kg) *</label>
-                        <input type="number" name="luong_dung" required placeholder="Ví dụ: 1">
-                    </div>
-                    <div class="input-group">
-                        <label>Gu hiện tại</label>
-                        <input type="text" name="gu_hien_tai" placeholder="Đậm, đắng...">
-                    </div>
-                </div>
-
-                <div class="order-section">
-                    <h4><i class="fas fa-box-open"></i> Lên đơn / Báo giá</h4>
-                    <div class="input-group" style="margin-bottom: 10px;">
-                        <label>Khách thuộc kênh bán nào?</label>
-                        <select id="channel-select" name="kenh_ban">
-                            <option value="ban_le">Bán lẻ</option>
-                            <option value="dai_ly_quan">Đại Lý / Quán</option>
-                            <option value="he_thong_npp">Hệ Thống / NPP</option>
-                        </select>
-                    </div>
-
-                    <div class="search-product-box">
-                        <input type="text" id="search-product" placeholder="🔍 Tìm tên, trọng lượng..."
-                            oninput="filterProducts()">
-                        <div class="quick-filters">
-                            <button type="button" class="tag-btn cart-tag" onclick="showSelectedOnly()">🛒 Đã
-                                chọn</button>
-
-                            <button type="button" class="tag-btn" onclick="setFilter('500g')">500g</button>
-                            <button type="button" class="tag-btn" onclick="setFilter('250g')">250g</button>
-                            <button type="button" class="tag-btn" onclick="setFilter('100g')">100g</button>
-                            <button type="button" class="tag-btn" onclick="setFilter('Truyền Thống')">Truyền
-                                Thống</button>
-                            <button type="button" class="tag-btn" onclick="setFilter('Mạnh Mẽ')">Mạnh Mẽ</button>
-                            <button type="button" class="tag-btn" onclick="setFilter('')">Tất cả</button>
-                        </div>
-                    </div>
-
-                    <label style="margin-top: 5px;">Chọn sản phẩm cấp cho khách</label>
-                    <div class="product-list" id="product-list">
-                    </div>
-
-                    <div class="total-box">
-                        Tổng cộng: <span id="total-price">0 đ</span>
-                    </div>
-
-                    <input type="hidden" name="chi_tiet_don" id="chi_tiet_don" value="">
-                </div>
-
-                <div class="actions">
-                    <button type="button" class="btn-prev" onclick="app.nextStep(1)">Quay lại</button>
-                    <button type="button" class="btn-next" onclick="app.validateAndNext(2, 3)">Tiếp theo <i
-                            class="fas fa-chevron-right"></i></button>
+                    <button type="button" class="btn-prev" onclick="app.nextStep(1)">Quay lại Sửa đơn</button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(2, 3)">Khảo sát nhu cầu <i class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
 
             <section class="form-step" id="step3">
-                <h3><i class="fas fa-eye"></i> Quan sát & Chốt hẹn</h3>
+                <h3><i class="fas fa-eye"></i> Nhu Cầu & Khảo Sát</h3>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Cách pha *</label>
+                        <select name="loai_ban" required>
+                            <option value="">-- Chọn cách pha --</option>
+                            <option value="Pha máy">Pha máy</option>
+                            <option value="Pha phin">Pha phin</option>
+                            <option value="Cả hai">Cả hai</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Sản lượng/tháng (kg) *</label>
+                        <input type="number" name="luong_dung" required placeholder="VD: 5">
+                    </div>
+                </div>
+
                 <div class="grid">
                     <div class="input-group">
                         <label>Hãng đang dùng </label>
                         <input type="text" name="hang_dang_dung" placeholder="Tên hãng...">
                     </div>
                     <div class="input-group">
-                        <label>Giá hiện tại </label>
-                        <input type="text" name="gia_hien_tai" placeholder="Giá/kg" oninput="app.formatCurrency(this)">
+                        <label>Gu hiện tại</label>
+                        <input type="text" name="gu_hien_tai" placeholder="Đậm, đắng...">
                     </div>
                 </div>
 
@@ -171,11 +156,11 @@
                         <label>Tiềm năng *</label>
                         <select name="tiem_nang" required>
                             <option value="">-- Đánh giá --</option>
-                            <option value="1">⭐ (Nhỏ)</option>
-                            <option value="2">⭐⭐ (Ổn định)</option>
-                            <option value="3">⭐⭐⭐ (Lớn)</option>
-                            <option value="4">⭐⭐⭐⭐ (Rất lớn)</option>
-                            <option value="5">⭐⭐⭐⭐⭐ (VIP)</option>
+                            <option value="1">⭐ Nhỏ</option>
+                            <option value="2">⭐⭐ Ổn định</option>
+                            <option value="3">⭐⭐⭐ Lớn</option>
+                            <option value="4">⭐⭐⭐⭐ Rất lớn</option>
+                            <option value="5">⭐⭐⭐⭐⭐ VIP</option>
                         </select>
                     </div>
                     <div class="input-group">

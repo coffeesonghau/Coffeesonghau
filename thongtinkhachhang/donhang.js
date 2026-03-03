@@ -78,7 +78,8 @@ async function fetchOrders() {
         document.getElementById('loadingText').style.display = 'none';
         
         if (result.success && result.orders.length > 0) {
-            renderOrderList(result.orders);
+            window.allOrdersList = result.orders; // Lưu lại để tìm kiếm
+            renderOrderList(window.allOrdersList);
         } else {
             document.getElementById('orderListContainer').innerHTML = "<p style='text-align:center;'>Chưa có đơn hàng nào.</p>";
         }
@@ -87,28 +88,81 @@ async function fetchOrders() {
     }
 }
 
+// 1.1 HÀM TÌM KIẾM ĐƠN HÀNG
+window.filterOrders = function() {
+    const term = document.getElementById('searchOrder').value.toLowerCase();
+    const filtered = window.allOrdersList.filter(o => {
+        // Cập nhật: Gom Tên quán, Mã đơn, SĐT và Địa chỉ vào chung một chuỗi để quét
+        const searchStr = `${o.ten_quan || ''} ${o.ma_don || ''} ${o.sdt || ''} ${o.dia_chi || ''}`.toLowerCase();
+        return searchStr.includes(term);
+    });
+    renderOrderList(filtered);
+};
+
+// 1.2 HÀM HIỂN THỊ DANH SÁCH
 function renderOrderList(orders) {
     const container = document.getElementById('orderListContainer');
     container.innerHTML = '';
+
+    if (orders.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color: #7f8c8d; margin-top: 20px;'>Không tìm thấy đơn hàng nào!</p>";
+        return;
+    }
+
     orders.forEach(o => {
         // Parse ngày
         const dateObj = new Date(o.thoi_gian);
         const dateStr = `${dateObj.getDate()}/${dateObj.getMonth()+1} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
         
+        // Tạo màu cho Trạng thái
+        let statusBg = "#f39c12"; // Mặc định Cam (Đang xử lý)
+        let statusText = o.trang_thai.toLowerCase();
+        if (statusText.includes("chưa")) statusBg = "#e74c3c"; // Đỏ
+        if (statusText.includes("đã") || statusText.includes("thành công")) statusBg = "#27ae60"; // Xanh
+
+        // Nút Gọi điện & Chỉ đường Google Maps (Xóa dấu ' ở đầu SĐT nếu có)
+        const cleanPhone = o.sdt ? o.sdt.replace(/'/g, '') : '';
+        const contactHtml = (cleanPhone || o.dia_chi) ? `
+            <div style="background: #f8fafc; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #e2e8f0;">
+                ${cleanPhone ? `
+                    <a href="tel:${cleanPhone}" style="display: flex; align-items: center; gap: 8px; color: #27ae60; text-decoration: none; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">
+                        <div style="background:#e8f8f5; padding:6px; border-radius:50%; width:24px; height:24px; display:flex; justify-content:center; align-items:center;"><i class="fas fa-phone-alt"></i></div>
+                        Gọi: ${cleanPhone}
+                    </a>` : ''}
+                ${o.dia_chi ? `
+                    <a href="https://maps.google.com/?q=${encodeURIComponent(o.dia_chi)}" target="_blank" style="display: flex; align-items: center; gap: 8px; color: #2980b9; text-decoration: none; font-size: 0.85rem; line-height: 1.4;">
+                        <div style="background:#ebf5fb; padding:6px; border-radius:50%; width:24px; height:24px; display:flex; justify-content:center; align-items:center; flex-shrink:0;"><i class="fas fa-map-marker-alt"></i></div>
+                        ${o.dia_chi}
+                    </a>` : ''}
+            </div>
+        ` : '';
+
         const card = document.createElement('div');
         card.className = 'order-card';
         card.innerHTML = `
-            <div class="order-header">
-                <span class="order-id"><i class="fas fa-hashtag"></i> ${o.ma_don}</span>
-                <span class="order-status">${o.trang_thai}</span>
+            <div class="order-header" style="margin-bottom: 10px;">
+                <span class="order-id" style="font-weight: bold; color: var(--primary-color);"><i class="fas fa-hashtag"></i> ${o.ma_don}</span>
+                <span style="background: ${statusBg}; color: white; padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: bold;">${o.trang_thai}</span>
             </div>
-            <div class="order-shop">${o.ten_quan}</div>
-            <div style="font-size:0.75rem; color:#a0aec0; margin-bottom:8px;">📅 ${dateStr} - 📦 Kênh: ${o.kenh_ban}</div>
-            <div class="order-details">${o.chi_tiet}</div>
-            <div class="order-total">${parseInt(o.tong_tien || 0).toLocaleString('vi-VN')} đ</div>
-            <button class="btn-edit-order" onclick='openEditView(${JSON.stringify(o)})'>
-                <i class="fas fa-pencil-alt"></i> Sửa Đơn Hàng
-            </button>
+            <div class="order-shop" style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">${o.ten_quan}</div>
+            
+            ${contactHtml}
+
+            <div style="font-size:0.8rem; color:#64748b; margin-bottom:10px; display: flex; gap: 15px;">
+                <span><i class="far fa-clock"></i> ${dateStr}</span>
+                <span><i class="fas fa-box"></i> ${o.kenh_ban.replace(/_/g, ' ')}</span>
+            </div>
+            
+            <div class="order-details" style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.85rem; color: #856404; margin-bottom: 10px; border-left: 3px solid #ffeeba;">
+                ${o.chi_tiet}
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
+                <div class="order-total" style="font-size: 1.1rem; color: #e74c3c; font-weight: bold;">${parseInt(o.tong_tien || 0).toLocaleString('vi-VN')} đ</div>
+                <button onclick='openEditView(${JSON.stringify(o)})' style="background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 6px 15px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: 0.2s;">
+                    <i class="fas fa-pencil-alt"></i> Sửa
+                </button>
+            </div>
         `;
         container.appendChild(card);
     });
@@ -267,5 +321,50 @@ window.saveUpdatedOrder = async function() {
     } finally {
         btn.disabled = false;
         btn.innerHTML = 'LƯU THAY ĐỔI';
+    }
+}
+// ==========================================
+// 5. GỬI YÊU CẦU SỬA/XOÁ ĐƠN CHO IT
+// ==========================================
+window.sendITRequest = async function(loaiYeuCau) {
+    // Đóng menu nếu đang mở
+    document.getElementById('sideMenu').classList.remove('open');
+    document.getElementById('menuOverlay').classList.remove('open');
+
+    // Hỏi mã đơn
+    const orderId = prompt(`Nhập MÃ ĐƠN HÀNG bạn muốn ${loaiYeuCau.includes('SỬA') ? 'SỬA' : 'XOÁ'}:`);
+    if (!orderId || orderId.trim() === "") return;
+
+    // Hỏi lý do
+    const reason = prompt(`Nhập LÝ DO chi tiết (VD: Khách đổi món, Đặt trùng đơn...):`);
+    if (!reason || reason.trim() === "") {
+        alert("Bạn phải nhập lý do thì IT mới có thể xử lý được!");
+        return;
+    }
+
+    try {
+        // Gửi dữ liệu về Google Sheet
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ 
+                action: "sendITRequest", 
+                id_sales: userId,
+                nguoi_gui: userName,
+                loai_yeu_cau: loaiYeuCau,
+                ma_don: orderId.trim(),
+                ly_do: reason.trim()
+            }),
+            headers: { "Content-Type": "text/plain;charset=utf-8" }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(`✅ Đã gửi ${loaiYeuCau} thành công!\n\nBộ phận IT sẽ kiểm tra mã đơn ${orderId} và liên hệ lại với bạn sớm nhất.`);
+        } else {
+            alert("❌ Lỗi từ máy chủ: " + result.msg);
+        }
+    } catch (err) {
+        alert("❌ Lỗi kết nối mạng, vui lòng thử lại sau!");
     }
 }
