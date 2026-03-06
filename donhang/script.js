@@ -126,18 +126,19 @@ const app = {
     },
 
     clearDraft: function () {
-        if (confirm("⚠️ Bạn có chắc muốn xóa sạch bản nháp hiện tại để nhập khách mới?")) {
-            localStorage.removeItem(this.storageKey);
-            document.getElementById('saleForm').reset();
-            const today = new Date().toISOString().split('T')[0];
-            const dateInput = document.getElementById('ngay_goi_lai');
-            if (dateInput) dateInput.value = today;
+    if (confirm("⚠️ Bạn có chắc muốn xóa sạch bản nháp hiện tại để nhập khách mới?")) {
+        localStorage.removeItem(this.storageKey);
+        document.getElementById('saleForm').reset();
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById('ngay_goi_lai');
+        if (dateInput) dateInput.value = today;
 
-            // Xoá giỏ hàng hiện tại
-            orderState.items = {};
-            renderProducts();
-        }
-    },
+        // Xoá giỏ hàng hiện tại
+        orderState.items = {};
+        renderProducts();
+        calculateTotal(); // [Bổ sung dòng này]
+    }
+},
 
     capitalizeFirstLetter: function (el) {
         el.value = el.value.replace(/\b\w/g, l => l.toUpperCase());
@@ -410,9 +411,10 @@ function renderProducts() {
                 <button type="button" class="qty-btn" onclick="updateOrderQty('${prod.id}', -1)">
                     <i class="fas fa-minus"></i>
                 </button>
-                <input type="number" inputmode="numeric" class="qty-input" value="${qty}" 
-                       onfocus="this.select()" 
-                       onchange="manualUpdateQty('${prod.id}', this.value)">
+                <input type="number" inputmode="numeric" class="qty-input" value="${qty}"
+       onfocus="this.select()"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+       onchange="manualUpdateQty('${prod.id}', this.value)">
                 <button type="button" class="qty-btn" onclick="updateOrderQty('${prod.id}', 1)">
                     <i class="fas fa-plus"></i>
                 </button>

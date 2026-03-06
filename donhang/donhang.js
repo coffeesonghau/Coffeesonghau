@@ -1,12 +1,21 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec"; 
 const userId = localStorage.getItem('sh_user_id');
-const userName = localStorage.getItem('sh_user_name'); // Lấy tên người dùng
+const userName = localStorage.getItem('sh_user_name'); 
 
 let currentEditingOrder = null;
 const orderState = { channel: "ban_le", items: {} };
 window.currentSearchTerm = '';
 
-// DB QUẢN LÝ AVATAR (Đồng bộ với file index.html)
+// --- 1. HÀM BỔ TRỢ XỬ LÝ MÀU SẮC TRẠNG THÁI (MỚI THÊM) ---
+function getStatusClass(status) {
+    if (!status) return 'pending';
+    const s = status.toLowerCase();
+    if (s.includes('hoàn thành') || s.includes('đã tạo đơn')) return 'processed'; // Xanh lá
+    if (s.includes('đang giao') || s.includes('đang chuẩn bị')) return 'shipping'; // Xanh biển
+    return 'pending'; // Vàng (Mặc định cho "Đang yêu cầu" hoặc "Chờ xử lý")
+}
+
+// DB QUẢN LÝ AVATAR
 const dbHelper = {
     dbName: 'SongHauDB',
     storeName: 'userProfile',
@@ -35,6 +44,46 @@ const dbHelper = {
     }
 };
 
+// --- 2. CẬP NHẬT HÀM HIỂN THỊ ĐƠN HÀNG ---
+function renderOrders(data) {
+    const container = document.getElementById('order-list-container');
+    if (!container) return;
+    
+    container.innerHTML = data.map(o => {
+        // Lấy trạng thái từ Database gửi về
+        let statusText = o.trang_thai || "Đang yêu cầu"; 
+        let statusClass = getStatusClass(statusText);
+
+        return `
+            <div class="order-card">
+                <div class="order-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <div style="font-weight: 800; color: #1e293b; font-size: 1.1rem;">${o.ten_quan}</div>
+                        <div style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">
+                            <i class="fas fa-barcode"></i> ${o.ma_don}
+                        </div>
+                    </div>
+                    <span class="badge ${statusClass}">${statusText}</span>
+                </div>
+                
+                <div class="order-details" style="margin: 12px 0; padding: 10px; background: #f8fafc; border-radius: 8px; font-size: 0.9rem;">
+                    <div style="margin-bottom: 4px;"><i class="fas fa-clock"></i> ${o.thoi_gian}</div>
+                    <div style="color: #475569; line-height: 1.4;">${o.chi_tiet}</div>
+                </div>
+
+                <div class="order-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #e2e8f0; pt: 10px;">
+                    <div style="font-weight: 800; color: #ef4444; font-size: 1.1rem;">
+                        ${Number(o.tong_tien).toLocaleString('vi-VN')} đ
+                    </div>
+                    <button class="btn-edit" onclick="openEditModal('${o.ma_don}')" 
+                        style="padding: 6px 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
+                        <i class="fas fa-edit"></i> Sửa đơn
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 document.addEventListener("DOMContentLoaded", () => {
     if (!userId) { window.location.href = 'login.html'; return; }
 
@@ -89,16 +138,17 @@ async function fetchOrders() {
 }
 
 // 1.1 HÀM TÌM KIẾM VÀ LỌC ĐƠN HÀNG KẾT HỢP
+let searchTimeout;
 window.filterOrders = function() {
-    const term = document.getElementById('searchOrder').value.toLowerCase();
-    
-    const filtered = window.allOrdersList.filter(o => {
-        // Lọc theo Text (Quán, SĐT, Địa chỉ, Mã đơn)
-        const searchStr = `${o.ten_quan || ''} ${o.ma_don || ''} ${o.sdt || ''} ${o.dia_chi || ''}`.toLowerCase();
-        return searchStr.includes(term);
-    });
-    
-    renderOrderList(filtered);
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const term = document.getElementById('searchOrder').value.toLowerCase();
+        const filtered = window.allOrdersList.filter(o => {
+            const searchStr = `${o.ten_quan || ''} ${o.ma_don || ''} ${o.sdt || ''} ${o.dia_chi || ''}`.toLowerCase();
+            return searchStr.includes(term);
+        });
+        renderOrderList(filtered);
+    }, 300); // Đợi 300ms sau thao tác gõ cuối cùng
 };
 
 // TÍNH NĂNG 3: HÀM COPY ĐƠN HÀNG GỬI ZALO
@@ -302,10 +352,15 @@ function renderEditProducts() {
                 <span class="product-price">${currentPrice.toLocaleString('vi-VN')} đ</span>
             </div>
             <div class="qty-controls">
-                <button class="qty-btn" onclick="updateEditOrderQty('${prod.id}', -1)"><i class="fas fa-minus"></i></button>
-                <input type="number" inputmode="numeric" class="qty-input" value="${qty}" onfocus="this.select()" onchange="manualEditUpdateQty('${prod.id}', this.value)">
-                <button class="qty-btn" onclick="updateEditOrderQty('${prod.id}', 1)"><i class="fas fa-plus"></i></button>
-            </div>
+    <button class="qty-btn" onclick="updateEditOrderQty('${prod.id}', -1)"><i class="fas fa-minus"></i></button>
+    
+    <input type="number" inputmode="numeric" class="qty-input" value="${qty}" 
+           onfocus="this.select()" 
+           oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+           onchange="manualEditUpdateQty('${prod.id}', this.value)">
+           
+    <button class="qty-btn" onclick="updateEditOrderQty('${prod.id}', 1)"><i class="fas fa-plus"></i></button>
+</div>
         `;
         listEl.appendChild(itemDiv);
     });
