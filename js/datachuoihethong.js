@@ -148,17 +148,17 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/PgCZ1BSXswTqPbAh8"
     },
     {
-        id: "fran-31",
+        id: "fran-05",
         type: "franchise",
-        city: "bac-lieu",
-        searchTags: "sh168 song hau 168 nhuong quyen",
-        name: "Sông Hậu 168",
-        address: "Đang cập nhật...", 
-        image: "chuoihethong/NQnon.png",
-        mapLink: "#"
+        city: "soc-trang",
+        searchTags: "shsoctrang song hau soc trang nhuong quyen",
+        name: "Sông Hậu Sóc Trăng",
+        address: "363 Mạc Đĩnh Chi, Phường 4, Sóc Trăng", 
+        image: "chuoihethong/SHsoctrang.webp",
+        mapLink: "https://maps.app.goo.gl/mjL4EtDTKtt7GEr9A"
     },
     {
-        id: "fran-05",
+        id: "fran-32",
         type: "franchise",
         city: "bac-lieu",
         searchTags: "sh9 nhuong quyen song hau 9",

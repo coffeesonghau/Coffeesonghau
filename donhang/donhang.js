@@ -160,8 +160,9 @@ function renderOrderList(orders) {
         if (statusText.includes("chưa")) statusBg = "#e74c3c";
         if (statusText.includes("đã") || statusText.includes("thành công")) statusBg = "#27ae60";
 
-        const cleanPhone = o.sdt ? o.sdt.replace(/'/g, '') : 'Chưa có SĐT';
-        const addressStr = o.dia_chi ? o.dia_chi : 'Chưa có địa chỉ';
+        // Xử lý dữ liệu SĐT và Địa chỉ triệt để hơn
+        let cleanPhone = (o.sdt && o.sdt.trim() !== '' && o.sdt !== "'") ? o.sdt.replace(/'/g, '').trim() : 'Chưa có SĐT';
+        let addressStr = (o.dia_chi && o.dia_chi.trim() !== '') ? o.dia_chi.trim() : 'Chưa có địa chỉ';
 
         const card = document.createElement('div');
         card.className = 'order-card';
@@ -176,12 +177,12 @@ function renderOrderList(orders) {
                     <i class="fas fa-store" style="color: #34495e; margin-right: 5px;"></i> ${o.ten_quan}
                 </div>
                 
-                <a href="tel:${cleanPhone}" style="display: flex; align-items: center; gap: 10px; color: #27ae60; text-decoration: none; font-weight: bold; margin-bottom: 10px; font-size: 0.95rem;">
+                <a href="${cleanPhone !== 'Chưa có SĐT' ? 'tel:' + cleanPhone : '#'}" style="display: flex; align-items: center; gap: 10px; color: #27ae60; text-decoration: none; font-weight: bold; margin-bottom: 10px; font-size: 0.95rem;">
                     <div style="background:#e8f8f5; padding:6px; border-radius:50%; width:26px; height:26px; display:flex; justify-content:center; align-items:center;"><i class="fas fa-phone-alt"></i></div>
                     ${cleanPhone}
                 </a>
                 
-                <a href="http://maps.google.com/maps?q=${encodeURIComponent(addressStr)}" target="_blank" style="display: flex; align-items: flex-start; gap: 10px; color: #2980b9; text-decoration: none; font-size: 0.9rem; line-height: 1.4;">
+                <a href="${addressStr !== 'Chưa có địa chỉ' ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addressStr) : '#'}" target="_blank" style="display: flex; align-items: flex-start; gap: 10px; color: #2980b9; text-decoration: none; font-size: 0.9rem; line-height: 1.4;">
                     <div style="background:#ebf5fb; padding:6px; border-radius:50%; width:26px; height:26px; display:flex; justify-content:center; align-items:center; flex-shrink:0; margin-top: -2px;"><i class="fas fa-map-marker-alt"></i></div>
                     ${addressStr}
                 </a>
@@ -203,7 +204,7 @@ function renderOrderList(orders) {
                     <button onclick="copyOrderToZalo('${o.ma_don}')" style="background: #e8f4fd; border: 1px solid #3498db; color: #3498db; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
                         <i class="far fa-copy"></i> Copy
                     </button>
-                    <button onclick='openEditView(${JSON.stringify(o)})' style="background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
+                    <button onclick='openEditView(${JSON.stringify(o).replace(/'/g, "&apos;")})' style="background: none; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
                         <i class="fas fa-pencil-alt"></i> Sửa
                     </button>
                 </div>
