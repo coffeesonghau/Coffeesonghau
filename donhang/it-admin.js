@@ -217,8 +217,7 @@ function renderAdminOrders(orders) {
             <td>${selectHtml}</td> <td><span class="badge ${statusClass}">${statusText}</span></td>
             <td>
                 ${statusClass === 'pending' ? `<button class="action-btn check" title="Xác nhận Kế toán" onclick="markAsProcessed(this, '${o.ma_don}')"><i class="fas fa-check-circle"></i></button>` : ''}
-                <button class="action-btn edit" title="Xem chi tiết" onclick='openModal(${orderJson})'><i class="fas fa-eye"></i></button>
-            </td>
+                <<button class="action-btn edit" title="Xem chi tiết" onclick="openModal('${o.ma_don}')"><i class="fas fa-eye"></i></button>
         `;
         tableBody.appendChild(tr);
     });
@@ -309,7 +308,7 @@ const productNames = {
 };
 
 window.openModal = function(maDon) {
-    // [QUAN TRỌNG]: Tự đi tìm dữ liệu order dựa trên mã đơn truyền vào
+    // Tìm dữ liệu đơn hàng trong mảng global dựa trên mã đơn
     const order = window.allAdminOrders.find(o => o.ma_don === maDon);
     if (!order) {
         showToast("Lỗi: Không tìm thấy dữ liệu đơn hàng!", "error");

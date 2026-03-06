@@ -1,26 +1,22 @@
 /**
- * HỆ THỐNG QUẢN LÝ SÔNG HẬU COFFEE (API BACKEND V2 - ENTERPRISE)
- * Tối ưu tốc độ, Modular hoá và tự động khôi phục cấu trúc.
- */
-
-const CONFIG = {
-  SHEET_URL: "https://docs.google.com/spreadsheets/d/1D6z7mmyTwvwdfBttuY_3ZrCrQ09k6z9rELg8V5VFdn4/edit?usp=sharing",
-  SHEETS: {
-    NHANVIEN: "NhanVien",
-    KHACHHANG: "KhachHang",
-    DONHANG: "Donhang",
-    IT: "YeuCauIT"
-  },
-  HEADERS: {
-    KH: ["Thời gian", "ID Sales", "Người gửi", "Tên quán", "Địa chỉ", "Chủ quán", "SĐT", "Cách pha", "Lượng dùng", "Gu", "Hãng cũ", "Giá hiện tại", "Tiềm năng", "Tình trạng mẫu", "Ngày hẹn", "Ghi chú"],
-    DH: ["Mã Đơn", "Thời gian", "ID Sales", "Tên quán", "SĐT", "Địa chỉ", "Kênh Bán", "Trạng thái", "Chi Tiết Đơn", "TỔNG TIỀN", "Cart JSON", "Cập nhật cuối"],
+ * HỆ THỐNG QUẢN LÝ SÔNG HẬU COFFEE (API BACKEND V3 - ENTERPRISE)
+ * Tích hợp Bảo mật SHA-256, Sửa lỗi Index, Module IT Admin và URL chínha
+    // Cấu trúc cột chuẩn đã đồng bộ với giao diện
+    KH: ["Thời gian", "ID Sales", "Người gửi", "Tên quán", "Địa chỉ", "Chủ quán", "SĐT", "Kênh Bán", "Tiềm năng", "Tình trạng mẫu", "Ngày hẹn", "Ghi chú"],
+    DH: ["Mã Đơn", "Thời gian", "ID Sales", "Tên quán", "SĐT", "Địa chỉ", "Kênh Bán", "Trạng thái", "Trạng thái Kế Toán", "Chi Tiết Đơn", "TỔNG TIỀN", "Cart JSON", "Cập nhật cuối"],
     IT: ["Thời gian", "ID Sales", "Người yêu cầu", "Loại yêu cầu", "Mã Đơn", "Lý do", "Trạng thái"]
   },
-  COLORS: { KH: "#fff2cc", DH: "#d9ead3", IT: "#fce5cd" }
+  COLORS: { KH: "#fff2cc", DH: "#d9ead3", IT: "#fce5cd" },
+  
+  // TÀI KHOẢN MASTER ADMIN (Dùng cho trang it-admin.html)
+  ADMIN: {
+    user: "admin", 
+    pass: hashPassword("admin123") // Mật khẩu IT Admin mặc định là admin123
+  }
 };
 
 // =========================================
-// 1. CORE ROUTER & CONFIG
+// 1. CORE ROUTER
 // =========================================
 function doOptions(e) {
   return createResponse({ status: "ok" });
@@ -28,7 +24,7 @@ function doOptions(e) {
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  lock.waitLock(10000); // Đợi 10s nếu có nhiều Sales cùng nhấn lưu lúc
+  lock.waitLock(10000); // Đợi tối đa 10s nếu có nhiều Sales cùng lưu đơn
 
   try {
     if (!e || !e.postData || !e.postData.contents) {
@@ -38,8 +34,9 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openByUrl(CONFIG.SHEET_URL);
 
-    // Bộ định tuyến (Router) tương tự các Framework Backend hiện đại
+    // Bộ định tuyến phân luồng API
     const actionMap = {
+      // Nhóm API cho Sales (App chính)
       "checkID": () => handleCheckID(ss, data),
       "login": () => handleLogin(ss, data),
       "changePass": () => handleChangePass(ss, data),
@@ -47,7 +44,13 @@ function doPost(e) {
       "saveData": () => handleSaveData(ss, data),
       "getOrders": () => handleGetOrders(ss, data),
       "updateOrder": () => handleUpdateOrder(ss, data),
-      "sendITRequest": () => handleSendITRequest(ss, data)
+      "sendITRequest": () => handleSendITRequest(ss, data),
+      
+      // Nhóm API cho IT Admin
+      "loginIT": () => handleLoginIT(data),
+      "getAllOrdersAdmin": () => handleGetAllOrdersAdmin(ss),
+      "updateOrderStatus": () => handleUpdateOrderStatus(ss, data),
+      "updateDelivery": () => handleUpdateDelivery(ss, data)
     };
 
     if (actionMap[data.action]) {
@@ -64,7 +67,7 @@ function doPost(e) {
 }
 
 // =========================================
-// 2. HELPER FUNCTIONS
+// 2. HELPER FUNCTIONS & SECURITY
 // =========================================
 function createResponse(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
@@ -93,14 +96,27 @@ function parseJSON(str, defaultVal = {}) {
   try { return str ? JSON.parse(str) : defaultVal; } catch (e) { return defaultVal; }
 }
 
+// Hàm băm mật khẩu chuẩn SHA-256 (Tăng cường bảo mật)
+function hashPassword(password) {
+  if (!password) return "";
+  const rawHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, password);
+  let txtHash = '';
+  for (let i = 0; i < rawHash.length; i++) {
+    let hashVal = rawHash[i];
+    if (hashVal < 0) hashVal += 256;
+    if (hashVal.toString(16).length == 1) txtHash += '0';
+    txtHash += hashVal.toString(16);
+  }
+  return txtHash;
+}
+
 // =========================================
-// 3. AUTHENTICATION MODULE
+// 3. AUTHENTICATION MODULE (Sales)
 // =========================================
 function handleCheckID(ss, data) {
   const sheet = ss.getSheetByName(CONFIG.SHEETS.NHANVIEN);
   if (!sheet) throw new Error("Mất Sheet Nhân viên");
   const rows = sheet.getDataRange().getValues();
-  
   const userRow = rows.find((r, index) => index > 0 && r[0].toString() === data.user.toString());
   return userRow ? { success: true, name: userRow[1] } : { success: false };
 }
@@ -109,17 +125,21 @@ function handleLogin(ss, data) {
   const sheet = ss.getSheetByName(CONFIG.SHEETS.NHANVIEN);
   const rows = sheet.getDataRange().getValues();
   
-  const userRow = rows.find((r, index) => index > 0 && r[0].toString() === data.user.toString() && r[2] === data.password);
+  // So sánh mật khẩu đã được mã hóa
+  const hashedInputPass = hashPassword(data.password);
+  const userRow = rows.find((r, index) => index > 0 && r[0].toString() === data.user.toString() && r[2].toString() === hashedInputPass);
+  
   return userRow ? { success: true, name: userRow[1] } : { success: false, msg: "Sai tài khoản hoặc mật khẩu" };
 }
 
 function handleChangePass(ss, data) {
   const sheet = ss.getSheetByName(CONFIG.SHEETS.NHANVIEN);
   const rows = sheet.getDataRange().getValues();
+  const hashedOldPass = hashPassword(data.oldPass);
   
-  const index = rows.findIndex((r, i) => i > 0 && r[0].toString() === data.user.toString() && r[2] === data.oldPass);
+  const index = rows.findIndex((r, i) => i > 0 && r[0].toString() === data.user.toString() && r[2].toString() === hashedOldPass);
   if (index > -1) {
-    sheet.getRange(index + 1, 3).setValue(data.newPass);
+    sheet.getRange(index + 1, 3).setValue(hashPassword(data.newPass));
     return { success: true };
   }
   return { success: false, msg: "Mật khẩu cũ không đúng" };
@@ -128,10 +148,9 @@ function handleChangePass(ss, data) {
 function handleResetPass(ss, data) {
   const sheet = ss.getSheetByName(CONFIG.SHEETS.NHANVIEN);
   const rows = sheet.getDataRange().getValues();
-  
   const index = rows.findIndex((r, i) => i > 0 && r[0].toString() === data.user.toString());
   if (index > -1) {
-    sheet.getRange(index + 1, 3).setValue(data.newPass);
+    sheet.getRange(index + 1, 3).setValue(hashPassword(data.newPass));
     return { success: true };
   }
   return { success: false, msg: "Không tìm thấy tài khoản" };
@@ -151,18 +170,16 @@ function handleSaveData(ss, data) {
   // 1. Lưu hồ sơ khách hàng
   sheetKH.appendRow([
     timeVN, data.id_sales, data.nguoi_gui, data.ten_quan, data.dia_chi, data.chu_quan,
-    "'" + data.sdt_zalo, data.loai_ban, data.luong_dung, data.gu_hien_tai, data.hang_dang_dung,
-    data.gia_hien_tai, data.tiem_nang, data.da_gui_mau, data.ngay_goi_lai, data.phan_hoi
+    "'" + data.sdt_zalo, data.kenh_ban, data.tiem_nang, data.da_gui_mau, data.ngay_goi_lai, data.phan_hoi
   ]);
 
   // 2. Xử lý sản phẩm & Lưu đơn hàng
   let parsedItems = parseJSON(data.cart_json);
   let itemIDs = Object.keys(parsedItems);
-  
+
   let lastColDH = sheetDH.getLastColumn();
   let currentHeaderDH = lastColDH > 0 ? sheetDH.getRange(1, 1, 1, lastColDH).getValues()[0] : CONFIG.HEADERS.DH;
 
-  // Thêm header mới nếu có sản phẩm chưa từng có
   let newHeaders = itemIDs.filter(id => !currentHeaderDH.includes(id));
   if (newHeaders.length > 0) {
     currentHeaderDH.push(...newHeaders);
@@ -171,7 +188,6 @@ function handleSaveData(ss, data) {
       .setFontWeight("bold").setBackground(CONFIG.COLORS.DH).setHorizontalAlignment("center");
   }
 
-  // Tối ưu tốc độ: Map thẳng dữ liệu vào một mảng, chỉ dùng appendRow 1 lần duy nhất
   let rowDataDH = new Array(currentHeaderDH.length).fill("");
   let colMap = currentHeaderDH.reduce((acc, col, idx) => { acc[col] = idx; return acc; }, {});
 
@@ -182,7 +198,8 @@ function handleSaveData(ss, data) {
   rowDataDH[colMap["SĐT"]] = "'" + (data.sdt_zalo || "");
   rowDataDH[colMap["Địa chỉ"]] = data.dia_chi || "";
   rowDataDH[colMap["Kênh Bán"]] = data.kenh_ban;
-  rowDataDH[colMap["Trạng thái"]] = data.da_gui_mau;
+  rowDataDH[colMap["Trạng thái"]] = "Đang yêu cầu";
+  rowDataDH[colMap["Trạng thái Kế Toán"]] = "Chưa tạo đơn";
   rowDataDH[colMap["Chi Tiết Đơn"]] = data.chi_tiet_don;
   rowDataDH[colMap["TỔNG TIỀN"]] = tongTienSo;
   rowDataDH[colMap["Cart JSON"]] = data.cart_json || "{}";
@@ -211,16 +228,17 @@ function handleGetOrders(ss, data) {
     let row = dataRange[i];
     if (row[colMap["ID Sales"]] == data.id_sales) {
       orders.push({
-        ma_don: row[colMap["Mã Đơn"]] || `DH_Cũ_${i}`,
-        thoi_gian: row[colMap["Thời gian"]] || new Date(),
-        ten_quan: row[colMap["Tên quán"]] || "",
-        sdt: row[colMap["SĐT"]] || "",
-        dia_chi: row[colMap["Địa chỉ"]] || "",
-        kenh_ban: row[colMap["Kênh Bán"]] || "ban_le",
-        chi_tiet: row[colMap["Chi Tiết Đơn"]] || "",
-        tong_tien: row[colMap["TỔNG TIỀN"]] || 0,
-        trang_thai: row[colMap["Trạng thái"]] || "Chưa rõ",
-        cart_json: row[colMap["Cart JSON"]] || "{}"
+        ma_don: row[colMap["Mã Đơn"]],
+        thoi_gian: row[colMap["Thời gian"]],
+        ten_quan: row[colMap["Tên quán"]],
+        sdt: row[colMap["SĐT"]],
+        dia_chi: row[colMap["Địa chỉ"]],
+        kenh_ban: row[colMap["Kênh Bán"]],
+        chi_tiet: row[colMap["Chi Tiết Đơn"]],
+        tong_tien: row[colMap["TỔNG TIỀN"]],
+        trang_thai: row[colMap["Trạng thái"]] || "Đang yêu cầu",
+        trang_thai_ke_toan: row[colMap["Trạng thái Kế Toán"]] || "Chưa tạo đơn",
+        cart_json: row[colMap["Cart JSON"]]
       });
     }
   }
@@ -234,15 +252,13 @@ function handleUpdateOrder(ss, data) {
   let dataRange = sheetDH.getDataRange().getValues();
   let headers = dataRange[0];
   let colMap = headers.reduce((acc, col, idx) => { acc[col] = idx; return acc; }, {});
-
   let rowIndex = dataRange.findIndex((r, idx) => idx > 0 && r[colMap["Mã Đơn"]] == data.ma_don);
+  
   if (rowIndex === -1) throw new Error("Không tìm thấy mã đơn cần sửa");
+  rowIndex += 1;
 
-  rowIndex += 1; // Index API Sheet bắt đầu từ 1
   let timeUpdate = getTimeVN();
-
-  // Tạo mảng cập nhật để ghi đè (Tránh dùng setValue nhiều lần gây giật lag)
-  let updatedRow = [...dataRange[rowIndex - 1]]; 
+  let updatedRow = [...dataRange[rowIndex - 1]];
   
   updatedRow[colMap["SĐT"]] = "'" + (data.sdt || "");
   updatedRow[colMap["Địa chỉ"]] = data.dia_chi || "";
@@ -251,24 +267,25 @@ function handleUpdateOrder(ss, data) {
   updatedRow[colMap["Cart JSON"]] = data.cart_json;
   updatedRow[colMap["Cập nhật cuối"]] = timeUpdate;
 
-  // Làm sạch các ô số lượng sản phẩm cũ
-  for(let i = 12; i < headers.length; i++) updatedRow[i] = "";
+  // Xóa các sản phẩm cũ một cách an toàn dựa trên cột mốc "Cập nhật cuối"
+  let startProductIdx = colMap["Cập nhật cuối"] + 1;
+  for(let i = startProductIdx; i < headers.length; i++) {
+      updatedRow[i] = "";
+  }
 
-  // Cập nhật số lượng mới
   let parsedItems = parseJSON(data.cart_json);
   let itemIDs = Object.keys(parsedItems);
-
   let newHeaders = itemIDs.filter(id => colMap[id] === undefined);
+  
   if (newHeaders.length > 0) {
     headers.push(...newHeaders);
     sheetDH.getRange(1, 1, 1, headers.length)
       .setValues([headers])
       .setFontWeight("bold").setBackground(CONFIG.COLORS.DH);
-    
-    // Cập nhật lại colMap
+      
     newHeaders.forEach(h => {
         colMap[h] = headers.length - 1;
-        updatedRow.push(""); // Kéo dài mảng dữ liệu dòng tương ứng
+        updatedRow.push(""); 
     });
   }
 
@@ -276,17 +293,76 @@ function handleUpdateOrder(ss, data) {
     updatedRow[colMap[id]] = Number(parsedItems[id]);
   });
 
-  // Ghi toàn bộ dữ liệu 1 lần (Tối ưu x10 tốc độ)
   sheetDH.getRange(rowIndex, 1, 1, updatedRow.length).setValues([updatedRow]);
-
   return { success: true };
 }
 
 // =========================================
-// 5. SYSTEM MODULE
+// 5. IT ADMIN MODULE
 // =========================================
 function handleSendITRequest(ss, data) {
   let sheetYC = getOrCreateSheet(ss, CONFIG.SHEETS.IT, CONFIG.HEADERS.IT, CONFIG.COLORS.IT);
   sheetYC.appendRow([getTimeVN(), data.id_sales, data.nguoi_gui, data.loai_yeu_cau, data.ma_don, data.ly_do, "Chờ xử lý"]);
+  return { success: true };
+}
+
+function handleLoginIT(data) {
+  if (data.user === CONFIG.ADMIN.user && hashPassword(data.password) === CONFIG.ADMIN.pass) {
+    return { success: true, token: "admin_token_secure" };
+  }
+  return { success: false, msg: "Sai tài khoản Quản trị viên!" };
+}
+
+function handleGetAllOrdersAdmin(ss) {
+  let sheetDH = ss.getSheetByName(CONFIG.SHEETS.DONHANG);
+  if (!sheetDH) return { success: true, orders: [] };
+
+  let dataRange = sheetDH.getDataRange().getValues();
+  if (dataRange.length <= 1) return { success: true, orders: [] };
+
+  let headers = dataRange[0];
+  let colMap = headers.reduce((acc, col, idx) => { acc[col] = idx; return acc; }, {});
+  let orders = [];
+
+  for (let i = 1; i < dataRange.length; i++) {
+    let row = dataRange[i];
+    orders.push({
+      ma_don: row[colMap["Mã Đơn"]],
+      thoi_gian: row[colMap["Thời gian"]],
+      id_sales: row[colMap["ID Sales"]],
+      ten_quan: row[colMap["Tên quán"]],
+      sdt: row[colMap["SĐT"]],
+      tong_tien: row[colMap["TỔNG TIỀN"]],
+      trang_thai: row[colMap["Trạng thái"]] || "Đang yêu cầu",
+      trang_thai_ke_toan: row[colMap["Trạng thái Kế Toán"]] || "Chưa tạo đơn",
+      cart_json: row[colMap["Cart JSON"]]
+    });
+  }
+  return { success: true, orders: orders.reverse() };
+}
+
+function handleUpdateOrderStatus(ss, data) {
+  let sheetDH = ss.getSheetByName(CONFIG.SHEETS.DONHANG);
+  let dataRange = sheetDH.getDataRange().getValues();
+  let headers = dataRange[0];
+  let colMap = headers.reduce((acc, col, idx) => { acc[col] = idx; return acc; }, {});
+  
+  let rowIndex = dataRange.findIndex((r, idx) => idx > 0 && r[colMap["Mã Đơn"]] == data.ma_don);
+  if (rowIndex === -1) throw new Error("Không tìm thấy mã đơn");
+
+  sheetDH.getRange(rowIndex + 1, colMap["Trạng thái Kế Toán"] + 1).setValue(data.new_status);
+  return { success: true };
+}
+
+function handleUpdateDelivery(ss, data) {
+  let sheetDH = ss.getSheetByName(CONFIG.SHEETS.DONHANG);
+  let dataRange = sheetDH.getDataRange().getValues();
+  let headers = dataRange[0];
+  let colMap = headers.reduce((acc, col, idx) => { acc[col] = idx; return acc; }, {});
+  
+  let rowIndex = dataRange.findIndex((r, idx) => idx > 0 && r[colMap["Mã Đơn"]] == data.ma_don);
+  if (rowIndex === -1) throw new Error("Không tìm thấy mã đơn");
+
+  sheetDH.getRange(rowIndex + 1, colMap["Trạng thái"] + 1).setValue(data.new_status);
   return { success: true };
 }
