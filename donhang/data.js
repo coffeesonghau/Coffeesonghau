@@ -15,7 +15,7 @@ const productData = {
         { id: "tt2_500", name: "Truyền Thống 2", weight: "500g", prices: { ban_le: 120000, dai_ly_quan: 110000, he_thong_npp: 100000 } },
         { id: "mm1_500", name: "Mạnh Mẽ 1", weight: "500g", prices: { ban_le: 110000, dai_ly_quan: 100000, he_thong_npp: 90000 } },
         { id: "mm2_500", name: "Mạnh Mẽ 2", weight: "500g", prices: { ban_le: 90000, dai_ly_quan: 80000, he_thong_npp: 70000 } },
-        { id: "cd_500", name: "Cận Đại", weight: "500g", prices: { ban_le: 70000, dai_ly_quan: 60000, he_thong_npp: 50000 } },
+        { id: "cd_500", name: "Cận Đại", weight: "500g", prices: { ban_le: 80000, dai_ly_quan: 70000, he_thong_npp: 60000 } },
 
         // Dòng 250g
         { id: "pre_250", name: "Premium 2026", weight: "250g", prices: { ban_le: 100000, dai_ly_quan: 95000, he_thong_npp: 90000 } },
