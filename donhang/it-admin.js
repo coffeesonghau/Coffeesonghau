@@ -110,6 +110,7 @@ async function loginIT() {
             showToast(result.msg || "Sai thông tin bảo mật!", "error");
         }
     } catch (err) {
+        console.error("Lỗi Đăng Nhập:", err);
         showToast("Lỗi kết nối Server Google Sheet!", "error");
     } finally {
         btn.innerHTML = 'XÁC THỰC BẢO MẬT';
@@ -181,6 +182,7 @@ async function loadAdminData() {
             tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--danger);">${result.msg}</td></tr>`;
         }
     } catch (err) {
+        console.error("Lỗi Tải Dữ Liệu:", err);
         tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--danger);">Lỗi kết nối mạng, không thể tải dữ liệu!</td></tr>';
     }
 }
@@ -231,7 +233,7 @@ window.applyFilters = function() {
         if (salesFilter !== 'all') matchSales = (o.id_sales == salesFilter);
 
         let matchDate = true;
-        let orderDateParts = o.thoi_gian.split(' ')[0].split('/');
+        let orderDateParts = String(o.thoi_gian).split(' ')[0].split('/');
         if(orderDateParts.length === 3) {
             let orderTime = new Date(`${orderDateParts[2]}-${orderDateParts[1]}-${orderDateParts[0]}`).getTime();
             if (!isNaN(orderTime)) {
@@ -256,7 +258,9 @@ function renderAdminOrders(orders) {
 
     orders.forEach(o => {
         const total = parseInt(o.tong_tien || 0).toLocaleString('vi-VN') + ' đ';
-        const cleanPhone = (o.sdt && o.sdt !== "'") ? o.sdt.replace(/'/g, '') : 'N/A';
+        
+        // CẢI TIẾN: Ép kiểu String trước khi replace để tránh lỗi Data Type từ Sheet
+        const cleanPhone = (o.sdt && o.sdt !== "'") ? String(o.sdt).replace(/'/g, '') : 'N/A';
         
         let statusClass = 'pending';
         let statusText = o.trang_thai_ke_toan || 'Chưa tạo đơn';
@@ -287,14 +291,12 @@ function renderAdminOrders(orders) {
 }
 
 // ==========================================
-// 4. QUẢN LÝ NHÂN SỰ SALES (MODULE MỚI)
+// 4. QUẢN LÝ NHÂN SỰ SALES
 // ==========================================
 async function loadStaffData() {
     const staffTable = document.getElementById('adminStaffTable');
     
     try {
-        // Gửi yêu cầu lên Google Sheet lấy danh sách từ tab NhanVien (Nếu bạn đã viết API action: "getStaffList" trong Google Apps Script)
-        // Dưới đây là logic mẫu để bảng hoạt động mượt mà. Nếu backend chưa có, nó sẽ bắt lỗi và hiện data giả lập để demo Enterprise.
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({ action: "getStaffList" }), 
@@ -308,7 +310,7 @@ async function loadStaffData() {
             throw new Error("Chưa cấu hình API NhanVien");
         }
     } catch (err) {
-        // Mock Data dùng tạm để show cho sếp/công ty thấy khung sườn Enterprise
+        console.error("Lỗi Tải Nhân Sự:", err);
         const mockStaff = [
             { id: "100001", name: "Nguyễn Văn A", region: "Hồ Chí Minh", status: "Đang hoạt động" },
             { id: "100002", name: "Trần Thị B", region: "Hà Nội", status: "Đang hoạt động" },
@@ -357,15 +359,22 @@ window.resetStaffPass = async function(id) {
             showToast(`Lỗi: ${result.msg}`, "error");
         }
     } catch (err) {
+        console.error("Lỗi Reset Mật Khẩu:", err);
         showToast("Lỗi kết nối mạng khi reset mật khẩu!", "error");
     }
 }
 
-// CÁC HÀM CŨ ĐƯỢC GIỮ NGUYÊN (Export Excel, Update Status, Modal)
+// ==========================================
+// CÁC CHỨC NĂNG KHÁC (Cập nhật trạng thái, Xuất File, Modal)
+// ==========================================
 async function markAsProcessed(btn, maDon) {
     if(!confirm(`Xác nhận đánh dấu đơn ${maDon} ĐÃ TẠO trên phần mềm kế toán?`)) return;
     const tr = btn.closest('tr');
     const badge = tr.querySelector('.badge');
+    
+    // Lưu lại icon cũ đề phòng bị lỗi
+    const originalContent = btn.innerHTML;
+    
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled = true;
 
@@ -386,12 +395,13 @@ async function markAsProcessed(btn, maDon) {
             showToast("Kế toán xử lý thành công.", "success");
         } else {
             showToast("Lỗi Server: " + result.msg, "error");
-            btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+            btn.innerHTML = originalContent;
             btn.disabled = false;
         }
     } catch (err) {
+        console.error("Lỗi Đánh Dấu Xử Lý:", err);
         showToast("Mất kết nối mạng!", "error");
-        btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+        btn.innerHTML = originalContent;
         btn.disabled = false;
     }
 }
@@ -405,9 +415,10 @@ function exportToExcel() {
     const ordersToExport = window.allAdminOrders.filter(o => visibleIds.includes(o.ma_don));
 
     ordersToExport.forEach(o => {
-        let cleanPhone = (o.sdt || "").replace(/'/g, '');
-        let cleanName = (o.ten_quan || "").replace(/,/g, ' '); 
-        let cleanCart = (o.cart_json || "{}").replace(/"/g, '""'); 
+        // CẢI TIẾN: Ép kiểu String để đảm bảo không bị lỗi hàm replace
+        let cleanPhone = String(o.sdt || "").replace(/'/g, '');
+        let cleanName = String(o.ten_quan || "").replace(/,/g, ' '); 
+        let cleanCart = String(o.cart_json || "{}").replace(/"/g, '""'); 
         
         let row = `${o.ma_don},${o.thoi_gian},${o.id_sales},${cleanName},${cleanPhone},${o.tong_tien},${o.trang_thai_ke_toan},"${cleanCart}"`;
         csvContent += row + "\n";
@@ -447,11 +458,14 @@ window.openModal = function(maDon) {
         }
     } catch(e) { cartItemsHtml = 'Lỗi dữ liệu giỏ hàng.'; }
 
+    // CẢI TIẾN: Ép kiểu String cho SĐT
+    const cleanPhone = order.sdt ? String(order.sdt).replace(/'/g, '') : '';
+
     let html = `
         <div style="margin-bottom: 10px;"><strong>Thời gian:</strong> ${order.thoi_gian}</div>
         <div style="margin-bottom: 10px;"><strong>ID Sales:</strong> ${order.id_sales}</div>
         <div style="margin-bottom: 10px;"><strong>Khách hàng:</strong> <span style="color: var(--admin-primary); font-weight: bold;">${order.ten_quan}</span></div>
-        <div style="margin-bottom: 10px;"><strong>SĐT:</strong> ${order.sdt ? order.sdt.replace(/'/g, '') : ''}</div>
+        <div style="margin-bottom: 10px;"><strong>SĐT:</strong> ${cleanPhone}</div>
         
         <div style="margin-top: 20px; border: 1px solid var(--border); padding: 15px; border-radius: 8px;">
             <div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px dashed var(--border); padding-bottom: 10px;">Chi tiết sản phẩm:</div>
@@ -489,6 +503,7 @@ window.changeDeliveryStatus = async function(selectEl, maDon) {
             selectEl.value = selectEl.getAttribute('data-old'); 
         }
     } catch (err) {
+        console.error("Lỗi Cập Nhật Giao Vận:", err);
         showToast("Lỗi mạng!", "error");
         selectEl.value = selectEl.getAttribute('data-old'); 
     } finally {
