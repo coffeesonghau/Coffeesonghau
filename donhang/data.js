@@ -30,6 +30,14 @@ const productData = {
         { id: "tt2_100", name: "Truyền Thống 2", weight: "100g", prices: { ban_le: 34000, dai_ly_quan: 34000, he_thong_npp: 34000 } },
         { id: "mm1_100", name: "Mạnh Mẽ 1", weight: "100g", prices: { ban_le: 32000, dai_ly_quan: 32000, he_thong_npp: 32000 } },
         { id: "mm2_100", name: "Mạnh Mẽ 2", weight: "100g", prices: { ban_le: 28000, dai_ly_quan: 28000, he_thong_npp: 28000 } },
-        { id: "cd_100", name: "Cận Đại", weight: "100g", prices: { ban_le: 26000, dai_ly_quan: 26000, he_thong_npp: 26000 } }
+        { id: "cd_100", name: "Cận Đại", weight: "100g", prices: { ban_le: 26000, dai_ly_quan: 26000, he_thong_npp: 26000 } },
+
+        // Dòng 100g dùng thử
+        { id: "tt1_100dt", name: "Truyền Thống 1", weight: "100g", prices: { ban_le: 0, dai_ly_quan: 0, he_thong_npp: 0 } },
+        { id: "tt2_100dt", name: "Truyền Thống 2", weight: "100g", prices: { ban_le: 0, dai_ly_quan: 0, he_thong_npp: 0 } },
+        { id: "mm1_100dt", name: "Mạnh Mẽ 1", weight: "100g", prices: { ban_le: 0, dai_ly_quan: 0, he_thong_npp: 0 } },
+        { id: "mm2_100dt", name: "Mạnh Mẽ 2", weight: "100g", prices: { ban_le: 0, dai_ly_quan: 0, he_thong_npp: 0 } },
+        { id: "cd_100dt", name: "Cận Đại", weight: "100g", prices: { ban_le: 0, dai_ly_quan: 0, he_thong_npp: 0 } },
+
     ]
 };
