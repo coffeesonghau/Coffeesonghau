@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sông Hậu - Enterprise Admin Portal</title>
+    <title>Admin Portal - Sông Hậu Coffee</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="it-admin.css">
 </head>
+
 <body>
 
     <div id="itLoginOverlay">
         <div class="login-box">
-            <div class="login-icon"><i class="fas fa-shield-alt"></i></div>
-            <h2>Enterprise Admin</h2>
-            <p class="login-subtitle">Hệ thống quản trị đặc quyền Sông Hậu</p>
-            <input type="text" id="itUsername" placeholder="ID Quản trị (Admin)...">
+            <div class="login-icon">
+                <img src="duong-dan-anh-cua-ban.jpg" alt="Logo Sông Hậu" style="width: 80px; height: auto;">
+            </div>
+
+            <h2>SÔNG HẬU COFFEE</h2>
+            <p class="login-subtitle">Enterprise Portal Sông Hậu</p>
+            <input type="text" id="itUsername" placeholder="ID hệ thống...">
             <input type="password" id="itPassword" placeholder="Mật khẩu hệ thống...">
             <button onclick="loginIT()" id="btnITLogin">XÁC THỰC BẢO MẬT</button>
         </div>
@@ -23,12 +28,15 @@
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <i class="fas fa-coffee"></i> SH CORP
+            <i class="fas fa-coffee"></i> Sông Hậu Coffee
         </div>
         <div class="nav-menu">
-            <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Tổng Quan Số Liệu</div>
+            <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Tổng Quan Số
+                Liệu</div>
             <div class="nav-item" onclick="switchTab('orders')"><i class="fas fa-database"></i> CSDL Đơn Hàng</div>
             <div class="nav-item" onclick="switchTab('staff')"><i class="fas fa-users-cog"></i> Quản Trị Sales</div>
+            <div class="nav-item" onclick="switchTab('products')"><i class="fas fa-box"></i> Quản Trị Hàng Hóa</div>
+            <div class="nav-item" onclick="switchTab('shifts')"><i class="fas fa-truck-loading"></i> Kho & Kết Ca</div>
         </div>
         <div class="sidebar-footer">
             <button class="btn-logout" onclick="logoutIT()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
@@ -43,8 +51,10 @@
                     <div class="user-name">Quản Trị Viên</div>
                     <div class="user-role">Quyền lực tối cao</div>
                 </div>
-                <div class="avatar-wrapper" onclick="document.getElementById('avatarUpload').click()" title="Nhấn để đổi ảnh đại diện">
-                    <img src="https://ui-avatars.com/api/?name=AD&background=2563eb&color=fff" id="adminAvatar" class="avatar">
+                <div class="avatar-wrapper" onclick="document.getElementById('avatarUpload').click()"
+                    title="Nhấn để đổi ảnh đại diện">
+                    <img src="https://ui-avatars.com/api/?name=AD&background=2563eb&color=fff" id="adminAvatar"
+                        class="avatar">
                     <div class="avatar-overlay"><i class="fas fa-camera"></i></div>
                 </div>
                 <input type="file" id="avatarUpload" hidden accept="image/png, image/jpeg, image/webp">
@@ -52,7 +62,6 @@
         </div>
 
         <div class="content-area">
-            
             <div id="tab-dashboard" class="tab-pane active">
                 <div class="stats-grid">
                     <div class="stat-card border-primary">
@@ -88,9 +97,11 @@
                 <div class="panel">
                     <div class="panel-header">
                         <div class="panel-title">Tình trạng kết nối Database</div>
-                        <button class="btn-action btn-refresh" onclick="loadAdminData()"><i class="fas fa-sync-alt"></i> Cập nhật dữ liệu</button>
+                        <button class="btn-action btn-refresh" onclick="loadAdminData()"><i class="fas fa-sync-alt"></i>
+                            Cập nhật dữ liệu</button>
                     </div>
-                    <p class="panel-desc">Hệ thống đang đồng bộ trực tiếp từ CSDL Google Sheet. Dữ liệu được mã hóa và truyền tải theo thời gian thực. Ảnh đại diện được mã hóa và lưu trữ nội bộ qua công nghệ IndexedDB.</p>
+                    <p class="panel-desc">Hệ thống đang đồng bộ trực tiếp từ CSDL Google Sheet. Dữ liệu được mã hóa và
+                        truyền tải theo thời gian thực.</p>
                 </div>
             </div>
 
@@ -98,11 +109,12 @@
                 <div class="panel">
                     <div class="panel-header">
                         <div class="panel-title">Truy xuất Dữ liệu Đơn Hàng</div>
-                        <button class="btn-action btn-export" onclick="exportToExcel()"><i class="fas fa-file-csv"></i> Xuất Báo Cáo CSV</button>
+                        <button class="btn-action btn-export" onclick="exportToExcel()"><i class="fas fa-file-csv"></i>
+                            Xuất Báo Cáo CSV</button>
                     </div>
-                    
                     <div class="filters">
-                        <input type="text" id="filterSearch" placeholder="🔍 Tên quán, Mã đơn, SĐT..." oninput="applyFilters()">
+                        <input type="text" id="filterSearch" placeholder="🔍 Tên quán, Mã đơn, SĐT..."
+                            oninput="applyFilters()">
                         <input type="date" id="filterDateStart" title="Từ ngày" onchange="applyFilters()">
                         <input type="date" id="filterDateEnd" title="Đến ngày" onchange="applyFilters()">
                         <select id="filterStatus" onchange="applyFilters()">
@@ -114,7 +126,6 @@
                             <option value="all">Tất cả nhân viên Sales</option>
                         </select>
                     </div>
-
                     <div class="table-container">
                         <table>
                             <thead>
@@ -124,23 +135,23 @@
                                     <th>ID Sales</th>
                                     <th>Thông Tin Khách</th>
                                     <th>Tổng Tiền</th>
-                                    <th>Tiến Độ Giao</th> 
+                                    <th>Tiến Độ Giao</th>
                                     <th>Trạng Thái Kế Toán</th>
                                     <th>Thao Tác</th>
                                 </tr>
                             </thead>
-                            <tbody id="adminOrderTable">
-                                </tbody>
+                            <tbody id="adminOrderTable"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
             <div id="tab-staff" class="tab-pane">
-                 <div class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <div class="panel-title">Danh sách Nhân sự Sales</div>
-                        <button class="btn-action btn-primary" onclick="showToast('Chức năng cấp tài khoản đang hoàn thiện backend.', 'warning')"><i class="fas fa-user-plus"></i> Cấp tài khoản mới</button>
+                        <button class="btn-action btn-primary" onclick="openStaffModal()"><i
+                                class="fas fa-user-plus"></i> Cấp tài khoản mới</button>
                     </div>
                     <div class="table-container">
                         <table>
@@ -154,27 +165,235 @@
                                 </tr>
                             </thead>
                             <tbody id="adminStaffTable">
-                                <tr><td colspan="5" style="text-align:center; padding: 20px;">Đang tải danh sách nhân viên...</td></tr>
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding: 20px;">Đang tải danh sách nhân
+                                        viên...</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <div id="tab-products" class="tab-pane">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Danh mục Hàng hóa & Bảng giá</div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Trọng Lượng</th>
+                                    <th>Giá Bán Lẻ</th>
+                                    <th>Giá Đại Lý / Quán</th>
+                                    <th>Giá Hệ Thống / NPP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductTable">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding: 20px;">Đang tải danh mục từ
+                                        data.js...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-shifts" class="tab-pane">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Quản lý Giao nhận & Kết ca Sales (Tồn xe)</div>
+                        <button class="btn-action btn-primary" onclick="openShiftModal()"><i
+                                class="fas fa-clipboard-check"></i> Tạo Phiếu Kết Ca</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã Phiếu</th>
+                                    <th>Thời Gian</th>
+                                    <th>Nhân sự Sales</th>
+                                    <th>Doanh Thu Ca</th>
+                                    <th>Chi Tiết Hàng Hóa (Bán/Mang đi)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminShiftTable">
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding: 20px;">Đang tải dữ liệu kết ca...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Chi Tiết Đơn <span id="mOrderId" class="text-primary"></span></h3>
-                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('orderModal')"><i class="fas fa-times"></i></button>
             </div>
             <div id="modalBody"></div>
+            <div
+                style="margin-top: 15px; background: #fffbeb; padding: 15px; border-radius: 8px; border: 1px solid #fde68a;">
+                <div style="font-weight: bold; margin-bottom: 8px; color: #92400e;">📝 Ghi chú nội bộ (Kế toán/Kho):
+                </div>
+                <textarea id="mInternalNote"
+                    style="width: 100%; height: 60px; padding: 10px; border: 1px solid #fcd34d; border-radius: 6px; outline: none; font-size: 0.9rem; resize: vertical;"
+                    placeholder="Nhập ghi chú nợ, tình trạng giao, v.v..."></textarea>
+                <button onclick="saveInternalNote()" class="btn-action btn-primary"
+                    style="margin-top: 10px; width: 100%; justify-content: center;">Lưu Ghi Chú</button>
+            </div>
         </div>
     </div>
 
-    <div id="toastContainer" class="toast-container"></div>
+    <div class="modal-overlay" id="staffModal">
+        <div class="modal-content" style="width: 450px;">
+            <div class="modal-header">
+                <h3>Cấp Tài Khoản Sales</h3>
+                <button class="modal-close" onclick="closeModal('staffModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <label
+                        style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Mã
+                        Nhân Viên (ID)*</label>
+                    <input type="text" id="newStaffId" class="filters"
+                        style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                        placeholder="VD: NV001">
+                </div>
+                <div>
+                    <label
+                        style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Họ
+                        và Tên*</label>
+                    <input type="text" id="newStaffName"
+                        style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                        placeholder="VD: Nguyễn Văn A">
+                </div>
+                <div>
+                    <label
+                        style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Khu
+                        Vực Phụ Trách</label>
+                    <input type="text" id="newStaffRegion"
+                        style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                        placeholder="VD: TP.HCM, Hà Nội...">
+                </div>
+                <button id="btnSaveStaff" onclick="saveNewStaff()" class="btn-action btn-primary"
+                    style="justify-content: center; padding: 12px; margin-top: 10px;">TẠO TÀI KHOẢN</button>
+            </div>
+        </div>
+    </div>
 
-    <script src="it-admin.js"></script>
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content" style="width: 500px;">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Thêm Sản Phẩm Mới</h3>
+                <button class="modal-close" onclick="closeModal('productModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <input type="hidden" id="pActionType" value="add">
+                <div>
+                    <label
+                        style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Mã
+                        Hệ Thống (Mã SP)*</label>
+                    <input type="text" id="pId"
+                        style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                        placeholder="VD: tt1_500">
+                </div>
+                <div>
+                    <label
+                        style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Tên
+                        Hiển Thị*</label>
+                    <input type="text" id="pName"
+                        style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                        placeholder="VD: Truyền Thống 1">
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label
+                            style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Trọng
+                            Lượng</label>
+                        <input type="text" id="pWeight"
+                            style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                            placeholder="VD: 500g">
+                    </div>
+                    <div style="flex: 1;">
+                        <label
+                            style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Giá
+                            Bán Lẻ (đ)</label>
+                        <input type="number" id="pPrice"
+                            style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;"
+                            placeholder="VD: 120000">
+                    </div>
+                </div>
+                <div>
+                    <label
+                        style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block;">Trạng
+                        Thái</label>
+                    <select id="pStatus"
+                        style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;">
+                        <option value="Đang bán">Đang bán</option>
+                        <option value="Ngừng kinh doanh">Ngừng kinh doanh</option>
+                    </select>
+                </div>
+                <button id="btnSaveProduct" onclick="saveProduct()" class="btn-action btn-export"
+                    style="justify-content: center; padding: 12px; margin-top: 10px;">LƯU SẢN PHẨM</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="shiftModal">
+        <div class="modal-content" style="width: 800px; max-width: 95%;">
+            <div class="modal-header">
+                <h3>Tạo Phiếu Kết Ca Kho & Tồn Xe</h3>
+                <button class="modal-close" onclick="closeModal('shiftModal')"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 15px;">
+                <label style="font-weight: 700; color: #334155;">Chọn nhân sự Sales cần chốt ca:</label>
+                <select id="shiftSalesId"
+                    style="padding: 10px; border: 1px solid var(--border); border-radius: 8px; flex: 1;"></select>
+            </div>
+
+            <div class="table-container"
+                style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;">
+                <table style="width: 100%; margin-bottom: 0;">
+                    <thead style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th>Sản Phẩm (Giá)</th>
+                            <th style="width: 110px;">Sáng Mang Đi</th>
+                            <th style="width: 110px;">Chiều Mang Về</th>
+                            <th style="width: 100px; text-align: center;">Thực Bán</th>
+                            <th style="text-align: right;">Doanh Thu (đ)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shiftProductsTable">
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                style="margin-top: 20px; text-align: right; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);">
+                <div style="font-size: 1rem; color: #64748b; margin-bottom: 5px;">TỔNG DOANH THU CA BÁN:</div>
+                <div id="shiftTotalText" style="font-size: 1.8rem; font-weight: 800; color: var(--danger);">0 đ</div>
+            </div>
+
+            <button id="btnSaveShift" onclick="saveShift()" class="btn-action btn-export"
+                style="width: 100%; justify-content: center; padding: 14px; margin-top: 15px; font-size: 1.05rem;"><i
+                    class="fas fa-save"></i> LƯU PHIẾU KẾT CA</button>
+        </div>
+    </div>
+
+</html>
+<script src="data.js"></script>
+<script src="it-admin.js"></script>
 </body>
+
 </html>
