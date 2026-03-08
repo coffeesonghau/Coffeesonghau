@@ -144,17 +144,16 @@
             <a href="#" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
         </div>
 
-        <div class="actions">
-            <button type="button" class="btn-prev" onclick="app.clearDraft()"
-                style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
-                <i class="fas fa-trash-alt"></i> Làm Mới
+        <div class="actions top-action-bar">
+            <button type="button" class="btn-refresh" onclick="app.clearDraft()">
+                <i class="fas fa-redo-alt"></i> Mới
             </button>
-            <button type="button" class="btn-prev" onclick="app.copyBaoGia()"
-                style="background: #e8f4fd; color: #3498db; border: 1px solid #b6d4fe;">
-                <i class="fas fa-copy"></i> Copy Báo Giá
+            <button type="button" class="btn-copy" onclick="app.copyBaoGia()">
+                <i class="fas fa-copy"></i> Copy
             </button>
-            <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo <i
-                    class="fas fa-chevron-right"></i></button>
+            <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">
+                Tiếp <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
 
         <div id="deleteModal" class="modal-overlay" style="display:none;">
@@ -224,12 +223,12 @@
                 <input type="hidden" name="chi_tiet_don" id="chi_tiet_don" value="">
 
                 <div class="actions">
-                    <button type="button" class="btn-prev" onclick="app.clearDraft()"
-                        style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
-                        <i class="fas fa-trash-alt"></i> Làm Mới
+                    <button type="button" class="btn-refresh" onclick="app.clearDraft()">
+                        <i class="fas fa-redo-alt"></i> Làm Mới
                     </button>
-                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp theo <i
-                            class="fas fa-chevron-right"></i></button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">
+                        Tiếp theo <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </section>
 

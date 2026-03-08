@@ -568,3 +568,42 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .modal-content h3 { margin-top: 0; font-size: 1.2rem; margin-bottom: 10px; }
 .modal-content .input-group { margin-bottom: 15px; }
 .modal-content textarea { resize: none; }
+/* ==========================================
+   TỐI ƯU THANH NÚT THAO TÁC NHANH (TOP BAR)
+   ========================================== */
+.top-action-bar {
+    margin: 15px 20px 0 20px; /* Căn lề đồng bộ với form bên dưới */
+    gap: 8px; /* Khoảng cách giữa các nút vừa phải */
+}
+
+.top-action-bar button {
+    height: 48px;
+    font-size: 0.85rem;
+    padding: 0 5px;
+}
+
+/* Nút Xóa/Làm mới - Tone Đỏ Pastel */
+.btn-refresh {
+    flex: 1;
+    background: #fff;
+    color: #e74c3c;
+    border: 1px solid #fadbd8;
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.05);
+}
+.btn-refresh:active { background: #fdedec; }
+
+/* Nút Copy Báo Giá - Tone Xanh Pastel */
+.btn-copy {
+    flex: 1.2;
+    background: #fff;
+    color: #2980b9;
+    border: 1px solid #d4e6f1;
+    box-shadow: 0 2px 4px rgba(41, 128, 185, 0.05);
+}
+.btn-copy:active { background: #eaf2f8; }
+
+/* Tinh chỉnh riêng cho nút Tiếp theo trên top bar */
+.top-action-bar .btn-next {
+    flex: 1.4;
+    box-shadow: 0 4px 10px rgba(111, 78, 55, 0.25);
+}
