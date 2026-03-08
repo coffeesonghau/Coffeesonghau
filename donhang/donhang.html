@@ -59,10 +59,30 @@
             <div class="side-menu-header">MENU CÔNG VIỆC</div>
             <a href="index.html"><i class="fas fa-plus-circle"></i> Tạo Khách & Lên Đơn</a>
             <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
-            <a href="#" onclick="sendITRequest('Yêu cầu SỬA đơn')"><i class="fas fa-tools"></i> Yêu cầu Sửa Đơn</a>
-            <a href="#" onclick="sendITRequest('Yêu cầu XOÁ đơn')"><i class="fas fa-trash-alt"></i> Yêu cầu Xoá Đơn</a>
+            <a href="#" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i> Yêu cầu Xoá Đơn</a>
             <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
-        </div> 
+        </div>
+
+<div id="deleteModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <h3><i class="fas fa-trash-alt" style="color:#e74c3c;"></i> Yêu cầu Xoá Đơn</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Gửi yêu cầu về bộ phận IT để hủy/xóa đơn hàng trên hệ thống.</p>
+            
+            <div class="input-group">
+                <label>Mã đơn hàng cần xóa *</label>
+                <input type="text" id="delOrderId" placeholder="VD: DH123456789" required>
+            </div>
+            <div class="input-group">
+                <label>Lý do xóa / Hủy *</label>
+                <textarea id="delReason" rows="2" placeholder="VD: Khách đổi ý, đặt trùng đơn..." required></textarea>
+            </div>
+            
+            <div class="actions" style="margin-top: 20px;">
+                <button class="btn-prev" onclick="closeDeleteModal()">Hủy</button>
+                <button class="btn-submit" id="btnSubmitDelete" onclick="submitDeleteRequest()" style="background: #e74c3c;"><i class="fas fa-paper-plane"></i> Gửi IT</button>
+            </div>
+        </div>
+    </div> 
 
         <div id="orderListView" style="padding: 15px;">
             <div class="action-bar">

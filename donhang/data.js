@@ -1,4 +1,5 @@
 // data.js
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec";
 const productData = {
     // Định nghĩa các mức giá chung
     channels: {

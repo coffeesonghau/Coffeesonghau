@@ -277,7 +277,7 @@ document.getElementById('saleForm').addEventListener('submit', function (e) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec';
+    const scriptURL = SCRIPT_URL;
 
     // ==========================================
     // ĐOẠN MÃ BẠN VỪA HỎI ĐƯỢC ĐẶT Ở ĐÂY:
@@ -492,4 +492,71 @@ document.addEventListener("DOMContentLoaded", () => {
 function toggleMenu() {
     document.getElementById('sideMenu').classList.toggle('open');
     document.getElementById('menuOverlay').classList.toggle('open');
+}
+// ==========================================
+// TÍNH NĂNG POPUP GỬI YÊU CẦU XÓA ĐƠN CHO IT
+// ==========================================
+window.openDeleteModal = function() {
+    // Đóng menu nếu đang mở
+    document.getElementById('sideMenu').classList.remove('open');
+    document.getElementById('menuOverlay').classList.remove('open');
+    // Hiển thị modal
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+window.closeDeleteModal = function() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+window.submitDeleteRequest = async function() {
+    const orderId = document.getElementById('delOrderId').value.trim();
+    const reason = document.getElementById('delReason').value.trim();
+
+    if (!orderId || !reason) {
+        alert("Vui lòng nhập đầy đủ Mã đơn hàng và Lý do xóa!");
+        return;
+    }
+
+    const btn = document.querySelector('#deleteModal .btn-submit');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+    btn.disabled = true;
+
+    try {
+        const userId = localStorage.getItem('sh_user_id');
+        const userName = localStorage.getItem('sh_user_name');
+        
+        // Bạn có thể dùng SCRIPT_URL nếu đang ở donhang.js, hoặc hardcode url ở script.js
+        const apiUrl = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec";
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            body: JSON.stringify({ 
+                action: "sendITRequest", 
+                id_sales: userId,
+                nguoi_gui: userName,
+                loai_yeu_cau: "Yêu cầu XOÁ đơn",
+                ma_don: orderId,
+                ly_do: reason
+            }),
+            headers: { "Content-Type": "text/plain;charset=utf-8" }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(`✅ Đã gửi yêu cầu Xóa đơn thành công!\n\nBộ phận IT sẽ kiểm tra mã đơn ${orderId} và xóa trên hệ thống sớm nhất.`);
+            closeDeleteModal();
+            // Reset form
+            document.getElementById('delOrderId').value = '';
+            document.getElementById('delReason').value = '';
+        } else {
+            alert("❌ Lỗi từ máy chủ: " + result.msg);
+        }
+    } catch (err) {
+        alert("❌ Lỗi kết nối mạng, vui lòng thử lại sau!");
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
 }

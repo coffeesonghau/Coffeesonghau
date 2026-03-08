@@ -3,8 +3,6 @@
    Tích hợp: Dynamic Products (Từ data.js), HR, Internal Notes & Inventory Shifts (Kết Ca)
 ========================================== */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec"; 
-
 window.allAdminOrders = [];
 window.allProducts = {}; // Lưu trữ động danh sách sản phẩm từ data.js
 window.allStaffData = []; // Lưu danh sách Nhân sự để làm Dropdown kết ca
@@ -79,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loadAdminData(); 
         loadStaffData(); 
         loadProductsData(); // MỚI: Tải từ data.js
-        loadShiftsData(); 
+        loadShiftsData();
+        loadITRequests(); 
     }
 });
 
@@ -108,7 +107,7 @@ async function loginIT() {
             loadAdminData();
             loadStaffData();
             loadProductsData(); // MỚI: Tải từ data.js
-            loadShiftsData();
+            loadITRequests();
         } else {
             showToast(result.msg || "Sai thông tin bảo mật!", "error");
         }
@@ -131,7 +130,7 @@ function logoutIT() {
 // ==========================================
 // 2. GIAO DIỆN & TIỆN ÍCH CHUNG
 // ==========================================
-const tabTitles = { 'dashboard': 'Tổng Quan Số Liệu', 'orders': 'CSDL Đơn Hàng', 'staff': 'Quản Trị Nhân Sự Sales', 'products': 'Danh Mục Hàng Hóa', 'shifts': 'Quản lý Kho & Kết Ca' };
+const tabTitles = { 'dashboard': 'Tổng Quan Số Liệu', 'orders': 'CSDL Đơn Hàng', 'staff': 'Quản Trị Nhân Sự Sales', 'products': 'Danh Mục Hàng Hóa', 'shifts': 'Quản lý Kho & Kết Ca', 'it-requests': 'Xử Lý Yêu Cầu IT' };
 
 function switchTab(tabId) {
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -767,4 +766,148 @@ window.saveShift = async function() {
         btn.innerHTML = '<i class="fas fa-save"></i> LƯU PHIẾU KẾT CA'; 
         btn.disabled = false; 
     }
+}
+// ==========================================
+// 8. MODULE XỬ LÝ YÊU CẦU IT (XÓA ĐƠN)
+// ==========================================
+async function loadITRequests() {
+    const tbody = document.getElementById('adminITRequestsTable');
+    if (!tbody) return;
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: "getITRequests" }),
+            headers: { "Content-Type": "text/plain;charset=utf-8" }
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            tbody.innerHTML = '';
+            if (result.data.length === 0) return tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Không có yêu cầu nào.</td></tr>';
+            
+            result.data.forEach(req => {
+                let isPending = req.trang_thai === "Chờ xử lý";
+                let statusClass = isPending ? "pending" : (req.trang_thai === "Đã duyệt xóa" ? "processed" : "active"); // active màu xanh biển (Từ chối)
+                
+                tbody.innerHTML += `
+                    <tr style="${!isPending ? 'opacity: 0.7;' : 'background: #fffbeb;'}">
+                        <td>${req.thoi_gian}</td>
+                        <td><strong style="color:var(--admin-secondary);">${req.id_sales}</strong><br><span style="font-size:0.8rem">${req.nguoi_yc}</span></td>
+                        <td><strong style="color:var(--danger);">${req.ma_don}</strong></td>
+                        <td style="max-width: 200px; white-space: normal;">${req.ly_do}</td>
+                        <td><span class="badge ${statusClass}">${req.trang_thai}</span></td>
+                        <td>
+                            ${isPending ? `
+                                <button class="btn-action" style="background:#059669; color:#fff; padding:6px 10px; margin-right:5px; border-radius:4px;" onclick="resolveIT(this, '${req.ma_don}', 'Đã duyệt xóa')" title="Đồng ý Xóa"><i class="fas fa-check"></i> Duyệt</button>
+                                <button class="btn-action" style="background:#dc2626; color:#fff; padding:6px 10px; border-radius:4px;" onclick="resolveIT(this, '${req.ma_don}', 'Từ chối xóa')" title="Từ chối Xóa"><i class="fas fa-times"></i> Hủy</button>
+                            ` : `<span style="font-size: 0.85rem; color: #64748b;">Đã xử lý</span>`}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+    } catch (e) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:red;">Lỗi kết nối!</td></tr>'; }
+}
+
+window.resolveIT = async function(btn, maDon, actionType) {
+    if (!confirm(`Bạn có chắc muốn [${actionType.toUpperCase()}] cho mã đơn ${maDon}?`)) return;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: "resolveITRequest", ma_don: maDon, new_status: actionType }),
+            headers: { "Content-Type": "text/plain;charset=utf-8" }
+        });
+        const result = await res.json();
+        if (result.success) {
+            showToast(`Đã ${actionType} đơn ${maDon}!`, "success");
+            loadITRequests(); // Load lại bảng yêu cầu
+            loadAdminData();  // Load lại bảng Đơn Hàng (để thấy đơn bị hủy)
+        } else { showToast("Lỗi: " + result.msg, "error"); }
+    } catch (err) { showToast("Lỗi mạng!", "error"); }
+}
+
+// ==========================================
+// 9. MODULE IN PHIẾU GIAO HÀNG (MÁY IN NHIỆT K80)
+// ==========================================
+window.printOrderBill = function() {
+    const maDon = document.getElementById('mOrderId').getAttribute('data-id');
+    const order = window.allAdminOrders.find(o => o.ma_don === maDon);
+    if (!order) return showToast("Không thể in đơn này!", "error");
+
+    let cleanPhone = order.sdt ? String(order.sdt).replace(/'/g, '') : '';
+    let cartHtml = '';
+    
+    try {
+        let cart = JSON.parse(order.cart_json || "{}");
+        for (const [id, qty] of Object.entries(cart)) {
+            if (qty > 0) {
+                let pName = window.allProducts[id] ? window.allProducts[id].name : id;
+                cartHtml += `
+                    <tr style="border-bottom: 1px dashed #ccc;">
+                        <td style="padding: 6px 0; font-size: 13px;">${pName}</td>
+                        <td style="text-align: center; padding: 6px 0; font-size: 13px; font-weight: bold;">${qty}</td>
+                    </tr>
+                `;
+            }
+        }
+    } catch(e) {}
+
+    const printContent = `
+        <div style="width: 76mm; padding: 0; font-family: monospace; color: #000; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 10px;">
+                <h2 style="margin: 0; font-size: 18px; text-transform: uppercase;">SÔNG HẬU COFFEE</h2>
+                <p style="margin: 4px 0; font-size: 12px;">ĐC: Kho Trung Tâm</p>
+                <p style="margin: 4px 0; font-size: 12px;">Hotline: 0999.999.999</p>
+                <hr style="border: 0; border-top: 1px dashed #000; margin: 8px 0;">
+                <h3 style="margin: 5px 0; font-size: 16px;">PHIẾU GIAO HÀNG</h3>
+                <p style="margin: 0; font-size: 12px; font-weight: bold;">Mã: ${order.ma_don}</p>
+            </div>
+            
+            <div style="margin-bottom: 10px; font-size: 13px;">
+                <p style="margin: 4px 0;"><strong>Khách:</strong> ${order.ten_quan}</p>
+                <p style="margin: 4px 0;"><strong>SĐT:</strong> ${cleanPhone}</p>
+                <p style="margin: 4px 0;"><strong>Ngày:</strong> ${order.thoi_gian.split(' ')[0]}</p>
+                <p style="margin: 4px 0;"><strong>Sale Phụ Trách:</strong> ${order.id_sales}</p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #000;">
+                        <th style="text-align: left; padding: 5px 0; font-size: 13px;">Sản phẩm</th>
+                        <th style="text-align: center; padding: 5px 0; font-size: 13px; width: 30px;">SL</th>
+                    </tr>
+                </thead>
+                <tbody>${cartHtml}</tbody>
+            </table>
+            
+            <div style="text-align: right; margin-top: 10px;">
+                <h3 style="margin: 0; font-size: 15px;">Tổng thu: ${parseInt(order.tong_tien || 0).toLocaleString('vi-VN')} đ</h3>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; font-size: 12px;">
+                <p style="margin: 4px 0;">Cảm ơn quý khách đã tin dùng!</p>
+                <p style="margin: 4px 0;">----------------------</p>
+                <p style="margin: 4px 0;">Chữ ký nhận hàng</p>
+                <br><br><br>
+            </div>
+        </div>
+    `;
+    
+    // Mở popup ẩn và gọi lệnh In của trình duyệt
+    const printWindow = window.open('', '', 'width=400,height=600');
+    printWindow.document.write('<html><head><title>In Phiếu Sông Hậu</title></head><body style="margin:0; padding:10px; display:flex; justify-content:center;">');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // Đợi render xong rồi in
+    setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+    }, 500);
 }

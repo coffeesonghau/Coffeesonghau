@@ -538,3 +538,33 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .badge.pending { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; } /* Vàng */
 .badge.processed { background: #d1fae5; color: #047857; border: 1px solid #a7f3d0; } /* Xanh */
 .badge.shipping { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; } /* Xanh biển */
+/* --- GIAO DIỆN POPUP MODAL (YÊU CẦU XÓA ĐƠN) --- */
+.modal-overlay {
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(3px);
+    z-index: 3000;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff; 
+    width: 90%; max-width: 400px;
+    padding: 25px 20px; 
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h3 { margin-top: 0; font-size: 1.2rem; margin-bottom: 10px; }
+.modal-content .input-group { margin-bottom: 15px; }
+.modal-content textarea { resize: none; }
