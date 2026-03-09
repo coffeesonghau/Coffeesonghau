@@ -3,7 +3,7 @@ window.dbProducts = [
         id: 1, 
         name: "Sông Hậu Premium", 
         price: 400000, 
-        unit: "#",
+        unit: "",
         category: ["cao-cap", "rang-xay"], 
         img: "img/SHpremium1.webp",
         gallery: [
@@ -381,9 +381,9 @@ window.dbProducts = [
         price: 300000, 
         unit: "Kg",
         category: "cafe-hat", 
-        img: "img/hatcaphe2.webp",
+        img: "img/cafehat.webp",
         gallery: [
-            "img/hatcaphe2.webp",  
+            "img/cafehat.webp",  
         ],
         info: {
             description: "Cà Phê Hạt Sông Hậu Rang Mộc giữa Robusta - Arabica.",
