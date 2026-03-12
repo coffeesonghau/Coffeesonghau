@@ -489,18 +489,33 @@ document.addEventListener("DOMContentLoaded", () => {
         renderProducts();
     }, 200);
 });
-function toggleMenu() {
-    document.getElementById('sideMenu').classList.toggle('open');
-    document.getElementById('menuOverlay').classList.toggle('open');
-}
 // ==========================================
 // TÍNH NĂNG POPUP GỬI YÊU CẦU XÓA ĐƠN CHO IT
 // ==========================================
-window.openDeleteModal = function() {
-    // Đóng menu nếu đang mở
-    document.getElementById('sideMenu').classList.remove('open');
-    document.getElementById('menuOverlay').classList.remove('open');
-    // Hiển thị modal
+// ==========================================
+// TÍNH NĂNG POPUP GỬI YÊU CẦU XÓA ĐƠN CHO IT (CẢI TIẾN)
+// ==========================================
+
+// Mở modal và tự động điền mã đơn nếu bấm từ danh sách
+window.openDeleteModal = function(ma_don = '') {
+    const orderIdInput = document.getElementById('delOrderId');
+    const reasonInput = document.getElementById('delReason');
+    
+    // Reset form trước khi mở
+    reasonInput.value = '';
+    
+    // Nếu có mã đơn truyền vào (bấm từ thẻ đơn)
+    if (ma_don) {
+        orderIdInput.value = ma_don;
+        orderIdInput.readOnly = true; // Không cho sửa mã đơn nếu đã bấm chuẩn từ thẻ
+        orderIdInput.style.backgroundColor = '#f1f5f9';
+    } else {
+        // Nếu mở từ dưới thanh Nav (nhập tay)
+        orderIdInput.value = '';
+        orderIdInput.readOnly = false;
+        orderIdInput.style.backgroundColor = '#fff';
+    }
+
     document.getElementById('deleteModal').style.display = 'flex';
 }
 
@@ -509,11 +524,17 @@ window.closeDeleteModal = function() {
 }
 
 window.submitDeleteRequest = async function() {
-    const orderId = document.getElementById('delOrderId').value.trim();
+    // In hoa và xóa khoảng trắng dư thừa
+    const orderId = document.getElementById('delOrderId').value.trim().toUpperCase(); 
     const reason = document.getElementById('delReason').value.trim();
 
     if (!orderId || !reason) {
-        alert("Vui lòng nhập đầy đủ Mã đơn hàng và Lý do xóa!");
+        alert("⚠️ Vui lòng nhập đầy đủ Mã đơn hàng và Lý do xóa!");
+        return;
+    }
+
+    // Thêm bước xác nhận chống bấm nhầm
+    if (!confirm(`Bạn có chắc chắn muốn gửi yêu cầu XÓA đơn [${orderId}] cho bộ phận IT không?`)) {
         return;
     }
 
@@ -526,10 +547,7 @@ window.submitDeleteRequest = async function() {
         const userId = localStorage.getItem('sh_user_id');
         const userName = localStorage.getItem('sh_user_name');
         
-        // Bạn có thể dùng SCRIPT_URL nếu đang ở donhang.js, hoặc hardcode url ở script.js
-        const apiUrl = "https://script.google.com/macros/s/AKfycbwlWkIZWvJlu6iETWWiC4eStWWoH05ZWvVam3FlH4M-KfqKhd-HYrfihH7D6oTtgEHo/exec";
-
-        const response = await fetch(apiUrl, {
+        const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({ 
                 action: "sendITRequest", 
@@ -545,11 +563,8 @@ window.submitDeleteRequest = async function() {
         const result = await response.json();
         
         if (result.success) {
-            alert(`✅ Đã gửi yêu cầu Xóa đơn thành công!\n\nBộ phận IT sẽ kiểm tra mã đơn ${orderId} và xóa trên hệ thống sớm nhất.`);
+            alert(`✅ Đã gửi yêu cầu!\n\nBộ phận IT sẽ kiểm tra mã đơn ${orderId} và xóa trên hệ thống sớm nhất.`);
             closeDeleteModal();
-            // Reset form
-            document.getElementById('delOrderId').value = '';
-            document.getElementById('delReason').value = '';
         } else {
             alert("❌ Lỗi từ máy chủ: " + result.msg);
         }
@@ -560,3 +575,194 @@ window.submitDeleteRequest = async function() {
         btn.disabled = false;
     }
 }
+// Mở trang cá nhân
+// ==========================================
+// QUẢN LÝ TRANG CÁ NHÂN (PROFILE) - CHUẨN
+// ==========================================
+
+// 1. Mở trang cá nhân
+window.openProfileModal = async function() {
+    const userName = localStorage.getItem('sh_user_name') || "Thành viên";
+    const userId = localStorage.getItem('sh_user_id') || "N/A";
+    
+    // 1. Điền thông tin văn bản
+    const nameEl = document.getElementById('profileName');
+    const idEl = document.getElementById('profileId');
+    if (nameEl) nameEl.innerText = userName;
+    if (idEl) idEl.innerText = userId;
+    
+    // 2. Tải và hiển thị ảnh đại diện từ IndexedDB
+    try {
+        if (typeof dbHelper !== 'undefined') {
+            const savedAvatar = await dbHelper.getAvatar();
+            const profileImg = document.getElementById('profileDisplayAvatar');
+            if (profileImg) {
+                profileImg.src = savedAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=6F4E37&color=fff`;
+            }
+        }
+    } catch (err) {
+        console.error("Lỗi tải avatar:", err);
+    }
+
+    // 3. Hiển thị Modal
+    const modal = document.getElementById('profileModal');
+    if (modal) modal.style.display = 'flex';
+};
+
+// Đừng quên hàm đóng modal
+window.closeProfileModal = function() {
+    const modal = document.getElementById('profileModal');
+    if (modal) modal.style.display = 'none';
+};
+
+// 2. Đóng trang cá nhân
+window.closeProfileModal = function() {
+    const modal = document.getElementById('profileModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Cập nhật lại hàm openProfileModal để lấy ảnh khi mở trang
+window.openProfileModal = async function() {
+    console.log("Đang mở Profile..."); // Để kiểm tra trong Console
+    const userName = localStorage.getItem('sh_user_name') || "Thành viên";
+    const userId = localStorage.getItem('sh_user_id') || "N/A";
+    
+    // Đổ dữ liệu vào HTML dựa trên ID
+    const nameEl = document.getElementById('profileName');
+    const idEl = document.getElementById('profileId');
+    const modal = document.getElementById('profileModal');
+
+    if (nameEl) nameEl.innerText = userName;
+    if (idEl) idEl.innerText = userId;
+    
+    // Tải ảnh đại diện từ IndexedDB
+    try {
+        const savedAvatar = await dbHelper.getAvatar();
+        const profileImg = document.getElementById('profileDisplayAvatar');
+        if (profileImg) {
+            if (savedAvatar) {
+                profileImg.src = savedAvatar;
+            } else {
+                profileImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=6F4E37&color=fff`;
+            }
+        }
+    } catch (err) {
+        console.error("Lỗi lấy avatar từ DB:", err);
+    }
+
+    if (modal) {
+        modal.style.display = 'flex';
+    } else {
+        alert("Lỗi: Không tìm thấy Modal trong HTML!");
+    }
+};
+
+// Hàm đóng Modal
+window.closeProfileModal = function() {
+    const modal = document.getElementById('profileModal');
+    if (modal) modal.style.display = 'none';
+};
+
+// Hàm xử lý đổi ảnh và lưu vào DB
+window.handleAvatarChange = async function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+        alert("Ảnh quá nặng, vui lòng chọn ảnh dưới 2MB");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64Data = e.target.result;
+        
+        // Hiển thị ngay lên màn hình
+        const profileImg = document.getElementById('profileDisplayAvatar');
+        if (profileImg) profileImg.src = base64Data;
+        
+        // Lưu vào IndexedDB
+        try {
+            await dbHelper.saveAvatar(base64Data);
+            alert("✅ Đã cập nhật ảnh đại diện thành công!");
+        } catch (err) {
+            console.error("Lỗi lưu DB:", err);
+        }
+    };
+    reader.readAsDataURL(file);
+};
+// Hàm xử lý khi người dùng chọn ảnh từ điện thoại/máy tính
+async function handleAvatarChange(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Đọc file ảnh dưới dạng Base64
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64Data = e.target.result;
+        
+        // 1. Cập nhật ngay lập tức lên giao diện Profile
+        const profileImg = document.getElementById('profileDisplayAvatar');
+        if (profileImg) profileImg.src = base64Data;
+        
+        // 2. Cập nhật luôn ảnh ở Header (nếu có)
+        const headerImg = document.getElementById('userAvatar');
+        if (headerImg) headerImg.src = base64Data;
+
+        // 3. Lưu vào IndexedDB để lần sau mở app vẫn còn
+        try {
+            await dbHelper.saveAvatar(base64Data);
+            alert("✅ Đã cập nhật ảnh đại diện!");
+        } catch (err) {
+            console.error("Lỗi lưu IndexedDB:", err);
+        }
+    };
+    reader.readAsDataURL(file);
+}
+// Thêm hàm này vào script.js nếu chưa có để xử lý chọn ảnh từ Profile
+window.handleAvatarChange = function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (file.size > 2 * 1024 * 1024) {
+            alert("Ảnh quá nặng, vui lòng chọn ảnh dưới 2MB");
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Data = e.target.result;
+            // Cập nhật lên giao diện modal
+            document.getElementById('profileDisplayAvatar').src = base64Data;
+            // Lưu vào IndexedDB (sử dụng dbHelper bạn đã có)
+            dbHelper.saveAvatar(base64Data);
+        };
+        reader.readAsDataURL(file);
+    }
+};
+// --- TÍNH NĂNG ẨN/HIỆN NAV KHI CUỘN ---
+let lastScrollTop = 0;
+const bNav = document.querySelector('.bottom-nav');
+
+window.addEventListener('scroll', function() {
+    let st = window.pageYOffset || document.documentElement.scrollTop;
+    if (!bNav) return;
+
+    if (st > lastScrollTop && st > 100) {
+        // Vuốt xuống -> Ẩn
+        bNav.classList.add('nav-hidden');
+    } else {
+        // Vuốt lên -> Hiện
+        bNav.classList.remove('nav-hidden');
+    }
+    lastScrollTop = st <= 0 ? 0 : st;
+}, { passive: true });
+
+// --- ĐỒNG BỘ HIỂN THỊ AVATAR KHI MỞ TRANG ---
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const savedAvatar = await dbHelper.getAvatar();
+        const profileImg = document.getElementById('profileDisplayAvatar');
+        if (savedAvatar && profileImg) {
+            profileImg.src = savedAvatar;
+        }
+    } catch (e) { console.log("Chưa có avatar"); }
+});

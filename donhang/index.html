@@ -9,103 +9,92 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="data.js"></script>
     <style>
-        /* CSS Tối ưu giao diện POS chuyên nghiệp cho Sales */
-        .sales-header-card {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            margin-bottom: 15px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .search-icon-wrapper {
-            position: relative;
-            margin-top: 10px;
-        }
-
-        .search-icon-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-        }
-
-        .search-icon-wrapper input {
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
-            padding: 12px 15px 12px 40px;
-            border-radius: 25px;
-            border: 1px solid #cbd5e1;
-            font-size: 0.95rem;
-            outline: none;
-            box-sizing: border-box;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
-            transition: 0.2s;
-        }
-
-        .search-icon-wrapper input:focus {
-            border-color: var(--primary-color, #4e54c8);
-        }
-
-        .quick-filters {
+            max-width: 480px;
+            height: 65px;
+            background: #ffffff;
             display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 12px 0 5px 0;
-        }
-
-        .quick-filters::-webkit-scrollbar {
-            display: none;
-        }
-
-        .quick-filters .tag-btn {
-            white-space: nowrap;
-            padding: 6px 15px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            background: #fff;
-            color: #475569;
-            font-weight: 600;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .quick-filters .tag-btn:active {
-            transform: scale(0.95);
-        }
-
-        .quick-filters .cart-tag {
-            border-color: #10b981;
-            color: #10b981;
-            background: #ecfdf5;
-        }
-
-        .sticky-total-bar {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            padding: 12px 15px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-            margin: 15px 0;
-            border-left: 4px solid #e74c3c;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 2000;
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
-        .total-label {
-            font-size: 0.85rem;
-            color: #64748b;
+        .nav-item {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            flex: 1;
+            transition: 0.2s;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-item span {
+            font-size: 0.7rem;
             font-weight: 700;
-            text-transform: uppercase;
         }
 
-        .total-amount {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #e74c3c;
+        .nav-item.active {
+            color: #6F4E37;
+        }
+
+        .app-container {
+            padding-bottom: 80px;
+        }
+
+        .profile-card {
+            text-align: center;
+            padding: 20px !important;
+        }
+
+        .profile-avatar-wrapper {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            border: 3px solid #6F4E37;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #6F4E37;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            border: 2px solid #fff;
         }
     </style>
 </head>
@@ -114,148 +103,83 @@
     <div class="app-container">
         <header>
             <div class="header-top">
-                <div class="menu-btn" onclick="toggleMenu()">
-                    <i class="fas fa-bars"></i>
-                </div>
                 <div style="font-size: 0.85rem; font-weight: bold;">
-                    <i class="fas fa-user"></i> <span id="currentUserName">Đang tải...</span>
+                    <i class="fas fa-circle" style="color: #27ae60; font-size: 0.6rem; margin-right: 5px;"></i>
+                    <span id="currentUserName">Đang tải...</span>
                 </div>
+                <div class="status-badge" style="font-size: 0.75rem; opacity: 0.8;">Hệ thống Sales</div>
             </div>
             <div class="logo">SÔNG HẬU COFFEE</div>
         </header>
 
-        <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-        <div class="side-menu" id="sideMenu">
-            <div class="user-profile-section">
-                <div class="avatar-container" onclick="document.getElementById('avatarUpload').click()">
-                    <img id="userAvatar" src="https://ui-avatars.com/api/?name=NV&background=4e54c8&color=fff&size=100"
-                        alt="Avatar">
-                    <div class="avatar-overlay"><i class="fas fa-camera"></i></div>
-                </div>
-                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
-                <div class="user-info">
-                    <div class="user-name" id="menuUserName">Đang tải...</div>
-                    <div class="user-role"><i class="fas fa-briefcase"></i> Nhân viên Sales</div>
-                </div>
-            </div>
-            <div class="side-menu-header">MENU CÔNG VIỆC</div>
-            <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
-            <a href="#" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i> Yêu cầu Xoá Đơn</a>
-            <a href="#" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
-        </div>
-
         <div class="actions top-action-bar">
-            <button type="button" class="btn-refresh" onclick="app.clearDraft()">
-                <i class="fas fa-redo-alt"></i> Mới
-            </button>
-            <button type="button" class="btn-copy" onclick="app.copyBaoGia()">
-                <i class="fas fa-copy"></i> Copy
-            </button>
-            <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">
-                Tiếp <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-
-        <div id="deleteModal" class="modal-overlay" style="display:none;">
-            <div class="modal-content">
-                <h3><i class="fas fa-trash-alt" style="color:#e74c3c;"></i> Yêu cầu Xoá Đơn</h3>
-                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Gửi yêu cầu về bộ phận IT để hủy/xóa
-                    đơn hàng trên hệ thống.</p>
-
-                <div class="input-group">
-                    <label>Mã đơn hàng cần xóa *</label>
-                    <input type="text" id="delOrderId" placeholder="VD: DH123456789" required>
-                </div>
-                <div class="input-group">
-                    <label>Lý do xóa / Hủy *</label>
-                    <textarea id="delReason" rows="2" placeholder="VD: Khách đổi ý, đặt trùng đơn..."
-                        required></textarea>
-                </div>
-
-                <div class="actions" style="margin-top: 20px;">
-                    <button class="btn-prev" onclick="closeDeleteModal()">Hủy</button>
-                    <button class="btn-submit" onclick="submitDeleteRequest()" style="background: #e74c3c;"><i
-                            class="fas fa-paper-plane"></i> Gửi IT</button>
-                </div>
-            </div>
+            <button type="button" class="btn-refresh" onclick="app.clearDraft()"><i class="fas fa-redo-alt"></i>
+                Mới</button>
+            <button type="button" class="btn-copy" onclick="app.copyBaoGia()"><i class="fas fa-copy"></i> Copy</button>
+            <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">Tiếp <i
+                    class="fas fa-arrow-right"></i></button>
         </div>
 
         <form id="saleForm">
             <section class="form-step active" id="step1">
                 <h3><i class="fas fa-calculator"></i> Báo Giá & Lên Đơn</h3>
-
                 <div class="sales-header-card">
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label style="font-size: 0.8rem; color: #475569;"><i class="fas fa-tags"></i> Kênh giá áp
-                            dụng</label>
-                        <select id="channel-select" name="kenh_ban"
-                            style="padding: 10px; border-radius: 8px; font-weight: bold; color: #2c3e50;">
+                    <div class="input-group">
+                        <label>Kênh giá</label>
+                        <select id="channel-select" name="kenh_ban">
                             <option value="ban_le">Bán lẻ</option>
                             <option value="dai_ly_quan">Đại Lý / Quán</option>
                             <option value="he_thong_npp">Hệ Thống / NPP</option>
                         </select>
                     </div>
-
                     <div class="search-icon-wrapper">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="search-product" placeholder="Tìm tên món, trọng lượng..."
-                            oninput="filterProducts()">
+                        <input type="text" id="search-product" placeholder="Tìm món..." oninput="filterProducts()">
                     </div>
-
                     <div class="quick-filters">
                         <button type="button" class="tag-btn cart-tag" onclick="showSelectedOnly()"><i
                                 class="fas fa-shopping-cart"></i> Đang chọn</button>
-                        <button type="button" class="tag-btn" onclick="setFilter('500g')">500g</button>
-                        <button type="button" class="tag-btn" onclick="setFilter('250g')">250g</button>
                         <button type="button" class="tag-btn" onclick="setFilter('100g')">100g</button>
+                        <button type="button" class="tag-btn" onclick="setFilter('250g')">250g</button>
+                        <button type="button" class="tag-btn" onclick="setFilter('500g')">500g</button>
                         <button type="button" class="tag-btn" onclick="setFilter('')">Tất cả</button>
                     </div>
                 </div>
-
-                <div class="product-list" id="product-list">
-                </div>
-
+                <div class="product-list" id="product-list"></div>
                 <div class="sticky-total-bar">
-                    <span class="total-label">Tổng thanh toán:</span>
-                    <span class="total-amount" id="total-price">0 đ</span>
+                    <span>Tổng cộng:</span>
+                    <span id="total-price">0 đ</span>
                 </div>
-
-                <input type="hidden" name="chi_tiet_don" id="chi_tiet_don" value="">
-
+                <input type="hidden" name="chi_tiet_don" id="chi_tiet_don">
                 <div class="actions">
-                    <button type="button" class="btn-refresh" onclick="app.clearDraft()">
-                        <i class="fas fa-redo-alt"></i> Làm Mới
-                    </button>
-                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)">
-                        Tiếp theo <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <button type="button" class="btn-next" onclick="app.validateAndNext(1, 2)" style="width: 100%;">Tiếp
+                        theo <i class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
 
             <section class="form-step" id="step2">
                 <h3><i class="fas fa-id-card"></i> Thông Tin Khách Hàng</h3>
                 <div class="input-group">
-                    <label>Tên cửa hàng *</label>
+                    <label>Tên cửa hàng/quán *</label>
                     <input type="text" name="ten_quan" placeholder="Nhập tên quán..." required
                         oninput="app.capitalizeFirstLetter(this)">
                 </div>
                 <div class="input-group">
                     <label>Địa chỉ *</label>
                     <div class="gps-wrapper">
-                        <input type="text" name="dia_chi" id="dia_chi" placeholder="Số nhà, tên đường..." required>
+                        <input type="text" name="dia_chi" id="dia_chi" placeholder="Địa chỉ chi tiết..." required>
                         <button type="button" class="btn-gps" onclick="app.getLocation()"><i
                                 class="fas fa-location-arrow"></i></button>
                     </div>
                 </div>
                 <div class="grid">
                     <div class="input-group">
-                        <label>Chủ quán/Người mua *</label>
-                        <input type="text" name="chu_quan" required placeholder="Tên khách hàng">
+                        <label>Người mua *</label>
+                        <input type="text" name="chu_quan" required placeholder="Tên khách">
                     </div>
                     <div class="input-group">
                         <label>SĐT/Zalo *</label>
-                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                        <input type="tel" name="sdt_zalo" required pattern="[0-9]{10}" placeholder="09xxxxxxxx">
                     </div>
                 </div>
                 <div class="actions">
@@ -268,38 +192,24 @@
 
             <section class="form-step" id="step3">
                 <h3><i class="fas fa-eye"></i> Nhu Cầu & Khảo Sát</h3>
-
                 <div class="grid">
                     <div class="input-group">
                         <label>Tiềm năng *</label>
                         <select name="tiem_nang" required>
                             <option value="">-- Đánh giá --</option>
                             <option value="1">⭐ Nhỏ</option>
-                            <option value="2">⭐⭐ Ổn định</option>
                             <option value="3">⭐⭐⭐ Lớn</option>
-                            <option value="4">⭐⭐⭐⭐ Rất lớn</option>
                             <option value="5">⭐⭐⭐⭐⭐ VIP</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Tình trạng mẫu *</label>
-                        <select name="da_gui_mau" required>
-                            <option value="">-- Chọn --</option>
-                            <option value="Chưa gửi">Chưa gửi</option>
-                            <option value="Đã gửi dùng thử">Đã gửi thử</option>
-                            <option value="Đã test tại quán">Đã test tại quán</option>
-                        </select>
+                        <label>Ngày hẹn lại *</label>
+                        <input type="date" name="ngay_goi_lai" id="ngay_goi_lai" required>
                     </div>
                 </div>
-
                 <div class="input-group">
-                    <label>Ngày ghé lại / Hẹn *</label>
-                    <input type="date" name="ngay_goi_lai" id="ngay_goi_lai" required>
-                </div>
-                <div class="input-group">
-                    <label>Ghi chú quan trọng</label>
-                    <textarea name="phan_hoi" rows="3"
-                        placeholder="Ghi chú thêm về khách, dặn dò giao hàng..."></textarea>
+                    <label>Ghi chú</label>
+                    <textarea name="phan_hoi" rows="3" placeholder="Ghi chú thêm..."></textarea>
                 </div>
                 <div class="actions">
                     <button type="button" class="btn-prev" onclick="app.nextStep(2)"><i class="fas fa-chevron-left"></i>
@@ -309,6 +219,104 @@
                 </div>
             </section>
         </form>
+
+        <div id="deleteModal" class="modal-overlay" style="display:none; z-index: 3000;">
+            <div class="modal-content delete-modal-pro">
+
+                <div class="modal-header-pro">
+                    <div class="icon-warning-bg">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                    <h3>Yêu Cầu Xóa Đơn</h3>
+                    <p>Gửi thông báo hủy đơn lên hệ thống</p>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác. Đơn hàng sẽ được chuyển cho IT kiểm
+                        duyệt và xóa khỏi hệ thống.</span>
+                </div>
+
+                <div class="form-group-pro">
+                    <label>Mã đơn hàng <span class="text-danger">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="form-group-pro">
+                    <label>Lý do xóa <span class="text-danger">*</span></label>
+                    <div class="input-wrapper align-top">
+                        <i class="fas fa-pen"></i>
+                        <textarea id="delReason" rows="3"
+                            placeholder="Nhập lý do chi tiết (VD: Khách đổi ý, trùng đơn, lên sai giá...)"
+                            autocomplete="off"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-actions-pro">
+                    <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
+                    <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
+                        <i class="fas fa-paper-plane"></i> Gửi Cho IT
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="profileModal" class="modal-overlay" style="display:none; z-index: 3000;">
+            <div class="modal-content profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar-wrapper" onclick="document.getElementById('avatarInput').click()">
+                        <img id="profileDisplayAvatar"
+                            src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
+                        <div class="avatar-edit-icon"><i class="fas fa-camera"></i></div>
+                    </div>
+                    <input type="file" id="avatarInputGlobal" accept="image/*" style="display: none;"
+                        onchange="handleAvatarChange(event)">
+
+                    <h4 id="profileName">Tên nhân viên</h4>
+                    <span class="badge processed">Nhân viên Sales</span>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Mã NV</span>
+                        <span class="stat-value" id="profileId">---</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Khu vực</span>
+                        <span class="stat-value">Sông Hậu</span>
+                    </div>
+                </div>
+
+                <div class="profile-menu-list">
+                    <div class="menu-item" onclick="document.getElementById('avatarInput').click()">
+                        <i class="fas fa-image"></i> Đổi ảnh đại diện
+                    </div>
+                    <div class="menu-item" onclick="app.clearDraft()">
+                        <i class="fas fa-eraser"></i> Xóa bản nháp đơn
+                    </div>
+                    <div class="menu-item logout-item" onclick="app.logout()">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </div>
+                </div>
+
+                <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;"
+                    onclick="closeProfileModal()">Đóng</button>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item active"><i class="fas fa-calculator"></i><span>Lên đơn</span></a>
+            <a href="donhang.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+            <button type="button" class="nav-item" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i><span>Xoá
+                    đơn</span></button>
+            <button type="button" class="nav-item" onclick="openProfileModal()">
+                <i class="fas fa-user-circle"></i>
+                <span>Tài khoản</span>
+            </button>
     </div>
     <script src="script.js"></script>
 </body>

@@ -100,10 +100,11 @@ body {
 .toggle-password { position: absolute; right: 14px; cursor: pointer; color: #cbd5e0; font-size: 0.9rem; }
 
 /* Button: Gọn gàng hơn */
+/* Nút bấm chuyển sang màu xanh dương (--primary) và thêm hiệu ứng đổ bóng */
 button {
     width: 100%;
     padding: 13px;
-    background: var(--success);
+    background: var(--primary); /* Đổi từ --success sang --primary */
     color: white;
     border: none;
     border-radius: 10px;
@@ -111,7 +112,18 @@ button {
     font-weight: 700;
     cursor: pointer;
     margin-top: 10px;
-    transition: 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(78, 84, 200, 0.25); /* Bóng đổ tone xanh dương */
+}
+
+button:hover { 
+    background: #3f45a5; /* Màu xanh đậm hơn một chút khi di chuột vào */
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 18px rgba(78, 84, 200, 0.4); /* Bóng đổ to hơn khi hover */
+}
+
+button:active { 
+    transform: scale(0.98); 
 }
 
 button:hover { background: var(--success-hover); transform: translateY(-1px); }
@@ -128,3 +140,65 @@ button:active { transform: scale(0.99); }
     .form-side { padding: 30px 20px; }
     .auth-container { width: 92%; }
 }
+/* ==========================================
+   CẢI TIẾN: TOAST, SHAKE VÀ CHECKBOX
+========================================== */
+
+/* Hiệu ứng rung lắc khi sai mật khẩu */
+.shake-error {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Tính năng Lưu tài khoản */
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+/* Hệ thống Toast Thông Báo Nổi */
+.toast-container {
+    position: fixed; top: 20px; right: 20px; z-index: 9999;
+    display: flex; flex-direction: column; gap: 10px;
+}
+
+.toast {
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 14px 20px;
+    border-radius: 10px;
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 600; font-size: 0.9rem; color: var(--text-dark);
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    border-left: 4px solid var(--primary);
+}
+
+.toast.success { border-left-color: var(--success); }
+.toast.success i { color: var(--success); }
+.toast.error { border-left-color: #e74c3c; }
+.toast.error i { color: #e74c3c; }
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }

@@ -1,211 +1,200 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sông Hậu - Quản Lý Đơn</title>
+    <title>Sông Hậu - Quản Lý Đơn Hàng</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="donhang.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="data.js"></script>
-    <style>
-        /* CSS bổ sung trực tiếp cho các tính năng mới để không làm vỡ giao diện cũ */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-card { padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); color: white; position: relative; overflow: hidden; }
-        .stat-card i.bg-icon { position: absolute; right: -10px; bottom: -15px; font-size: 4rem; opacity: 0.15; }
-        .stat-title { font-size: 0.75rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
-        
-        .advanced-filters { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #e2e8f0; }
-        .filter-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .filter-item { flex: 1; }
-        .filter-item label { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 4px; font-weight: bold; }
-        .filter-item input, .filter-item select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; outline: none; box-sizing: border-box; }
-        
-        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        
-        /* Floating Action Button */
-        .fab-btn { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #4e54c8, #8f94fb); width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(78, 84, 200, 0.4); text-decoration: none; z-index: 99; transition: transform 0.2s; }
-        .fab-btn:active { transform: scale(0.9); }
-
-        /* Sticky Footer cho trang Edit */
-        .sticky-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); display: flex; gap: 10px; z-index: 100; border-top: 1px solid #e2e8f0; }
-        .sticky-actions button { flex: 1; margin: 0; }
-        #editOrderView { padding-bottom: 80px !important; } /* Chừa chỗ cho sticky footer */
-    </style>
 </head>
+
 <body>
     <div class="app-container">
-        <header>
-            <div class="header-top">
-                <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-                <div style="font-size: 0.85rem; font-weight: bold;">ĐƠN HÀNG CỦA TÔI</div>
-            </div>
-            <div class="logo">SÔNG HẬU COFFEE</div>
-        </header>
-
-        <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-        <div class="side-menu" id="sideMenu">
-            <div class="user-profile-section">
-                <div class="avatar-container" onclick="document.getElementById('avatarUpload').click()">
-                    <img id="userAvatar" src="https://ui-avatars.com/api/?name=NV&background=4e54c8&color=fff&size=100" alt="Avatar">
-                    <div class="avatar-overlay"><i class="fas fa-camera"></i></div>
+        <div id="orderListView">
+            <header>
+                <div class="header-top">
+                    <div style="font-weight: 800; font-size: 1.1rem; color: white;">LỊCH SỬ ĐƠN</div>
+                    <button class="btn-refresh-modern" id="refreshBtn" onclick="fetchOrders()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Làm mới</span>
+                    </button>
                 </div>
-                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
-                <div class="user-info">
-                    <div class="user-name" id="menuUserName">Đang tải...</div>
-                    <div class="user-role"><i class="fas fa-briefcase"></i> Nhân viên Sales</div>
+            </header>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">Đơn Hôm Nay</div>
+                    <div class="stat-value" id="statCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Doanh Thu Ngày</div>
+                    <div class="stat-value" id="statTotal">0đ</div>
                 </div>
             </div>
-            <div class="side-menu-header">MENU CÔNG VIỆC</div>
-            <a href="index.html"><i class="fas fa-plus-circle"></i> Tạo Khách & Lên Đơn</a>
-            <a href="donhang.html"><i class="fas fa-box-open"></i> Lịch Sử Đơn Hàng</a>
-            <a href="#" onclick="openDeleteModal()"><i class="fas fa-trash-alt"></i> Yêu cầu Xoá Đơn</a>
-            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
-        </div>
 
-<div id="deleteModal" class="modal-overlay" style="display:none;">
-        <div class="modal-content">
-            <h3><i class="fas fa-trash-alt" style="color:#e74c3c;"></i> Yêu cầu Xoá Đơn</h3>
-            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Gửi yêu cầu về bộ phận IT để hủy/xóa đơn hàng trên hệ thống.</p>
-            
-            <div class="input-group">
-                <label>Mã đơn hàng cần xóa *</label>
-                <input type="text" id="delOrderId" placeholder="VD: DH123456789" required>
-            </div>
-            <div class="input-group">
-                <label>Lý do xóa / Hủy *</label>
-                <textarea id="delReason" rows="2" placeholder="VD: Khách đổi ý, đặt trùng đơn..." required></textarea>
-            </div>
-            
-            <div class="actions" style="margin-top: 20px;">
-                <button class="btn-prev" onclick="closeDeleteModal()">Hủy</button>
-                <button class="btn-submit" id="btnSubmitDelete" onclick="submitDeleteRequest()" style="background: #e74c3c;"><i class="fas fa-paper-plane"></i> Gửi IT</button>
-            </div>
-        </div>
-    </div> 
-
-        <div id="orderListView" style="padding: 15px;">
-            <div class="action-bar">
-                <h3 style="margin: 0; color: #2c3e50;"><i class="fas fa-chart-pie"></i> Tổng Quan</h3>
+            <div class="search-box-wrapper">
+                <div class="search-icon-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchOrder" placeholder="Tìm tên khách, mã đơn..." oninput="filterOrders()">
+                </div>
             </div>
 
-            <div class="container" style="padding: 15px;">
-    <div class="stats-grid">
-        <div class="stat-card" style="background: linear-gradient(135deg, #4e54c8, #8f94fb);">
-            <i class="fas fa-shopping-cart bg-icon"></i>
-            <div class="stat-title">Đơn hôm nay</div>
-            <div class="stat-value" id="stat-total-orders">0</div>
+            <div class="status-filters">
+                <div class="filter-chip active" onclick="filterByStatus('all', this)">Tất cả</div>
+                <div class="filter-chip" onclick="filterByStatus('Chưa', this)">Chưa xử lý</div>
+                <div class="filter-chip" onclick="filterByStatus('Đang', this)">Đang giao</div>
+                <div class="filter-chip" onclick="filterByStatus('Thành', this)">Thành công</div>
+            </div>
+
+            <div id="orderListContainer">
+                <div style="text-align: center; padding: 50px; color: #94a3b8;">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Đang tải dữ liệu...
+                </div>
+            </div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
-            <i class="fas fa-money-bill-wave bg-icon"></i>
-            <div class="stat-title">Doanh số</div>
-            <div class="stat-value" id="stat-total-sales" style="font-size: 0.9rem;">0đ</div>
+
+        <div id="editOrderView" style="display:none; padding: 15px; background: #f8fafc;">
+            <div class="edit-header"
+                style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button onclick="closeEditView()" style="border:none; background:none; font-size: 1.2rem;"><i
+                        class="fas fa-arrow-left"></i></button>
+                <h3 style="margin:0; color: var(--primary-color);">Sửa Đơn: <span id="editOrderId"></span></h3>
+                <div></div>
+            </div>
+
+            <div class="card" style="background:white; padding:15px; border-radius:15px; margin-bottom:15px;">
+                <div style="font-weight: bold; margin-bottom:10px;" id="editShopName">Tên quán</div>
+                <input type="tel" id="editPhone" placeholder="Số điện thoại"
+                    style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+                <input type="text" id="editAddress" placeholder="Địa chỉ giao hàng"
+                    style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;">
+            </div>
+
+            <div class="search-product-box" style="margin-bottom:15px;">
+                <input type="text" id="search-product" placeholder="Thêm món vào đơn..." oninput="filterEditProducts()"
+                    style="width:100%; padding:12px; border-radius:10px; border:1px solid #cbd5e1;">
+            </div>
+
+            <div id="edit-product-list" style="max-height: 350px; overflow-y: auto; margin-bottom: 80px;">
+            </div>
+
+            <div class="edit-footer"
+                style="position:fixed; bottom:0; left:0; width:100%; background:white; padding:15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display:flex; justify-content: space-between; align-items: center; z-index: 1000;">
+                <div>
+                    <div style="font-size:0.8rem; color:#64748b;">Tổng tiền mới:</div>
+                    <div id="edit-total-price" style="font-weight:800; color:#e74c3c; font-size:1.2rem;">0 đ</div>
+                </div>
+                <button id="btnUpdateOrder" onclick="saveUpdatedOrder()"
+                    style="background:var(--primary-color); color:white; border:none; padding:12px 25px; border-radius:10px; font-weight:bold;">
+                    <i class="fas fa-save"></i> LƯU THAY ĐỔI
+                </button>
+            </div>
         </div>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-calculator"></i><span>Lên đơn</span>
+            </a>
+            <a href="donhang.html" class="nav-item active">
+                <i class="fas fa-history"></i><span>Lịch sử</span>
+            </a>
+            <button type="button" class="nav-item" onclick="openDeleteModal()">
+                <i class="fas fa-trash-alt"></i><span>Xoá đơn</span>
+            </button>
+            <button type="button" class="nav-item" onclick="openProfileModal()">
+                <i class="fas fa-user-circle"></i>
+                <span>Tài khoản</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay" style="display:none; z-index: 3000;">
+    <div class="modal-content delete-modal-pro">
+        
+        <div class="modal-header-pro">
+            <div class="icon-warning-bg">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <h3>Yêu Cầu Xóa Đơn</h3>
+            <p>Gửi thông báo hủy đơn lên hệ thống</p>
+        </div>
+
+        <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác. Đơn hàng sẽ được chuyển cho IT kiểm duyệt và xóa khỏi hệ thống.</span>
+        </div>
+
+        <div class="form-group-pro">
+            <label>Mã đơn hàng <span class="text-danger">*</span></label>
+            <div class="input-wrapper">
+                <i class="fas fa-hashtag"></i>
+                <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="form-group-pro">
+            <label>Lý do xóa <span class="text-danger">*</span></label>
+            <div class="input-wrapper align-top">
+                <i class="fas fa-pen"></i>
+                <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết (VD: Khách đổi ý, trùng đơn, lên sai giá...)" autocomplete="off"></textarea>
+            </div>
+        </div>
+
+        <div class="modal-actions-pro">
+            <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
+            <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
+                <i class="fas fa-paper-plane"></i> Gửi Cho IT
+            </button>
+        </div>
+
     </div>
 </div>
 
-<div class="order-section">
-    </div>
-            <div class="stats-grid">
-                <div class="stat-card" style="background: linear-gradient(135deg, #4e54c8, #8f94fb);">
-                    <i class="fas fa-box bg-icon"></i>
-                    <div class="stat-title">Tổng số đơn</div>
-                    <div id="statCount" class="stat-value">0</div>
+    <div id="profileModal" class="modal-overlay" style="display:none; z-index: 3000;">
+        <div class="modal-content profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper" onclick="document.getElementById('avatarInputHistory').click()">
+                    <img id="profileDisplayAvatar"
+                        src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
+                    <div class="avatar-edit-icon"><i class="fas fa-camera"></i></div>
                 </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, #0984e3, #74b9ff);">
-                    <i class="fas fa-wallet bg-icon"></i>
-                    <div class="stat-title">Doanh thu</div>
-                    <div id="statTotal" class="stat-value" style="font-size: 1.05rem;">0 đ</div>
-                </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, #00b894, #55efc4);">
-                    <i class="fas fa-check-circle bg-icon"></i>
-                    <div class="stat-title">Thành công</div>
-                    <div id="statSuccess" class="stat-value">0</div>
-                </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, #e17055, #fab1a0);">
-                    <i class="fas fa-clock bg-icon"></i>
-                    <div class="stat-title">Đang chờ</div>
-                    <div id="statPending" class="stat-value">0</div>
-                </div>
-            </div>
-            
-            <div class="advanced-filters">
-                <div style="position: relative; margin-bottom: 15px;">
-                    <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #4e54c8;"></i>
-                    <input type="text" id="searchOrder" placeholder="🔍 Tìm tên quán, SĐT, mã đơn..." oninput="filterOrders()" style="width: 100%; padding: 10px 10px 10px 40px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background: #f8fafc;">
-                </div>
+                <input type="file" id="avatarInputHistory" accept="image/*" style="display: none;"
+                    onchange="handleAvatarChange(event)">
 
-                <div class="filter-row">
-                    <div class="filter-item">
-                        <label>Từ ngày</label>
-                        <input type="date" id="filterStartDate" onchange="filterOrders()">
-                    </div>
-                    <div class="filter-item">
-                        <label>Đến ngày</label>
-                        <input type="date" id="filterEndDate" onchange="filterOrders()">
-                    </div>
+                <h4 id="profileName">Tên nhân viên</h4>
+                <span class="badge processed">Nhân viên Sales</span>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Mã NV</span>
+                    <span class="stat-value" id="profileId">---</span>
                 </div>
-                
-                <div class="filter-row" style="margin-bottom: 0;">
-                    <div class="filter-item">
-                        <label>Sắp xếp theo</label>
-                        <select id="sortOrder" onchange="filterOrders()">
-                            <option value="newest">Mới nhất</option>
-                            <option value="oldest">Cũ nhất</option>
-                            <option value="high_price">Giá trị cao - thấp</option>
-                            <option value="low_price">Giá trị thấp - cao</option>
-                        </select>
-                    </div>
+                <div class="stat-item">
+                    <span class="stat-label">Khu vực</span>
+                    <span class="stat-value">Sông Hậu</span>
                 </div>
             </div>
 
-            <div id="loadingText" style="text-align: center; padding: 20px; color: var(--text-sub);">
-                <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
-            </div>
-            <div id="orderListContainer"></div>
-        </div>
-
-        <a href="index.html" class="fab-btn" id="fabAddOrder">
-            <i class="fas fa-plus"></i>
-        </a>
-
-        <div id="editOrderView" style="display: none; padding: 20px;">
-            <div style="background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
-                <h3 style="font-size: 1.1rem; margin-top: 0; color: #2c3e50;"><i class="fas fa-edit"></i> Chỉnh sửa đơn</h3>
-                <p style="margin-bottom: 5px; font-size: 0.9rem;">Mã: <span id="editOrderId" style="color: #e74c3c; font-weight: bold;"></span></p>
-                <p style="margin-bottom: 15px; font-size: 0.9rem;">Quán: <span id="editShopName" style="color: var(--primary-color); font-weight: bold;"></span></p>
-                
-                <div style="margin-bottom: 10px;">
-                    <label style="font-size: 0.8rem; font-weight: bold; color: #64748b; display: block; margin-bottom: 4px;">SĐT / Zalo</label>
-                    <input type="text" id="editPhone" placeholder="Nhập SĐT..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem;">
+            <div class="profile-menu-list">
+                <div class="menu-item" onclick="document.getElementById('avatarInputHistory').click()">
+                    <i class="fas fa-image"></i> Đổi ảnh đại diện
                 </div>
-                <div>
-                    <label style="font-size: 0.8rem; font-weight: bold; color: #64748b; display: block; margin-bottom: 4px;">Địa chỉ</label>
-                    <input type="text" id="editAddress" placeholder="Nhập địa chỉ..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem;">
+                <div class="menu-item logout-item" onclick="app.logout()">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
                 </div>
             </div>
-            
-            <div class="order-section">
-                <div class="search-product-box">
-                    <input type="text" id="search-product" placeholder="🔍 Tìm kiếm để thêm món..." oninput="filterEditProducts()">
-                    <div class="quick-filters" style="margin-bottom: 10px;">
-                        <button class="tag-btn cart-tag" onclick="showEditSelectedOnly()">🛒 Đang chọn</button>
-                        <button class="tag-btn" onclick="setEditFilter('500g')">500g</button>
-                        <button class="tag-btn" onclick="setEditFilter('250g')">250g</button>
-                        <button class="tag-btn" onclick="setEditFilter('')">Tất cả</button>
-                    </div>
-                </div>
 
-                <div class="product-list" id="edit-product-list"></div>
-                <div class="total-box" style="margin-bottom: 20px;">Tổng đơn mới: <span id="edit-total-price">0 đ</span></div>
-            </div>
-
-            <div class="sticky-actions">
-                <button class="btn-prev" onclick="closeEditView()"><i class="fas fa-times"></i> HỦY BỎ</button>
-                <button class="btn-submit" onclick="saveUpdatedOrder()" id="btnUpdateOrder"><i class="fas fa-save"></i> LƯU THAY ĐỔI</button>
-            </div>
+            <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;"
+                onclick="closeProfileModal()">Đóng</button>
         </div>
     </div>
-    <script src="donhang.js"></script>
+
+<script src="script.js"></script>
+<script src="donhang.js"></script>
 </body>
+
 </html>

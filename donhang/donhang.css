@@ -1,0 +1,210 @@
+/* DASHBOARD THỐNG KÊ (Màu nâu Sông Hậu) */
+.stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px;
+    background: var(--primary-color);
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.stat-title {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #FFD700;
+}
+
+/* TÌM KIẾM */
+.search-box-wrapper {
+    margin-top: -15px;
+    padding: 0 15px;
+    position: relative;
+    z-index: 10;
+}
+
+.search-icon-wrapper {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+/* BỘ LỌC CHIPS */
+.status-filters {
+    display: flex;
+    gap: 8px;
+    padding: 15px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.status-filters::-webkit-scrollbar { display: none; }
+
+.filter-chip {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.filter-chip.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+/* CARD ĐƠN HÀNG */
+.order-card {
+    background: #fff;
+    margin: 0 15px 15px;
+    padding: 18px;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #f1f5f9;
+}
+
+.order-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-action {
+    height: 42px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-call {
+    color: #27ae60;
+    border-color: #d1fae5;
+    background: #f0fff4;
+}
+
+/* HIỆU ỨNG TẢI LẠI */
+/* 1. Xóa bỏ hiệu ứng xoay trên toàn bộ khung nút */
+.loading { 
+    animation: none !important; 
+}
+
+.btn-refresh-modern.loading i {
+    display: inline-block; 
+    animation: spinIcon 1s linear infinite;
+}
+
+@keyframes spinIcon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.btn-refresh-modern.loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.btn-refresh-modern:hover {
+    background: white;
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.btn-refresh-modern:active {
+    transform: scale(0.95);
+}
+
+.btn-refresh-modern i {
+    font-size: 0.85rem;
+    transition: transform 0.5s ease;
+}
+
+/* Chỉ xoay icon bên trong, không xoay toàn bộ nút */
+/* Nâng cấp nút Làm mới */
+.btn-refresh-modern {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+/* CHỈ xoay icon khi nút có class loading */
+.btn-refresh-modern.loading i {
+    animation: spinIcon 1s linear infinite;
+    display: inline-block; /* Quan trọng để icon xoay tại chỗ */
+}
+
+/* Chữ "Làm mới" đứng yên tuyệt đối */
+.btn-refresh-modern span {
+    display: inline-block;
+}
+
+/* Hiệu ứng xoay mượt mà */
+@keyframes spinIcon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Hiệu ứng khi đang tải (nút mờ nhẹ nhưng không xoay) */
+.btn-refresh-modern:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+.bottom-nav {
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng trượt */
+}
+
+.bottom-nav.nav-hidden {
+    transform: translateY(100%) translateX(-50%); /* Đẩy xuống ẩn đi */
+}
+/* Hiệu ứng trượt cho Bottom Nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Hiệu ứng mượt */
+    z-index: 2000;
+}
+
+/* Khi ẩn: Đẩy xuống dưới 100% chiều cao */
+.bottom-nav.nav-hidden {
+    transform: translateY(100%) translateX(-50%);
+}
