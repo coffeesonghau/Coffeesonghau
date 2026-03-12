@@ -8,7 +8,6 @@ const userName = localStorage.getItem('sh_user_name');
 
 let allOrdersList = []; // Lưu trữ dữ liệu gốc để lọc không cần fetch lại
 let currentEditingOrder = null;
-const orderState = { channel: "ban_le", items: {} };
 
 // --- 1. KHỞI TẠO VÀ ĐỒNG BỘ ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -144,6 +143,13 @@ function updateDashboard(count, total) {
     const totalEl = document.getElementById('statTotal');
     if (countEl) countEl.innerText = count;
     if (totalEl) totalEl.innerText = total.toLocaleString('vi-VN') + ' đ';
+}
+
+function getStatusClass(status) {
+    if (status.includes('Chưa')) return 'pending';
+    if (status.includes('Đang')) return 'shipping';
+    if (status.includes('Thành')) return 'processed';
+    return '';
 }
 
 // --- 4. BỘ LỌC VÀ TÌM KIẾM ---
@@ -289,183 +295,5 @@ window.saveUpdatedOrder = async function() {
     } finally {
         btn.disabled = false;
         btn.innerHTML = 'LƯU THAY ĐỔI';
-    }
-};
-
-// --- 6. XÓA ĐƠN & ZALO ---
-// ==========================================
-// TÍNH NĂNG POPUP GỬI YÊU CẦU XÓA ĐƠN CHO IT (CẢI TIẾN)
-// ==========================================
-
-// Mở modal và tự động điền mã đơn nếu bấm từ danh sách
-window.openDeleteModal = function(ma_don = '') {
-    const orderIdInput = document.getElementById('delOrderId');
-    const reasonInput = document.getElementById('delReason');
-    
-    // Reset form trước khi mở
-    reasonInput.value = '';
-    
-    // Nếu có mã đơn truyền vào (bấm từ thẻ đơn)
-    if (ma_don) {
-        orderIdInput.value = ma_don;
-        orderIdInput.readOnly = true; // Không cho sửa mã đơn nếu đã bấm chuẩn từ thẻ
-        orderIdInput.style.backgroundColor = '#f1f5f9';
-    } else {
-        // Nếu mở từ dưới thanh Nav (nhập tay)
-        orderIdInput.value = '';
-        orderIdInput.readOnly = false;
-        orderIdInput.style.backgroundColor = '#fff';
-    }
-
-    document.getElementById('deleteModal').style.display = 'flex';
-}
-
-window.closeDeleteModal = function() {
-    document.getElementById('deleteModal').style.display = 'none';
-}
-
-window.submitDeleteRequest = async function() {
-    // In hoa và xóa khoảng trắng dư thừa
-    const orderId = document.getElementById('delOrderId').value.trim().toUpperCase(); 
-    const reason = document.getElementById('delReason').value.trim();
-
-    if (!orderId || !reason) {
-        alert("⚠️ Vui lòng nhập đầy đủ Mã đơn hàng và Lý do xóa!");
-        return;
-    }
-
-    // Thêm bước xác nhận chống bấm nhầm
-    if (!confirm(`Bạn có chắc chắn muốn gửi yêu cầu XÓA đơn [${orderId}] cho bộ phận IT không?`)) {
-        return;
-    }
-
-    const btn = document.querySelector('#deleteModal .btn-submit');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
-    btn.disabled = true;
-
-    try {
-        const userId = localStorage.getItem('sh_user_id');
-        const userName = localStorage.getItem('sh_user_name');
-        
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: "sendITRequest", 
-                id_sales: userId,
-                nguoi_gui: userName,
-                loai_yeu_cau: "Yêu cầu XOÁ đơn",
-                ma_don: orderId,
-                ly_do: reason
-            }),
-            headers: { "Content-Type": "text/plain;charset=utf-8" }
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            alert(`✅ Đã gửi yêu cầu!\n\nBộ phận IT sẽ kiểm tra mã đơn ${orderId} và xóa trên hệ thống sớm nhất.`);
-            closeDeleteModal();
-        } else {
-            alert("❌ Lỗi từ máy chủ: " + result.msg);
-        }
-    } catch (err) {
-        alert("❌ Lỗi kết nối mạng, vui lòng thử lại sau!");
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
-}
-// --- 1. TÍNH NĂNG ẨN/HIỆN BOTTOM NAV KHI VUỐT ---
-let lastScrollTop = 0;
-const bottomNav = document.querySelector('.bottom-nav');
-
-window.addEventListener('scroll', function() {
-    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Nếu vuốt xuống hơn 100px -> Ẩn Nav
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-        if (bottomNav) bottomNav.classList.add('nav-hidden');
-    } 
-    // Nếu vuốt lên -> Hiện Nav
-    else {
-        if (bottomNav) bottomNav.classList.remove('nav-hidden');
-    }
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-}, false);
-
-// --- 2. ĐỒNG BỘ HIỂN THỊ AVATAR TRÊN TẤT CẢ TRANG ---
-async function syncProfileAvatar() {
-    try {
-        const savedAvatar = await dbHelper.getAvatar(); // Lấy ảnh từ IndexedDB
-        const profileImg = document.getElementById('profileDisplayAvatar');
-        const headerImg = document.getElementById('userAvatar');
-        
-        if (savedAvatar) {
-            if (profileImg) profileImg.src = savedAvatar;
-            if (headerImg) headerImg.src = savedAvatar;
-        }
-    } catch (err) {
-        console.log("Chưa có ảnh đại diện trong bộ nhớ máy.");
-    }
-}
-
-// Chạy khi trang tải xong
-document.addEventListener("DOMContentLoaded", () => {
-    syncProfileAvatar();
-    
-    // Đảm bảo ID nhân viên hiển thị đúng trong modal Tài khoản
-    const idEl = document.getElementById('profileId');
-    if (idEl) idEl.innerText = localStorage.getItem('sh_user_id') || "---";
-});
-// --- QUẢN LÝ POPUP TÀI KHOẢN ---
-window.openProfileModal = async function() {
-    const uName = localStorage.getItem('sh_user_name') || "Thành viên";
-    const uId = localStorage.getItem('sh_user_id') || "N/A";
-    
-    // Cập nhật thông tin vào Modal
-    const nameEl = document.getElementById('profileName');
-    const idEl = document.getElementById('profileId');
-    if (nameEl) nameEl.innerText = uName;
-    if (idEl) idEl.innerText = uId;
-    
-    // Tải ảnh đại diện từ IndexedDB (dbHelper nằm trong script.js)
-    try {
-        if (typeof dbHelper !== 'undefined') {
-            const savedAvatar = await dbHelper.getAvatar();
-            const profileImg = document.getElementById('profileDisplayAvatar');
-            if (profileImg && savedAvatar) {
-                profileImg.src = savedAvatar;
-            } else if (profileImg) {
-                profileImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(uName)}&background=6F4E37&color=fff`;
-            }
-        }
-    } catch (err) {
-        console.log("Lỗi tải avatar:", err);
-    }
-
-    // Hiển thị Modal
-    const modal = document.getElementById('profileModal');
-    if (modal) modal.style.display = 'flex';
-};
-
-window.closeProfileModal = function() {
-    const modal = document.getElementById('profileModal');
-    if (modal) modal.style.display = 'none';
-};
-
-// Hàm xử lý đổi ảnh ngay tại trang đơn hàng
-window.handleAvatarChange = function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            const base64Data = e.target.result;
-            document.getElementById('profileDisplayAvatar').src = base64Data;
-            if (typeof dbHelper !== 'undefined') {
-                await dbHelper.saveAvatar(base64Data);
-            }
-        };
-        reader.readAsDataURL(file);
     }
 };

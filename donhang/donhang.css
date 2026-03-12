@@ -187,13 +187,6 @@
     opacity: 0.8;
     cursor: not-allowed;
 }
-.bottom-nav {
-    transition: transform 0.3s ease-in-out; /* Hiệu ứng trượt */
-}
-
-.bottom-nav.nav-hidden {
-    transform: translateY(100%) translateX(-50%); /* Đẩy xuống ẩn đi */
-}
 /* Hiệu ứng trượt cho Bottom Nav */
 .bottom-nav {
     position: fixed;
@@ -202,6 +195,11 @@
     transform: translateX(-50%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Hiệu ứng mượt */
     z-index: 2000;
+}
+
+/* Khi ẩn: Đẩy xuống dưới 100% chiều cao */
+.bottom-nav.nav-hidden {
+    transform: translateY(100%) translateX(-50%);
 }
 
 /* Khi ẩn: Đẩy xuống dưới 100% chiều cao */

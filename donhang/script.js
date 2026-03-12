@@ -116,12 +116,18 @@ const app = {
     updateNetworkStatus: function (isOnline) {
         const header = document.querySelector('header');
         const logo = document.querySelector('.logo');
-        if (!isOnline) {
-            header.style.backgroundColor = '#e74c3c'; // Màu đỏ cảnh báo
-            logo.innerHTML = '<i class="fas fa-wifi-slash"></i> MẤT KẾT NỐI';
-        } else {
-            header.style.backgroundColor = 'var(--primary-color)';
-            logo.innerText = 'SÔNG HẬU COFFEE';
+        
+        if (header) {
+            header.style.backgroundColor = !isOnline ? '#e74c3c' : 'var(--primary-color)';
+        }
+        
+        // Thêm lệnh if (logo) để chống sập web
+        if (logo) {
+            if (!isOnline) {
+                logo.innerHTML = '<i class="fas fa-wifi-slash"></i> MẤT KẾT NỐI';
+            } else {
+                logo.innerText = 'SÔNG HẬU COFFEE';
+            }
         }
     },
 
@@ -264,63 +270,62 @@ const app = {
 app.init();
 
 // --- XỬ LÝ GỬI FORM ---
-document.getElementById('saleForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+const saleFormElement = document.getElementById('saleForm');
+if (saleFormElement) {
+    saleFormElement.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    // Chặn gửi nếu đang mất mạng
-    if (!navigator.onLine) {
-        alert("⚠️ Bạn đang mất kết nối mạng. Vui lòng kiểm tra lại 3G/Wi-Fi trước khi gửi!");
-        return;
-    }
+        // Chặn gửi nếu đang mất mạng
+        if (!navigator.onLine) {
+            alert("⚠️ Bạn đang mất kết nối mạng. Vui lòng kiểm tra lại 3G/Wi-Fi trước khi gửi!");
+            return;
+        }
 
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...';
 
-    const scriptURL = SCRIPT_URL;
+        const scriptURL = SCRIPT_URL;
 
-    // ==========================================
-    // ĐOẠN MÃ BẠN VỪA HỎI ĐƯỢC ĐẶT Ở ĐÂY:
-    // ==========================================
-    const formData = new FormData(this);
-    const dataObj = Object.fromEntries(formData.entries());
+        const formData = new FormData(this);
+        const dataObj = Object.fromEntries(formData.entries());
 
-    dataObj.action = "saveData";
-    dataObj.nguoi_gui = localStorage.getItem('sh_user_name');
-    dataObj.id_sales = localStorage.getItem('sh_user_id');
+        dataObj.action = "saveData";
+        dataObj.nguoi_gui = localStorage.getItem('sh_user_name');
+        dataObj.id_sales = localStorage.getItem('sh_user_id');
 
-    // TÍNH LẠI TỔNG TIỀN SỐ VÀ LẤY GIỎ HÀNG JSON TRƯỚC KHI GỬI
-    let tong_tien_so = 0;
-    productData.products.forEach(prod => {
-        const qty = orderState.items[prod.id] || 0;
-        if (qty > 0) tong_tien_so += (prod.prices[orderState.channel] * qty);
-    });
-    dataObj.tong_tien_so = tong_tien_so;
-    dataObj.cart_json = JSON.stringify(orderState.items); // Lưu trạng thái giỏ hàng
-    // ==========================================
-
-    // Phần fetch giữ nguyên như cũ
-    fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify(dataObj),
-        headers: { "Content-Type": "text/plain;charset=utf-8" }
-    })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert('✅ THÀNH CÔNG! Dữ liệu đã được lưu.');
-                localStorage.removeItem(app.storageKey);
-                location.reload();
-            } else {
-                throw new Error("Lỗi từ máy chủ");
-            }
-        })
-        .catch(error => {
-            alert('❌ LỖI GỬI DỮ LIỆU! Kiểm tra lại kết nối mạng.');
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = 'HOÀN TẤT & LƯU';
+        // TÍNH LẠI TỔNG TIỀN SỐ VÀ LẤY GIỎ HÀNG JSON TRƯỚC KHI GỬI
+        let tong_tien_so = 0;
+        productData.products.forEach(prod => {
+            const qty = orderState.items[prod.id] || 0;
+            if (qty > 0) tong_tien_so += (prod.prices[orderState.channel] * qty);
         });
-});
+        dataObj.tong_tien_so = tong_tien_so;
+        dataObj.cart_json = JSON.stringify(orderState.items); // Lưu trạng thái giỏ hàng
+
+        // Fetch gửi dữ liệu lên Google Sheet
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify(dataObj),
+            headers: { "Content-Type": "text/plain;charset=utf-8" }
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('✅ THÀNH CÔNG! Dữ liệu đã được lưu.');
+                    localStorage.removeItem(app.storageKey);
+                    location.reload();
+                } else {
+                    throw new Error("Lỗi từ máy chủ");
+                }
+            })
+            .catch(error => {
+                alert('❌ LỖI GỬI DỮ LIỆU! Kiểm tra lại kết nối mạng.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'HOÀN TẤT & LƯU';
+            });
+    });
+}
 
 // ==========================================
 // LOGIC XỬ LÝ ĐƠN HÀNG SẢN PHẨM & TÍNH GIÁ
@@ -738,23 +743,27 @@ window.handleAvatarChange = function(event) {
         reader.readAsDataURL(file);
     }
 };
-// --- TÍNH NĂNG ẨN/HIỆN NAV KHI CUỘN ---
-let lastScrollTop = 0;
-const bNav = document.querySelector('.bottom-nav');
+// --- TÍNH NĂNG ẨN/HIỆN NAV KHI CUỘN (ÁP DỤNG MỌI TRANG) ---
+{
+    let lastScrollTop = 0;
+    const bNav = document.querySelector('.bottom-nav');
 
-window.addEventListener('scroll', function() {
-    let st = window.pageYOffset || document.documentElement.scrollTop;
-    if (!bNav) return;
+    window.addEventListener('scroll', function() {
+        let st = window.pageYOffset || document.documentElement.scrollTop;
+        if (!bNav) return;
 
-    if (st > lastScrollTop && st > 100) {
-        // Vuốt xuống -> Ẩn
-        bNav.classList.add('nav-hidden');
-    } else {
-        // Vuốt lên -> Hiện
-        bNav.classList.remove('nav-hidden');
-    }
-    lastScrollTop = st <= 0 ? 0 : st;
-}, { passive: true });
+        // Vuốt xuống (scroll down) hơn 50px -> Ẩn menu
+        if (st > lastScrollTop && st > 50) {
+            bNav.classList.add('nav-hidden');
+        } 
+        // Vuốt lên (scroll up) -> Hiện menu
+        else if (st < lastScrollTop) {
+            bNav.classList.remove('nav-hidden');
+        }
+        
+        lastScrollTop = st <= 0 ? 0 : st;
+    }, { passive: true });
+}
 
 // --- ĐỒNG BỘ HIỂN THỊ AVATAR KHI MỞ TRANG ---
 document.addEventListener("DOMContentLoaded", async () => {
