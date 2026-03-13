@@ -11,7 +11,7 @@ const systemData = [
         subTitle: "Công Ty TNHH MTV SX TM DV",
         address: "188+181, Đường 23/8, Khóm Cầu Sập, Phường 8, TP. Bạc Liêu, Tỉnh Cà Mau",
         phone: "0852.494.694",
-        image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
+        image: "img/congtyphoto.webp",
         mapLink: "https://maps.app.goo.gl/sWArB5r16oyuGpzUA",
         contactLink: "nhuong-quyen.html"
     },
