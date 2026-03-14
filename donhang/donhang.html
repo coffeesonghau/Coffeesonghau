@@ -95,15 +95,26 @@
         </div>
 
         <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
-                <i class="fas fa-calculator"></i><span>Lên đơn</span>
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-calculator"></i>
+                <span>Lên đơn</span>
             </a>
-            <a href="donhang.html" class="nav-item active">
-                <i class="fas fa-history"></i><span>Lịch sử</span>
+
+            <a href="donhang.html" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Lịch sử</span>
             </a>
+
+            <a href="chamcong.html" class="nav-item">
+                <i class="fas fa-user-clock" style="color: #27ae60;"></i>
+                <span style="color: #27ae60;">Chấm công</span>
+            </a>
+
             <button type="button" class="nav-item" onclick="openDeleteModal()">
-                <i class="fas fa-trash-alt"></i><span>Xoá đơn</span>
+                <i class="fas fa-trash-alt"></i>
+                <span>Xoá đơn</span>
             </button>
+
             <button type="button" class="nav-item" onclick="openProfileModal()">
                 <i class="fas fa-user-circle"></i>
                 <span>Tài khoản</span>
@@ -112,46 +123,49 @@
     </div>
 
     <div id="deleteModal" class="modal-overlay" style="display:none; z-index: 3000;">
-    <div class="modal-content delete-modal-pro">
-        
-        <div class="modal-header-pro">
-            <div class="icon-warning-bg">
-                <i class="fas fa-trash-alt"></i>
+        <div class="modal-content delete-modal-pro">
+
+            <div class="modal-header-pro">
+                <div class="icon-warning-bg">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <h3>Yêu Cầu Xóa Đơn</h3>
+                <p>Gửi thông báo hủy đơn lên hệ thống</p>
             </div>
-            <h3>Yêu Cầu Xóa Đơn</h3>
-            <p>Gửi thông báo hủy đơn lên hệ thống</p>
-        </div>
 
-        <div class="warning-box">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác. Đơn hàng sẽ được chuyển cho IT kiểm duyệt và xóa khỏi hệ thống.</span>
-        </div>
-
-        <div class="form-group-pro">
-            <label>Mã đơn hàng <span class="text-danger">*</span></label>
-            <div class="input-wrapper">
-                <i class="fas fa-hashtag"></i>
-                <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác. Đơn hàng sẽ được chuyển cho IT kiểm duyệt
+                    và xóa khỏi hệ thống.</span>
             </div>
-        </div>
 
-        <div class="form-group-pro">
-            <label>Lý do xóa <span class="text-danger">*</span></label>
-            <div class="input-wrapper align-top">
-                <i class="fas fa-pen"></i>
-                <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết (VD: Khách đổi ý, trùng đơn, lên sai giá...)" autocomplete="off"></textarea>
+            <div class="form-group-pro">
+                <label>Mã đơn hàng <span class="text-danger">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-hashtag"></i>
+                    <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+                </div>
             </div>
-        </div>
 
-        <div class="modal-actions-pro">
-            <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
-            <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
-                <i class="fas fa-paper-plane"></i> Gửi Cho IT
-            </button>
-        </div>
+            <div class="form-group-pro">
+                <label>Lý do xóa <span class="text-danger">*</span></label>
+                <div class="input-wrapper align-top">
+                    <i class="fas fa-pen"></i>
+                    <textarea id="delReason" rows="3"
+                        placeholder="Nhập lý do chi tiết (VD: Khách đổi ý, trùng đơn, lên sai giá...)"
+                        autocomplete="off"></textarea>
+                </div>
+            </div>
 
+            <div class="modal-actions-pro">
+                <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
+                <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
+                    <i class="fas fa-paper-plane"></i> Gửi Cho IT
+                </button>
+            </div>
+
+        </div>
     </div>
-</div>
 
     <div id="profileModal" class="modal-overlay" style="display:none; z-index: 3000;">
         <div class="modal-content profile-card">
@@ -196,8 +210,8 @@
         </div>
     </div>
 
-<script src="script.js"></script>
-<script src="donhang.js"></script>
+    <script src="script.js"></script>
+    <script src="donhang.js"></script>
 </body>
 
 </html>
