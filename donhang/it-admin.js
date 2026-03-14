@@ -16,19 +16,19 @@ let idb;
 
 function initIndexedDB() {
     const request = indexedDB.open(DB_NAME, 1);
-    
+
     request.onupgradeneeded = (event) => {
         idb = event.target.result;
         if (!idb.objectStoreNames.contains(STORE_NAME)) {
             idb.createObjectStore(STORE_NAME, { keyPath: "key" });
         }
     };
-    
+
     request.onsuccess = (event) => {
         idb = event.target.result;
         loadAvatarFromDB();
     };
-    
+
     request.onerror = (event) => console.error("Lỗi IndexedDB:", event.target.error);
 }
 
@@ -44,7 +44,7 @@ function loadAvatarFromDB() {
     const transaction = idb.transaction([STORE_NAME], "readonly");
     const store = transaction.objectStore(STORE_NAME);
     const request = store.get("adminAvatarBase64");
-    
+
     request.onsuccess = () => {
         if (request.result && request.result.value) {
             document.getElementById('adminAvatar').src = request.result.value;
@@ -52,12 +52,12 @@ function loadAvatarFromDB() {
     };
 }
 
-document.getElementById('avatarUpload').addEventListener('change', function(event) {
+document.getElementById('avatarUpload').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (file) {
         if (file.size > 2 * 1024 * 1024) return showToast("Kích thước ảnh quá lớn (Tối đa 2MB)!", "error");
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             const base64String = e.target.result;
             document.getElementById('adminAvatar').src = base64String;
             saveToDB("adminAvatarBase64", base64String);
@@ -74,11 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initIndexedDB();
     if (localStorage.getItem('sh_it_logged_in') === 'true') {
         document.getElementById('itLoginOverlay').style.display = 'none';
-        loadAdminData(); 
-        loadStaffData(); 
+        loadAdminData();
+        loadStaffData();
         loadProductsData(); // MỚI: Tải từ data.js
         loadShiftsData();
-        loadITRequests(); 
+        loadITRequests();
     }
 });
 
@@ -95,11 +95,11 @@ async function loginIT() {
     try {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: "loginIT", user: user, password: pass }), 
+            body: JSON.stringify({ action: "loginIT", user: user, password: pass }),
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        
+
         if (result.success) {
             localStorage.setItem('sh_it_logged_in', 'true');
             document.getElementById('itLoginOverlay').style.display = 'none';
@@ -121,7 +121,7 @@ async function loginIT() {
 }
 
 function logoutIT() {
-    if(confirm("Hệ thống sẽ đóng phiên làm việc. Xác nhận đăng xuất?")) {
+    if (confirm("Hệ thống sẽ đóng phiên làm việc. Xác nhận đăng xuất?")) {
         localStorage.removeItem('sh_it_logged_in');
         location.reload();
     }
@@ -148,35 +148,35 @@ function showToast(message, type = "success") {
         newContainer.className = 'toast-container';
         document.body.appendChild(newContainer);
     }
-    
+
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     const icon = type === 'success' ? 'fa-check-circle' : (type === 'warning' ? 'fa-exclamation-triangle' : 'fa-exclamation-circle');
-    
-    if(type === 'warning') toast.style.borderLeftColor = 'var(--warning)';
-    if(type === 'error') toast.style.borderLeftColor = 'var(--danger)';
-    
+
+    if (type === 'warning') toast.style.borderLeftColor = 'var(--warning)';
+    if (type === 'error') toast.style.borderLeftColor = 'var(--danger)';
+
     toast.innerHTML = `<i class="fas ${icon}" style="color: ${type === 'success' ? 'var(--success)' : (type === 'warning' ? 'var(--warning)' : 'var(--danger)')}; font-size: 1.2rem;"></i> <span>${message}</span>`;
     document.getElementById('toastContainer').appendChild(toast);
-    
+
     setTimeout(() => {
         toast.style.animation = 'fadeOut 0.3s forwards';
         setTimeout(() => toast.remove(), 300);
     }, 3500);
 }
 
-window.closeModal = function(modalId) { 
-    if(modalId) {
-        document.getElementById(modalId).style.display = 'none'; 
+window.closeModal = function (modalId) {
+    if (modalId) {
+        document.getElementById(modalId).style.display = 'none';
     } else {
         document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
     }
 }
 
-window.onclick = function(event) { 
+window.onclick = function (event) {
     if (event.target.classList.contains('modal-overlay')) {
         event.target.style.display = 'none';
-    } 
+    }
 }
 
 // ==========================================
@@ -198,7 +198,7 @@ async function loadAdminData() {
             window.allAdminOrders = result.orders;
             updateDashboardStats(window.allAdminOrders);
             populateSalesFilter(window.allAdminOrders);
-            applyFilters(); 
+            applyFilters();
             showToast("Đã đồng bộ Dữ liệu Đơn hàng.", "success");
         } else {
             tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--danger);">${result.msg}</td></tr>`;
@@ -225,18 +225,18 @@ function updateDashboardStats(orders) {
 function populateSalesFilter(orders) {
     const select = document.getElementById('filterSales');
     const uniqueSales = [...new Set(orders.map(o => o.id_sales))].filter(id => id && id !== "Không xác định");
-    
+
     select.innerHTML = '<option value="all">Tất cả nhân viên Sales</option>';
     uniqueSales.forEach(id => {
         select.innerHTML += `<option value="${id}">Mã Sales: ${id}</option>`;
     });
 }
 
-window.applyFilters = function() {
+window.applyFilters = function () {
     const term = document.getElementById('filterSearch').value.toLowerCase();
     const statusFilter = document.getElementById('filterStatus').value;
     const salesFilter = document.getElementById('filterSales').value;
-    
+
     const dateStartVal = document.getElementById('filterDateStart').value;
     const dateEndVal = document.getElementById('filterDateEnd').value;
     const dateStart = dateStartVal ? new Date(dateStartVal).getTime() : 0;
@@ -256,7 +256,7 @@ window.applyFilters = function() {
 
         let matchDate = true;
         let orderDateParts = String(o.thoi_gian).split(' ')[0].split('/');
-        if(orderDateParts.length === 3) {
+        if (orderDateParts.length === 3) {
             let orderTime = new Date(`${orderDateParts[2]}-${orderDateParts[1]}-${orderDateParts[0]}`).getTime();
             if (!isNaN(orderTime)) {
                 matchDate = (orderTime >= dateStart && orderTime <= dateEnd);
@@ -281,14 +281,14 @@ function renderAdminOrders(orders) {
     orders.forEach(o => {
         const total = parseInt(o.tong_tien || 0).toLocaleString('vi-VN') + ' đ';
         const cleanPhone = (o.sdt && o.sdt !== "'") ? String(o.sdt).replace(/'/g, '') : 'N/A';
-        
+
         let statusClass = 'pending';
         let statusText = o.trang_thai_ke_toan || 'Chưa tạo đơn';
         if (statusText.toLowerCase().includes('đã')) statusClass = 'processed';
 
         const deliveryStatuses = ["Đang yêu cầu", "Đang chuẩn bị", "Đang giao", "Hoàn thành", "Thất bại"];
         let currentDelivery = o.trang_thai || "Đang yêu cầu";
-        
+
         let selectHtml = `<select onchange="changeDeliveryStatus(this, '${o.ma_don}')" data-old="${currentDelivery}" style="padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem; font-weight: 600; color: #334155; background: #f8fafc; outline: none; cursor: pointer;">`;
         deliveryStatuses.forEach(s => { selectHtml += `<option value="${s}" ${currentDelivery === s ? 'selected' : ''}>${s}</option>`; });
         selectHtml += `</select>`;
@@ -318,13 +318,13 @@ async function loadStaffData() {
     try {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: "getStaffList" }), 
+            body: JSON.stringify({ action: "getStaffList" }),
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        
-        if(result.success && result.data) {
-            window.allStaffData = result.data; 
+
+        if (result.success && result.data) {
+            window.allStaffData = result.data;
             renderStaffTable(result.data);
         } else {
             staffTable.innerHTML = `<tr><td colspan="5" style="text-align:center;">${result.msg}</td></tr>`;
@@ -338,11 +338,11 @@ async function loadStaffData() {
 function renderStaffTable(staffList) {
     const tbody = document.getElementById('adminStaffTable');
     tbody.innerHTML = '';
-    
+
     staffList.forEach(staff => {
         let isLocked = staff.status === "Nghỉ việc";
         let statusClass = isLocked ? "pending" : "active";
-        
+
         tbody.innerHTML += `
             <tr style="${isLocked ? 'opacity: 0.6;' : ''}">
                 <td><strong style="color: var(--admin-primary)">${staff.id}</strong></td>
@@ -362,50 +362,50 @@ function renderStaffTable(staffList) {
     });
 }
 
-window.toggleStaffStatus = async function(id) {
-    if(!confirm(`Đổi trạng thái Hoạt Động / Nghỉ Việc của nhân sự ID: ${id}?`)) return;
+window.toggleStaffStatus = async function (id) {
+    if (!confirm(`Đổi trạng thái Hoạt Động / Nghỉ Việc của nhân sự ID: ${id}?`)) return;
     try {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: "toggleStaffStatus", id: id }), 
+            body: JSON.stringify({ action: "toggleStaffStatus", id: id }),
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        if(result.success) {
+        if (result.success) {
             showToast(result.msg, "success");
-            loadStaffData(); 
+            loadStaffData();
         } else { showToast(result.msg, "error"); }
     } catch (err) { showToast("Lỗi mạng!", "error"); }
 }
 
-window.resetStaffPass = async function(id) {
-    if(!confirm(`Yêu cầu Reset mật khẩu về mặc định (123456) cho Sales ID: ${id}?`)) return;
+window.resetStaffPass = async function (id) {
+    if (!confirm(`Yêu cầu Reset mật khẩu về mặc định (123456) cho Sales ID: ${id}?`)) return;
     try {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: "resetStaffPass", id: id }), 
+            body: JSON.stringify({ action: "resetStaffPass", id: id }),
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        if(result.success) showToast(`Đã reset mật khẩu ${id} về 123456.`, "success");
+        if (result.success) showToast(`Đã reset mật khẩu ${id} về 123456.`, "success");
         else showToast(`Lỗi: ${result.msg}`, "error");
     } catch (err) { showToast("Lỗi kết nối mạng!", "error"); }
 }
 
-window.openStaffModal = function() {
+window.openStaffModal = function () {
     document.getElementById('newStaffId').value = '';
     document.getElementById('newStaffName').value = '';
     document.getElementById('newStaffRegion').value = '';
     document.getElementById('staffModal').style.display = 'flex';
 }
 
-window.saveNewStaff = async function() {
+window.saveNewStaff = async function () {
     const id = document.getElementById('newStaffId').value.trim();
     const name = document.getElementById('newStaffName').value.trim();
     const region = document.getElementById('newStaffRegion').value.trim();
     const btn = document.getElementById('btnSaveStaff');
 
-    if(!id || !name) return showToast("Vui lòng nhập ID và Tên hiển thị!", "warning");
+    if (!id || !name) return showToast("Vui lòng nhập ID và Tên hiển thị!", "warning");
 
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG TẠO...';
     btn.disabled = true;
@@ -413,15 +413,15 @@ window.saveNewStaff = async function() {
     try {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: "addStaff", id: id, name: name, region: region }), 
+            body: JSON.stringify({ action: "addStaff", id: id, name: name, region: region }),
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        
-        if(result.success) {
+
+        if (result.success) {
             showToast(result.msg, "success");
             closeModal('staffModal');
-            loadStaffData(); 
+            loadStaffData();
         } else { showToast(result.msg, "error"); }
     } catch (err) { showToast("Lỗi kết nối!", "error"); }
     finally { btn.innerHTML = 'TẠO TÀI KHOẢN'; btn.disabled = false; }
@@ -434,8 +434,8 @@ window.saveNewStaff = async function() {
 function loadProductsData() {
     const tbody = document.getElementById('adminProductTable');
     try {
-        window.allProducts = {}; 
-        
+        window.allProducts = {};
+
         if (typeof productData !== 'undefined' && productData.products) {
             productData.products.forEach(p => window.allProducts[p.id] = p);
             renderProductTable(productData.products);
@@ -454,7 +454,7 @@ function renderProductTable(products) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Chưa có sản phẩm nào trong data.js.</td></tr>`;
         return;
     }
-    
+
     products.forEach(p => {
         tbody.innerHTML += `
             <tr>
@@ -473,12 +473,12 @@ function renderProductTable(products) {
 // ==========================================
 // 6. CÁC CHỨC NĂNG KHÁC (Update Kế toán, Xuất File, Modal Đơn hàng)
 // ==========================================
-window.markAsProcessed = async function(btn, maDon) {
-    if(!confirm(`Xác nhận đánh dấu đơn ${maDon} ĐÃ TẠO trên phần mềm kế toán?`)) return;
+window.markAsProcessed = async function (btn, maDon) {
+    if (!confirm(`Xác nhận đánh dấu đơn ${maDon} ĐÃ TẠO trên phần mềm kế toán?`)) return;
     const tr = btn.closest('tr');
     const badge = tr.querySelector('.badge');
     const originalContent = btn.innerHTML;
-    
+
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled = true;
 
@@ -492,9 +492,9 @@ window.markAsProcessed = async function(btn, maDon) {
         if (result.success) {
             badge.className = 'badge processed';
             badge.innerText = 'Đã tạo đơn';
-            btn.style.display = 'none'; 
+            btn.style.display = 'none';
             const orderObj = window.allAdminOrders.find(o => o.ma_don === maDon);
-            if(orderObj) orderObj.trang_thai_ke_toan = "Đã tạo đơn";
+            if (orderObj) orderObj.trang_thai_ke_toan = "Đã tạo đơn";
             updateDashboardStats(window.allAdminOrders);
             showToast("Kế toán xử lý thành công.", "success");
         } else {
@@ -505,24 +505,24 @@ window.markAsProcessed = async function(btn, maDon) {
     } catch (err) { showToast("Mất kết nối mạng!", "error"); btn.innerHTML = originalContent; btn.disabled = false; }
 }
 
-window.exportToExcel = function() {
+window.exportToExcel = function () {
     const tbody = document.getElementById('adminOrderTable');
-    if(tbody.rows.length === 0 || tbody.innerText.includes("Không tìm thấy")) return showToast("Không có dữ liệu để xuất!", "error");
-    
+    if (tbody.rows.length === 0 || tbody.innerText.includes("Không tìm thấy")) return showToast("Không có dữ liệu để xuất!", "error");
+
     let csvContent = "Ma Don,Thoi Gian,ID Sales,Ten Quan,SDT,Tong Tien,Trang Thai Ke Toan,Chi Tiet San Pham\n";
     const visibleIds = Array.from(tbody.querySelectorAll('td:first-child strong')).map(el => el.innerText);
     const ordersToExport = window.allAdminOrders.filter(o => visibleIds.includes(o.ma_don));
 
     ordersToExport.forEach(o => {
         let cleanPhone = String(o.sdt || "").replace(/'/g, '');
-        let cleanName = String(o.ten_quan || "").replace(/,/g, ' '); 
-        let cleanCart = String(o.cart_json || "{}").replace(/"/g, '""'); 
-        
+        let cleanName = String(o.ten_quan || "").replace(/,/g, ' ');
+        let cleanCart = String(o.cart_json || "{}").replace(/"/g, '""');
+
         let row = `${o.ma_don},${o.thoi_gian},${o.id_sales},${cleanName},${cleanPhone},${o.tong_tien},${o.trang_thai_ke_toan},"${cleanCart}"`;
         csvContent += row + "\n";
     });
 
-    const blob = new Blob(["\uFEFF"+csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `Export_SH_Admin_${new Date().getTime()}.csv`;
@@ -531,15 +531,15 @@ window.exportToExcel = function() {
     document.body.removeChild(link);
 }
 
-window.openOrderModal = function(maDon) {
+window.openOrderModal = function (maDon) {
     const order = window.allAdminOrders.find(o => o.ma_don === maDon);
     if (!order) return showToast("Lỗi dữ liệu", "error");
 
     document.getElementById('mOrderId').innerText = order.ma_don;
-    document.getElementById('mOrderId').setAttribute('data-id', order.ma_don); 
-    
+    document.getElementById('mOrderId').setAttribute('data-id', order.ma_don);
+
     const noteEl = document.getElementById('mInternalNote');
-    if(noteEl) noteEl.value = order.ghi_chu_noi_bo || "";
+    if (noteEl) noteEl.value = order.ghi_chu_noi_bo || "";
 
     let cartItemsHtml = '';
     try {
@@ -550,7 +550,7 @@ window.openOrderModal = function(maDon) {
                 cartItemsHtml += `<div class="cart-item" style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;"><span>${pName}</span> <strong style="color: var(--admin-primary); background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">x${qty}</strong></div>`;
             }
         }
-    } catch(e) { cartItemsHtml = 'Lỗi dữ liệu giỏ hàng.'; }
+    } catch (e) { cartItemsHtml = 'Lỗi dữ liệu giỏ hàng.'; }
 
     const cleanPhone = order.sdt ? String(order.sdt).replace(/'/g, '') : '';
 
@@ -572,10 +572,10 @@ window.openOrderModal = function(maDon) {
     document.getElementById('orderModal').style.display = 'flex';
 }
 
-window.saveInternalNote = async function() {
+window.saveInternalNote = async function () {
     const maDon = document.getElementById('mOrderId').getAttribute('data-id');
     const note = document.getElementById('mInternalNote').value;
-    
+
     try {
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
@@ -586,12 +586,12 @@ window.saveInternalNote = async function() {
         if (result.success) {
             showToast("Đã lưu ghi chú nội bộ!", "success");
             const orderObj = window.allAdminOrders.find(o => o.ma_don === maDon);
-            if(orderObj) orderObj.ghi_chu_noi_bo = note;
+            if (orderObj) orderObj.ghi_chu_noi_bo = note;
         } else { showToast("Lỗi Server", "error"); }
     } catch (err) { showToast("Lỗi mạng!", "error"); }
 }
 
-window.changeDeliveryStatus = async function(selectEl, maDon) {
+window.changeDeliveryStatus = async function (selectEl, maDon) {
     const newStatus = selectEl.value;
     selectEl.disabled = true;
 
@@ -605,37 +605,38 @@ window.changeDeliveryStatus = async function(selectEl, maDon) {
         if (result.success) {
             showToast(`Giao vận: ${newStatus}`, "success");
             const orderObj = window.allAdminOrders.find(o => o.ma_don === maDon);
-            if(orderObj) orderObj.trang_thai = newStatus;
-            selectEl.setAttribute('data-old', newStatus); 
+            if (orderObj) orderObj.trang_thai = newStatus;
+            selectEl.setAttribute('data-old', newStatus);
         } else {
             showToast("Lỗi Server", "error");
-            selectEl.value = selectEl.getAttribute('data-old'); 
+            selectEl.value = selectEl.getAttribute('data-old');
         }
     } catch (err) {
         showToast("Lỗi mạng!", "error");
-        selectEl.value = selectEl.getAttribute('data-old'); 
+        selectEl.value = selectEl.getAttribute('data-old');
     } finally { selectEl.disabled = false; }
 }
 
 // ==========================================
 // 7. QUẢN LÝ KẾT CA / TỒN XE (SHIFTS)
 // ==========================================
+window.allShiftsDataList = [];
+window.currentEditShiftId = null;
+
 async function loadShiftsData() {
     const tbody = document.getElementById('adminShiftTable');
     try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            body: JSON.stringify({ action: "getShifts" }) 
-        });
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "getShifts" }) });
         const result = await res.json();
         if(result.success) {
+            window.allShiftsDataList = result.data; // Lưu lại để dùng khi bấm nút Sửa
             tbody.innerHTML = '';
-            if(result.data.length === 0) return tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Chưa có phiếu kết ca nào.</td></tr>';
+            if(result.data.length === 0) return tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có phiếu kết ca nào.</td></tr>';
             
             result.data.forEach(s => {
                 let detailsHtml = '';
                 try {
-                    let soldItems = JSON.parse(s.sold_details || "{}");
+                    let soldItems = JSON.parse(s.da_ban || "{}");
                     for (const [id, qty] of Object.entries(soldItems)) {
                         if(qty > 0) detailsHtml += `<span class="badge processed" style="margin-right:4px; margin-bottom:4px;">${window.allProducts[id] ? window.allProducts[id].name : id}: ${qty}</span>`;
                     }
@@ -648,6 +649,9 @@ async function loadShiftsData() {
                         <td style="color:var(--admin-secondary); font-weight:700;">${s.sales_id}</td>
                         <td style="color:var(--danger); font-weight:800;">${Number(s.revenue).toLocaleString('vi-VN')} đ</td>
                         <td>${detailsHtml || '<span style="color:#94a3b8; font-size:0.85rem;">Không phát sinh doanh thu</span>'}</td>
+                        <td style="text-align: center;">
+                            <button class="action-btn edit" title="Sửa phiếu" onclick="editShift('${s.id}')"><i class="fas fa-edit"></i></button>
+                        </td>
                     </tr>
                 `;
             });
@@ -655,7 +659,11 @@ async function loadShiftsData() {
     } catch (err) {}
 }
 
-window.openShiftModal = function() {
+// Cập nhật openShiftModal (thêm tham số isEdit để reset rỗng nếu tạo mới)
+window.openShiftModal = function(isEdit = false) {
+    if(!isEdit) window.currentEditShiftId = null; // Đặt lại về null nếu tạo mới
+    document.querySelector('#shiftModal h3').innerText = isEdit ? "Sửa Phiếu Kết Ca" : "Tạo Phiếu Kết Ca Kho & Tồn Xe";
+
     const selectSales = document.getElementById('shiftSalesId');
     selectSales.innerHTML = '<option value="">-- Chọn Nhân Sự --</option>';
     window.allStaffData.forEach(staff => {
@@ -668,12 +676,12 @@ window.openShiftModal = function() {
     if (typeof productData !== 'undefined' && productData.products) {
         productData.products.forEach(p => {
             const price = Number(p.prices.dai_ly_quan) || 0; 
-            
             tbody.innerHTML += `
                 <tr data-pid="${p.id}" data-price="${price}">
                     <td style="font-weight:600; font-size:0.9rem;">${p.name} (${p.weight}) <div style="font-size:0.8rem; color:#64748b; font-weight:400;">${price.toLocaleString('vi-VN')} đ</div></td>
                     <td><input type="number" class="in-mangdi" min="0" value="0" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; text-align:center;" oninput="calcShiftRow(this)"></td>
                     <td><input type="number" class="in-mangve" min="0" value="0" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; text-align:center;" oninput="calcShiftRow(this)"></td>
+                    <td><input type="number" class="in-tangmau" min="0" value="0" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; text-align:center; background:#fffbeb;" oninput="calcShiftRow(this)" title="Hàng mẫu, dùng thử"></td>
                     <td style="text-align:center; font-weight:700; color:var(--admin-secondary);" class="out-daban">0</td>
                     <td style="text-align:right; font-weight:700; color:var(--danger);" class="out-thanhtien">0 đ</td>
                 </tr>
@@ -685,15 +693,45 @@ window.openShiftModal = function() {
     document.getElementById('shiftModal').style.display = 'flex';
 }
 
+// Hàm mới: Bấm nút Sửa sẽ tự động điền lại số liệu cũ
+// Hàm mới: Bấm nút Sửa sẽ tự động điền lại số liệu cũ
+window.editShift = function(shiftId) {
+    window.currentEditShiftId = shiftId;
+    const shiftData = window.allShiftsDataList.find(s => s.id === shiftId);
+    if(!shiftData) return showToast("Không tìm thấy dữ liệu phiếu!", "error");
 
+    window.openShiftModal(true); // Mở modal với chế độ Sửa
+
+    // Chọn lại Sales ID
+    document.getElementById('shiftSalesId').value = shiftData.sales_id;
+
+    // Parse các cục JSON data cũ
+    const mangDi = JSON.parse(shiftData.mang_di || "{}");
+    const mangVe = JSON.parse(shiftData.mang_ve || "{}");
+    const tangMau = JSON.parse(shiftData.tang_mau || "{}");
+
+    // Lặp qua bảng, điền dữ liệu và kích hoạt hàm tính lại
+    document.querySelectorAll('#shiftProductsTable tr').forEach(tr => {
+        const pid = tr.getAttribute('data-pid');
+        if(mangDi[pid]) tr.querySelector('.in-mangdi').value = mangDi[pid];
+        if(mangVe[pid]) tr.querySelector('.in-mangve').value = mangVe[pid];
+        if(tangMau[pid]) tr.querySelector('.in-tangmau').value = tangMau[pid];
+
+        calcShiftRow(tr.querySelector('.in-mangdi')); // Tự động trigger tính lại hàng ngang
+    });
+} // <--- Đã đóng ngoặc đúng chỗ
+
+// THÊM LẠI KHAI BÁO HÀM BỊ MẤT Ở ĐÂY:
 window.calcShiftRow = function(inputEl) {
     const tr = inputEl.closest('tr');
     const price = Number(tr.getAttribute('data-price'));
     const mangDi = Number(tr.querySelector('.in-mangdi').value) || 0;
     const mangVe = Number(tr.querySelector('.in-mangve').value) || 0;
+    const tangMau = Number(tr.querySelector('.in-tangmau').value) || 0;
     
-    let daBan = mangDi - mangVe;
-    if(daBan < 0) daBan = 0; 
+    // Công thức mới: Mang Đi - Mang Về - Tặng Mẫu = Thực Bán
+    let daBan = mangDi - mangVe - tangMau;
+    if(daBan < 0) daBan = 0; // Không cho âm
 
     tr.querySelector('.out-daban').innerText = daBan;
     tr.querySelector('.out-thanhtien').innerText = (daBan * price).toLocaleString('vi-VN') + ' đ';
@@ -716,48 +754,52 @@ window.saveShift = async function() {
     const salesId = document.getElementById('shiftSalesId').value;
     if(!salesId) return showToast("Vui lòng chọn nhân sự Sales!", "warning");
 
-    let mangDiObj = {};
-    let mangVeObj = {};
-    let daBanObj = {};
+    let mangDiObj = {}, mangVeObj = {}, tangMauObj = {}, daBanObj = {};
     let totalRevenue = Number(document.getElementById('shiftTotalText').getAttribute('data-total')) || 0;
-
     let hasData = false;
 
     document.querySelectorAll('#shiftProductsTable tr').forEach(tr => {
         const pid = tr.getAttribute('data-pid');
         const mDi = Number(tr.querySelector('.in-mangdi').value) || 0;
         const mVe = Number(tr.querySelector('.in-mangve').value) || 0;
+        const tMau = Number(tr.querySelector('.in-tangmau').value) || 0;
         const dBan = Number(tr.querySelector('.out-daban').innerText) || 0;
 
-        if(mDi > 0 || mVe > 0) {
+        if(mDi > 0 || mVe > 0 || tMau > 0) {
             hasData = true;
             mangDiObj[pid] = mDi;
             mangVeObj[pid] = mVe;
+            if(tMau > 0) tangMauObj[pid] = tMau;
             if(dBan > 0) daBanObj[pid] = dBan;
         }
     });
 
-    if(!hasData) return showToast("Vui lòng nhập số lượng hàng hóa Mang Đi/Về!", "warning");
+    if(!hasData) return showToast("Vui lòng nhập dữ liệu hàng hóa!", "warning");
 
     const btn = document.getElementById('btnSaveShift');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ĐANG LƯU...'; 
     btn.disabled = true;
 
+    // KIỂM TRA ĐANG SỬA HAY TẠO MỚI
+    const actionName = window.currentEditShiftId ? "updateShift" : "saveShift";
+
     try {
         const res = await fetch(SCRIPT_URL, { 
             method: 'POST', 
             body: JSON.stringify({ 
-                action: "saveShift", 
+                action: actionName, 
+                shift_id: window.currentEditShiftId, // Dành cho update
                 sales_id: salesId, 
                 mang_di: JSON.stringify(mangDiObj), 
                 mang_ve: JSON.stringify(mangVeObj), 
+                tang_mau: JSON.stringify(tangMauObj),
                 da_ban: JSON.stringify(daBanObj), 
                 revenue: totalRevenue 
             }) 
         });
         const result = await res.json();
         if(result.success) { 
-            showToast("Lưu phiếu kết ca thành công!", "success"); 
+            showToast(result.msg, "success"); 
             closeModal('shiftModal'); 
             loadShiftsData(); 
         } else showToast(result.msg, "error");
@@ -780,15 +822,15 @@ async function loadITRequests() {
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        
+
         if (result.success) {
             tbody.innerHTML = '';
             if (result.data.length === 0) return tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Không có yêu cầu nào.</td></tr>';
-            
+
             result.data.forEach(req => {
                 let isPending = req.trang_thai === "Chờ xử lý";
                 let statusClass = isPending ? "pending" : (req.trang_thai === "Đã duyệt xóa" ? "processed" : "active"); // active màu xanh biển (Từ chối)
-                
+
                 tbody.innerHTML += `
                     <tr style="${!isPending ? 'opacity: 0.7;' : 'background: #fffbeb;'}">
                         <td>${req.thoi_gian}</td>
@@ -809,7 +851,7 @@ async function loadITRequests() {
     } catch (e) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:red;">Lỗi kết nối!</td></tr>'; }
 }
 
-window.resolveIT = async function(btn, maDon, actionType) {
+window.resolveIT = async function (btn, maDon, actionType) {
     if (!confirm(`Bạn có chắc muốn [${actionType.toUpperCase()}] cho mã đơn ${maDon}?`)) return;
     const originalText = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -833,14 +875,14 @@ window.resolveIT = async function(btn, maDon, actionType) {
 // ==========================================
 // 9. MODULE IN PHIẾU GIAO HÀNG (MÁY IN NHIỆT K80)
 // ==========================================
-window.printOrderBill = function() {
+window.printOrderBill = function () {
     const maDon = document.getElementById('mOrderId').getAttribute('data-id');
     const order = window.allAdminOrders.find(o => o.ma_don === maDon);
     if (!order) return showToast("Không thể in đơn này!", "error");
 
     let cleanPhone = order.sdt ? String(order.sdt).replace(/'/g, '') : '';
     let cartHtml = '';
-    
+
     try {
         let cart = JSON.parse(order.cart_json || "{}");
         for (const [id, qty] of Object.entries(cart)) {
@@ -854,7 +896,7 @@ window.printOrderBill = function() {
                 `;
             }
         }
-    } catch(e) {}
+    } catch (e) { }
 
     const printContent = `
         <div style="width: 76mm; padding: 0; font-family: monospace; color: #000; margin: 0 auto;">
@@ -896,7 +938,7 @@ window.printOrderBill = function() {
             </div>
         </div>
     `;
-    
+
     // Mở popup ẩn và gọi lệnh In của trình duyệt
     const printWindow = window.open('', '', 'width=400,height=600');
     printWindow.document.write('<html><head><title>In Phiếu Sông Hậu</title></head><body style="margin:0; padding:10px; display:flex; justify-content:center;">');
@@ -904,7 +946,7 @@ window.printOrderBill = function() {
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.focus();
-    
+
     // Đợi render xong rồi in
     setTimeout(() => {
         printWindow.print();
