@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phát Catalog - Sông Hậu Coffee</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="check-gift.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="global-loading" class="hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Đang xử lý...</p>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <div class="header-top">
+                <div style="font-size: 0.85rem; font-weight: bold; color: white;">
+                    <i class="fas fa-circle" style="color: #27ae60; font-size: 0.6rem; margin-right: 5px;"></i>
+                    <span id="currentUserName">Đang tải...</span>
+                </div>
+                <div class="status-badge" style="font-size: 0.75rem; opacity: 0.8; color: white;">Hệ thống Sales</div>
+            </div>
+            <div class="logo">SÔNG HẬU COFFEE</div>
+        </header>
+
+        <div class="gift-container">
+            <div class="page-title">
+                <h3><i class="fas fa-route"></i> Quản Lý Phát Catalog</h3>
+                <p>Theo dõi tiến độ phát quà & định vị tuyến đường</p>
+            </div>
+
+            <div class="gift-card" id="setup-section">
+                <div class="setup-icon"><i class="fas fa-box-open"></i></div>
+                <h4 style="text-align: center; color: var(--primary-color); margin-bottom: 15px;">Bắt Đầu Ngày Mới</h4>
+                <label style="text-align: center; display: block;">Số lượng Catalog/Gift nhận đi phát hôm nay:</label>
+                <div class="input-setup-wrapper">
+                    <input type="number" id="initial-amount" placeholder="VD: 50" inputmode="numeric">
+                </div>
+                <button class="btn-submit" onclick="initGift()" style="width: 100%; height: 50px; font-size: 1.1rem; border-radius: 25px;">
+                    <i class="fas fa-play"></i> BẮT ĐẦU CHUYẾN ĐI
+                </button>
+            </div>
+
+            <div id="tracking-section" style="display: none;">
+                
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <span style="font-weight: 700; color: var(--text-main);">Tiến độ hoàn thành</span>
+                        <span id="progress-percent" style="font-weight: 900; color: var(--success-color);">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dash-box">
+                        <div class="dash-icon" style="color: #3498db; background: #ebf5fb;"><i class="fas fa-cube"></i></div>
+                        <div class="dash-value" id="val-total">0</div>
+                        <div class="dash-title">Tổng nhận</div>
+                    </div>
+                    <div class="dash-box">
+                        <div class="dash-icon" style="color: #2e7d32; background: #e8f5e9;"><i class="fas fa-check-double"></i></div>
+                        <div class="dash-value" id="val-given" style="color: #2e7d32;">0</div>
+                        <div class="dash-title" style="color: #2e7d32;">Đã phát</div>
+                    </div>
+                    <div class="dash-box">
+                        <div class="dash-icon" style="color: #e65100; background: #fff3e0;"><i class="fas fa-box"></i></div>
+                        <div class="dash-value" id="val-remain" style="color: #e65100;">0</div>
+                        <div class="dash-title" style="color: #e65100;">Còn lại</div>
+                    </div>
+                </div>
+
+                <button class="btn-large-action pulse-effect" onclick="trackOneGift()">
+                    <div class="btn-icon-wrapper"><i class="fas fa-map-marker-alt"></i></div>
+                    <span class="btn-text">GHI NHẬN PHÁT 1 CUỐN</span>
+                    <span class="btn-subtext">Lấy tọa độ GPS tại vị trí này</span>
+                </button>
+
+                <div class="history-card">
+                    <div class="history-header">
+                        <span style="font-weight: bold; color: var(--primary-color); font-size: 1rem;">
+                            <i class="fas fa-stream"></i> Lịch sử tuyến đường
+                        </span>
+                        <button onclick="undoLastGift()" class="btn-undo">
+                            <i class="fas fa-undo"></i> Hoàn tác
+                        </button>
+                    </div>
+                    <div class="timeline-container" id="history-items">
+                        </div>
+                </div>
+
+                <div class="bottom-actions-grid">
+                    <button class="btn-tool" onclick="editInitialAmount()">
+                        <i class="fas fa-pen"></i> Sửa tổng số
+                    </button>
+                    <button class="btn-end-day" onclick="sendEndDayReport()">
+                        <i class="fas fa-flag-checkered"></i> KẾT THÚC & BÁO CÁO
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="deleteModal" class="modal-overlay" style="display:none; z-index: 3000;">
+            <div class="modal-content delete-modal-pro">
+                <div class="modal-header-pro">
+                    <div class="icon-warning-bg"><i class="fas fa-trash-alt"></i></div>
+                    <h3>Yêu Cầu Xóa Đơn</h3>
+                    <p>Gửi thông báo hủy đơn lên hệ thống</p>
+                </div>
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Lưu ý:</strong> Đơn hàng sẽ được chuyển cho IT kiểm duyệt.</span>
+                </div>
+                <div class="form-group-pro">
+                    <label>Mã đơn hàng <span class="text-danger">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group-pro">
+                    <label>Lý do xóa <span class="text-danger">*</span></label>
+                    <div class="input-wrapper align-top">
+                        <i class="fas fa-pen"></i>
+                        <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết..." autocomplete="off"></textarea>
+                    </div>
+                </div>
+                <div class="modal-actions-pro">
+                    <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
+                    <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
+                        <i class="fas fa-paper-plane"></i> Gửi Cho IT
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="profileModal" class="modal-overlay" style="display:none; z-index: 3000;">
+            <div class="modal-content profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar-wrapper" onclick="document.getElementById('avatarInputGlobal').click()">
+                        <img id="profileDisplayAvatar" src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
+                        <div class="avatar-edit-icon"><i class="fas fa-camera"></i></div>
+                    </div>
+                    <input type="file" id="avatarInputGlobal" accept="image/*" style="display: none;" onchange="handleAvatarChange(event)">
+                    <h4 id="profileName">Tên nhân viên</h4>
+                    <span class="badge processed">Nhân viên Sales</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Mã NV</span>
+                        <span class="stat-value" id="profileId">---</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Khu vực</span>
+                        <span class="stat-value">Sông Hậu</span>
+                    </div>
+                </div>
+                <div class="profile-menu-list">
+                    <div class="menu-item" onclick="document.getElementById('avatarInputGlobal').click()">
+                        <i class="fas fa-image"></i> Đổi ảnh đại diện
+                    </div>
+                    <a href="check-code.html" class="menu-item" style="text-decoration: none; color: inherit;">
+                        <i class="fas fa-gift"></i> Check gift
+                    </a>
+                    <div class="menu-item logout-item" onclick="app.logout()">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </div>
+                </div>
+                <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;" onclick="closeProfileModal()">Đóng</button>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-calculator"></i>
+                <span>Lên đơn</span>
+            </a>
+            <a href="donhang.html" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Lịch sử</span>
+            </a>
+            <a href="chamcong.html" class="nav-item">
+                <i class="fas fa-user-clock"></i>
+                <span>Chấm công</span>
+            </a>
+            <button type="button" class="nav-item" onclick="openDeleteModal()">
+                <i class="fas fa-trash-alt"></i>
+                <span>Xoá đơn</span>
+            </button>
+            <button type="button" class="nav-item" onclick="openProfileModal()">
+                <i class="fas fa-user-circle"></i>
+                <span>Tài khoản</span>
+            </button>
+        </nav>
+    </div>
+    
+    <script src="script.js"></script>
+    <script src="check-gift.js"></script>
+</body>
+</html>

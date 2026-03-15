@@ -1,0 +1,341 @@
+/* --- CHECK GIFT PRO STYLES --- */
+.gift-container {
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.page-title h3 {
+    justify-content: center;
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+}
+
+.page-title p {
+    color: var(--text-sub);
+    font-size: 0.85rem;
+}
+
+.gift-card {
+    background: #fff;
+    padding: 25px 20px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
+}
+
+.setup-icon {
+    font-size: 3rem;
+    color: var(--secondary-color);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.input-setup-wrapper {
+    margin: 15px 0 25px 0;
+}
+
+.input-setup-wrapper input {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    border-radius: 15px;
+    padding: 15px;
+    background: #f8fafc;
+}
+
+/* --- PROGRESS BAR --- */
+.progress-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- DASHBOARD --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.dash-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 15px 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.dash-icon {
+    width: 35px;
+    height: 35px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1rem;
+}
+
+.dash-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    margin-bottom: 2px;
+}
+
+.dash-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    text-transform: uppercase;
+}
+
+/* --- MAIN ACTION BUTTON --- */
+.btn-large-action {
+    width: 100%;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+    border: none;
+    padding: 20px 15px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(78, 84, 200, 0.4);
+    margin-bottom: 25px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-large-action:active {
+    transform: scale(0.96);
+    box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+}
+
+.btn-icon-wrapper {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.btn-text {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+}
+
+.btn-subtext {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-top: 5px;
+    font-weight: normal;
+}
+
+/* Hiệu ứng thở (Pulse) cho nút Ghi nhận */
+.pulse-effect {
+    animation: pulseGlow 2s infinite;
+}
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(78, 84, 200, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(78, 84, 200, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(78, 84, 200, 0); }
+}
+
+/* --- TIMELINE HISTORY --- */
+.history-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.btn-undo {
+    background: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.timeline-container {
+    max-height: 280px;
+    overflow-y: auto;
+    padding-left: 10px;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 25px;
+    padding-bottom: 20px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+/* Dấu chấm timeline */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--success-color);
+    border: 3px solid #d1fae5;
+    z-index: 2;
+}
+
+/* Đường kẻ nối */
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 15px;
+    bottom: 0;
+    width: 2px;
+    background: #e2e8f0;
+    z-index: 1;
+}
+
+.time-row {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.gps-row {
+    font-size: 0.8rem;
+    color: var(--text-sub);
+}
+
+.gps-row a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.acc-badge {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-left: 10px;
+}
+
+/* --- BOTTOM ACTIONS --- */
+.bottom-actions-grid {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.btn-tool {
+    flex: 1;
+    background: #f8fafc;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-weight: bold;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.btn-end-day {
+    flex: 2;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+/* Trạng thái trống */
+.empty-state {
+    text-align: center;
+    padding: 30px 10px;
+    color: #94a3b8;
+}
+.empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+/* --- GLOBAL LOADING (Copy từ cũ) --- */
+#global-loading {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(255, 255, 255, 0.9); z-index: 9999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.hidden { display: none !important; }
+.spinner {
+    width: 50px; height: 50px; border: 5px solid #f8f5f2;
+    border-top: 5px solid var(--primary-color); border-radius: 50%;
+    animation: spin 1s linear infinite; margin-bottom: 15px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+#loading-text { font-weight: bold; color: var(--primary-color); font-size: 1.1rem; }
