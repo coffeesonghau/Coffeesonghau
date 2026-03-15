@@ -292,9 +292,12 @@
                 </div>
 
                 <div class="profile-menu-list">
-                    <div class="menu-item" onclick="document.getElementById('avatarInput').click()">
+                    <div class="menu-item" onclick="document.getElementById('avatarInputGlobal').click()">
                         <i class="fas fa-image"></i> Đổi ảnh đại diện
                     </div>
+                    <a href="check-code.html" class="menu-item" style="text-decoration: none; color: inherit;">
+                        <i class="fas fa-gift"></i> Check gift
+                    </a>
                     <div class="menu-item" onclick="app.clearDraft()">
                         <i class="fas fa-eraser"></i> Xóa bản nháp đơn
                     </div>
@@ -320,8 +323,8 @@
             </a>
             
             <a href="chamcong.html" class="nav-item">
-                <i class="fas fa-user-clock" style="color: #27ae60;"></i>
-                <span style="color: #27ae60;">Chấm công</span>
+                <i class="fas fa-user-clock"></i>
+                <span>Chấm công</span>
             </a>
 
             <button type="button" class="nav-item" onclick="openDeleteModal()">

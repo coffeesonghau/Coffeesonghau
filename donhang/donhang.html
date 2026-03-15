@@ -197,6 +197,9 @@
                 <div class="menu-item" onclick="document.getElementById('avatarInputHistory').click()">
                     <i class="fas fa-image"></i> Đổi ảnh đại diện
                 </div>
+                <a href="check-code.html" class="menu-item" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-gift"></i> Check gift
+                </a>
                 <div class="menu-item" onclick="app.clearDraft()">
                     <i class="fas fa-eraser"></i> Xóa bản nháp đơn
                 </div>
@@ -209,6 +212,33 @@
                 onclick="closeProfileModal()">Đóng</button>
         </div>
     </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-calculator"></i>
+            <span>Lên đơn</span>
+        </a>
+
+        <a href="donhang.html" class="nav-item active">
+            <i class="fas fa-history"></i>
+            <span>Lịch sử</span>
+        </a>
+
+        <a href="chamcong.html" class="nav-item">
+            <i class="fas fa-user-clock"></i>
+            <span>Chấm công</span>
+        </a>
+
+        <button type="button" class="nav-item" onclick="openDeleteModal()">
+            <i class="fas fa-trash-alt"></i>
+            <span>Xoá đơn</span>
+        </button>
+
+        <button type="button" class="nav-item" onclick="openProfileModal()">
+            <i class="fas fa-user-circle"></i>
+            <span>Tài khoản</span>
+        </button>
+    </nav>
 
     <script src="script.js"></script>
     <script src="donhang.js"></script>

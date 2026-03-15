@@ -25,7 +25,7 @@
                     <span id="currentUserName" style="font-weight: 700; font-size: 0.85rem;">Thuận</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 0.8rem; opacity: 0.9;">Hệ thống Sales</span>
+                    <span id="header-system-status" style="font-size: 0.8rem; opacity: 0.9;">Chưa định vị</span>
                     <i class="fas fa-redo" onclick="resetForm()"
                         style="color: #fff; cursor: pointer; padding: 5px; font-size: 1.1rem;"></i>
                 </div>
@@ -36,8 +36,8 @@
         <div id="saleForm" style="padding-top: 15px;">
             <div class="status-card">
                 <div class="gps-info">
-                    <i class="fas fa-map-marker-alt" id="gps-icon" style="color: var(--primary-color);"></i>
-                    <span id="status-text">Đang định vị...</span>
+                    <i class="fas fa-satellite-dish" id="gps-icon" style="color: var(--primary-color);"></i>
+                    <span style="font-weight: 700;">Khoảng cách đến C.Ty:</span>
                 </div>
                 <div class="dist-badge"><span id="dist-val">--</span>m</div>
             </div>
@@ -134,65 +134,79 @@
         </div>
 
         <div id="deleteModal" class="modal-overlay" style="display:none; z-index: 3000;">
-    <div class="modal-content delete-modal-pro">
-        <div class="modal-header-pro">
-            <div class="icon-warning-bg"><i class="fas fa-trash-alt"></i></div>
-            <h3>Yêu Cầu Xóa Đơn</h3>
-            <p>Gửi thông báo hủy đơn lên hệ thống</p>
-        </div>
-        <div class="warning-box">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác. Đơn hàng sẽ được chuyển cho IT kiểm duyệt và xóa khỏi hệ thống.</span>
-        </div>
-        <div class="form-group-pro">
-            <label>Mã đơn hàng <span class="text-danger">*</span></label>
-            <div class="input-wrapper">
-                <i class="fas fa-hashtag"></i>
-                <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+            <div class="modal-content delete-modal-pro">
+                <div class="modal-header-pro">
+                    <div class="icon-warning-bg"><i class="fas fa-trash-alt"></i></div>
+                    <h3>Yêu Cầu Xóa Đơn</h3>
+                    <p>Gửi thông báo hủy đơn lên hệ thống</p>
+                </div>
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác. Đơn hàng sẽ được chuyển cho IT kiểm
+                        duyệt và xóa khỏi hệ thống.</span>
+                </div>
+                <div class="form-group-pro">
+                    <label>Mã đơn hàng <span class="text-danger">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" id="delOrderId" placeholder="VD: DH123456" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group-pro">
+                    <label>Lý do xóa <span class="text-danger">*</span></label>
+                    <div class="input-wrapper align-top">
+                        <i class="fas fa-pen"></i>
+                        <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết..."
+                            autocomplete="off"></textarea>
+                    </div>
+                </div>
+                <div class="modal-actions-pro">
+                    <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
+                    <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
+                        <i class="fas fa-paper-plane"></i> Gửi Cho IT
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="form-group-pro">
-            <label>Lý do xóa <span class="text-danger">*</span></label>
-            <div class="input-wrapper align-top">
-                <i class="fas fa-pen"></i>
-                <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết..." autocomplete="off"></textarea>
-            </div>
-        </div>
-        <div class="modal-actions-pro">
-            <button type="button" class="btn-cancel-pro" onclick="closeDeleteModal()">Quay Lại</button>
-            <button type="button" class="btn-confirm-pro btn-submit" onclick="submitDeleteRequest()">
-                <i class="fas fa-paper-plane"></i> Gửi Cho IT
-            </button>
-        </div>
-    </div>
-</div>
 
-<div id="profileModal" class="modal-overlay" style="display:none; z-index: 3000;">
-    <div class="modal-content profile-card">
-        <div class="profile-header">
-            <div class="profile-avatar-wrapper" onclick="document.getElementById('avatarInputGlobal').click()">
-                <img id="profileDisplayAvatar" src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
-                <div class="avatar-edit-icon"><i class="fas fa-camera"></i></div>
+        <div id="profileModal" class="modal-overlay" style="display:none; z-index: 3000;">
+            <div class="modal-content profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar-wrapper" onclick="document.getElementById('avatarInputGlobal').click()">
+                        <img id="profileDisplayAvatar"
+                            src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
+                        <div class="avatar-edit-icon"><i class="fas fa-camera"></i></div>
+                    </div>
+                    <input type="file" id="avatarInputGlobal" accept="image/*" style="display: none;"
+                        onchange="handleAvatarChange(event)">
+                    <h4 id="profileName">Tên nhân viên</h4>
+                    <span class="badge processed">Nhân viên Sales</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item"><span class="stat-label">Mã NV</span><span class="stat-value"
+                            id="profileId">---</span></div>
+                    <div class="stat-item"><span class="stat-label">Khu vực</span><span class="stat-value">Sông
+                            Hậu</span></div>
+                </div>
+                <div class="profile-menu-list">
+                    <div class="menu-item" onclick="document.getElementById('avatarInputGlobal').click()">
+                        <i class="fas fa-image"></i> Đổi ảnh đại diện
+                    </div>
+                    <a href="check-code.html" class="menu-item" style="text-decoration: none; color: inherit;">
+                        <i class="fas fa-gift"></i> Check gift
+                    </a>
+                    <div class="menu-item" onclick="localStorage.removeItem('songhau_coffee_draft'); showToast('Đã xóa bản nháp đơn', 'success');">
+                        <i class="fas fa-eraser"></i> Xóa bản nháp đơn
+                    </div>
+                    <div class="menu-item logout-item" onclick="handleLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </div>
+                </div>
+                
+                <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;"
+                    onclick="closeProfileModal()">Đóng</button>
             </div>
-            <input type="file" id="avatarInputGlobal" accept="image/*" style="display: none;" onchange="handleAvatarChange(event)">
-            <h4 id="profileName">Tên nhân viên</h4>
-            <span class="badge processed">Nhân viên Sales</span>
         </div>
-        <div class="profile-stats">
-            <div class="stat-item"><span class="stat-label">Mã NV</span><span class="stat-value" id="profileId">---</span></div>
-            <div class="stat-item"><span class="stat-label">Khu vực</span><span class="stat-value">Sông Hậu</span></div>
-        </div>
-        <div class="profile-menu-list">
-            <div class="menu-item" onclick="document.getElementById('avatarInputGlobal').click()">
-                <i class="fas fa-image"></i> Đổi ảnh đại diện
-            </div>
-            <div class="menu-item logout-item" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i> Đăng xuất
-            </div>
-        </div>
-        <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;" onclick="closeProfileModal()">Đóng</button>
-    </div>
-</div>
 
         <nav class="bottom-nav">
             <a href="index.html" class="nav-item">
@@ -206,8 +220,8 @@
             </a>
 
             <a href="chamcong.html" class="nav-item active">
-                <i class="fas fa-user-clock" style="color: #27ae60;"></i>
-                <span style="color: #27ae60;">Chấm công</span>
+                <i class="fas fa-user-clock"></i>
+                <span>Chấm công</span>
             </a>
 
             <button type="button" class="nav-item" onclick="openDeleteModal()">
