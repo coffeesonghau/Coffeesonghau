@@ -4,22 +4,22 @@
  */
 
 const userId = localStorage.getItem('sh_user_id');
-const userName = localStorage.getItem('sh_user_name'); 
+const userName = localStorage.getItem('sh_user_name');
 
 let allOrdersList = []; // Lưu trữ dữ liệu gốc để lọc không cần fetch lại
 let currentEditingOrder = null;
 
 // --- 1. KHỞI TẠO VÀ ĐỒNG BỘ ---
 document.addEventListener("DOMContentLoaded", () => {
-    if (!userId) { 
-        window.location.href = 'login.html'; 
-        return; 
+    if (!userId) {
+        window.location.href = 'login.html';
+        return;
     }
-    
+
     // Hiển thị tên người dùng nếu có
     const profileNameEl = document.getElementById('profileName');
     if (profileNameEl) profileNameEl.innerText = userName || "Nhân viên Sông Hậu";
-    
+
     fetchOrders();
 });
 
@@ -27,11 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
 async function fetchOrders() {
     const refreshBtn = document.getElementById('refreshBtn');
     const container = document.getElementById('orderListContainer');
-    
+
     // Bắt đầu hiệu ứng tải và chặn click trùng lặp
     if (refreshBtn) {
         refreshBtn.classList.add('loading');
-        refreshBtn.disabled = true; 
+        refreshBtn.disabled = true;
     }
 
     try {
@@ -41,7 +41,7 @@ async function fetchOrders() {
             headers: { "Content-Type": "text/plain;charset=utf-8" }
         });
         const result = await response.json();
-        
+
         if (result.success) {
             allOrdersList = result.orders; // Cập nhật danh sách đơn hàng
             renderOrderList(allOrdersList);
@@ -65,7 +65,7 @@ function renderOrderList(orders) {
     const container = document.getElementById('orderListContainer');
     if (!container) return;
     container.innerHTML = '';
-    
+
     let countToday = 0;
     let totalRevenueToday = 0;
     const todayStr = new Date().toLocaleDateString('vi-VN');
@@ -117,9 +117,9 @@ function renderOrderList(orders) {
                     ${parseInt(o.tong_tien).toLocaleString('vi-VN')} đ
                 </div>
                 <div style="display:flex; gap:8px;">
-                    <button class="btn-action btn-call" onclick="copyOrderToZalo('${o.ma_don}')">
-                        <i class="far fa-copy"></i> Giao
-                    </button>
+                    <button class="btn-action btn-call" onclick='openBillPopup(${JSON.stringify(o).replace(/'/g, "\\'")})'>
+    <i class="fas fa-file-invoice"></i> Bill
+</button>
                     <button class="btn-action" onclick='openEditView(${JSON.stringify(o).replace(/'/g, "\\'")})'>
                         <i class="fas fa-edit"></i> Sửa
                     </button>
@@ -153,7 +153,7 @@ function getStatusClass(status) {
 }
 
 // --- 4. BỘ LỌC VÀ TÌM KIẾM ---
-window.filterOrders = function() {
+window.filterOrders = function () {
     const term = document.getElementById('searchOrder').value.toLowerCase();
     const filtered = allOrdersList.filter(o => {
         const searchStr = `${o.ten_quan} ${o.ma_don} ${o.sdt} ${o.dia_chi}`.toLowerCase();
@@ -162,7 +162,7 @@ window.filterOrders = function() {
     renderOrderList(filtered);
 };
 
-window.filterByStatus = function(status, el) {
+window.filterByStatus = function (status, el) {
     document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
 
@@ -175,33 +175,33 @@ window.filterByStatus = function(status, el) {
 };
 
 // --- 5. LOGIC SỬA ĐƠN HÀNG ---
-window.openEditView = function(orderObj) {
+window.openEditView = function (orderObj) {
     currentEditingOrder = orderObj;
     document.getElementById('orderListView').style.display = 'none';
     document.getElementById('editOrderView').style.display = 'block';
-    
+
     document.getElementById('editOrderId').innerText = orderObj.ma_don;
     document.getElementById('editShopName').innerText = orderObj.ten_quan;
     document.getElementById('editPhone').value = orderObj.sdt ? orderObj.sdt.replace(/'/g, '') : '';
     document.getElementById('editAddress').value = orderObj.dia_chi || '';
-    
+
     orderState.channel = orderObj.kenh_ban || "ban_le";
     try {
         orderState.items = JSON.parse(orderObj.cart_json || "{}");
-    } catch(e) { 
-        orderState.items = {}; 
+    } catch (e) {
+        orderState.items = {};
     }
-    
+
     renderEditProducts();
 };
 
-window.closeEditView = function() {
+window.closeEditView = function () {
     document.getElementById('editOrderView').style.display = 'none';
     document.getElementById('orderListView').style.display = 'block';
     currentEditingOrder = null;
 };
 
-window.filterEditProducts = function() {
+window.filterEditProducts = function () {
     renderEditProducts();
 };
 
@@ -209,15 +209,15 @@ function renderEditProducts() {
     const listEl = document.getElementById('edit-product-list');
     const searchTerm = document.getElementById('search-product').value.toLowerCase();
     listEl.innerHTML = '';
-    
+
     productData.products.filter(p => p.name.toLowerCase().includes(searchTerm)).forEach(prod => {
         const qty = orderState.items[prod.id] || 0;
         const currentPrice = prod.prices[orderState.channel];
-        
+
         const itemDiv = document.createElement('div');
         itemDiv.className = 'product-item';
-        if(qty > 0) itemDiv.style.background = "#fff3cd"; 
-        
+        if (qty > 0) itemDiv.style.background = "#fff3cd";
+
         itemDiv.innerHTML = `
             <div class="product-info">
                 <div style="font-weight:bold;">${prod.name}</div>
@@ -234,7 +234,7 @@ function renderEditProducts() {
     calculateEditTotal();
 }
 
-window.updateEditQty = function(id, change) {
+window.updateEditQty = function (id, change) {
     if (!orderState.items[id]) orderState.items[id] = 0;
     orderState.items[id] += change;
     if (orderState.items[id] < 0) orderState.items[id] = 0;
@@ -250,10 +250,10 @@ function calculateEditTotal() {
     document.getElementById('edit-total-price').innerText = total.toLocaleString('vi-VN') + ' đ';
 }
 
-window.saveUpdatedOrder = async function() {
+window.saveUpdatedOrder = async function () {
     const btn = document.getElementById('btnUpdateOrder');
     const totalNew = parseInt(document.getElementById('edit-total-price').innerText.replace(/\D/g, ''));
-    
+
     if (totalNew === 0) {
         alert("Đơn hàng không được để trống!");
         return;
@@ -295,5 +295,104 @@ window.saveUpdatedOrder = async function() {
     } finally {
         btn.disabled = false;
         btn.innerHTML = 'LƯU THAY ĐỔI';
+    }
+};
+// ==========================================
+// TÍNH NĂNG POPUP HÓA ĐƠN (BILL)
+// ==========================================
+window.openBillPopup = function(orderObj) {
+    window.currentBillData = orderObj;
+    // 1. Gắn thông tin cơ bản
+    document.getElementById('billOrderId').innerText = orderObj.ma_don;
+    document.getElementById('billShopName').innerText = orderObj.ten_quan;
+    document.getElementById('billPhone').innerText = orderObj.sdt ? orderObj.sdt.replace(/'/g, '') : 'Chưa có SĐT';
+    document.getElementById('billAddress').innerText = orderObj.dia_chi || 'Không có địa chỉ';
+
+    // 2. Format thời gian
+    const dateObj = new Date(orderObj.thoi_gian);
+    const timeStr = `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')} - ${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
+    document.getElementById('billTime').innerText = timeStr;
+
+    // 3. Hiển thị Tổng tiền
+    document.getElementById('billTotal').innerText = parseInt(orderObj.tong_tien).toLocaleString('vi-VN') + ' đ';
+
+    // 4. Xử lý tách chuỗi chi tiết đơn để in ra list món ăn
+    const billItemsContainer = document.getElementById('billItems');
+    billItemsContainer.innerHTML = '';
+
+    let chiTietText = orderObj.chi_tiet || '';
+    // Tách bỏ phần "=> Tổng tiền: ..." ở đuôi chuỗi
+    let itemsText = chiTietText.split('=>')[0].trim(); 
+    
+    if(itemsText) {
+        // Tách từng món dựa theo dấu phẩy
+        let itemsArray = itemsText.split(',');
+        itemsArray.forEach(item => {
+            let parts = item.trim().split(' x'); // Cắt bằng chữ " x" để tách tên và số lượng
+            let name = parts[0];
+            let qty = parts[1] ? `x${parts[1]}` : 'x1';
+            
+            billItemsContainer.innerHTML += `
+                <tr>
+                    <td style="padding: 6px 0; color: #334155; font-weight: 600;">${name}</td>
+                    <td style="padding: 6px 0; text-align: right; font-weight: bold; color: var(--primary-color); white-space: nowrap;">${qty}</td>
+                </tr>
+            `;
+        });
+    }
+
+    // 5. Hiển thị modal
+    document.getElementById('billModal').style.display = 'flex';
+};
+
+window.closeBillPopup = function() {
+    document.getElementById('billModal').style.display = 'none';
+};
+window.copyBillToZalo = function() {
+    if (!window.currentBillData) return;
+    const o = window.currentBillData;
+    
+    // Format thời gian
+    const dateObj = new Date(o.thoi_gian);
+    const timeStr = `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')} - ${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
+    
+    // Xử lý danh sách món cho đẹp
+    let chiTietText = o.chi_tiet || '';
+    let itemsText = chiTietText.split('=>')[0].trim();
+    let formattedItems = itemsText.split(',').map(item => "▪️ " + item.trim()).join('\n');
+
+    // Chuyển đổi thành nội dung văn bản (Text)
+    const textToCopy = `🧾 SÔNG HẬU COFFEE\n` +
+                       `📌 Mã đơn: ${o.ma_don}\n` +
+                       `🕒 Thời gian: ${timeStr}\n` +
+                       `----------------------\n` +
+                       `🏠 Khách hàng: ${o.ten_quan}\n` +
+                       `📞 SĐT: ${o.sdt ? o.sdt.replace(/'/g, '') : 'Chưa có'}\n` +
+                       `📍 Địa chỉ: ${o.dia_chi || 'Không có'}\n` +
+                       `----------------------\n` +
+                       `📝 CHI TIẾT ĐƠN:\n${formattedItems}\n` +
+                       `----------------------\n` +
+                       `💰 TỔNG CỘNG: ${parseInt(o.tong_tien).toLocaleString('vi-VN')} đ\n\n` +
+                       `Cảm ơn Quý khách đã ủng hộ! ☕`;
+
+    // Lệnh Copy vào Clipboard
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert("✅ Đã copy hóa đơn! Bạn có thể chuyển sang Zalo/Messenger dán (Paste) cho khách.");
+        });
+    } else {
+        // Dự phòng cho các trình duyệt cũ
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert("✅ Đã copy hóa đơn! Bạn có thể chuyển sang Zalo/Messenger dán (Paste) cho khách.");
+        } catch (err) {
+            alert("❌ Trình duyệt không hỗ trợ copy tự động. Vui lòng chụp ảnh màn hình Bill.");
+        }
+        document.body.removeChild(textArea);
     }
 };
