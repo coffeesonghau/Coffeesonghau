@@ -29,9 +29,10 @@
         </header>
 
         <div class="gift-container">
+
             <div class="page-title">
-                <h3><i class="fas fa-route"></i> Quản Lý Phát Catalog</h3>
-                <p>Theo dõi tiến độ phát quà & định vị tuyến đường</p>
+                <h3><i class="fas fa-gift"></i> Quản Lý Phát Catalog</h3>
+                <p>Công cụ kiểm đếm và ghi nhận tiến độ trong ngày</p>
             </div>
 
             <div class="gift-card" id="setup-section">
@@ -41,13 +42,14 @@
                 <div class="input-setup-wrapper">
                     <input type="number" id="initial-amount" placeholder="VD: 50" inputmode="numeric">
                 </div>
-                <button class="btn-submit" onclick="initGift()" style="width: 100%; height: 50px; font-size: 1.1rem; border-radius: 25px;">
+                <button class="btn-submit" onclick="initGift()"
+                    style="width: 100%; height: 50px; font-size: 1.1rem; border-radius: 25px;">
                     <i class="fas fa-play"></i> BẮT ĐẦU CHUYẾN ĐI
                 </button>
             </div>
 
             <div id="tracking-section" style="display: none;">
-                
+
                 <div class="progress-card">
                     <div class="progress-header">
                         <span style="font-weight: 700; color: var(--text-main);">Tiến độ hoàn thành</span>
@@ -60,26 +62,29 @@
 
                 <div class="dashboard-grid">
                     <div class="dash-box">
-                        <div class="dash-icon" style="color: #3498db; background: #ebf5fb;"><i class="fas fa-cube"></i></div>
+                        <div class="dash-icon" style="color: #3498db; background: #ebf5fb;"><i class="fas fa-cube"></i>
+                        </div>
                         <div class="dash-value" id="val-total">0</div>
                         <div class="dash-title">Tổng nhận</div>
                     </div>
                     <div class="dash-box">
-                        <div class="dash-icon" style="color: #2e7d32; background: #e8f5e9;"><i class="fas fa-check-double"></i></div>
+                        <div class="dash-icon" style="color: #2e7d32; background: #e8f5e9;"><i
+                                class="fas fa-check-double"></i></div>
                         <div class="dash-value" id="val-given" style="color: #2e7d32;">0</div>
                         <div class="dash-title" style="color: #2e7d32;">Đã phát</div>
                     </div>
                     <div class="dash-box">
-                        <div class="dash-icon" style="color: #e65100; background: #fff3e0;"><i class="fas fa-box"></i></div>
+                        <div class="dash-icon" style="color: #e65100; background: #fff3e0;"><i class="fas fa-box"></i>
+                        </div>
                         <div class="dash-value" id="val-remain" style="color: #e65100;">0</div>
                         <div class="dash-title" style="color: #e65100;">Còn lại</div>
                     </div>
                 </div>
 
                 <button class="btn-large-action pulse-effect" onclick="trackOneGift()">
-                    <div class="btn-icon-wrapper"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="btn-icon-wrapper"><i class="fas fa-check-circle"></i></div>
                     <span class="btn-text">GHI NHẬN PHÁT 1 CUỐN</span>
-                    <span class="btn-subtext">Lấy tọa độ GPS tại vị trí này</span>
+                    <span class="btn-subtext">Hệ thống sẽ lưu thời gian thực</span>
                 </button>
 
                 <div class="history-card">
@@ -87,12 +92,16 @@
                         <span style="font-weight: bold; color: var(--primary-color); font-size: 1rem;">
                             <i class="fas fa-stream"></i> Lịch sử tuyến đường
                         </span>
+
+                        <span style="font-weight: bold; color: var(--primary-color); font-size: 1rem;">
+                            <i class="fas fa-list-ul"></i> Lịch sử ghi nhận
+                        </span>
                         <button onclick="undoLastGift()" class="btn-undo">
                             <i class="fas fa-undo"></i> Hoàn tác
                         </button>
                     </div>
                     <div class="timeline-container" id="history-items">
-                        </div>
+                    </div>
                 </div>
 
                 <div class="bottom-actions-grid">
@@ -128,7 +137,8 @@
                     <label>Lý do xóa <span class="text-danger">*</span></label>
                     <div class="input-wrapper align-top">
                         <i class="fas fa-pen"></i>
-                        <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết..." autocomplete="off"></textarea>
+                        <textarea id="delReason" rows="3" placeholder="Nhập lý do chi tiết..."
+                            autocomplete="off"></textarea>
                     </div>
                 </div>
                 <div class="modal-actions-pro">
@@ -144,10 +154,12 @@
             <div class="modal-content profile-card">
                 <div class="profile-header">
                     <div class="profile-avatar-wrapper" onclick="document.getElementById('avatarInputGlobal').click()">
-                        <img id="profileDisplayAvatar" src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
+                        <img id="profileDisplayAvatar"
+                            src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff">
                         <div class="avatar-edit-icon"><i class="fas fa-camera"></i></div>
                     </div>
-                    <input type="file" id="avatarInputGlobal" accept="image/*" style="display: none;" onchange="handleAvatarChange(event)">
+                    <input type="file" id="avatarInputGlobal" accept="image/*" style="display: none;"
+                        onchange="handleAvatarChange(event)">
                     <h4 id="profileName">Tên nhân viên</h4>
                     <span class="badge processed">Nhân viên Sales</span>
                 </div>
@@ -172,7 +184,8 @@
                         <i class="fas fa-sign-out-alt"></i> Đăng xuất
                     </div>
                 </div>
-                <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;" onclick="closeProfileModal()">Đóng</button>
+                <button type="button" class="btn-prev" style="width: 100%; margin-top: 15px;"
+                    onclick="closeProfileModal()">Đóng</button>
             </div>
         </div>
 
@@ -199,8 +212,9 @@
             </button>
         </nav>
     </div>
-    
+
     <script src="script.js"></script>
     <script src="check-gift.js"></script>
 </body>
+
 </html>

