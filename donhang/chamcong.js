@@ -92,7 +92,7 @@ async function submitTimekeep() {
         return showToast("Chưa đến 17:00, không thể ra về sớm!", "error");
     }
 
-    // B. Kiểm tra Cooldown (Thời gian chờ giữa 2 lần bấm)
+    // B. Kiểm tra Cooldown
     const lastTime = localStorage.getItem('tk_last_time');
     const now = new Date().getTime();
     if (lastTime && (now - parseInt(lastTime)) < COOLDOWN_MINS * 60 * 1000) {
@@ -100,22 +100,7 @@ async function submitTimekeep() {
         return showToast(`Vui lòng đợi ${minsLeft} phút nữa.`, 'warning');
     }
 
-    // C. KIỂM TRA BẮT BUỘC CÓ GPS (MỚI THÊM)
-    const gpsValue = document.getElementById('tk-gps').value;
-    if (!gpsValue || gpsValue === "Không xác định" || gpsValue === "Đang định vị..." || !gpsValue.includes("http")) {
-        return showToast("⚠️ BẮT BUỘC: Bạn phải nhấn nút lấy vị trí GPS trước khi chấm công!", "error");
-    }
-    // --- THÊM ĐOẠN KIỂM TRA BÁN KÍNH 30M NÀY VÀO ---
-    const locationType = document.getElementById('tk-location-type').value;
-    if (locationType === "CongTy") {
-        const currentDist = document.getElementById('dist-val').innerText;
-        // Nếu đã có khoảng cách và khoảng cách > 30m thì chặn lại
-        if (currentDist !== "--" && parseFloat(currentDist) > 30) {
-            return showToast(`⚠️ LỖI: Bạn cách công ty ${currentDist}m. Phải nằm trong bán kính 30m mới được chấm công!`, "error");
-        }
-    }
-
-    // D. Kiểm tra Ảnh (Bắt buộc cho nghỉ trưa và ra về)
+    // C. Kiểm tra Ảnh (Bắt buộc cho nghỉ trưa và ra về)
     const imgData = document.getElementById('tk-img-preview').dataset.base64;
     if ((currentAction === 'lunch_out' || currentAction === 'checkout')) {
         if (!imgData || imgData === "") {
@@ -123,7 +108,46 @@ async function submitTimekeep() {
         }
     }
 
-    // Cập nhật Payload để gửi tên thật và ID về Telegram
+    // ==========================================
+    // LOGIC MỚI: TỰ ĐỘNG LẤY GPS VÀ KIỂM TRA 30M
+    // ==========================================
+    setGlobalLoading(true, "Đang kiểm tra tọa độ GPS...");
+    let gpsValue = "Không xác định";
+    const locationType = document.getElementById('tk-location-type').value;
+
+    try {
+        const coords = await getGPSCoordinates();
+        gpsValue = `https://maps.google.com/?q=$$${coords.lat},${coords.lon}`;
+        
+        const distVal = document.getElementById('dist-val');
+        const distBadge = document.querySelector('.dist-badge');
+        const headerStatus = document.getElementById('header-system-status');
+
+        if (locationType === "CongTy") {
+            const distance = getDistance(coords.lat, coords.lon, COMPANY_LAT, COMPANY_LON);
+            distVal.innerText = distance;
+
+            if (distance > 30) {
+                distBadge.classList.add('error');
+                if (headerStatus) headerStatus.innerHTML = `<span style="color: #ff7675; font-weight:bold;">Cách c.ty ${distance}m (Quá xa)</span>`;
+                setGlobalLoading(false);
+                return showToast(`⚠️ LỖI: Bạn cách công ty ${distance}m. Phải nằm trong bán kính 30m mới được chấm công!`, "error");
+            } else {
+                distBadge.classList.remove('error');
+                if (headerStatus) headerStatus.innerHTML = `<span style="color: #55efc4; font-weight:bold;">Cách c.ty ${distance}m</span>`;
+            }
+        } else {
+            distVal.innerText = "Sales";
+            distBadge.classList.remove('error');
+            if (headerStatus) headerStatus.innerHTML = `<span style="color: #55efc4; font-weight:bold;">Đang đi Sales</span>`;
+        }
+    } catch (errorMsg) {
+        setGlobalLoading(false);
+        return showToast(errorMsg, "error");
+    }
+
+    // D. Gửi dữ liệu lên Telegram
+    setGlobalLoading(true, "Đang gửi dữ liệu...");
     const payload = {
         user: `${currentUser.name} (ID: ${currentUser.id})`,
         time: new Date().toLocaleString('vi-VN'),
@@ -132,8 +156,6 @@ async function submitTimekeep() {
         image: imgData || null
     };
 
-    // E. Gửi dữ liệu
-    setGlobalLoading(true, "Đang gửi dữ liệu...");
     const success = await sendToTelegram(payload);
     setGlobalLoading(false);
 
@@ -145,32 +167,39 @@ async function submitTimekeep() {
     }
 }
 
-// Hàm tự động chuyển bước tiếp theo và cập nhật giao diện
-function advanceAction(currentAction) {
-    const btnSubmit = document.getElementById('btn-main-submit');
-    const btnText = document.getElementById('btn-submit-text');
-    const currentIndex = ACTION_SEQUENCE.indexOf(currentAction);
+// Thay thế hàm captureAndWatermark hiện tại để bỏ tham chiếu tới ô GPS cũ
+function captureAndWatermark() {
+    const video = document.getElementById('camera-stream');
+    const canvas = document.getElementById('camera-canvas');
+    const ctx = canvas.getContext('2d');
 
-    let nextAction = 'done';
-    if (currentIndex < ACTION_SEQUENCE.length - 1) {
-        nextAction = ACTION_SEQUENCE[currentIndex + 1];
-    }
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Cập nhật nút bấm
-    btnSubmit.dataset.action = nextAction;
-    btnText.innerText = ACTION_LABELS[nextAction];
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('vi-VN') + ' - ' + now.toLocaleDateString('vi-VN');
+    const userName = currentUser.name + " (" + currentUser.id + ")";
+    
+    // Đổi lại chữ in trên ảnh cho phù hợp
+    const locationType = document.getElementById('tk-location-type').value;
+    const locationStr = locationType === "CongTy" ? "📍 Làm việc tại Công Ty" : "📍 Đi Sales ngoài thị trường";
 
-    // Cập nhật thanh tiến trình (Dots)
-    document.querySelectorAll('.dot').forEach((dot, idx) => {
-        if (idx <= currentIndex) dot.classList.add('completed');
-        if (idx === currentIndex + 1) dot.classList.add('active');
-    });
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.fillRect(10, canvas.height - 90, canvas.width - 20, 80);
 
-    document.getElementById('tk-step-text').innerText = `Tiến trình: ${currentIndex + 1}/4`;
+    ctx.fillStyle = "white";
+    ctx.font = "16px Arial";
+    ctx.fillText("👤 " + userName, 20, canvas.height - 65);
+    ctx.fillText("⏰ " + timeStr, 20, canvas.height - 40);
+    ctx.fillText(locationStr, 20, canvas.height - 15);
 
-    // Lưu trạng thái vào máy để F5 không bị mất
-    localStorage.setItem('tk_saved_action', nextAction);
-    handleTkActionChange();
+    const base64 = canvas.toDataURL('image/jpeg', 0.8);
+    const preview = document.getElementById('tk-img-preview');
+    preview.src = base64;
+    preview.dataset.base64 = base64;
+    document.getElementById('tk-photo-preview').style.display = 'block';
+    closeCameraModal();
 }
 
 // ==========================================
@@ -232,70 +261,27 @@ function getDistance(lat1, lon1, lat2, lon2) {
     return parseFloat((R * c).toFixed(1)); 
 }
 
-// Hàm lấy GPS mới (Đã xóa lỗi can thiệp HTML)
-function startLiveGPS() {
-    const gpsInput = document.getElementById('tk-gps');
-    const distBadge = document.querySelector('.dist-badge');
-    const distVal = document.getElementById('dist-val');
-    const locationType = document.getElementById('tk-location-type').value;
-    const headerStatus = document.getElementById('header-system-status');
-
-    // Reset trạng thái ban đầu
-    gpsInput.value = "Đang định vị...";
-    distVal.innerText = "--";
-    distBadge.classList.remove('error');
-    if (headerStatus) headerStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tìm...';
-
-    if (!navigator.geolocation) {
-        showToast("Trình duyệt của bạn không hỗ trợ GPS", "error");
-        gpsInput.value = "";
-        if (headerStatus) headerStatus.innerHTML = "Lỗi GPS";
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            const mapLink = `https://maps.google.com/?q=$${lat},${lon}`;
-
-            gpsInput.value = mapLink;
-
-            if (locationType === "CongTy") {
-                // Tính khoảng cách
-                const distance = getDistance(lat, lon, COMPANY_LAT, COMPANY_LON);
-
-                // HIỂN THỊ SỐ MÉT CHÍNH XÁC VÀO HTML
-                distVal.innerText = distance;
-
-                // Vượt quá 30m -> Cảnh báo đỏ
-                if (distance > 30) {
-                    distBadge.classList.add('error');
-                    if (headerStatus) headerStatus.innerHTML = `<span style="color: #ff7675; font-weight:bold;">Cách c.ty ${distance}m (Quá xa)</span>`;
-                    showToast(`Cảnh báo: Bạn đang cách công ty ${distance}m (Bán kính cho phép: 30m)!`, "warning");
-                } else {
-                    distBadge.classList.remove('error');
-                    if (headerStatus) headerStatus.innerHTML = `<span style="color: #55efc4; font-weight:bold;">Cách c.ty ${distance}m</span>`;
-                    showToast("Cập nhật vị trí thành công (Đạt yêu cầu)!", "success");
-                }
-            } else {
-                // Đi sales ngoài thị trường
-                distVal.innerText = "Sales";
-                distBadge.classList.remove('error');
-                if (headerStatus) headerStatus.innerHTML = `<span style="color: #55efc4; font-weight:bold;">Đang đi Sales</span>`;
-                showToast("Cập nhật vị trí thành công!", "success");
-            }
-        },
-        (error) => {
-            console.error(error);
-            showToast("Không thể lấy vị trí. Hãy bật Location!", "error");
-            gpsInput.value = "";
-            if (headerStatus) headerStatus.innerHTML = `<span style="color: #ff7675;">Lỗi định vị</span>`;
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
+// --- HÀM LẤY GPS TỰ ĐỘNG DƯỚI NỀN ---
+function getGPSCoordinates() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject("Trình duyệt không hỗ trợ GPS");
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve({ 
+                    lat: position.coords.latitude, 
+                    lon: position.coords.longitude 
+                });
+            },
+            (error) => {
+                reject("Hãy bật Vị trí (Location) trên điện thoại và cho phép web truy cập!");
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    });
 }
-
 // Các hàm Camera (Mở, Chụp, Đóng)
 function openCameraModal() {
     document.getElementById('camera-modal').classList.remove('hidden');
@@ -477,25 +463,15 @@ window.addEventListener('DOMContentLoaded', () => {
     handleTkActionChange();
 });
 // ==========================================
-// HÀM RESET CHU TRÌNH CHẤM CÔNG THỦ CÔNG
-// Dùng cho nút icon xoay tròn trên góc phải
+// HÀM LÀM MỚI ỨNG DỤNG (CHỈ REFRESH, KHÔNG XÓA DỮ LIỆU)
 // ==========================================
 function resetForm() {
-    if (confirm("⚠️ Bạn có chắc muốn làm mới chu trình chấm công về lại VÀO CA SÁNG không?")) {
-        // Xóa các dữ liệu đã lưu
-        localStorage.setItem('tk_saved_action', 'checkin');
-        localStorage.removeItem('tk_last_time');
-        
-        // Xóa ảnh đang chụp dở (nếu có)
-        resetPhoto();
-
-        showToast("Đã làm mới hệ thống chấm công!", "success");
-        
-        // Đợi 1 chút rồi tải lại trang để áp dụng
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
-    }
+    
+    setGlobalLoading(true, "Đang làm mới dữ liệu...");
+    
+    setTimeout(() => {
+        window.location.reload();
+    }, 800);
 }
 // ==========================================
 // 6. TÍNH NĂNG MENU BOTTOM (TÀI KHOẢN & XÓA ĐƠN)
