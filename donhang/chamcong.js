@@ -436,39 +436,74 @@ window.addEventListener('DOMContentLoaded', () => {
     updateWelcomeMessage();
     updateClock();
 
-    // Khôi phục trạng thái ca từ lần trước (nếu có)
+    // 1. KIỂM TRA QUA NGÀY MỚI ĐỂ XÓA CHU TRÌNH CŨ
+    const lastTime = localStorage.getItem('tk_last_time');
+    
+    if (lastTime) {
+        // Lấy ngày tháng năm hiện tại và ngày tháng năm của lần chấm công cuối
+        const lastDate = new Date(parseInt(lastTime)).toLocaleDateString('vi-VN');
+        const currentDate = new Date().toLocaleDateString('vi-VN');
+        
+        // Nếu đã sang ngày mới -> Xóa sạch trạng thái dang dở của hôm qua
+        if (lastDate !== currentDate) {
+            localStorage.removeItem('tk_saved_action'); 
+            localStorage.removeItem('tk_last_time'); 
+        }
+    }
+
+    // 2. KHÔI PHỤC HOẶC LÀM MỚI GIAO DIỆN
     const saved = localStorage.getItem('tk_saved_action');
+    const btn = document.getElementById('btn-main-submit');
+    const stepText = document.getElementById('tk-step-text');
+    const allDots = document.querySelectorAll('.dot');
+    
+    // Nếu vẫn trong cùng 1 ngày và có trạng thái lưu dở
     if (saved) {
-        const btn = document.getElementById('btn-main-submit');
         btn.dataset.action = saved;
         document.getElementById('btn-submit-text').innerText = ACTION_LABELS[saved];
+        
+        const currentIndex = ACTION_SEQUENCE.indexOf(saved);
+        if (currentIndex !== -1) {
+            allDots.forEach((dot, idx) => {
+                dot.classList.remove('completed', 'active');
+                if (idx < currentIndex) dot.classList.add('completed');
+                if (idx === currentIndex) dot.classList.add('active');
+            });
+            stepText.innerText = `Tiến trình: ${currentIndex}/4`;
+        }
+    } else {
+        // Nếu là ngày mới (đã bị xóa dữ liệu) hoặc là người dùng mới tinh
+        btn.dataset.action = 'checkin';
+        document.getElementById('btn-submit-text').innerText = ACTION_LABELS['checkin'];
+        
+        allDots.forEach(dot => dot.classList.remove('completed', 'active'));
+        const firstDot = document.getElementById('dot-0');
+        if(firstDot) firstDot.classList.add('active');
+        stepText.innerText = `Tiến trình: 0/4`;
     }
 
     handleTkActionChange();
 });
 // ==========================================
-// THÊM VÀO CUỐI FILE CHAMCONG.JS 
-// ĐỂ MENU BOTTOM HOẠT ĐỘNG
+// HÀM RESET CHU TRÌNH CHẤM CÔNG THỦ CÔNG
+// Dùng cho nút icon xoay tròn trên góc phải
 // ==========================================
+function resetForm() {
+    if (confirm("⚠️ Bạn có chắc muốn làm mới chu trình chấm công về lại VÀO CA SÁNG không?")) {
+        // Xóa các dữ liệu đã lưu
+        localStorage.setItem('tk_saved_action', 'checkin');
+        localStorage.removeItem('tk_last_time');
+        
+        // Xóa ảnh đang chụp dở (nếu có)
+        resetPhoto();
 
-function openDeleteModal() {
-    document.getElementById('deleteModal').style.display = 'flex';
-}
-function closeDeleteModal() {
-    document.getElementById('deleteModal').style.display = 'none';
-}
-// 2. Popup Tài Khoản
-async function openProfileModal() {
-    const userName = localStorage.getItem('sh_user_name') || "Thành viên";
-    const userId = localStorage.getItem('sh_user_id') || "N/A";
-
-    document.getElementById('profileName').innerText = userName;
-    document.getElementById('profileId').innerText = userId;
-
-    document.getElementById('profileModal').style.display = 'flex';
-}
-function closeProfileModal() {
-    document.getElementById('profileModal').style.display = 'none';
+        showToast("Đã làm mới hệ thống chấm công!", "success");
+        
+        // Đợi 1 chút rồi tải lại trang để áp dụng
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    }
 }
 // ==========================================
 // 6. TÍNH NĂNG MENU BOTTOM (TÀI KHOẢN & XÓA ĐƠN)
