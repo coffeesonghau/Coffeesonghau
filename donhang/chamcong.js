@@ -167,7 +167,59 @@ async function submitTimekeep() {
     }
 }
 
+// ==========================================
+// HÀM CHUYỂN BƯỚC CHẤM CÔNG (Chuyển ca)
+// ==========================================
+function advanceAction(currentAction) {
+    // 1. Tìm xem hiện tại đang ở bước thứ mấy
+    const currentIndex = ACTION_SEQUENCE.indexOf(currentAction);
+    let nextAction = 'done'; // Mặc định nếu đã bấm "RA VỀ" thì sẽ chuyển thành "HOÀN THÀNH"
+
+    // 2. Xác định bước tiếp theo
+    if (currentIndex !== -1 && currentIndex < ACTION_SEQUENCE.length - 1) {
+        nextAction = ACTION_SEQUENCE[currentIndex + 1];
+    }
+
+    // 3. Lưu bước tiếp theo vào bộ nhớ để F5 không bị mất
+    localStorage.setItem('tk_saved_action', nextAction);
+
+    // 4. Cập nhật lại giao diện nút bấm và thanh tiến trình (timeline)
+    const btn = document.getElementById('btn-main-submit');
+    const stepText = document.getElementById('tk-step-text');
+    const allDots = document.querySelectorAll('.dot');
+
+    if (nextAction === 'done') {
+        // Đã hoàn thành 4 ca
+        btn.dataset.action = 'done';
+        document.getElementById('btn-submit-text').innerText = ACTION_LABELS['done'];
+        btn.style.background = 'linear-gradient(135deg, #27ae60, #219150)'; // Đổi màu nút sang xanh lá
+        btn.disabled = true; // Khóa nút không cho bấm nữa
+        
+        allDots.forEach(dot => {
+            dot.classList.remove('active');
+            dot.classList.add('completed');
+        });
+        stepText.innerText = `Tiến trình: 4/4 (Hoàn tất)`;
+    } else {
+        // Chuyển sang ca tiếp theo bình thường
+        btn.dataset.action = nextAction;
+        document.getElementById('btn-submit-text').innerText = ACTION_LABELS[nextAction];
+        
+        const nextIndex = ACTION_SEQUENCE.indexOf(nextAction);
+        allDots.forEach((dot, idx) => {
+            dot.classList.remove('completed', 'active');
+            if (idx < nextIndex) dot.classList.add('completed');
+            if (idx === nextIndex) dot.classList.add('active');
+        });
+        stepText.innerText = `Tiến trình: ${nextIndex}/4`;
+    }
+
+    // 5. Kiểm tra xem ca mới có bắt buộc chụp ảnh không để hiện khung Camera lên
+    handleTkActionChange(); 
+}
+
 // Thay thế hàm captureAndWatermark hiện tại để bỏ tham chiếu tới ô GPS cũ
+// Thay thế hàm này vào file chamcong.js
 function captureAndWatermark() {
     const video = document.getElementById('camera-stream');
     const canvas = document.getElementById('camera-canvas');
@@ -175,30 +227,38 @@ function captureAndWatermark() {
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
+
+    // 1. Vẽ ảnh từ camera lên canvas
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+    // 2. Lấy thông tin cần in lên ảnh
     const now = new Date();
     const timeStr = now.toLocaleTimeString('vi-VN') + ' - ' + now.toLocaleDateString('vi-VN');
     const userName = currentUser.name + " (" + currentUser.id + ")";
     
-    // Đổi lại chữ in trên ảnh cho phù hợp
+    // ĐIỂM SỬA CHÍNH TẠI ĐÂY: Dựa vào "Vị trí làm việc" thay vì ô GPS đã bị xóa
     const locationType = document.getElementById('tk-location-type').value;
-    const locationStr = locationType === "CongTy" ? "📍 Làm việc tại Công Ty" : "📍 Đi Sales ngoài thị trường";
+    const locationStr = locationType === "CongTy" ? "Làm việc tại Công Ty" : "Đi Sales ngoài thị trường";
 
+    // 3. Vẽ khung nền mờ đen để chữ dễ đọc hơn
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.fillRect(10, canvas.height - 90, canvas.width - 20, 80);
 
+    // 4. In chữ màu trắng lên ảnh
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
     ctx.fillText("👤 " + userName, 20, canvas.height - 65);
     ctx.fillText("⏰ " + timeStr, 20, canvas.height - 40);
-    ctx.fillText(locationStr, 20, canvas.height - 15);
+    ctx.fillText("📍 " + locationStr, 20, canvas.height - 15);
 
+    // Xuất ra Base64
     const base64 = canvas.toDataURL('image/jpeg', 0.8);
+
     const preview = document.getElementById('tk-img-preview');
     preview.src = base64;
     preview.dataset.base64 = base64;
     document.getElementById('tk-photo-preview').style.display = 'block';
+    
     closeCameraModal();
 }
 
