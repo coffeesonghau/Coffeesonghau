@@ -197,13 +197,6 @@ function handleLogout() {
     }
 }
 
-function updateClock() {
-    const now = new Date();
-    document.getElementById('tk-clock').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
-    document.getElementById('tk-date').innerText = now.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
-    setTimeout(updateClock, 1000);
-}
-
 function showToast(msg, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -434,7 +427,6 @@ async function sendToTelegram(data) {
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
     updateWelcomeMessage();
-    updateClock();
 
     // 1. KIỂM TRA QUA NGÀY MỚI ĐỂ XÓA CHU TRÌNH CŨ
     const lastTime = localStorage.getItem('tk_last_time');
