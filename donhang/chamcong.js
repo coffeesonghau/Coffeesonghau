@@ -70,7 +70,6 @@ function handleTkActionChange() {
     }
 
     // THÊM ĐOẠN NÀY ĐỂ RESET GPS KHI ĐỔI LOẠI HÌNH (Công ty / Sales)
-    document.getElementById('tk-gps').value = "";
     document.getElementById('status-text').innerText = "Vui lòng định vị lại";
     document.getElementById('dist-val').innerText = "--";
     document.querySelector('.dist-badge').classList.remove('error');
@@ -118,7 +117,7 @@ async function submitTimekeep() {
     try {
         const coords = await getGPSCoordinates();
         gpsValue = `https://maps.google.com/?q=$$${coords.lat},${coords.lon}`;
-        
+
         const distVal = document.getElementById('dist-val');
         const distBadge = document.querySelector('.dist-badge');
         const headerStatus = document.getElementById('header-system-status');
@@ -194,7 +193,7 @@ function advanceAction(currentAction) {
         document.getElementById('btn-submit-text').innerText = ACTION_LABELS['done'];
         btn.style.background = 'linear-gradient(135deg, #27ae60, #219150)'; // Đổi màu nút sang xanh lá
         btn.disabled = true; // Khóa nút không cho bấm nữa
-        
+
         allDots.forEach(dot => {
             dot.classList.remove('active');
             dot.classList.add('completed');
@@ -204,7 +203,7 @@ function advanceAction(currentAction) {
         // Chuyển sang ca tiếp theo bình thường
         btn.dataset.action = nextAction;
         document.getElementById('btn-submit-text').innerText = ACTION_LABELS[nextAction];
-        
+
         const nextIndex = ACTION_SEQUENCE.indexOf(nextAction);
         allDots.forEach((dot, idx) => {
             dot.classList.remove('completed', 'active');
@@ -215,51 +214,7 @@ function advanceAction(currentAction) {
     }
 
     // 5. Kiểm tra xem ca mới có bắt buộc chụp ảnh không để hiện khung Camera lên
-    handleTkActionChange(); 
-}
-
-// Thay thế hàm captureAndWatermark hiện tại để bỏ tham chiếu tới ô GPS cũ
-// Thay thế hàm này vào file chamcong.js
-function captureAndWatermark() {
-    const video = document.getElementById('camera-stream');
-    const canvas = document.getElementById('camera-canvas');
-    const ctx = canvas.getContext('2d');
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    // 1. Vẽ ảnh từ camera lên canvas
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // 2. Lấy thông tin cần in lên ảnh
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('vi-VN') + ' - ' + now.toLocaleDateString('vi-VN');
-    const userName = currentUser.name + " (" + currentUser.id + ")";
-    
-    // ĐIỂM SỬA CHÍNH TẠI ĐÂY: Dựa vào "Vị trí làm việc" thay vì ô GPS đã bị xóa
-    const locationType = document.getElementById('tk-location-type').value;
-    const locationStr = locationType === "CongTy" ? "Làm việc tại Công Ty" : "Đi Sales ngoài thị trường";
-
-    // 3. Vẽ khung nền mờ đen để chữ dễ đọc hơn
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.fillRect(10, canvas.height - 90, canvas.width - 20, 80);
-
-    // 4. In chữ màu trắng lên ảnh
-    ctx.fillStyle = "white";
-    ctx.font = "16px Arial";
-    ctx.fillText("👤 " + userName, 20, canvas.height - 65);
-    ctx.fillText("⏰ " + timeStr, 20, canvas.height - 40);
-    ctx.fillText("📍 " + locationStr, 20, canvas.height - 15);
-
-    // Xuất ra Base64
-    const base64 = canvas.toDataURL('image/jpeg', 0.8);
-
-    const preview = document.getElementById('tk-img-preview');
-    preview.src = base64;
-    preview.dataset.base64 = base64;
-    document.getElementById('tk-photo-preview').style.display = 'block';
-    
-    closeCameraModal();
+    handleTkActionChange();
 }
 
 // ==========================================
@@ -316,9 +271,9 @@ function getDistance(lat1, lon1, lat2, lon2) {
         Math.cos(p1) * Math.cos(p2) *
         Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    
+
     // Sửa dòng này để lấy chính xác 1 số thập phân (VD: 32.5m)
-    return parseFloat((R * c).toFixed(1)); 
+    return parseFloat((R * c).toFixed(1));
 }
 
 // --- HÀM LẤY GPS TỰ ĐỘNG DƯỚI NỀN ---
@@ -330,9 +285,9 @@ function getGPSCoordinates() {
         }
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                resolve({ 
-                    lat: position.coords.latitude, 
-                    lon: position.coords.longitude 
+                resolve({
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
                 });
             },
             (error) => {
@@ -372,9 +327,8 @@ function captureAndWatermark() {
     const now = new Date();
     const timeStr = now.toLocaleTimeString('vi-VN') + ' - ' + now.toLocaleDateString('vi-VN');
     const userName = currentUser.name + " (" + currentUser.id + ")";
-    const gpsData = document.getElementById('tk-gps').value;
-    const locationStr = (gpsData && gpsData !== "Đang định vị...") ? "Đã gắn tọa độ GPS" : "Chưa lấy vị trí GPS";
-
+    const locationType = document.getElementById('tk-location-type').value;
+    const locationStr = (locationType === "CongTy") ? "Tại Công Ty (Đã quét GPS)" : "Ngoài thị trường (Sales)";
     // 3. Vẽ khung nền mờ đen để chữ dễ đọc hơn
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.fillRect(10, canvas.height - 90, canvas.width - 20, 80);
@@ -476,16 +430,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // 1. KIỂM TRA QUA NGÀY MỚI ĐỂ XÓA CHU TRÌNH CŨ
     const lastTime = localStorage.getItem('tk_last_time');
-    
+
     if (lastTime) {
         // Lấy ngày tháng năm hiện tại và ngày tháng năm của lần chấm công cuối
         const lastDate = new Date(parseInt(lastTime)).toLocaleDateString('vi-VN');
         const currentDate = new Date().toLocaleDateString('vi-VN');
-        
+
         // Nếu đã sang ngày mới -> Xóa sạch trạng thái dang dở của hôm qua
         if (lastDate !== currentDate) {
-            localStorage.removeItem('tk_saved_action'); 
-            localStorage.removeItem('tk_last_time'); 
+            localStorage.removeItem('tk_saved_action');
+            localStorage.removeItem('tk_last_time');
         }
     }
 
@@ -494,12 +448,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('btn-main-submit');
     const stepText = document.getElementById('tk-step-text');
     const allDots = document.querySelectorAll('.dot');
-    
+
     // Nếu vẫn trong cùng 1 ngày và có trạng thái lưu dở
     if (saved) {
         btn.dataset.action = saved;
         document.getElementById('btn-submit-text').innerText = ACTION_LABELS[saved];
-        
+
         const currentIndex = ACTION_SEQUENCE.indexOf(saved);
         if (currentIndex !== -1) {
             allDots.forEach((dot, idx) => {
@@ -513,10 +467,10 @@ window.addEventListener('DOMContentLoaded', () => {
         // Nếu là ngày mới (đã bị xóa dữ liệu) hoặc là người dùng mới tinh
         btn.dataset.action = 'checkin';
         document.getElementById('btn-submit-text').innerText = ACTION_LABELS['checkin'];
-        
+
         allDots.forEach(dot => dot.classList.remove('completed', 'active'));
         const firstDot = document.getElementById('dot-0');
-        if(firstDot) firstDot.classList.add('active');
+        if (firstDot) firstDot.classList.add('active');
         stepText.innerText = `Tiến trình: 0/4`;
     }
 
@@ -526,9 +480,9 @@ window.addEventListener('DOMContentLoaded', () => {
 // HÀM LÀM MỚI ỨNG DỤNG (CHỈ REFRESH, KHÔNG XÓA DỮ LIỆU)
 // ==========================================
 function resetForm() {
-    
+
     setGlobalLoading(true, "Đang làm mới dữ liệu...");
-    
+
     setTimeout(() => {
         window.location.reload();
     }, 800);
