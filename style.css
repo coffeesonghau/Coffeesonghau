@@ -299,3 +299,33 @@ aside ul li:hover {
     50% { transform: rotate(0); }
     100% { transform: rotate(0); }
 }
+/* ==========================================
+   GIAO DIỆN VUỐT NGANG TRÊN MOBILE (BẢN CHUẨN 2x2)
+   ========================================== */
+@media (max-width: 767px) {
+    /* Ép hiển thị dạng lưới ngang 2 hàng */
+    .mobile-swipe-grid {
+        display: grid !important;
+        grid-template-rows: repeat(2, max-content) !important; /* Xếp thành 2 hàng */
+        grid-auto-flow: column !important; /* Sản phẩm chảy theo chiều ngang */
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px !important;
+        padding-bottom: 20px !important;
+    }
+
+    /* Ép cứng kích thước thẻ để hiển thị 2 cột (4 sản phẩm) */
+    .mobile-swipe-grid > div {
+        /* Chỉnh từ 65vw xuống 42vw để vừa 2 sản phẩm trên 1 hàng ngang */
+        width: 42vw !important; 
+        max-width: 180px !important; /* Giảm max-width để cân đối */
+        scroll-snap-align: start;
+        height: 100%; 
+    }
+
+    /* Ẩn thanh cuộn cho thẩm mỹ */
+    .mobile-swipe-grid::-webkit-scrollbar { display: none; }
+    .mobile-swipe-grid { -ms-overflow-style: none; scrollbar-width: none; }
+}
