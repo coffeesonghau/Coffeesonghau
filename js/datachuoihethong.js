@@ -123,7 +123,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shqk nhuong quyen song hau qk cầu sập huy liệu xã hoà bình",
         name: "Sông Hậu QK",
-        address: "Long Thạnh, Vĩnh Lợi, Bạc Liêu,", 
+        address: "Long Thạnh, Vĩnh Lợi, Bạc Liêu,",
         image: "chuoihethong/SHNQqk.webp",
         mapLink: "https://maps.app.goo.gl/55qa3L2RqXHgJvGr9"
     },
@@ -133,7 +133,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh22 song hau 22 nhuong quyen song hau 22 vo thi sau, phuong 8, bac lieu",
         name: "Sông Hậu 22",
-        address: "45 Võ Thị Sáu, Phường 8, Bạc Liêu", 
+        address: "45 Võ Thị Sáu, Phường 8, Bạc Liêu",
         image: "chuoihethong/SH22.webp",
         mapLink: "https://maps.app.goo.gl/ohEPJhJ4NupZ2eEy7"
     },
@@ -143,7 +143,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shphuoclong nhuong quyen song hau phuoc long",
         name: "Sông Hậu Phước Long (TB)",
-        address: "ấp long thành thị trấn phước long tỉnh bạc liêu", 
+        address: "ấp long thành thị trấn phước long tỉnh bạc liêu",
         image: "chuoihethong/SHphuoclongTB.webp",
         mapLink: "https://maps.app.goo.gl/PgCZ1BSXswTqPbAh8"
     },
@@ -153,9 +153,19 @@ const systemData = [
         city: "soc-trang",
         searchTags: "shsoctrang song hau soc trang nhuong quyen",
         name: "Sông Hậu Sóc Trăng",
-        address: "363 Mạc Đĩnh Chi, Phường 4, Sóc Trăng", 
+        address: "363 Mạc Đĩnh Chi, Phường 4, Sóc Trăng",
         image: "chuoihethong/SHsoctrang.webp",
         mapLink: "https://maps.app.goo.gl/mjL4EtDTKtt7GEr9A"
+    },
+    {
+        id: "fran-6",
+        type: "franchise",
+        city: "bac-lieu",
+        searchTags: "shhongdan nhuong quyen song hau ngan dua hong dan",
+        name: "Sông Hậu Hồng Dân",
+        address: "Ngan Dừa, Hồng Dân, Tỉnh Bạc Liêu",
+        image: "chuoihethong/SHhongdan.webp",
+        mapLink: "https://maps.app.goo.gl/6Yy7BbCdKFdLiJWP6"
     },
     {
         id: "fran-32",
@@ -163,17 +173,17 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh9 nhuong quyen song hau 9",
         name: "Sông Hậu 9",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
     {
-        id: "fran-06",
+        id: "fran-23",
         type: "franchise",
         city: "bac-lieu",
         searchTags: "sh13 nhuong quyen song hau 13",
         name: "Sông Hậu 13",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -183,7 +193,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh19 nhuong quyen song hau 19",
         name: "Sông Hậu 19",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -193,7 +203,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh28 song hau 28 nhuong quyen",
         name: "Sông Hậu 28",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -203,7 +213,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh22 nhuong quyen song hau 22",
         name: "Sông Hậu 22",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -213,7 +223,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh86 nhuong quyen song hau 86",
         name: "Sông Hậu 86",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -223,7 +233,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh26 nhuong quyen song hau 26",
         name: "Sông Hậu 26",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -233,7 +243,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh1 nhuong quyen song hau 1",
         name: "Sông Hậu 1",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -243,7 +253,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh2 nhuong quyen song hau 2",
         name: "Sông Hậu 2",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -253,7 +263,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh3 nhuong quyen song hau 3",
         name: "Sông Hậu 3",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -263,7 +273,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh69 nhuong quyen song hau 69",
         name: "Sông Hậu 69",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -273,7 +283,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh23/8 nhuong quyen song hau 23/8",
         name: "Sông Hậu 23/8",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -283,7 +293,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh32 nhuong quyen song hau 32",
         name: "Sông Hậu 32",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -293,7 +303,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shnhamat nhuong quyen song hau nha mat",
         name: "Sông Hậu Nhà Mát",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -303,7 +313,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "sh22 nhuong quyen song hau 22",
         name: "Sông Hậu 22",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -313,7 +323,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shdoanhnhan nhuong quyen song hau doanh nhan",
         name: "Sông Hậu Doanh Nhân",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -323,7 +333,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shchauhung nhuong quyen song hau chau hung",
         name: "Sông Hậu Châu Hưng",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -333,17 +343,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shphuoclong nhuong quyen song hau phuoc long",
         name: "Sông Hậu Phước Long TB",
-        address: "Đang cập nhật...", 
-        image: "chuoihethong/NQnon.png",
-        mapLink: "#"
-    },
-    {
-        id: "fran-23",
-        type: "franchise",
-        city: "bac-lieu",
-        searchTags: "shhongdan nhuong quyen song hau hong dan",
-        name: "Sông Hậu Hồng Dân",
-        address: "Đang cập nhật...", 
+        address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -353,7 +353,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shhoabinh nhuong quyen song hau hoa binh ",
         name: "Sông Hậu Hoà Binh AK",
-        address: "45 Võ Thị Sáu, Phường 8, Bạc Liêu", 
+        address: "45 Võ Thị Sáu, Phường 8, Bạc Liêu",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -363,7 +363,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shcauhoabinh nhuong quyen song hau cau hoa binh",
         name: "Sông Hậu Cầu Hoà Bình",
-        address: "Đang cập nhật", 
+        address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -373,7 +373,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shhoabinh nhuong quyen song hau hoa binh",
         name: "Sông Hậu Hoà Bình",
-        address: "Đang cập nhật", 
+        address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -383,7 +383,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shvinhhung nhuong quyen song hau vinh hung",
         name: "Sông Hậu Vĩnh Hưng",
-        address: "Đang cập nhật", 
+        address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -393,7 +393,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shdat nhuong quyen song hau dat",
         name: "Sông Hậu SH Đạt",
-        address: "Đang cập nhật", 
+        address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -403,7 +403,7 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shquangtruong nhuong quyen song hau quang truong",
         name: "Sông Hậu Quảng Trường",
-        address: "Đang cập nhật", 
+        address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
@@ -413,9 +413,9 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "nhuong quyen song hau",
         name: "Đang cập nhật...",
-        address: "Đang cập nhật", 
+        address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
     },
-    
+
 ];
