@@ -72,7 +72,7 @@ window.dbProducts = [
     {
         id: 4, 
         name: "SH Mạnh Mẽ 1 (250g)", 
-        price: 55000, 
+        price: 50000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHmanhme2026.webp",
@@ -94,7 +94,7 @@ window.dbProducts = [
     {
         id: 5, 
         name: "SH Mạnh Mẽ 2 (250g)", 
-        price: 45000, 
+        price: 40000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHmanhme2026.webp",
@@ -116,7 +116,7 @@ window.dbProducts = [
     {
         id: 6, 
         name: "SH Cận Đại (250g)", 
-        price: 40000, 
+        price: 35000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHcandai2026.webp",
@@ -179,7 +179,7 @@ window.dbProducts = [
     {
         id: 9, 
         name: "SH Mạnh Mẽ 1 (500g)", 
-        price: 110000, 
+        price: 100000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHmanhme1.webp",
@@ -200,7 +200,7 @@ window.dbProducts = [
     {
         id: 10, 
         name: "SH Mạnh Mẽ 2 (500g)", 
-        price: 90000, 
+        price: 80000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHmanhme2.webp",
@@ -221,7 +221,7 @@ window.dbProducts = [
     {
         id: 11, 
         name: "SH Cận Đại (500g)", 
-        price: 80000, 
+        price: 70000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHcandai.webp",
@@ -282,7 +282,7 @@ window.dbProducts = [
     {
         id: 14, 
         name: "SH Mạnh Mẽ 1 (100g)", 
-        price: 32000, 
+        price: 30000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHmanhme1sample.webp",
@@ -302,7 +302,7 @@ window.dbProducts = [
     {
         id: 15, 
         name: "SH Mạnh Mẽ 2 (100g)", 
-        price: 28000, 
+        price: 26000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHmanhme2sample.webp",
@@ -322,7 +322,7 @@ window.dbProducts = [
     {
         id: 16, 
         name: "SH Cận Đại (100g)", 
-        price: 26000, 
+        price: 24000, 
         unit: "Gói",
         category: "rang-xay",
         img: "img/SHcandaisample.webp",
@@ -360,7 +360,7 @@ window.dbProducts = [
     {
         id: 97, 
         name: "Phin Cà Phê Cao Cấp", 
-        price: 79000, 
+        price: 60000, 
         unit: "Cái",
         category: "dung-cu",
         img: "img/phincaocap.webp",

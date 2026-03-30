@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Render các khu vực sản phẩm hiện có
         renderSection('cao-cap', 'grid-cao-cap');
         renderSection('cafe-hat', 'grid-cafe-hat');
-        renderSection('rang-xay', 'grid-rang-xay');
+        renderRangXayPagination();
         renderSection('best-seller', 'grid-best-seller');
 
         // --- THÊM MỚI: RENDER MẪU DÙNG THỬ (ID 12, 13) ---
@@ -700,7 +700,7 @@ function renderRangXayPagination() {
 // Hàm được gọi khi click vào nút trang
 function changePageRangXay(newPage) {
     currentRangXayPage = newPage;
-    renderSection('rang-xay', 'grid-rang-xay');
+    renderRangXayPagination();
     // Tự động cuộn lên đầu danh sách sản phẩm khi chuyển trang
     document.getElementById('grid-rang-xay').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
