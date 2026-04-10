@@ -104,7 +104,7 @@ const systemData = [
         name: "Sông Hậu Tân Tạo",
         address: "Ấp Tân Tạo, Huyện Vĩnh Lợi, Tỉnh Cà Mau",
         image: "img/songhautantao.webp",
-        mapLink: "https://maps.app.goo.gl/81ArU6jUDP7AUaST8"
+        mapLink: "https://maps.app.goo.gl/eiARWPgjgufu1pG26"
     },
     // --- HỆ THỐNG NHƯỢNG QUYỀN (ĐỐI TÁC) ---
     {
