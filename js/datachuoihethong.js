@@ -97,14 +97,14 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/DHt4iLCEiSGepEQz6"
     },
     {
-        id: "res-01",
-        type: "restaurant", // Loại đặc biệt: Nhà hàng (Card nhỏ, badge xanh)
+        id: "sys-09",
+        type: "system", // Loại đặc biệt: Nhà hàng (Card nhỏ, badge xanh)
         city: "bac-lieu",
-        searchTags: "am thuc song hau vong xoay ton duc thang vo van kiet",
-        name: "Ẩm Thực Sông Hậu",
-        address: "Vòng xoay Tôn Đức Thắng, P.7, BL",
-        image: "img/amthucsonghau.jpg",
-        mapLink: "https://maps.app.goo.gl/gcN9vA2XzsJdc4GW9"
+        searchTags: "sh bai rac tan tao vinh loi ap tan tao",
+        name: "Sông Hậu Tân Tạo",
+        address: "Ấp Tân Tạo, Huyện Vĩnh Lợi, Tỉnh Cà Mau",
+        image: "img/songhautantao.webp",
+        mapLink: "https://maps.app.goo.gl/81ArU6jUDP7AUaST8"
     },
     // --- HỆ THỐNG NHƯỢNG QUYỀN (ĐỐI TÁC) ---
     {
@@ -301,7 +301,7 @@ const systemData = [
         id: "fran-18",
         type: "franchise",
         city: "bac-lieu",
-        searchTags: "shnhamat nhuong quyen song hau nha mat",
+        searchTags: "sh nhamat nhuong quyen song hau nha mat",
         name: "Sông Hậu Nhà Mát",
         address: "Đang cập nhật...",
         image: "chuoihethong/NQnon.png",
