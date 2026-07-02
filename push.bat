@@ -1,69 +1,68 @@
 @echo off
 setlocal enabledelayedexpansion
+title CoffeeSongHau Auto Git Push Pro
 
-REM --- VE THU MUC CHUA FILE BAT ---
 cd /d "%~dp0"
 
-REM --- CAU HINH ---
 set BRANCH=master
-set WEB_URL=https://coffeesonghau.com/
+set LOGFILE=git_push_log.txt
 
-REM --- TAO THOI GIAN ---
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set dt=%%I
-set ngay=%dt:~0,4%-%dt:~4,2%-%dt:~6,2%
-set gio=%dt:~8,2%:%dt:~10,2%
-set msg=Update: %ngay% %gio%
+color 0A
 
-echo ==========================================
-echo       AUTO DEPLOY - CA PHE SONG HAU
-echo       Nhanh: %BRANCH%
-echo       Thoi gian: %msg%
-echo ==========================================
+echo ======================================
+echo       CoffeeSongHau Git Auto Push
+echo ======================================
 
-REM --- DONG GIT TREO ---
-taskkill /F /IM git.exe >nul 2>&1
-del /f /q .git\index.lock >nul 2>&1
+:: Tao commit message theo thoi gian
+for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HH-mm-ss"') do set msg=Auto Update %%i
 
-REM --- KIEM TRA FILE THAY DOI ---
-echo [1/4] Dang kiem tra file thay doi...
-git status --short
+echo.
+echo [1/5] Checking changes...
+git status
 
+echo.
+echo [2/5] Adding files...
 git add .
+
+:: Kiem tra co thay doi khong
 git diff --cached --quiet
 if %errorlevel% equ 0 (
-echo [THONG BAO] Khong co file nao thay doi.
-goto :End
+    echo No changes detected.
+    pause
+    exit /b
 )
 
-REM --- COMMIT ---
-echo [2/4] Dang commit...
-git commit -m "%msg%"
-
-REM --- CAP NHAT TU GITHUB ---
-echo [3/4] Dang lay code moi nhat...
+echo.
+echo [3/5] Pulling latest from GitHub...
 git pull origin %BRANCH% --rebase
-
 if %errorlevel% neq 0 (
-color 4
-echo [LOI] Loi khi pull code!
-pause
-exit /b
+    echo [ERROR] Pull failed. Resolve conflict manually.
+    pause
+    exit /b
 )
 
-REM --- PUSH ---
-echo [4/4] Dang push len GitHub...
+echo.
+echo [4/5] Commiting...
+git commit -m "%msg%"
+if %errorlevel% neq 0 (
+    echo [ERROR] Commit failed.
+    pause
+    exit /b
+)
+
+echo.
+echo [5/5] Pushing to GitHub...
 git push origin %BRANCH%
-
 if %errorlevel% neq 0 (
-color 4
-echo [LOI] Push that bai!
-pause
-exit /b
+    echo [ERROR] Push failed.
+    pause
+    exit /b
 )
 
-:End
-echo ==========================================
-echo       DEPLOY THANH CONG!
-echo       Website: %WEB_URL%
-echo ==========================================
-timeout /t 5
+echo [%date% %time%] SUCCESS: %msg% >> %LOGFILE%
+
+echo.
+echo ======================================
+echo Push completed successfully!
+echo ======================================
+pause
