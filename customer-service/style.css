@@ -201,3 +201,142 @@ h1 {
         opacity: 1;
     }
 }
+/* Bubble quảng cáo Cafe */
+.coffee-bubble{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    z-index:999;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    text-decoration:none;
+
+    background:#8B4513;
+    color:#fff;
+
+    border-radius:40px;
+    padding:10px 15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+
+    animation:floatCoffee 2.5s ease-in-out infinite;
+    transition:.3s;
+}
+
+.coffee-bubble:hover{
+    transform:scale(1.05);
+}
+
+.bubble-icon{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#fff;
+    color:#8B4513;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+}
+
+.bubble-text{
+    display:flex;
+    flex-direction:column;
+    line-height:1.2;
+}
+
+.bubble-text strong{
+    font-size:13px;
+    font-weight:700;
+}
+
+.bubble-text span{
+    font-size:12px;
+    opacity:.9;
+}
+
+@keyframes floatCoffee{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-6px);
+    }
+}
+.coffee-mascot{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+
+    display:flex;
+    align-items:flex-end;
+
+    text-decoration:none;
+    z-index:9999;
+}
+
+.coffee-mascot img{
+    width:170px;          /* hoặc 180px nếu muốn nổi bật hơn */
+    height:auto;
+    display:block;
+
+    filter:drop-shadow(0 8px 20px rgba(0,0,0,.18));
+
+    animation:bearFloat 2.5s ease-in-out infinite;
+    transition:.3s;
+}
+
+.coffee-mascot:hover img{
+    transform:scale(1.05);
+}
+
+.coffee-text{
+
+    margin-left:-18px;
+
+    background:#fff;
+
+    padding:12px 18px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+
+    color:#5b3315;
+
+    border:2px solid #EBC08D;
+}
+
+.coffee-text strong{
+    display:block;
+    font-size:14px;
+}
+
+.coffee-text span{
+    font-size:13px;
+    font-weight:bold;
+}
+
+@keyframes bearFloat{
+
+    0%,100%{
+        transform:translateY(0) rotate(0deg);
+    }
+
+    25%{
+        transform:translateY(-3px) rotate(-2deg);
+    }
+
+    50%{
+        transform:translateY(-8px) rotate(2deg);
+    }
+
+    75%{
+        transform:translateY(-3px) rotate(-1deg);
+    }
+}
