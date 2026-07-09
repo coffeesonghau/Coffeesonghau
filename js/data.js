@@ -463,7 +463,7 @@ window.dbProducts = [
     // --- CODE MẪU ---
 
     { 
-        id: 98, 
+        id: 91, 
         name: "Máy Pha Cà Phê Công Nghiệp", 
         price: 0, // Ví dụ giá 15 triệu
         unit: "Cái", // Thêm đơn vị
