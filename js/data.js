@@ -358,7 +358,7 @@ window.dbProducts = [
         }
     },
     {
-        id: 97, 
+        id: 95, 
         name: "Phin Cà Phê Cao Cấp", 
         price: 60000, 
         unit: "Cái",
@@ -375,9 +375,10 @@ window.dbProducts = [
             `
         }
     },
+
     {
-        id: 99, 
-        name: "Cà Phê Hạt", 
+        id: 96, 
+        name: "Cà Phê Hạt Robusta & Arabica", 
         price: 300000, 
         unit: "Kg",
         category: "cafe-hat", 
@@ -394,7 +395,70 @@ window.dbProducts = [
                 <p>- <strong>Hạn sử dụng:</strong> 1 tháng kể từ ngày sản xuất.</p>
             `
         }
-    },   
+    },
+
+    {
+        id: 97, 
+        name: "Cà Phê Hạt Robusta", 
+        price: 240000, 
+        unit: "Kg",
+        category: "cafe-hat", 
+        img: "img/cafehat.webp",
+        gallery: [
+            "img/cafehat.webp",  
+        ],
+        info: {
+            description: "Cà Phê Hạt Sông Hậu Rang Mộc Robusta.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Hạt Cà Phê Robusta.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất Rang thủ công</p>
+                <p>- <strong>Hạn sử dụng:</strong> 1 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    }, 
+
+    {
+        id: 98, 
+        name: "Cà Phê Hạt Culi", 
+        price: 250000, 
+        unit: "Kg",
+        category: "cafe-hat", 
+        img: "img/cafehat.webp",
+        gallery: [
+            "img/cafehat.webp",  
+        ],
+        info: {
+            description: "Cà Phê Hạt Sông Hậu Rang Mộc Culi.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Hạt Cà Phê Culi.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất Rang thủ công</p>
+                <p>- <strong>Hạn sử dụng:</strong> 1 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },
+
+    {
+        id: 99, 
+        name: "Cà Phê Hạt Moka", 
+        price: 400000, 
+        unit: "Kg",
+        category: "cafe-hat", 
+        img: "img/cafehat.webp",
+        gallery: [
+            "img/cafehat.webp",  
+        ],
+        info: {
+            description: "Cà Phê Hạt Sông Hậu Rang Mộc Moka.",
+            details: `
+                <p class="mb-2">- <strong>Thành phần:</strong> Hạt Cà Phê Moka.</p>
+                <p class="mb-2">- <strong>Mức rang:</strong> Medium Dark (Rang vừa đậm).</p>
+                <p class="mb-2">- <strong>Hương vị:</strong> Mộc nguyên chất Rang thủ công</p>
+                <p>- <strong>Hạn sử dụng:</strong> 1 tháng kể từ ngày sản xuất.</p>
+            `
+        }
+    },    
 
     // --- CODE MẪU ---
 
