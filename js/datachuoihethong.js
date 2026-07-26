@@ -98,7 +98,7 @@ const systemData = [
     },
     {
         id: "sys-09",
-        type: "system", // Loại đặc biệt: Nhà hàng (Card nhỏ, badge xanh)
+        type: "system",
         city: "bac-lieu",
         searchTags: "sh bai rac tan tao vinh loi ap tan tao",
         name: "Sông Hậu Tân Tạo",
@@ -106,6 +106,18 @@ const systemData = [
         image: "img/songhautantao.webp",
         mapLink: "https://maps.app.goo.gl/eiARWPgjgufu1pG26"
     },
+
+    {
+        id: "sys-10",
+        type: "system", 
+        city: "bac-lieu",
+        searchTags: "sh phuong bac lieu vong xoay, ton duc thang vo van kiet, bac lieu, ca mau",
+        name: "Sông Hậu Phường Bạc Liêu",
+        address: "Vòng xoay Tôn Đức Thắng Đ. Võ Văn Kiệt, Bạc Liêu, Cà Mau",
+        image: "img/songhaupbl.jpg",
+        mapLink: "https://maps.app.goo.gl/StDQJ6pugdfo8k6s5"
+    },
+
     // --- HỆ THỐNG NHƯỢNG QUYỀN (ĐỐI TÁC) ---
     {
         id: "fran-01",
