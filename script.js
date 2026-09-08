@@ -285,7 +285,7 @@ function initSlider() {
 
     let currentSlide = 0;
     let autoPlayInterval;
-    const totalSlides = 3; // Số lượng slide mặc định
+    const totalSlides = 3; 
 
     // --- A. Hàm chuyển Slide ---
     function moveSlider(index) {
@@ -434,7 +434,7 @@ function renderProductDetail() {
         return;
     }
 
-    // --- [MỚI] LOGIC GIÁ & ĐƠN VỊ (Trang Chi Tiết) ---
+
     let mainPriceHTML = '';
     const bigUnit = product.unit ? `<span class="text-xl font-bold text-gray-500 ml-1">/${product.unit}</span>` : '';
 
