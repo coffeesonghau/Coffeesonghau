@@ -109,7 +109,7 @@ const systemData = [
 
     {
         id: "sys-10",
-        type: "system", 
+        type: "system",
         city: "bac-lieu",
         searchTags: "sh phuong bac lieu vong xoay, ton duc thang vo van kiet, bac lieu, ca mau",
         name: "Sông Hậu Phường Bạc Liêu",
@@ -120,7 +120,27 @@ const systemData = [
 
     // --- HỆ THỐNG NHƯỢNG QUYỀN (ĐỐI TÁC) ---
     {
-        id: "fran-01",
+        id: "fran-82",
+        type: "franchise",
+        city: "bac-lieu",
+        searchTags: "sh9 sh vong xoay nhuong quyen song hau 9 song hau vong xoay",
+        name: "Sông Hậu Vòng Xoay",
+        address: "QL91B ngã 5 vòng xoay,Phường 7, Bạc Liêu",
+        image: "chuoihethong/SHvongxoay.webp",
+        mapLink: "https://maps.app.goo.gl/2sBBP9ACBpvbX53SA"
+    },
+    {
+        id: "fran-83",
+        type: "franchise",
+        city: "can-tho",
+        searchTags: "nhuong quyen song hau can tho",
+        name: "Sông Hậu Cần Thơ",
+        address: "18B QL91B Phường Long Tuyền, TP Cần Thơ",
+        image: "chuoihethong/SHcantho.webp",
+        mapLink: "https://maps.app.goo.gl/qrTKUd4W2Fb3JLjf8"
+    },
+    {
+        id: "fran-84",
         type: "franchise", // Loại: Nhượng quyền (Card nhỏ, badge vàng)
         city: "bac-lieu",
         searchTags: "shpl nhuong quyen song hau phuoc long bac lieu",
@@ -130,7 +150,7 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/s12ovPaD52eF9mwy7"
     },
     {
-        id: "fran-02",
+        id: "fran-85",
         type: "franchise",
         city: "bac-lieu",
         searchTags: "shqk nhuong quyen song hau qk cầu sập huy liệu xã hoà bình",
@@ -140,7 +160,7 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/55qa3L2RqXHgJvGr9"
     },
     {
-        id: "fran-03",
+        id: "fran-86",
         type: "franchise",
         city: "bac-lieu",
         searchTags: "sh22 song hau 22 nhuong quyen song hau 22 vo thi sau, phuong 8, bac lieu",
@@ -150,7 +170,7 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/ohEPJhJ4NupZ2eEy7"
     },
     {
-        id: "fran-04",
+        id: "fran-87",
         type: "franchise",
         city: "bac-lieu",
         searchTags: "shphuoclong nhuong quyen song hau phuoc long",
@@ -160,7 +180,7 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/PgCZ1BSXswTqPbAh8"
     },
     {
-        id: "fran-05",
+        id: "fran-88",
         type: "franchise",
         city: "soc-trang",
         searchTags: "shsoctrang song hau soc trang nhuong quyen",
@@ -170,7 +190,7 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/mjL4EtDTKtt7GEr9A"
     },
     {
-        id: "fran-6",
+        id: "fran-89",
         type: "franchise",
         city: "bac-lieu",
         searchTags: "shhongdan nhuong quyen song hau ngan dua hong dan",
@@ -180,14 +200,14 @@ const systemData = [
         mapLink: "https://maps.app.goo.gl/6Yy7BbCdKFdLiJWP6"
     },
     {
-        id: "fran-32",
+        id: "fran-90",
         type: "franchise",
         city: "bac-lieu",
-        searchTags: "sh9 nhuong quyen song hau 9",
-        name: "Sông Hậu 9",
-        address: "Đang cập nhật...",
-        image: "chuoihethong/NQnon.png",
-        mapLink: "#"
+        searchTags: "sh9 sh vong xoay nhuong quyen song hau 9 song hau vong xoay",
+        name: "Sông Hậu Vòng Xoay",
+        address: "QL91B ngã 5 vòng xoay,Phường 7, Bạc Liêu",
+        image: "chuoihethong/SHvongxoay.webp",
+        mapLink: "https://maps.app.goo.gl/2sBBP9ACBpvbX53SA"
     },
     {
         id: "fran-23",
@@ -415,16 +435,6 @@ const systemData = [
         city: "bac-lieu",
         searchTags: "shquangtruong nhuong quyen song hau quang truong",
         name: "Sông Hậu Quảng Trường",
-        address: "Đang cập nhật",
-        image: "chuoihethong/NQnon.png",
-        mapLink: "#"
-    },
-    {
-        id: "fran-30",
-        type: "franchise",
-        city: "bac-lieu",
-        searchTags: "nhuong quyen song hau",
-        name: "Đang cập nhật...",
         address: "Đang cập nhật",
         image: "chuoihethong/NQnon.png",
         mapLink: "#"
