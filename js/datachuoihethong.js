@@ -4,14 +4,14 @@ const systemData = [
     // --- TRỤ SỞ CHÍNH ---
     {
         id: "hq-01",
-        type: "headquarters", // Loại đặc biệt: Trụ sở chính (Card to)
+        type: "headquarters",
         city: "bac-lieu",
         searchTags: "cong ty nam duong tru so chinh bac lieu",
         name: "Nam Dương",
         subTitle: "Công Ty TNHH MTV SX TM DV",
         address: "188+181, Đường 23/8, Khóm Cầu Sập, Phường 8, TP. Bạc Liêu, Tỉnh Cà Mau",
         phone: "0852.494.694",
-        image: "img/congtyphoto.webp",
+        image: "chuoihethong/congtyphoto.webp",
         mapLink: "https://maps.app.goo.gl/sWArB5r16oyuGpzUA",
         contactLink: "nhuong-quyen.html"
     },
