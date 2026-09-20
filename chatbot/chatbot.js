@@ -74,7 +74,7 @@ const faqDatabase = [
     },
     {
         keywords: ["ít đường", "ít đá", "không đường", "không đá", "ngọt vừa", "giảm đường"],
-        question: "Tùy chỉnh đường/đá",
+        question: "Tùy chỉnh đường đá",
         answer: "Dạ chắc chắn rồi ạ! Quán luôn pha chế theo khẩu vị của bạn. Bạn có thể yêu cầu ít đường (30%, 50%), không đường, hoặc ít đá/không đá nhé."
     },
     {
