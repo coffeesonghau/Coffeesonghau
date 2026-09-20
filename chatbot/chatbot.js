@@ -253,12 +253,12 @@ const faqDatabase = [
     },
     {
         keywords: [
-            "giám đốc", "giám đốc là ai", "tên giám đốc", "người đứng đầu",
+            "giám đốc", "giám đốc là ai", "tên giám đốc", "người đứng đầu", "song hau", "chu quan",
             "của công ty nào", "cong ty nào", "thuộc công ty", "công ty chủ quản", 
             "chủ quán", "chủ quán là ai", "ai là chủ", "giới thiệu", "thông tin", "thành lập"
         ],
         question: "Thông tin chủ quản / Giám đốc / Người sáng lập",
-        answer: "Dạ, Coffee Sông Hậu là thương hiệu tâm huyết trực thuộc sự quản lý của CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ SẢN XUẤT NAM DƯƠNG (thương hiệu Cà Phê Sông Hậu), do Ông Lê Nam Dương làm Giám đốc. Bạn có thể tìm hiểu chi tiết hơn về câu chuyện thương hiệu tại trang <a href='index.html' style='color:#2563eb; font-weight:bold;'>Giới thiệu</a> nhé!"
+        answer: "Dạ, Coffee Sông Hậu là thương hiệu tâm huyết trực thuộc sự quản lý của CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ SẢN XUẤT NAM DƯƠNG (thương hiệu Cà Phê Sông Hậu), do Ông Lê Nam Dương làm Giám đốc. Bạn có thể tìm hiểu chi tiết hơn về câu chuyện thương hiệu tại trang <a href='../index.html' style='color:#2563eb; font-weight:bold;'>Giới thiệu</a> nhé!"
     },
     {
         keywords: [
