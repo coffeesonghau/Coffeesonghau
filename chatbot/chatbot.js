@@ -7,8 +7,8 @@ const sendBtn = document.getElementById('sendBtn');
 const typingIndicator = document.getElementById('typingIndicator');
 const suggestionsBox = document.getElementById('suggestionsBox');
 
-let isBotTyping = false; 
-const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'); 
+let isBotTyping = false;
+const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
 // ==========================================
 // 2. CƠ SỞ DỮ LIỆU KHỔNG LỒ (HƠN 60 KỊCH BẢN)
@@ -17,12 +17,12 @@ const faqDatabase = [
     // --- NHÓM 1.1: MENU & BÁO GIÁ CƠ BẢN ---
     {
         keywords: [
-            "bạn là ai", "ai đây", "ai đang chat", "bot à", "người hay máy", 
+            "bạn là ai", "ai đây", "ai đang chat", "bot à", "người hay máy",
             "tên gì", "trợ lý ảo", "mày là ai", "giới thiệu bản thân", "có thể làm gì",
             "bot tên gì", "bạn tên gì", "admin hay bot", "ai trực page", "ai rep tin nhắn",
             "phải bot không", "chat với máy à", "trả lời tự động à", "máy trả lời à",
             "bạn làm được gì", "bot làm được gì", "giúp được gì không", "tư vấn cho mình",
-            "hỗ trợ mình với", "chào", "alo", "hi", "hello", "có ai không", "ad ơi", 
+            "hỗ trợ mình với", "chào", "alo", "hi", "hello", "có ai không", "ad ơi",
             "admin ơi", "shop ơi", "quán ơi", "bot ơi", "trợ lý ơi"
         ],
         question: "Giới thiệu danh tính và chức năng của Chatbot",
@@ -59,7 +59,7 @@ const faqDatabase = [
     },
     {
         keywords: [
-            "phòng lạnh", "quy định phòng lạnh", "máy lạnh", "điều hòa", "phòng điều hòa", 
+            "phòng lạnh", "quy định phòng lạnh", "máy lạnh", "điều hòa", "phòng điều hòa",
             "phòng kính", "nội quy phòng lạnh", "ngồi phòng lạnh", "trong phòng lạnh"
         ],
         question: "Quy định khu vực phòng lạnh",
@@ -78,7 +78,7 @@ const faqDatabase = [
         answer: "Dạ chắc chắn rồi ạ! Quán luôn pha chế theo khẩu vị của bạn. Bạn có thể yêu cầu ít đường (30%, 50%), không đường, hoặc ít đá/không đá nhé."
     },
     {
-        keywords: ["đồ ăn ngoài", "thức uống ngoài", "mang bánh", "mang đồ ăn vào"],
+        keywords: ["đồ ăn ngoài", "thức uống ngoài", "mang bánh", "mang đồ ăn vào", "mang đồ ăn thức uống bên ngoài vào quán"],
         question: "Mang đồ ăn thức uống bên ngoài vào quán",
         answer: "Dạ bạn có thể mang theo đồ ăn vặt nhẹ hoặc bánh kem sinh nhật vào quán. Tuy nhiên, quán xin phép không nhận thức uống từ thương hiệu khác, đồ ăn nặng mùi khu vực phòng lạnh ạ."
     },
@@ -254,7 +254,7 @@ const faqDatabase = [
     {
         keywords: [
             "giám đốc", "giám đốc là ai", "tên giám đốc", "người đứng đầu", "song hau", "chu quan",
-            "của công ty nào", "cong ty nào", "thuộc công ty", "công ty chủ quản", 
+            "của công ty nào", "cong ty nào", "thuộc công ty", "công ty chủ quản",
             "chủ quán", "chủ quán là ai", "ai là chủ", "giới thiệu", "thông tin", "thành lập"
         ],
         question: "Thông tin chủ quản / Giám đốc / Người sáng lập",
@@ -262,7 +262,7 @@ const faqDatabase = [
     },
     {
         keywords: [
-            "bao nhiêu quán", "mấy quán", "bao nhiêu chi nhánh", "mấy chi nhánh", 
+            "bao nhiêu quán", "mấy quán", "bao nhiêu chi nhánh", "mấy chi nhánh",
             "chuỗi", "cà phê sông hậu", "cafe sông hậu", "hệ thống", "các chi nhánh"
         ],
         question: "Hỏi về số lượng chi nhánh / Hệ thống",
@@ -287,7 +287,7 @@ function appendMessage(sender, message, save = true) {
 
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${sender}`;
-    
+
     if (sender === 'bot') {
         msgDiv.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     } else {
@@ -296,7 +296,7 @@ function appendMessage(sender, message, save = true) {
 
     const timeDiv = document.createElement('div');
     timeDiv.className = 'msg-time';
-    const msgTime = getCurrentTime(); 
+    const msgTime = getCurrentTime();
     timeDiv.innerText = msgTime;
 
     wrapperDiv.appendChild(msgDiv);
@@ -317,7 +317,7 @@ function typeMessage(message, callback) {
 
     const msgDiv = document.createElement('div');
     msgDiv.className = 'message bot';
-    
+
     const timeDiv = document.createElement('div');
     timeDiv.className = 'msg-time';
     timeDiv.innerText = getCurrentTime();
@@ -327,8 +327,8 @@ function typeMessage(message, callback) {
     chatBox.appendChild(wrapperDiv);
 
     let i = 0;
-    const rawText = message.replace(/<[^>]*>?/gm, '').replace(/\*\*/g, ''); 
-    
+    const rawText = message.replace(/<[^>]*>?/gm, '').replace(/\*\*/g, '');
+
     const typingInterval = setInterval(() => {
         msgDiv.textContent += rawText.charAt(i);
         i++;
@@ -338,8 +338,8 @@ function typeMessage(message, callback) {
             clearInterval(typingInterval);
             msgDiv.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             saveChatHistory('bot', message, timeDiv.innerText);
-            
-            try { notificationSound.play().catch(e => {}); } catch(e) {}
+
+            try { notificationSound.play().catch(e => { }); } catch (e) { }
             if (callback) callback();
         }
     }, 15);
@@ -394,7 +394,7 @@ function handleSend(text) {
     setTimeout(() => {
         typingIndicator.style.display = 'none';
         const botResponse = getBotResponse(messageText);
-        
+
         typeMessage(botResponse, () => {
             isBotTyping = false;
         });
@@ -402,40 +402,40 @@ function handleSend(text) {
 }
 
 function getBotResponse(userText) {
-    const lowerText = " " + userText.toLowerCase() + " "; 
-    
+    const lowerText = " " + userText.toLowerCase() + " ";
+
     let bestMatch = null;
     let maxScore = 0;
 
     for (const item of faqDatabase) {
         let score = 0;
-        
+
         for (const keyword of item.keywords) {
             if (lowerText.includes(keyword.toLowerCase())) {
                 score += keyword.length; // Cộng điểm dựa trên độ dài từ khóa (Từ khóa càng dài/cụ thể càng được ưu tiên)
             }
         }
-        
+
         if (score > maxScore) {
             maxScore = score;
             bestMatch = item.answer;
         }
     }
-    
+
     // Yêu cầu phải có từ khóa được match (score > 0) mới trả lời
     if (maxScore > 0) {
         return bestMatch;
     }
-    
+
     return "Dạ, trợ lý ảo chưa hiểu rõ ý của bạn. Để được hỗ trợ chính xác nhất, bạn vui lòng để lại **Số điện thoại**, hoặc gọi trực tiếp Hotline ** 0852.494.6940**, nhân viên Sông Hậu sẽ gọi lại hỗ trợ bạn ngay lập tức ạ!";
 }
 
 // ==========================================
 // 8. TƯƠNG TÁC HTML VÀ AUTO-SUGGESTION
 // ==========================================
-window.sendQuickReply = function(text) { handleSend(text); }
-window.clearChat = function() {
-    if(confirm('Bạn có chắc muốn xóa lịch sử trò chuyện không?')) {
+window.sendQuickReply = function (text) { handleSend(text); }
+window.clearChat = function () {
+    if (confirm('Bạn có chắc muốn xóa lịch sử trò chuyện không?')) {
         localStorage.removeItem('chatHistorySongHau');
         chatBox.innerHTML = '';
         isBotTyping = true;
@@ -445,17 +445,17 @@ window.clearChat = function() {
     }
 }
 
-chatInput.addEventListener('input', function() {
+chatInput.addEventListener('input', function () {
     const val = this.value.toLowerCase().trim();
     suggestionsBox.innerHTML = '';
-    
+
     if (val.length < 2) {
         suggestionsBox.style.display = 'none';
         return;
     }
 
-    const matches = faqDatabase.filter(item => 
-        item.question.toLowerCase().includes(val) || 
+    const matches = faqDatabase.filter(item =>
+        item.question.toLowerCase().includes(val) ||
         item.keywords.some(k => k.includes(val))
     );
 
@@ -464,7 +464,7 @@ chatInput.addEventListener('input', function() {
             const div = document.createElement('div');
             div.className = 'suggestion-item';
             div.innerText = match.question;
-            div.onmousedown = function(e) { 
+            div.onmousedown = function (e) {
                 e.preventDefault();
                 chatInput.value = match.question;
                 suggestionsBox.style.display = 'none';
@@ -478,7 +478,7 @@ chatInput.addEventListener('input', function() {
     }
 });
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target !== chatInput && e.target !== suggestionsBox) {
         suggestionsBox.style.display = 'none';
     }
