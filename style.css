@@ -276,6 +276,10 @@ aside ul li:hover {
     background-color: #0084FF;
 }
 
+.bot-btn .icon-holder {
+    background-color: #4400ff; /* Xanh lá */
+}
+
 .floating-btn .text-label {
     font-size: 14px;
     font-weight: bold;

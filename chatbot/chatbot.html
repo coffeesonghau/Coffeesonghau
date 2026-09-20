@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chatbot CSKH - Coffee Sông Hậu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="chatbot.css">
+</head>
+
+<body>
+    <div class="card">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <a href="lienhe.html" class="back-btn" aria-label="Quay lại"><i class="fas fa-arrow-left"></i></a>
+                <div class="header-info">
+                    <div class="header-title">Trợ Lý Sông Hậu CSKH</div>
+                    <div class="header-status"><span class="dot"></span> Trực tuyến 24/7</div>
+                </div>
+            </div>
+            <button class="header-action-btn" onclick="clearChat()" title="Xóa lịch sử trò chuyện">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+
+        <!-- Khung Chat -->
+        <div class="chat-box" id="chatBox">
+            <!-- Tin nhắn sẽ được render qua JS -->
+        </div>
+        <div class="typing-indicator" id="typingIndicator">Trợ lý đang phản hồi <i
+                class="fas fa-circle-notch fa-spin"></i></div>
+
+        <!-- Gợi ý Menu Dưới (Quick Replies) -->
+        <div class="quick-replies" id="quickReplies">
+            <button class="quick-btn" onclick="sendQuickReply('Xem menu và đồ uống nổi bật')">☕ Thực Đơn</button>
+            <button class="quick-btn" onclick="sendQuickReply('Thông tin địa chỉ, giờ mở cửa')">📍 Không Gian</button>
+            <button class="quick-btn" onclick="sendQuickReply('Khiếu nại thái độ nhân viên hoặc dịch vụ')">⚠️ Góp Ý Dịch Vụ</button>
+            <button class="quick-btn" onclick="sendQuickReply('Sự cố thiếu món, trễ)')">🛵 Sự Cố</button>
+            <button class="quick-btn" onclick="sendQuickReply('Đăng ký mua sỉ, đại lý, nhượng quyền')">📦 Nhập Sỉ / Nhượng Quyền</button>
+            <button class="quick-btn" onclick="sendQuickReply('Chương trình khuyến mãi và tích điểm')">🎁 Khuyến Mãi & Tích Điểm</button>
+            <button class="quick-btn" onclick="sendQuickReply('Thông tin tuyển dụng nhân viên')">🤝 Tuyển Dụng</button>
+            <button class="quick-btn" onclick="sendQuickReply('Tôi muốn gặp nhân viên hỗ trợ trực tiếp')">📞 Gặp Nhân Viên</button>
+        </div>
+
+        <!-- Box gợi ý tự động khi gõ -->
+        <div class="suggestions-box" id="suggestionsBox"></div>
+
+        <!-- Khung Nhập -->
+        <div class="input-area">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Nhập câu hỏi hoặc vấn đề của bạn..." autocomplete="off">
+            <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

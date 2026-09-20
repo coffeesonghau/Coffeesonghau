@@ -9,6 +9,7 @@
 </head>
 <body>
 
+    <!-- Màn hình chờ mở đầu -->
     <div id="intro-screen">
         <div class="intro-content">
             <img src="img/LogoSH.png" alt="Coffee Sông Hậu Logo" class="intro-logo">
@@ -16,7 +17,47 @@
         </div>
     </div>
 
+    <!-- Giao diện chính -->
     <div class="card main-content hidden">
+        
+        <!-- Nút Menu 3 gạch ngang -->
+        <button class="menu-toggle-btn" id="menuToggleBtn" aria-label="Mở menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Menu Trượt -->
+        <div class="side-menu" id="sideMenu">
+            <div class="side-menu-header">
+                <h3>Tiện ích Sông Hậu</h3>
+                <button class="close-menu-btn" id="closeMenuBtn"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="side-menu-list">
+                <a href="thucdon.html" class="side-menu-item">
+                    <div class="icon-wrap"><i class="fas fa-book-open"></i></div>
+                    <span>Thực đơn & Món mới</span>
+                </a>
+                <a href="danhgiadichvu.html" class="side-menu-item">
+                    <div class="icon-wrap"><i class="fas fa-star"></i></div>
+                    <span>Đánh giá dịch vụ</span>
+                </a>
+                <a href="chatbot.html" class="side-menu-item">
+                    <div class="icon-wrap"><i class="fas fa-star"></i></div>
+                    <span>Chát BOT A.I</span>
+                </a>
+                <hr class="menu-divider">
+                
+                <!-- Nút chuyển đổi Giao diện Tối/Sáng -->
+                <button class="side-menu-item theme-toggle" id="themeToggleBtn">
+                    <div class="icon-wrap"><i class="fas fa-moon" id="themeIcon"></i></div>
+                    <span id="themeText">Giao diện tối</span>
+                </button>
+            </div>
+        </div>
+        <!-- Lớp phủ khi mở menu -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <!-- Nội dung Card -->
         <div class="logo">
             <img src="img/LogoSH.png" alt="Logo" class="card-logo-img">
         </div>
@@ -26,9 +67,9 @@
 
         <div class="contact-list">
             <a href="tel:0852494694" class="contact-item">
-                <div class="icon"><i class="fas fa-phone"></i></div>
+                <div class="icon"><i class="fas fa-phone-alt"></i></div>
                 <div class="info">
-                    <strong>Hotline</strong>
+                    <strong>Gọi Hotline</strong>
                     <span>0852 494 694</span>
                 </div>
                 <i class="fas fa-chevron-right arrow"></i>
@@ -55,7 +96,7 @@
             <a href="https://www.coffeesonghau.com" target="_blank" class="contact-item">
                 <div class="icon"><i class="fas fa-globe"></i></div>
                 <div class="info">
-                    <strong>Website</strong>
+                    <strong>Website chính thức</strong>
                     <span>coffeesonghau.com</span>
                 </div>
                 <i class="fas fa-chevron-right arrow"></i>
@@ -64,7 +105,7 @@
 
         <div class="status">
             <span class="dot"></span>
-            Bộ phận CSKH đang tiếp nhận phản hồi
+            Bộ phận CSKH luôn sẵn sàng lắng nghe
         </div>
 
         <div class="footer">
@@ -72,9 +113,11 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Bong bóng gấu Mascot -->
     <a href="tel:0852494694" class="coffee-mascot">
-    <img src="img/Gaucoffee.png" alt="Coffee Sông Hậu">
-</a>
+        <img src="img/Gaucoffee.png" alt="Gọi ngay">
+    </a>
+
+    <script src="script.js"></script>
 </body>
 </html>
