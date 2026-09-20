@@ -79,7 +79,7 @@ const faqDatabase = [
     },
     {
         keywords: ["đồ ăn ngoài", "thức uống ngoài", "mang bánh", "mang đồ ăn vào"],
-        question: "Mang đồ ăn/thức uống bên ngoài vào quán",
+        question: "Mang đồ ăn thức uống bên ngoài vào quán",
         answer: "Dạ bạn có thể mang theo đồ ăn vặt nhẹ hoặc bánh kem sinh nhật vào quán. Tuy nhiên, quán xin phép không nhận thức uống từ thương hiệu khác, đồ ăn nặng mùi khu vực phòng lạnh ạ."
     },
 
