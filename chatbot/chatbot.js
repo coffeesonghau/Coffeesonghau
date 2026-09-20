@@ -78,7 +78,7 @@ const faqDatabase = [
         answer: "Dạ chắc chắn rồi ạ! Quán luôn pha chế theo khẩu vị của bạn. Bạn có thể yêu cầu ít đường (30%, 50%), không đường, hoặc ít đá/không đá nhé."
     },
     {
-        keywords: ["đồ ăn ngoài", "thức ăn ngoài", "mang bánh", "mang đồ ăn vào"],
+        keywords: ["đồ ăn ngoài", "thức uống ngoài", "mang bánh", "mang đồ ăn vào"],
         question: "Mang đồ ăn/thức uống bên ngoài vào quán",
         answer: "Dạ bạn có thể mang theo đồ ăn vặt nhẹ hoặc bánh kem sinh nhật vào quán. Tuy nhiên, quán xin phép không nhận thức uống từ thương hiệu khác, đồ ăn nặng mùi khu vực phòng lạnh ạ."
     },
