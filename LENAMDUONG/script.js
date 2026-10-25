@@ -31,7 +31,7 @@ function toggleMobileMenu(forceClose = false) {
 
     navMenu.classList.toggle('active', isOpen);
     navOverlay.classList.toggle('active', isOpen);
-    document.body.classList.toggle('no-scroll', isOpen); // Đảm bảo gỡ class này khi đóng
+    document.body.classList.toggle('no-scroll', isOpen);
     
     if (mobileMenuBtn) {
         mobileMenuBtn.setAttribute('aria-expanded', isOpen);
@@ -73,7 +73,6 @@ window.addEventListener('scroll', () => {
         link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
     });
 
-    // Chỉ cập nhật class active, ĐÃ XÓA lệnh scrollIntoView tự động tại đây
     quickNavPills.forEach(pill => {
         const isMatch = pill.getAttribute('href') === `#${current}`;
         if (!pill.classList.contains('mqn-highlight')) {
@@ -84,13 +83,10 @@ window.addEventListener('scroll', () => {
 
 quickNavPills.forEach(pill => {
     pill.addEventListener('click', function() {
-        // Cập nhật ngay class active cho nút được bấm
         quickNavPills.forEach(p => p.classList.remove('active'));
         if (!this.classList.contains('mqn-highlight')) {
             this.classList.add('active');
         }
-        
-        // Cuộn mượt và đưa pill ra giữa khung nhìn trên di động
         this.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
     });
 });
@@ -209,7 +205,6 @@ if (leadForm) {
     });
 }
 
-// Đóng Modal thông báo
 function closeSuccessModal() {
     if (successModal) {
         successModal.classList.remove('active');
@@ -225,6 +220,38 @@ if (successModal) {
     successModal.addEventListener('click', (e) => {
         if (e.target === successModal) {
             closeSuccessModal();
+        }
+    });
+}
+
+// 9. Xử lý mở/đóng Modal Tiểu sử chi tiết Giám Đốc
+const openBioModalBtn = document.getElementById('openBioModal');
+const closeBioModalBtn = document.getElementById('closeBioModal');
+const closeBioModalBottom = document.getElementById('closeBioModalBottom');
+const bioModal = document.getElementById('bioModal');
+
+function toggleBioModal(isOpen) {
+    if (!bioModal) return;
+    bioModal.classList.toggle('active', isOpen);
+    document.body.classList.toggle('no-scroll', isOpen);
+}
+
+if (openBioModalBtn) {
+    openBioModalBtn.addEventListener('click', () => toggleBioModal(true));
+}
+
+if (closeBioModalBtn) {
+    closeBioModalBtn.addEventListener('click', () => toggleBioModal(false));
+}
+
+if (closeBioModalBottom) {
+    closeBioModalBottom.addEventListener('click', () => toggleBioModal(false));
+}
+
+if (bioModal) {
+    bioModal.addEventListener('click', (e) => {
+        if (e.target === bioModal) {
+            toggleBioModal(false);
         }
     });
 }

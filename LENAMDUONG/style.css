@@ -322,7 +322,7 @@ header.scrolled {
     inset: 0;
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(4px);
-    z-index: 1002; /* Nằm dưới menu */
+    z-index: 1002;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -338,7 +338,7 @@ header.scrolled {
     background: linear-gradient(180deg, #191310 0%, #0E0A09 100%);
     border-left: 1px solid var(--border-gold);
     box-shadow: -15px 0 40px rgba(0, 0, 0, 0.75);
-    z-index: 1005; /* Cao hơn nav-overlay để hiện rõ nội dung sắc nét */
+    z-index: 1005;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -352,9 +352,7 @@ header.scrolled {
     visibility: visible;
 }
 
-/* =========================================================
-   HERO SECTION: BỐ CỤC 2 CỘT SANG TRỌNG
-   ========================================================= */
+/* --- HERO SECTION --- */
 #hero {
     padding: 64px 0 135px 0;
     background:
@@ -505,7 +503,7 @@ header.scrolled {
     background: rgba(255, 255, 255, 0.12);
 }
 
-/* Cột Phải: Thẻ Chân dung Giám đốc */
+/* Thẻ Chân dung Giám đốc */
 .ceo-portrait-card {
     background: linear-gradient(145deg, #221A15 0%, #140F0C 100%);
     border: 1px solid var(--border-gold);
@@ -1294,7 +1292,7 @@ header.scrolled {
     color: var(--text-gray);
 }
 
-/* --- LIÊN HỆ & FORM CHUYỂN ĐỔI CAO --- */
+/* --- LIÊN HỆ & FORM CHUYỂN ĐỔI --- */
 .contact-box-wrapper {
     display: grid;
     grid-template-columns: 0.95fr 1.05fr;
@@ -1387,7 +1385,6 @@ a.dc-card:hover {
     font-size: 0.84rem;
 }
 
-/* Cột Form */
 .contact-form-panel {
     background: #ffffff;
     padding: 36px 32px;
@@ -1423,7 +1420,6 @@ a.dc-card:hover {
     color: var(--text-gray);
 }
 
-/* Quick Select Chips */
 .quick-topic-chips {
     display: flex;
     flex-wrap: wrap;
@@ -1502,7 +1498,6 @@ a.dc-card:hover {
     border-radius: 10px;
     font-family: var(--font-body);
     font-size: 16px;
-    /* Chuẩn 16px chống tự động zoom trên iPhone/iOS */
     color: var(--text-dark);
     background-color: #FDFBF9;
     transition: all 0.2s;
@@ -1541,7 +1536,7 @@ a.dc-card:hover {
     margin-right: 4px;
 }
 
-/* --- FOOTER DOANH NGHIỆP --- */
+/* --- FOOTER --- */
 .main-footer {
     background-color: #090705;
     color: #9E9590;
@@ -1612,7 +1607,7 @@ a.dc-card:hover {
     font-size: 0.82rem;
 }
 
-/* --- MODAL THÔNG BÁO THÀNH CÔNG --- */
+/* --- MODAL THÀNH CÔNG --- */
 .toast-modal {
     position: fixed;
     inset: 0;
@@ -1677,9 +1672,326 @@ a.dc-card:hover {
     transform: translateY(0);
 }
 
-/* =========================================================
-   CHUẨN GIAO DIỆN ĐIỆN THOẠI CHUYÊN NGHIỆP (MOBILE-FIRST UX)
-   ========================================================= */
+/* --- KHUNG TIỂU SỬ TÓM TẮT & MODAL CHI TIẾT --- */
+.ceo-biography-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(198, 147, 75, 0.25);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+}
+
+.cb-title {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Ẩn bớt phần grid thông tin chi tiết ở khung ngoài */
+.ceo-biography-box .cb-hidden-content {
+    display: none;
+}
+
+.cb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cb-item {
+    font-size: 0.86rem;
+    color: #B5ADA8;
+}
+
+.cb-label {
+    display: inline-block;
+    color: #9E958F;
+    margin-right: 4px;
+}
+
+.cb-item strong {
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.cb-summary {
+    font-size: 0.85rem;
+    color: #D2CBC5;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.cb-action-wrap {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.btn-bio-detail {
+    background: linear-gradient(135deg, rgba(198, 147, 75, 0.25) 0%, rgba(154, 107, 40, 0.25) 100%);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-light);
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding: 12px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(198, 147, 75, 0.15);
+}
+
+.btn-bio-detail:hover {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--text-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(198, 147, 75, 0.35);
+}
+
+/* Hiệu ứng mũi tên chuyển động nhẹ để kêu gọi bấm vào */
+.btn-bio-detail .pulse-arrow {
+    animation: arrowMove 1.5s infinite ease-in-out;
+}
+
+@keyframes arrowMove {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(4px);
+    }
+}
+
+/* Bio Modal Styles */
+.bio-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(6px);
+    z-index: 2500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.bio-modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bio-modal-container {
+    background: #17120F;
+    border: 1px solid var(--border-gold);
+    max-width: 680px;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bio-modal-backdrop.active .bio-modal-container {
+    transform: translateY(0);
+}
+
+.bio-modal-header {
+    padding: 20px 24px;
+    background: #1F1813;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bmh-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.bmh-title-group h3 {
+    color: var(--text-light);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.bio-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-light);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.bio-close-btn:hover {
+    background: rgba(211, 47, 47, 0.2);
+    color: #ff6b6b;
+}
+
+.bio-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    color: #DCD4CE;
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.bm-profile-intro {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(198, 147, 75, 0.2);
+    margin-bottom: 22px;
+}
+
+.bm-avatar {
+    width: 75px;
+    height: 75px;
+    min-width: 75px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--primary-color);
+}
+
+.bm-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.bm-intro-text h4 {
+    color: var(--text-light);
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.bm-role {
+    font-size: 0.82rem;
+    color: var(--primary-light);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.bm-loc {
+    font-size: 0.78rem;
+    color: #A8A09C;
+}
+
+.bio-section-block {
+    margin-bottom: 22px;
+}
+
+.bio-section-block h5 {
+    font-size: 0.98rem;
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bio-section-block p {
+    color: #C8BFB9;
+    font-size: 0.88rem;
+}
+
+.bio-timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+    padding-left: 10px;
+    border-left: 2px solid var(--border-gold);
+}
+
+.bt-item {
+    position: relative;
+    padding-left: 12px;
+}
+
+.bt-year {
+    display: inline-block;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.bt-item p {
+    font-size: 0.85rem;
+    color: #C8BFB9;
+}
+
+.bio-check-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bio-check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.86rem;
+    color: #D2CBC5;
+}
+
+.bio-check-list i {
+    color: #2ecc71;
+    margin-top: 3px;
+}
+
+.bio-modal-footer {
+    padding: 16px 24px;
+    background: #1F1813;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    gap: 12px;
+}
+
+/* --- RESPONSIVE MOBILE --- */
 @media (max-width: 992px) {
     .topbar {
         display: none;
@@ -1708,7 +2020,6 @@ a.dc-card:hover {
 @media (max-width: 768px) {
     html {
         scroll-padding-top: 112px;
-        /* Bù chiều cao Header + Thanh Quick-Nav trên điện thoại */
     }
 
     body {
@@ -1737,7 +2048,6 @@ a.dc-card:hover {
         font-size: 0.92rem;
     }
 
-    /* Header Mobile Tinh Gọn + Nút Gọi Nhanh */
     header {
         padding: 10px 0 0 0;
     }
@@ -1793,7 +2103,6 @@ a.dc-card:hover {
         justify-content: center;
     }
 
-    /* Thanh trượt ngang Quick-Jump Pill Bar trên Mobile */
     .mobile-quick-nav {
         display: block;
         background: rgba(12, 9, 7, 0.95);
@@ -1810,7 +2119,6 @@ a.dc-card:hover {
         scrollbar-width: none;
         -ms-overflow-style: none;
         -webkit-overflow-scrolling: touch;
-        /* Bổ sung dòng này nếu thiếu */
     }
 
     .mqn-track::-webkit-scrollbar {
@@ -1842,7 +2150,6 @@ a.dc-card:hover {
         border-color: transparent;
     }
 
-    /* Menu Ngăn kéo Mobile (Slide-out Drawer) */
     #nav-menu {
         position: fixed;
         top: 0;
@@ -2010,10 +2317,6 @@ a.dc-card:hover {
         color: #5dade2;
     }
 
-    /* =================================================
-       BỐ CỤC HERO MOBILE: SẮP XẾP THÔNG MINH BẰNG FLEX/ORDER
-       Hiển thị: Huy hiệu -> Tên Giám đốc -> Thẻ Chân dung -> Mô tả -> Điểm mạnh -> Nút CTA
-       ================================================= */
     #hero {
         padding: 24px 0 76px 0;
     }
@@ -2026,7 +2329,6 @@ a.dc-card:hover {
 
     .hero-content-col {
         display: contents;
-        /* Cho phép sắp xếp lại thứ tự các phần tử con kết hợp với thẻ ảnh Giám đốc */
     }
 
     .hero-badge {
@@ -2119,7 +2421,6 @@ a.dc-card:hover {
         display: none;
     }
 
-    /* Metrics Bar Mobile 2x2 Grid */
     .metrics-bar {
         margin-top: -42px;
     }
@@ -2163,7 +2464,6 @@ a.dc-card:hover {
         line-height: 1.35;
     }
 
-    /* About & Signature Mobile */
     .visual-experience-box {
         margin: -18px 8px 0 8px;
         padding: 16px 18px;
@@ -2199,7 +2499,6 @@ a.dc-card:hover {
         border-top: 1px dashed #E5DEC9;
     }
 
-    /* Philosophy & Ecosystem Cards Mobile */
     .philosophy-card {
         padding: 26px 20px;
     }
@@ -2218,7 +2517,6 @@ a.dc-card:hover {
         margin-top: 12px;
     }
 
-    /* Quy trình 4 bước 2x2 trên Mobile */
     .process-steps {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
@@ -2245,7 +2543,6 @@ a.dc-card:hover {
         line-height: 1.4;
     }
 
-    /* Contact Form Mobile: Đặt Form lên trước để khách dễ thao tác */
     .contact-box-wrapper {
         padding: 18px 14px;
         gap: 28px;
@@ -2289,9 +2586,6 @@ a.dc-card:hover {
         align-items: center;
     }
 
-    /* =================================================
-       FLOATING GLASS DOCK DƯỚI ĐÁY ĐIỆN THOẠI (CHUẨN APP)
-       ================================================= */
     .mobile-bottom-bar {
         display: grid;
         grid-template-columns: 1.05fr 0.95fr 1.25fr;
@@ -2394,9 +2688,30 @@ a.dc-card:hover {
     .call-icon-pulse {
         animation: phonePulse 2s infinite;
     }
+
+    .bio-modal-container {
+        max-height: 95vh;
+        border-radius: 16px 16px 0 0;
+        position: fixed;
+        bottom: 0;
+        margin: 0;
+    }
+    
+    .bio-modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .bm-profile-intro {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .bio-modal-footer {
+        flex-direction: column;
+    }
 }
 
-/* Màn hình điện thoại nhỏ (iPhone SE / Galaxy Fold ngoài) */
 @media (max-width: 375px) {
     .header-quick-call span {
         display: none;
@@ -2416,12 +2731,10 @@ a.dc-card:hover {
 }
 
 @keyframes phonePulse {
-
     0%,
     100% {
         transform: scale(1);
     }
-
     50% {
         transform: scale(1.1);
     }
