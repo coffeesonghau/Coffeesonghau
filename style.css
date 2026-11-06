@@ -105,12 +105,11 @@ aside ul li:hover {
 /* CODE THANH THÔNG BÁO CHẠY (BẢN SỬA LỖI)  */
 /* ========================================= */
 
-/* 1. Khung bao ngoài (Cắt phần thừa) */
 .ticker-container {
     width: 100%;
-    overflow: hidden; /* Ẩn chữ tràn ra ngoài */
-    background-color: #eab308; /* Màu vàng thương hiệu */
-    border-bottom: 1px solid #ca8a04;
+    overflow: hidden;
+    background-color: #fad6a5;
+    border-bottom: 1px solid #e2bd8c; /* Viền sậm hơn một chút để hợp tông */
     position: relative;
     z-index: 60;
     line-height: 1.5; /* Căn chỉnh dòng */
