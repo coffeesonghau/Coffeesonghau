@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đánh Giá Dịch Vụ - Coffee Sông Hậu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* --- BIẾN CSS & CHẾ ĐỘ TỐI --- */
+        :root {
+            --primary-color: #8B4513;
+            --primary-hover: #70360f;
+            --bg-color: #f4f5f7;
+            --card-bg: #ffffff;
+            --text-main: #2d2d2d;
+            --text-sub: #777777;
+            --border-color: #ececec;
+            --item-bg: #f7f7f7;
+            --shadow: 0 10px 35px rgba(0,0,0,0.08);
+        }
+
+        body.dark-theme {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-sub: #a0a0a0;
+            --border-color: #333333;
+            --item-bg: #2a2a2a;
+            --shadow: 0 10px 35px rgba(0,0,0,0.3);
+        }
+
+        /* --- CẤU HÌNH CHUNG --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-color); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; transition: background-color 0.4s ease; }
+
+        /* --- GIAO DIỆN CARD --- */
+        .card { position: relative; width: 100%; max-width: 380px; background: var(--card-bg); border-radius: 24px; padding: 24px 22px; box-shadow: var(--shadow); transition: all 0.6s ease; }
+        .logo { width: 80px; height: 80px; margin: auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid var(--primary-color); overflow: hidden; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2); }
+        .card-logo-img { width: 100%; height: 100%; object-fit: cover; }
+        h1 { text-align: center; margin-top: 15px; font-size: 24px; color: var(--text-main); }
+        .subtitle { text-align: center; color: var(--text-sub); font-size: 14px; margin-top: 5px; margin-bottom: 25px; }
+
+        .back-btn { position: absolute; top: 20px; left: 20px; background: var(--item-bg); border: 1px solid var(--border-color); color: var(--primary-color); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; transition: all 0.3s; z-index: 10; }
+        .back-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+
+        /* --- FORM ĐÁNH GIÁ --- */
+        .rating-section { margin: 10px 0 20px; text-align: center; }
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 10px; }
+        .stars input { display: none; }
+        .stars label { font-size: 35px; color: var(--border-color); cursor: pointer; transition: all 0.2s; }
+        .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f5b301; }
+        .stars label:active { transform: scale(0.85); }
+
+        .dynamic-section { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.4s ease; }
+        .dynamic-section.active { display: flex; }
+        
+        /* CSS cho ô nhập số điện thoại */
+        .phone-input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--item-bg); color: var(--text-main); font-size: 15px; outline: none; transition: 0.3s; margin-bottom: 5px; }
+        .phone-input:focus { border-color: var(--primary-color); }
+        
+        .submit-btn { background: var(--primary-color); color: #fff; border: none; padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .submit-btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Lời nhắn (Message Box) */
+        .sweet-message { font-size: 14px; line-height: 1.5; color: var(--text-main); padding: 15px; border-radius: 8px; text-align: justify; }
+        .msg-error { background: #fff0f0; border-left: 4px solid #ff4d4f; }
+        body.dark-theme .msg-error { background: #2a1616; color: #e0e0e0; border-left-color: #ef4444; }
+        .msg-success { background: #f0fdf4; border-left: 4px solid #22c55e; }
+        body.dark-theme .msg-success { background: #142c16; color: #e0e0e0; border-left-color: #22c55e; }
+
+        .messenger-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #0084ff; color: #fff; text-decoration: none; padding: 12px; border-radius: 12px; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .messenger-btn:hover { background: #0073e6; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 132, 255, 0.3); }
+
+        /* --- POPUP COMPONENT --- */
+        .custom-popup-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s ease; }
+        .custom-popup-overlay.active { opacity: 1; visibility: visible; }
+        .custom-popup { background: var(--card-bg); width: 85%; max-width: 320px; border-radius: 20px; padding: 30px 20px 20px; text-align: center; position: relative; transform: scale(0.8) translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        .custom-popup-overlay.active .custom-popup { transform: scale(1) translateY(0); }
+        .popup-close-btn { position: absolute; top: 15px; right: 15px; background: var(--item-bg); border: none; width: 32px; height: 32px; border-radius: 50%; color: var(--text-sub); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .popup-close-btn:hover { background: #fee2e2; color: #ef4444; transform: rotate(90deg); }
+        .popup-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 2px solid var(--primary-color); }
+        .popup-title { color: var(--primary-color); font-size: 20px; margin-bottom: 8px; }
+        .popup-desc { color: var(--text-main); font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+
+        .footer { text-align: center; margin-top: 20px; color: var(--text-sub); font-size: 12px; }
+        .coffee-mascot { position: fixed; right: 20px; bottom: 20px; z-index: 9999; }
+        .coffee-mascot img { width: 130px; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.2)); animation: bearFloat 3s ease-in-out infinite; transition: 0.3s; }
+        .coffee-mascot:hover img { transform: scale(1.1) rotate(-5deg); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bearFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body>
+
+    <div class="card main-content">
+        <a href="lienhe.html" class="back-btn" aria-label="Quay lại"><i class="fas fa-arrow-left"></i></a>
+        <div class="logo"><img src="img/LogoSH.png" alt="Logo" class="card-logo-img"></div>
+        
+        <h1>ĐÁNH GIÁ DỊCH VỤ</h1>
+        <div class="subtitle">Trải nghiệm của bạn tại Coffee Sông Hậu thế nào?</div>
+
+        <form id="ratingForm">
+            <div class="rating-section">
+                <div class="stars">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5" class="fas fa-star"></label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4" class="fas fa-star"></label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3" class="fas fa-star"></label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2" class="fas fa-star"></label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1" class="fas fa-star"></label>
+                </div>
+            </div>
+
+            <!-- Form 4-5 sao -->
+            <div id="high-rating-area" class="dynamic-section">
+                <div class="sweet-message msg-success">
+                    <strong>Tuyệt vời quá!</strong> Cảm ơn bạn vì đã đánh giá cao. vui lòng để lại số điện thoại nhé! 🥰
+                </div>
+                <input type="tel" id="customerPhone" name="phone" class="phone-input" placeholder="Nhập số điện thoại của bạn *" required pattern="[0-9]{9,11}" title="Vui lòng nhập số điện thoại hợp lệ (9 - 11 số)">
+                <button type="submit" class="submit-btn" id="submitBtn">Hoàn Tất Đánh Giá</button>
+            </div>
+
+            <!-- Form <= 3 sao -->
+            <div id="low-rating-area" class="dynamic-section">
+                <div class="sweet-message msg-error">
+                    <strong>Dạ, Coffee Sông Hậu vô cùng xin lỗi</strong> vì trải nghiệm hôm nay của bạn chưa được trọn vẹn. 🥺<br><br>
+                    Bạn vui lòng nhắn tin trực tiếp cho chúng mình qua Messenger để quán có thể bù đắp ngay cho bạn nhé. ❤️
+                </div>
+                <a href="m.me/1003418946177388" target="_blank" class="messenger-btn">
+                    <i class="fab fa-facebook-messenger"></i> Nhắn tin cho quán ngay
+                </a>
+            </div>
+        </form>
+
+        <div class="footer">© 2026 Coffee Sông Hậu</div>
+    </div>
+
+    <!-- Hộp thông báo (Popup) -->
+    <div class="custom-popup-overlay" id="myPopup">
+        <div class="custom-popup">
+            <button class="popup-close-btn" type="button" onclick="closeAndRedirect()"><i class="fas fa-times"></i></button>
+            <img src="img/LogoSH.png" alt="Thành công" class="popup-img">
+            <h3 class="popup-title">Cảm ơn bạn! ❤️</h3>
+            <p class="popup-desc">Đánh giá của bạn đã được ghi nhận. Chúc bạn một ngày thật ngọt ngào và tràn đầy năng lượng cùng Coffee Sông Hậu nhé! 🥰</p>
+            <button class="submit-btn" type="button" style="width: 100%; margin-top: 10px;" onclick="closeAndRedirect()">Đồng ý</button>
+        </div>
+    </div>
+
+    <a href="tel:0852494694" class="coffee-mascot"><img src="img/Gaucoffee.png" alt="Gọi ngay"></a>
+
+    <script>
+        // KIỂM TRA DARK MODE
+        if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark-theme");
+
+        // ĐƯỜNG LINK GOOGLE APPS SCRIPT CỦA BẠN
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyI7EkugJ8pI5Tfsid8FIUjxao51XjdHHQqes6OLGVv-mr0tEmHou0ByVEOgk5whvZD/exec'; 
+
+        // HIỂN THỊ FORM THEO SAO
+        const stars = document.querySelectorAll('.stars input');
+        const highRatingArea = document.getElementById('high-rating-area');
+        const lowRatingArea = document.getElementById('low-rating-area');
+        const form = document.getElementById('ratingForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        stars.forEach(star => {
+            star.addEventListener('change', (e) => {
+                const rating = parseInt(e.target.value);
+                highRatingArea.classList.remove('active');
+                lowRatingArea.classList.remove('active');
+                setTimeout(() => rating <= 3 ? lowRatingArea.classList.add('active') : highRatingArea.classList.add('active'), 50);
+            });
+        });
+
+        // XỬ LÝ GỬI DỮ LIỆU LÊN GOOGLE SHEETS
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            const phoneVal = document.getElementById("customerPhone").value;
+            const ratingVal = document.querySelector('.stars input:checked').value;
+            
+            submitBtn.innerText = "Đang gửi...";
+            submitBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('rating', ratingVal);
+            formData.append('phone', phoneVal);
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    document.getElementById("myPopup").classList.add("active");
+                    submitBtn.innerText = "Hoàn Tất Đánh Giá";
+                    submitBtn.disabled = false;
+                })
+                .catch(error => {
+                    alert('Lỗi kết nối. Vui lòng thử lại!');
+                    submitBtn.innerText = "Hoàn Tất Đánh Giá";
+                    submitBtn.disabled = false;
+                });
+        });
+
+        // ĐÓNG POPUP
+        function closeAndRedirect() {
+            document.getElementById("myPopup").classList.remove("active");
+            window.location.href = 'lienhe.html'; 
+        }
+    </script>
+</body>
+</html>

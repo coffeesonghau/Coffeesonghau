@@ -1,0 +1,421 @@
+/* --- BIẾN CSS (Dễ dàng thay đổi màu sắc) --- */
+:root {
+    --primary-color: #8B4513;
+    --primary-hover: #70360f;
+    --bg-color: #f4f5f7;
+    --card-bg: #ffffff;
+    --text-main: #2d2d2d;
+    --text-sub: #777777;
+    --border-color: #ececec;
+    --item-bg: #f7f7f7;
+    --shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+
+/* Chế độ tối (Dark Mode) */
+body.dark-theme {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-sub: #a0a0a0;
+    --border-color: #333333;
+    --item-bg: #2a2a2a;
+    --shadow: 0 10px 35px rgba(0,0,0,0.3);
+}
+
+/* Reset & Cấu hình chung */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: var(--bg-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    overflow: hidden; 
+    transition: background-color 0.4s ease;
+}
+
+/* --- HIỆU ỨNG MỞ ĐẦU (INTRO SCREEN) --- */
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--card-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease-out, visibility 0.6s;
+}
+
+.intro-content {
+    text-align: center;
+    animation: zoomIn 1.2s ease-out forwards;
+}
+
+.intro-logo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+.intro-text {
+    font-size: 22px;
+    color: var(--primary-color);
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+#intro-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* --- GIAO DIỆN CHÍNH (CARD) --- */
+.card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 24px 22px;
+    box-shadow: var(--shadow);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, background-color 0.4s ease;
+    overflow: hidden;
+}
+
+.card.hidden {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    margin: auto;
+    border-radius: 50%;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--primary-color);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+}
+
+.card-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 24px;
+    color: var(--text-main);
+    transition: color 0.4s;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-sub);
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 25px;
+    transition: color 0.4s;
+}
+
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-main);
+    padding: 12px 15px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contact-item:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.12);
+}
+
+.icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    background: var(--item-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 18px;
+    transition: background-color 0.4s;
+}
+
+.info {
+    flex: 1;
+    margin-left: 15px;
+}
+
+.info strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+.info span {
+    font-size: 13px;
+    color: var(--text-sub);
+}
+
+.arrow {
+    color: var(--text-sub);
+    font-size: 14px;
+    transition: transform 0.3s;
+}
+
+.contact-item:hover .arrow {
+    transform: translateX(4px);
+    color: var(--primary-color);
+}
+
+.status {
+    margin-top: 20px;
+    background: var(--item-bg);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    animation: pulse 2s infinite;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-sub);
+    font-size: 12px;
+}
+
+/* --- GIAO DIỆN MENU 3 GẠCH & TIỆN ÍCH --- */
+.menu-toggle-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--item-bg);
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.menu-toggle-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.side-menu {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    height: 100%;
+    background: var(--card-bg);
+    z-index: 100;
+    box-shadow: 5px 0 30px rgba(0,0,0,0.15);
+    transition: left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.side-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dashed var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.side-menu-header h3 {
+    font-size: 18px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.close-menu-btn {
+    background: var(--item-bg);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-size: 16px;
+}
+
+.close-menu-btn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+.side-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.side-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: var(--text-main);
+    padding: 14px 15px;
+    border-radius: 14px;
+    background: var(--item-bg);
+    border: 1px solid transparent;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.icon-wrap {
+    width: 24px;
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.side-menu-item:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+}
+
+.side-menu-item:hover .icon-wrap {
+    color: #fff;
+}
+
+.menu-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 10px 0;
+}
+
+.menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(3px); /* Hiệu ứng kính mờ xịn xò */
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- HIỆU ỨNG & MASCOT --- */
+@keyframes zoomIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.coffee-mascot {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    align-items: flex-end;
+    text-decoration: none;
+    z-index: 9999;
+}
+
+.coffee-mascot img {
+    width: 160px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.2));
+    animation: bearFloat 3s ease-in-out infinite;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.coffee-mascot:hover img {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+@keyframes bearFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
